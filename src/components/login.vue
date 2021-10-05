@@ -5,9 +5,9 @@
       <div class="join">
         <div class="left">
           <h3>일반 로그인</h3>
-          <input type="text" class="userid" placeholder="아이디" /><br />
-          <input type="password" class="userpw" placeholder="비밀번호" /><br />
-          <input type="button" value="로그인" class="btn" />
+          <input type="text" class="userid" placeholder="아이디" v-model="userid" /><br />
+          <input type="password" class="userpw" placeholder="비밀번호" v-model="userpw" /><br />
+          <input type="button" value="로그인" class="btn" @click="handlelogin" />
           <div class="chk">
             <div class="chk_in_left">
               <input type="checkbox" class="checkbox" /><span class="chktext"
@@ -48,7 +48,18 @@
 </template>
 
 <script>
-export default {};
+// import axios from "axios";
+export default {
+    data() {
+    return {
+      userid: "",
+      userpw: "",
+    };
+  },
+    methods: {
+ 
+ },
+};
 </script>
 
 <style scoped>
