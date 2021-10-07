@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="right">
-          <h3>간편 로그인</h3>
+          <h3 class="login2">간편 로그인</h3>
           <button class="easylogin">네이버로 로그인</button><br />
           <button class="easylogin">구글로 로그인</button><br />
           <button class="easylogin">카카오톡 로그인</button>
