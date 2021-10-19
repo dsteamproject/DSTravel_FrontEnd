@@ -16,9 +16,9 @@ app.use(router);
 app.mount('#app');
 app.use(VueGoogleMaps, {
     load: {
-        key: 'YOUR_API_KEY_COMES_HERE',
+        key: 'AIzaSyAk3JtD4rmjVoNiVZHGcUTIs5-xU6FrbT4',
     },
-}).mount('#app')
+})
 
 // 설치한 모듈 
 // ==> vue router (npm install vue-router@next --save),
