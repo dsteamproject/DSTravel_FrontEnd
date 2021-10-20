@@ -63,7 +63,30 @@
     </GMapMarker>
   </GMapMap>
   </div>
-    <div class="right1">123</div>
+    <div class="right1">
+      <button id="right_btn" @click="handleright" v-bind:class="btncolor">추천코스</button>
+      <button id="right_btn" @click="handleright2" v-bind:class="btncolor2">숙소</button>
+      <div class="right_content" v-if="right=== 1">
+        <h4>추천코스</h4>
+        <ul class="travel_list">
+          <li>
+            <div class="imgdiv"><img src="../assets/gam.jpg" style=" height:100px;"></div>
+            <div class="textdiv">감천문화마을</div>
+            </li>
+          <li>
+            <div class="imgdiv"><img src="../assets/gam.jpg" style=" height:100px;"></div>
+            <div class="textdiv">감천문화마을</div>
+            </li>
+           <li>
+            <div class="imgdiv"><img src="../assets/gam.jpg" style=" height:100px;"></div>
+            <div class="textdiv">감천문화마을</div>
+            </li>
+        </ul>
+      </div>
+      <div class="right_content" v-if="right=== 2">
+        내용2
+      </div>
+    </div>
   </div>
 </template>
 
@@ -71,6 +94,9 @@
 export default {
   data() {
     return {
+      btncolor:"active",
+      btncolor2:"noneactive",
+      right:1,
    check: 1,
       num: 0,
       num2: 0,
@@ -111,14 +137,49 @@ export default {
       console.log(event.latLng);
       console.log(two)
     },
+    handleright(){
+      this.right =1
+       this.btncolor2 = "noneactive"
+      this.btncolor ="active"
+    },
+        handleright2(){
+      this.right =2
+      this.btncolor2 = "active"
+      this.btncolor ="noneactive"
+    }
   },
 };
 </script>
 
 <style scoped>
-
+.imgdiv{
+  overflow: hidden;
+  height: 100px;
+  width:100px;
+  float:left;
+}
+.textdiv{
+  float:left
+}
+.travel_list li{
+  width:100%;
+  height:100px;
+  box-shadow: 1px 10px 10px rgba(0,0,0,0.2);
+  margin-top:20px;
+  background: #ffffff;
+     list-style: none;
+}
+.noneactive{
+  background: #ffffff;
+  color:black;
+}
+.active{
+  background: #98dde3;
+  color:white;
+}
 .check{
   margin:0px!important;
+
 }
 .vue-map-container{
   height: 900px!important;
@@ -170,6 +231,7 @@ p {
 }
 .wrap {
   width: 100%;
+  
 }
 .left1 {
   width: 20%;
@@ -178,6 +240,7 @@ p {
   text-align: center;
   float: left;
   box-sizing: border-box;
+    padding:10px;
 }
 .center1 {
   width: 60%;
@@ -188,23 +251,43 @@ p {
 .right1 {
   width: 20%;
   height: 900px;
-   background: #ffffff;
+   background: rgb(238, 237, 237);
   float: left;
   box-sizing: border-box;
+  padding:10px;
 }
 .btn_last {
-  display: block;
+  width:100%;
+  height: 30px;
   outline: none;
   border: none;
   background: #ff1744;
   color: white;
   cursor: pointer;
   
-  margin:10px;
+  
 
 }
 body {
   margin: 0;
 }
+#right_btn{
+  width:50%;
+  height: 35px;
+  border:none;
+  cursor: pointer;
 
+}
+.right_content{
+  margin-top:10px;
+   background: #f1f1f1;
+   height: 800px;
+   padding:10px;
+   text-align: center;
+
+}
+.right_content h4{
+  font-weight: 900;
+  font-size:20px;
+}
 </style>
