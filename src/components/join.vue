@@ -28,14 +28,14 @@
       <div class="input_box" v-if="step === 1">
         <ul class="iul">
           <li>
-            <input type="checkbox" class="chk" />
+            <input type="checkbox" class="chk" v-model="checkall" />
             <span class="chk1"
               >사이트 이용약관, 개인정보 수집 및 이용동의, 이벤트 및 프로모션
               안내메일 수신(선택)에 모두 동의 합니다.</span
             >
           </li>
           <li>
-            <input type="checkbox" class="chk" />
+            <input type="checkbox" class="chk" v-model="chk1" />
             <span class="chk1"
               >사이트 이용약관
               <span class="blue">(필수)</span>
@@ -43,7 +43,7 @@
             <button class="exbtn">자세히 보기</button>
           </li>
           <li>
-            <input type="checkbox" class="chk" />
+            <input type="checkbox" class="chk" v-model="chk2" />
             <span class="chk1"
               >개인정보 수집 및 이용동의
               <span class="blue">(필수)</span>
@@ -51,7 +51,7 @@
             <button class="exbtn">자세히 보기</button>
           </li>
           <li>
-            <input type="checkbox" class="chk" />
+            <input type="checkbox" class="chk" v-model="chk3" />
             <span class="chk1"
               >이벤트 및 프로모션 알림 메일 수신
               <span class="blue">(선택)</span>
@@ -67,27 +67,46 @@
       </div>
       <div class="input_box1" v-if="step === 2">
         <p class="s2title">회원정보 입력</p>
-        <label>아이디</label><input type="text" class="userid" /><button
+        <label>아이디</label
+        ><input type="text" class="userid" v-model="userid" /><button
           class="id_btn"
         >
           중복확인</button
         ><br />
-        <label>비밀번호</label><input type="text" class="userpw" />
+        <label>비밀번호</label
+        ><input type="password" class="userpw" v-model="userpw" />
 
         <br />
-        <label>비밀번호 확인</label><input type="text" class="userpw" /><br />
-        <label>이름</label><input type="text" class="userpw" /><br />
-        <label>닉네임</label><input type="text" class="userpw" /><br />
-        <label>이메일</label><input type="text" class="usermail" />
-        <input type="text" class="userpw" />
-        <select class="sele">
+        <label>비밀번호 확인</label
+        ><input type="password" class="userpw" v-model="userpw2" /><br />
+        <label>이름</label
+        ><input type="text" class="userpw" v-model="username" /><br />
+        <label>닉네임</label
+        ><input type="text" class="userpw" v-model="usernickname" /><br />
+        <label>이메일</label
+        ><input type="text" class="usermail" v-model="usermail" />
+        <input type="text" class="userpw" v-model="email" />
+        <select class="sele" v-model="email">
+          <option disabled selected>선택항목</option>
           <option>naver.com</option>
           <option>google.com</option>
           <option>daum.net</option></select
         ><br />
         <label>성별</label
-        ><input type="radio" name="gender" value="man" class="radio" />남성
-        <input type="radio" name="gender" value="woman" class="radio" />여성
+        ><input
+          type="radio"
+          name="gender"
+          value="man"
+          class="radio"
+          v-model="gender"
+        />남성
+        <input
+          type="radio"
+          name="gender"
+          value="woman"
+          class="radio"
+          v-model="gender"
+        />여성
         <div class="center1">
           <button class="nonebtn">취소</button>
           <button class="yesbtn" @click="handlelast">가입완료</button>
@@ -113,26 +132,64 @@
 export default {
   data() {
     return {
+      userid: "",
+      userpw: "",
+      userpw2: "",
+      username: "",
+      usernickname: "",
+      usermail: "",
+      gender: "",
+      allcheck: false,
+      chk1: false,
+      chk2: false,
+      chk3: false,
       oncircle: "bluebg",
       step: 1,
       offcircle2: "graybg",
       offcircle1: "graybg",
+      email: "선택항목",
     };
   },
   methods: {
     handleyes() {
-      this.step = 2;
-      this.offcircle1 = "bluebg";
-      this.oncircle = "graybg";
+      if (this.chk1 === false || this.chk2 === false) {
+        alert("필수 체크항목을 체크해주세요");
+      } else {
+        this.step = 2;
+        this.offcircle1 = "bluebg";
+        this.oncircle = "graybg";
+      }
     },
     handlelast() {
-      this.step = 3;
-      this.offcircle2 = "bluebg";
-      this.offcircle1 = "graybg";
-      this.oncircle = "graybg";
+      if (this.userpw !== this.userpw2) {
+        alert("암호와 암호확인이 다릅니다");
+      } else {
+        this.step = 3;
+        this.offcircle2 = "bluebg";
+        this.offcircle1 = "graybg";
+        this.oncircle = "graybg";
+      }
     },
     gohome() {
       this.$router.push("/");
+    },
+  },
+  computed: {
+    checkall: {
+      get: function () {
+        return this.chk1 + "," + this.chk2 + "," + this.chk3;
+      },
+      set: function (e) {
+        if (e === true) {
+          this.chk1 = true;
+          this.chk2 = true;
+          this.chk3 = true;
+        } else {
+          this.chk1 = false;
+          this.chk2 = false;
+          this.chk3 = false;
+        }
+      },
     },
   },
 };
