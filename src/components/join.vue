@@ -68,24 +68,24 @@
       <div class="input_box1" v-if="step === 2">
         <p class="s2title">회원정보 입력</p>
         <label>아이디</label
-        ><input type="text" class="userid" v-model="userid" /><button
+        ><input type="text" class="userid" v-model="userid" ref="userid" /><button
           class="id_btn"
         >
           중복확인</button
         ><br />
         <label>비밀번호</label
-        ><input type="password" class="userpw" v-model="userpw" />
+        ><input type="password" class="userpw" v-model="userpw" ref="userpw" />
 
         <br />
         <label>비밀번호 확인</label
-        ><input type="password" class="userpw" v-model="userpw2" /><br />
+        ><input type="password" class="userpw" v-model="userpw2" ref="userpw2" /><br />
         <label>이름</label
-        ><input type="text" class="userpw" v-model="username" /><br />
+        ><input type="text" class="userpw" v-model="username" ref="username" /><br />
         <label>닉네임</label
-        ><input type="text" class="userpw" v-model="usernickname" /><br />
+        ><input type="text" class="userpw" v-model="usernickname" ref="usernickname" /><br />
         <label>이메일</label
-        ><input type="text" class="usermail" v-model="usermail" />
-        <input type="text" class="userpw" v-model="email" />
+        ><input type="text" class="usermail" v-model="usermail" ref="usermail" />
+        <input type="text" class="userpw" v-model="email" ref="email" readonly />
         <select class="sele" v-model="email">
           <option disabled selected>선택항목</option>
           <option>naver.com</option>
@@ -99,6 +99,7 @@
           value="man"
           class="radio"
           v-model="gender"
+          ref="gender"
         />남성
         <input
           type="radio"
@@ -115,8 +116,8 @@
       <div class="input_box2" v-if="step === 3">
         <h1 class="last_title">환영합니다!</h1>
         <p class="last_1">
-          OOO님, 회원가입을 축하합니다!<br />
-          가입하신 ID는<span class="effect">OOOOOO</span>입니다.
+          {{username}}님, 회원가입을 축하합니다!<br />
+          가입하신 ID는<span class="effect">{{userid}}</span>입니다.
         </p>
         <p class="last_2">
           travel 에서는 항상 회원님들의 입장에서<br />
@@ -161,6 +162,50 @@ export default {
       }
     },
     handlelast() {
+      if(this.userid === ""){
+        alert("아이디를 입력해주세요")
+         this.$refs.userid.focus();
+         return;
+      }
+      if(this.userpw ===""){
+         alert("비밀번호를 입력해주세요")
+          this.$refs.userpw.focus();
+          return;
+      }
+      if(this.userpw2 === ""){
+        alert("비밀번호 확인을 입력해주세요")
+         this.$refs.userpw2.focus();
+         return;
+      }
+       if(this.username === ""){
+        alert("이름을 입력해주세요")
+         this.$refs.username.focus();
+         return;
+      }
+        if(this.usernickname=== ""){
+        alert("닉네임을 입력해주세요")
+         this.$refs.usernickname.focus();
+         return;
+      }
+          if(this.usermail=== ""){
+        alert("이메일을 입력해주세요")
+         this.$refs.usermail.focus();
+         return;
+      }
+           if(this.email=== "선택항목"){
+        alert("메일을 선택해주세요")
+         this.$refs.email.focus();
+         return;
+      }
+             if(this.gender=== ""){
+        alert("성별을 선택해주세요")
+         this.$refs.gender.focus();
+         return;
+      }
+     if(!/^[a-z0-9]{5,20}$/i.test(this.userid))  {
+        alert("아이디는 5~20자의 영문 소문자, 숫자만 사용 가능합니다");
+        return;
+      }
       if (this.userpw !== this.userpw2) {
         alert("암호와 암호확인이 다릅니다");
       } else {
