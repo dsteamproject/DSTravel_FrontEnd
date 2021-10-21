@@ -26,7 +26,9 @@
         </div>
         <div class="nav2">
           <ul>
-            <li><router-link to="" class="router2">항공권</router-link></li>
+            <li>
+              <router-link to="/airline" class="router2">항공권</router-link>
+            </li>
             <li><router-link to="" class="router2">숙소</router-link></li>
             <li><router-link to="" class="router2">렌터카</router-link></li>
             <li>
@@ -42,6 +44,7 @@
     </div>
 
     <router-view></router-view>
+    <div class="footer">footer</div>
   </div>
 </template>
 
@@ -50,6 +53,12 @@ export default {};
 </script>
 
 <style scoped>
+.footer {
+  text-align: center;
+  height: 300px;
+  background: #fafafa;
+  clear: both;
+}
 .logo {
   text-decoration: none;
 }
