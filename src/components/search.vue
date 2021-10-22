@@ -13,6 +13,7 @@
             title="인원 상세설정"
             name="1"
             style="background-color: black"
+            v-bind:class="chclass"
           >
             <div>
               <div v-if="check === 1" class="check">
@@ -103,6 +104,7 @@
 export default {
   data() {
     return {
+      chclass:"chcss",
       btncolor: "active",
       btncolor2: "noneactive",
       right: 1,
@@ -161,6 +163,10 @@ export default {
 </script>
 
 <style scoped>
+.chcss{
+  text-align: center;
+  display: block;
+}
 .imgdiv {
   overflow: hidden;
   height: 100px;

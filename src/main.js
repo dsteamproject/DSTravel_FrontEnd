@@ -5,6 +5,7 @@ import VueGoogleMaps from '@fawmi/vue-google-maps'
 import App from './App.vue'
 import router from './routes'
 import VCalendar from 'v-calendar';
+import VueCookies from 'vue3-cookies'
 //ui 설정
 
 
@@ -20,6 +21,9 @@ app.use(VueGoogleMaps, {
         key: 'AIzaSyAk3JtD4rmjVoNiVZHGcUTIs5-xU6FrbT4',
     },
 })
+app.use(VueCookies, {
+    expireTimes: "7d",
+});
 
 // 설치한 모듈 
 // ==> vue router (npm install vue-router@next --save),

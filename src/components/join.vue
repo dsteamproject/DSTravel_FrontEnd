@@ -3,21 +3,35 @@
     <div class="wrap">
       <ul class="ul_1">
         <li class="circle1">
-          <span id="circle" v-bind:class="oncircle">1</span>
+          <span id="circle" v-bind:class="oncircle">
+        
+            <el-icon style="font-size:50px; line-height:30px;">
+        <document-checked />
+      </el-icon>
+    
+          </span>
           <dl class="circle_dl">
             <dt class="cdt">Step1</dt>
             <dd class="cdd">약관동의</dd>
           </dl>
         </li>
         <li class="circle1">
-          <span id="circle" v-bind:class="offcircle1">2</span>
+          <span id="circle" v-bind:class="offcircle1">
+           <el-icon style="font-size:50px">
+        <document />
+      </el-icon>
+          </span>
           <dl class="circle_dl">
             <dt class="cdt">Step2</dt>
             <dd class="cdd">정보입력</dd>
           </dl>
         </li>
         <li class="circle1">
-          <span id="circle" v-bind:class="offcircle2">3</span>
+          <span id="circle" v-bind:class="offcircle2">
+            <el-icon style="font-size:50px">
+        <finished />
+      </el-icon>
+          </span>
           <dl class="circle_dl">
             <dt class="cdt">Step3</dt>
             <dd class="cdd">가입완료</dd>
@@ -28,7 +42,7 @@
       <div class="input_box" v-if="step === 1">
         <ul class="iul">
           <li>
-            <input type="checkbox" class="chk" v-model="checkall" />
+            <input type="checkbox" class="chk" v-model="checkall" @click="allcheck" />
             <span class="chk1"
               >사이트 이용약관, 개인정보 수집 및 이용동의, 이벤트 및 프로모션
               안내메일 수신(선택)에 모두 동의 합니다.</span
@@ -61,7 +75,7 @@
           </li>
         </ul>
         <div class="center">
-          <button class="nonebtn">비동의</button>
+          <button class="nonebtn" @click="handlenone">비동의</button>
           <button class="yesbtn" @click="handleyes">동의</button>
         </div>
       </div>
@@ -109,7 +123,7 @@
           v-model="gender"
         />여성
         <div class="center1">
-          <button class="nonebtn">취소</button>
+          <button class="nonebtn" @click="handlenone2">취소</button>
           <button class="yesbtn" @click="handlelast">가입완료</button>
         </div>
       </div>
@@ -130,7 +144,16 @@
 </template>
 
 <script>
+import axios from "axios";
+import { Document } from "@element-plus/icons";
+import { DocumentChecked } from "@element-plus/icons";
+import { Finished } from "@element-plus/icons";
 export default {
+  components:{
+    Document,
+    Finished,
+    DocumentChecked,
+  },
   data() {
     return {
       userid: "",
@@ -152,6 +175,16 @@ export default {
     };
   },
   methods: {
+    
+    handlenone2(){
+      this.step = 1;
+      this.offcircle1 = "graybg";
+       this.oncircle = "bluebg";
+       this.offcircle2= "graybg";
+    },
+    handlenone(){
+      this.$router.go(-1)
+    },
     handleyes() {
       if (this.chk1 === false || this.chk2 === false) {
         alert("필수 체크항목을 체크해주세요");
@@ -161,7 +194,7 @@ export default {
         this.oncircle = "graybg";
       }
     },
-    handlelast() {
+    async handlelast() {
       if(this.userid === ""){
         alert("아이디를 입력해주세요")
          this.$refs.userid.focus();
@@ -202,13 +235,36 @@ export default {
          this.$refs.gender.focus();
          return;
       }
-     if(!/^[a-z0-9]{5,20}$/i.test(this.userid))  {
-        alert("아이디는 5~20자의 영문 소문자, 숫자만 사용 가능합니다");
-        return;
-      }
+     //if(!/^[a-z0-9]{5,20}$/i.test(this.userid))  {
+     //   alert("아이디는 5~20자의 영문 소문자, 숫자만 사용 가능합니다");
+      //  return;
+    //  }
+     //  if(!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,15}$/i.test(this.userpw)) {
+     //    alert("암호는 5~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요")
+     //    return;
+     //  }
+     //   if(!/^[가-힣A-Za-z]+$/i.test(this.username)) {
+     //     alert("실명을 입력해주세요")
+     //     return;
+//}
+ 
+    
       if (this.userpw !== this.userpw2) {
         alert("암호와 암호확인이 다릅니다");
       } else {
+        const url = `/REST/api/member/join`
+        const headers = { "Content-type": "application/json" };
+        const body = {
+        id: this.userid,
+        password: this.userpw,
+        name: this.username,
+        nicname: this.userphone,
+        email: this.usermail +"@" +this.email,
+        gender:this.gender
+      };
+       const response = await axios.post(url, body, { headers });
+       console.log(response);
+
         this.step = 3;
         this.offcircle2 = "bluebg";
         this.offcircle1 = "graybg";
@@ -229,6 +285,7 @@ export default {
           this.chk1 = true;
           this.chk2 = true;
           this.chk3 = true;
+         
         } else {
           this.chk1 = false;
           this.chk2 = false;
@@ -236,6 +293,8 @@ export default {
         }
       },
     },
+   
+    
   },
 };
 </script>
@@ -368,6 +427,9 @@ label {
 .iul li:nth-child(1) {
   background: #eee;
 }
+.iul{
+  margin-top:30px;
+}
 .center {
   width: 100%;
   text-align: center;
@@ -413,9 +475,12 @@ label {
 }
 .cdt {
   text-align: center;
+  line-height: 3.5;
 }
 .cdd {
   text-align: center;
+  font-weight: 600;
+  font-size:20px;
 }
 #back {
   background: #eeeeee;
@@ -437,7 +502,7 @@ label {
   background: #ccc;
   border-radius: 50%;
   text-align: center;
-  line-height: 107px;
+  line-height: 148px;
   margin: 0px 100px;
   float: left;
 }
@@ -462,6 +527,7 @@ ul .circle1 {
   height: 520px;
   padding: 30px 50px;
   box-sizing: border-box;
+  margin-top:30px;
 }
 .input_box2 {
   text-align: center;
@@ -471,5 +537,6 @@ ul .circle1 {
   height: 520px;
   padding: 30px 50px;
   box-sizing: border-box;
+  margin-top:30px;
 }
 </style>
