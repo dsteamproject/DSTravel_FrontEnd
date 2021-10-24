@@ -37,10 +37,9 @@
             <li>
               <router-link to="/search" class="router2">서치</router-link>
             </li>
-            <li><router-link to="" class="router2">메뉴2</router-link></li>
-            <li><router-link to="" class="router2">메뉴3</router-link></li>
-            <li><router-link to="" class="router2">메뉴4</router-link></li>
-            <li><router-link to="" class="router2">메뉴5</router-link></li>
+            <li><router-link to="" class="router2">여행월드컵</router-link></li>
+            <li><router-link to="" class="router2">게시판</router-link></li>
+        
           </ul>
         </div>
       </div>
