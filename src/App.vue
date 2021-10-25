@@ -67,7 +67,7 @@
             <li>
               <router-link to="/search" class="router2">서치</router-link>
             </li>
-            <li><router-link to="" class="router2">여행월드컵</router-link></li>
+            <li><router-link to="/vs" class="router2">여행월드컵</router-link></li>
             <li><router-link to="" class="router2">게시판</router-link></li>
           </ul>
         </div>

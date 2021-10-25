@@ -48,10 +48,14 @@
         :zoom="16"
         map-type-id="roadmap"
         style="width: 100vw; height: 20rem"
+        @click="mark"
+        class="gmap"
       >
         <GMapMarker
+         
           :key="index"
           v-for="(m, index) in markers"
+           :icon="m.icon"
           :position="m.position"
           :clickable="true"
           :draggable="false"
@@ -67,6 +71,7 @@
           </GMapInfoWindow>
         </GMapMarker>
       </GMapMap>
+      <button class="addmarker" @click="dialogVisible = true">추가</button>
     </div>
     <div class="right1">
       <button id="right_btn" @click="handleright" v-bind:class="btncolor">
@@ -101,9 +106,29 @@
       <div class="right_content" v-if="right === 2">내용2</div>
     </div>
   </div>
+    <el-dialog
+    v-model="dialogVisible"
+    title="위치 추가"
+    width="30%"
+    :before-close="handleClose"
+    class="sasa"
+  >
+  <span class="ind">위도,경도가 뜨지않을경우 지도에서 추가할려는 장소를 클릭해주세요</span><br><br>
+   위도: {{this.sublat}} , 경도: {{this.sublng}}<br><br>
+   위치 이름:<input type="text">
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">취소</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >완료</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
+
 export default {
   name: "search",
   created() {
@@ -112,6 +137,9 @@ export default {
   },
   data() {
     return {
+     dialogVisible:false,
+      sublat:"",
+      sublng:"",
       chclass: "chcss",
       btncolor: "active",
       btncolor2: "noneactive",
@@ -132,9 +160,18 @@ export default {
         },
         {
           id: 2,
+          
           position: {
             lat: 51.198429,
             lng: 6.69529,
+          },
+        },
+          {
+          id: 3,
+           icon:"https://developers.google.com/maps/documentation/javascript/examples/full/images/info-i_maps.png",
+          position: {
+           lat: "",
+            lng: "",
           },
         },
       ],
@@ -149,6 +186,16 @@ export default {
     });
   },
   methods: {
+    mark(event){
+       console.log(event.latLng.lat())
+       this.markers[2].position.lat = event.latLng.lat();
+      this.sublat = event.latLng.lat();
+     console.log(event.latLng.lng())
+       this.markers[2].position.lng = event.latLng.lng();
+        this.sublng= event.latLng.lng();
+       
+
+    },
     openMarker(id) {
       this.openedMarkerID = id;
     },
@@ -171,6 +218,12 @@ export default {
 </script>
 
 <style scoped>
+
+
+.ind{
+  color:red;
+  font-size:12px;
+}
 .chcss {
   text-align: center;
   display: block;
@@ -266,8 +319,19 @@ p {
 .center1 {
   width: 60%;
   height: 900px;
-
+  position: relative;
   float: left;
+}
+.addmarker{
+  position: absolute;
+  top:60px;
+  right:10px;
+  width:40px;
+  border:none;
+  background: white;
+  height: 40px;
+  cursor: pointer;
+  box-shadow: 1px 2px 3px rgba(0,0,0,0.3);
 }
 .right1 {
   width: 20%;

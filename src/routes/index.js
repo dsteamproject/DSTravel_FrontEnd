@@ -9,6 +9,8 @@ import car from '@/components/car'
 import hotel from '@/components/hotel'
 import find from '@/components/find'
 import mypage from '@/components/mypage'
+import vs from '@/components/vs'
+import vsseoul from '@/components/vsseoul'
 import findid from '@/components/id'
 import findpw from '@/components/pw'
 
@@ -20,6 +22,8 @@ const routes = [
     { path: '/airline', name: "airline", component: airline },
     { path: '/mypage', name: "mypage", component: mypage },
     { path: '/car', name: "car", component: car },
+    { path: '/vs', name: "vs", component: vs },
+    { path: '/vsseoul', name: "vsseoul", component: vsseoul },
     { path: '/hotel', name: "hotel", component: hotel },
     {
         path: '/find', name: "find", component: find,
