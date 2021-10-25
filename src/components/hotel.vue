@@ -32,7 +32,7 @@
               <div class="img">사진</div>
               <div class="text">
                 <div class="text_top">
-                  <h4>항공권</h4>
+                  <h4>호텔 말트 - 아스토텔</h4>
                 </div>
                 <div class="text_left">
                   <h3>₩356,031</h3>

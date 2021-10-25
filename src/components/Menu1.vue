@@ -55,20 +55,41 @@
         </ul>
         <div v-if="step === 1" class="step">
           <ul>
-            <li v-for="item in 8" :key="item" class="item">여행지</li>
+            <li
+              v-for="item in location"
+              :key="item"
+              class="item"
+              :value="item.title"
+              @click="handlestep1($event.target.textContent)"
+            >
+              <p>{{ item.title }}</p>
+              <p><span style="display: none">.</span>{{ item.sub }}</p>
+            </li>
           </ul>
           <button class="last_btn" @click="handlenext">다음</button>
         </div>
         <div v-if="step === 2" class="step">
           <ul>
-            <li v-for="item in 8" :key="item" class="item2">여행테마</li>
+            <li
+              v-for="item2 in travellike"
+              :key="item2"
+              class="item2"
+              @click="handlestep2($event.target.textContent)"
+            >
+              <p>{{ item2.title }}</p>
+            </li>
           </ul>
           <button class="last_btn" @click="handlenext2">다음</button>
         </div>
         <div v-if="step === 3" class="step1">
-          <v-date-picker v-model="range" is-range style="width: 100%" />
-          <span>시작일 : 2021.10.21 </span><br />
-          <span>종료일 : 2021.10.23 </span><br />
+          <v-date-picker
+            v-model="range"
+            is-range
+            style="width: 100%"
+            @click="handlestep3"
+          />
+          <span>시작일 : {{ start }} </span><br />
+          <span>종료일 : {{ end }} </span><br />
           <button class="last_btn" @click="handlesearch">추천여행 보기</button>
         </div>
       </div>
@@ -91,6 +112,7 @@
 </template>
 
 <script>
+// import axios from "axios";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 export default {
@@ -102,20 +124,114 @@ export default {
   },
   data() {
     return {
+      today: new Date(),
+      location: [
+        { title: "서울", sub: "SEOUL" },
+        { title: "인천", sub: "SEOUL" },
+        { title: "부산", sub: "SEOUL" },
+        { title: "울산", sub: "SEOUL" },
+        { title: "대구", sub: "SEOUL" },
+        { title: "경주", sub: "SEOUL" },
+        { title: "광주", sub: "SEOUL" },
+        { title: "제주도", sub: "SEOUL" },
+      ],
+      travellike: [
+        { title: "미식" },
+        { title: "힐링" },
+        { title: "액티비티" },
+        { title: "전통" },
+        { title: "당일치기" },
+        { title: "가이드" },
+        { title: "랜선투어" },
+        { title: "감성" },
+      ],
       range: {
-        start: new Date(2021, 10, 21),
-        end: new Date(2021, 10, 23),
+        start: new Date(),
+        end: new Date(new Date().setDate(new Date().getDate() + 1)),
       },
       step: 1,
       stepbg: "sbg",
       stepbg1: "nonesbg",
       stepbg2: "nonesbg",
+      step1value: "",
+      step1valuekor: "",
+      step1valueeng: "",
+      step2value: "",
+      start: "",
+      startmonth: "",
+      startyear: "",
+      startdate: "",
+      betsec: "",
+      betday: "",
+      end: "",
+      endmonth: "",
+      endyear: "",
+      enddate: "",
+
+      kora: [],
+      traveldate: "",
     };
   },
   methods: {
+    handlestep3() {
+      console.log(this.range.start);
+      console.log(this.range.end);
+      this.start =
+        this.range.start.getFullYear() +
+        "." +
+        (this.range.start.getMonth() + 1) +
+        "." +
+        this.range.start.getDate();
+
+      this.startmonth = this.range.start.getMonth() + 1;
+      console.log(this.startmonth);
+      this.startyear = this.range.start.getFullYear();
+      console.log(this.startyear);
+      this.startdate = this.range.start.getDate();
+      console.log(this.startdate);
+
+      this.end =
+        this.range.end.getFullYear() +
+        "." +
+        (this.range.end.getMonth() + 1) +
+        "." +
+        this.range.end.getDate();
+
+      this.endmonth = this.range.end.getMonth() + 1;
+
+      this.endyear = this.range.end.getFullYear();
+      this.enddate = this.range.end.getDate();
+
+      this.startDate = new Date(
+        this.startyear,
+        this.startmonth,
+        this.startdate
+      );
+      this.endDate = new Date(this.endyear, this.endmonth, this.enddate);
+      this.betsec = this.endDate.getTime() - this.startDate.getTime();
+      this.betday = this.betsec / 1000 / 60 / 60 / 24;
+      console.log(this.betday);
+    },
+    handlestep1(value) {
+      this.step1value = value;
+      console.log(value);
+      this.step = 2;
+      this.stepbg = "nonesbg";
+      this.stepbg1 = "sbg";
+      this.stepbg2 = "nonesbg";
+    },
+    handlestep2(value) {
+      this.step2value = value;
+      console.log(value);
+      this.step = 3;
+      this.stepbg = "nonesbg";
+      this.stepbg1 = "nonesbg";
+      this.stepbg2 = "sbg";
+    },
     handlenext() {
       this.step = 2;
-      (this.stepbg = "nonesbg"), (this.stepbg1 = "sbg");
+      this.stepbg = "nonesbg";
+      this.stepbg1 = "sbg";
       this.stepbg2 = "nonesbg";
     },
     handlenext2() {
@@ -123,8 +239,44 @@ export default {
       (this.stepbg = "nonesbg"), (this.stepbg1 = "nonesbg");
       this.stepbg2 = "sbg";
     },
-    handlesearch() {
-      this.$router.push("/search");
+    async handlesearch() {
+      console.log(this.step1value);
+      const kor = this.step1value;
+      this.kora = kor.split(".");
+      console.log(this.kora);
+      this.step1valuekor = this.kora[0];
+      console.log(this.step1valuekor);
+      this.step1valueeng = this.kora[1];
+      console.log(this.end);
+      console.log(this.start);
+      console.log(this.startmonth);
+      console.log(this.endmonth);
+
+      //const url = `/REST/추가할곳/추가할곳`;
+      //const headers = { "Content-type": "application/json" };
+      //const body = {
+      // 여행지: this.step1value,
+      // 여행테마: this.step2value,
+      //  시작일: this.start,
+      //  종료일: this.end,
+      //  시작월: this.startmonth,
+      //  종료월: this.endmonth,
+      //};
+      //const response = await axios.post(url, body, { headers });
+      //console.log(response);
+      this.$router.push({
+        name: "search",
+        query: {
+          locationkor: this.step1valuekor,
+          locationeng: this.step1valueeng,
+          theme: this.step2value,
+          start: this.start,
+          end: this.end,
+          startmon: this.startmonth,
+          endmonth: this.endmonth,
+          betday: this.betday + 1,
+        },
+      });
     },
   },
 };
@@ -204,6 +356,7 @@ export default {
 .step {
   width: 1300px;
   margin: 0 auto;
+  cursor: pointer;
 }
 .step1 {
   width: 900px;

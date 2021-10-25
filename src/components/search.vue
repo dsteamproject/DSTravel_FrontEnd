@@ -1,11 +1,14 @@
 <template>
   <div class="wrap">
     <div class="left1">
-      <h3>부산</h3>
-      <span class="sub_area">BUSAN</span><br />
-      <span class="day">10day</span><br />
+      <h3>{{ this.$route.query.locationkor }}</h3>
+      <span class="sub_area">{{ this.$route.query.locationeng }}</span
+      ><br />
+      <span class="day">{{ this.$route.query.betday }}day</span><br />
 
-      <a href="#" class="full_day">2021.12.01 - 2021.12.10</a>
+      <a href="#" class="full_day"
+        >{{ this.$route.query.start }} - {{ this.$route.query.end }}</a
+      >
 
       <div class="demo-collapse">
         <el-collapse v-model="activeNames" @change="handleChange">
@@ -39,14 +42,16 @@
       </div>
     </div>
     <div class="center1">
+      <button @click="addMarkers">add</button>
       <GMapMap
-        ref="myMapRef"
+        ref="mapRef"
         :center="center"
         :zoom="16"
         map-type-id="roadmap"
         style="width: 100vw; height: 20rem"
       >
         <GMapMarker
+          ref="mapRef"
           :key="index"
           v-for="(m, index) in markers"
           :position="m.position"
@@ -102,9 +107,14 @@
 
 <script>
 export default {
+  name: "search",
+  created() {
+    console.log(this.$route.query.locationkor);
+    console.log(this.$route.query.locationeng);
+  },
   data() {
     return {
-      chclass:"chcss",
+      chclass: "chcss",
       btncolor: "active",
       btncolor2: "noneactive",
       right: 1,
@@ -163,7 +173,7 @@ export default {
 </script>
 
 <style scoped>
-.chcss{
+.chcss {
   text-align: center;
   display: block;
 }

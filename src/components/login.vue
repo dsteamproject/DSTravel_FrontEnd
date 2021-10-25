@@ -90,7 +90,7 @@ export default {
       console.log(response);
       if (response.data.status === 200) {
         sessionStorage.setItem("TOKEN", response.data.token);
-        alert("로그인성공");
+
         if (this.saved === true) {
           this.$cookies.set("cookieid", this.userid);
         } else {

@@ -90,7 +90,9 @@
           class="userid"
           v-model="userid"
           ref="userid"
-        /><button class="id_btn" @click="checkid">중복확인</button><br />
+        /><button class="id_btn" @click="checkid">중복확인</button
+        ><span v-bind:class="idchk">{{ idcheck }}</span
+        ><br />
         <label>비밀번호</label
         ><input type="password" class="userpw" v-model="userpw" ref="userpw" />
 
@@ -187,6 +189,8 @@ export default {
   },
   data() {
     return {
+      idchk: "",
+      idcheck: "",
       userid: "",
       userpw: "",
       userpw2: "",
@@ -214,6 +218,20 @@ export default {
       };
       const response = await axios.post(url, body, { headers });
       console.log(response);
+      if (this.userid.length < "4") {
+        console.log(this.userid.length);
+        this.idcheck = "아이디는 5자리 이상입력해주세요";
+        this.idchk = "black";
+      } else {
+        if (response.data.status === 200) {
+          this.idcheck = response.data.result;
+          this.idchk = "blue";
+        } else {
+          this.idcheck = response.data.result;
+
+          this.idchk = "red";
+        }
+      }
     },
     handlenone2() {
       this.step = 1;
@@ -341,6 +359,32 @@ export default {
 </script>
 
 <style scoped>
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
+
+.black {
+  margin-left: 15px;
+  font-size: 13px;
+  color: black;
+  vertical-align: 3px;
+  font-family: "Noto Sans KR", sans-serif;
+}
+.blue {
+  margin-left: 15px;
+  font-size: 13px;
+  color: blue;
+  vertical-align: 3px;
+  font-family: "Noto Sans KR", sans-serif;
+}
+.red {
+  margin-left: 15px;
+  font-size: 13px;
+  color: red;
+  vertical-align: 3px;
+  font-family: "Noto Sans KR", sans-serif;
+}
 .last_2 {
   font-size: 15px;
   margin-top: 30px;

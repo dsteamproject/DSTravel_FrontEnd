@@ -31,7 +31,11 @@
               <router-link to="/login" class="router" v-if="logined === false"
                 >로그인</router-link
               >
-              <router-link to="" class="router" v-if="logined === true"
+              <router-link
+                to=""
+                @click="handlelogout"
+                class="router"
+                v-if="logined === true"
                 >로그아웃</router-link
               >
             </li>
@@ -46,7 +50,7 @@
               >
             </li>
             <li>
-              <router-link to="" class="router2"
+              <router-link to="/hotel" class="router2"
                 ><img
                   src="../src/assets/hotel.png"
                   style="width: 20px; height: 14px"
@@ -55,7 +59,7 @@
               >
             </li>
             <li>
-              <router-link to="" class="router2"
+              <router-link to="/car" class="router2"
                 ><img src="../src/assets/car.png" style="width: 20px" />
                 렌터카</router-link
               >
@@ -91,6 +95,17 @@ export default {
     changeLogged(logged) {
       this.logined = logged;
     },
+    handlelogout() {
+      const result = confirm("로그아웃 하시겠습니까?");
+      if (result) {
+        sessionStorage.removeItem("TOKEN");
+        this.logined = false;
+        this.$router.push(-1);
+      } else {
+        this.logined = true;
+        this.$router.push(-1);
+      }
+    },
   },
   created() {
     if (this.token !== null) {
@@ -101,6 +116,7 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
 .li_sch {
   margin-left: 20px;
   position: relative;
