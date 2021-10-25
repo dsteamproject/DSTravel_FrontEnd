@@ -42,16 +42,14 @@
       </div>
     </div>
     <div class="center1">
-      <button @click="addMarkers">add</button>
       <GMapMap
-        ref="mapRef"
+        ref="myMapRef"
         :center="center"
         :zoom="16"
         map-type-id="roadmap"
         style="width: 100vw; height: 20rem"
       >
         <GMapMarker
-          ref="mapRef"
           :key="index"
           v-for="(m, index) in markers"
           :position="m.position"
