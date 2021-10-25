@@ -5,22 +5,41 @@
       <div class="join">
         <div class="left">
           <h3>일반 로그인</h3>
-          <input type="text" class="userid" placeholder="아이디" v-model="userid" /><br />
-          <input type="password" class="userpw" placeholder="비밀번호" v-model="userpw" /><br />
-          <input type="button" value="로그인" class="btn" @click="handlelogin" />
+          <input
+            type="text"
+            class="userid"
+            placeholder="아이디"
+            v-model="userid"
+          /><br />
+          <input
+            type="password"
+            class="userpw"
+            placeholder="비밀번호"
+            v-model="userpw"
+          /><br />
+          <input
+            type="button"
+            value="로그인"
+            class="btn"
+            @click="handlelogin"
+          />
           <div class="chk">
             <div class="chk_in_left">
-              <input type="checkbox" class="checkbox" v-on:change="saveid" v-model="saved" /><span class="chktext"
-                >아이디저장</span
-              >
+              <input
+                type="checkbox"
+                class="checkbox"
+                v-on:change="saveid"
+                v-model="saved"
+              /><span class="chktext">아이디저장</span>
             </div>
             <ul class="chk_in_right">
-              <li  @click="$router.push('/find/id')">아이디 찾기</li>
+              <li @click="$router.push('/find/id')">아이디 찾기</li>
               <li>|</li>
-              <li  @click="$router.push('/find/pw')">비밀번호 찾기</li>
+              <li @click="$router.push('/find/pw')">비밀번호 찾기</li>
             </ul>
           </div>
-        </div><img src="../assets/naver.png">
+        </div>
+        <img src="../assets/naver.png" />
         <div class="right">
           <h3 class="login2">간편 로그인</h3>
           <button class="easylogin">네이버로 로그인</button><br />
@@ -39,7 +58,9 @@
           <div class="bottom_right">
             회원가입은 무료이며 <br />
             다양한 혜택을 받아 보실 수 있습니다.<br />
-            <button class="join_btn" @click="$router.push('/join')">회원가입하기</button>
+            <button class="join_btn" @click="$router.push('/join')">
+              회원가입하기
+            </button>
           </div>
         </div>
       </div>
@@ -48,33 +69,47 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 export default {
-    data() {
+  data() {
     return {
       userid: "",
       userpw: "",
-      saved:false,
+      saved: false,
     };
   },
-    methods: {
- handlelogin(){
-  
-   if(this.saved === true){
+  methods: {
+    async handlelogin() {
+      const url = `/REST/member/login`;
+      const headers = { "Content-type": "application/json" };
+      const body = {
+        id: this.userid,
+        password: this.userpw,
+      };
+      const response = await axios.post(url, body, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        sessionStorage.setItem("TOKEN", response.data.token);
+        alert("로그인성공");
+        if (this.saved === true) {
           this.$cookies.set("cookieid", this.userid);
         } else {
           this.$cookies.remove("cookieid");
         }
-   
- }
- },
- created(){
-   const cookieget = this.$cookies.get("cookieid");
-       if (this.$cookies.isKey("cookieid") === true) {
+        this.$router.push({ path: "/" });
+        this.$emit("changeLogged", true);
+      } else {
+        alert("아이디/암호를 다시확인해주세요");
+      }
+    },
+  },
+  created() {
+    const cookieget = this.$cookies.get("cookieid");
+    if (this.$cookies.isKey("cookieid") === true) {
       this.saved = true;
       this.userid = cookieget;
     }
- }
+  },
 };
 </script>
 

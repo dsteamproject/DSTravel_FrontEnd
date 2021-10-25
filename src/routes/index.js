@@ -6,6 +6,7 @@ import join from '@/components/join'
 import search from '@/components/search'
 import airline from '@/components/airline'
 import find from '@/components/find'
+import mypage from '@/components/mypage'
 import findid from '@/components/id'
 import findpw from '@/components/pw'
 
@@ -15,11 +16,12 @@ const routes = [
     { path: '/join', name: "join", component: join },
     { path: '/search', name: "search", component: search },
     { path: '/airline', name: "airline", component: airline },
+    { path: '/mypage', name: "mypage", component: mypage },
     {
         path: '/find', name: "find", component: find,
         children: [
-            {path: '/find/id', component: findid},
-            {path: '/find/pw', component: findpw}
+            { path: '/find/id', component: findid },
+            { path: '/find/pw', component: findpw }
         ]
     },
 

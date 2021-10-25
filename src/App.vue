@@ -13,39 +13,64 @@
                 class="search"
                 placeholder="도시나 상품을 검색해보세요"
               />
-             <el-icon class="sch_icon">
-        <search />
-      </el-icon>
+              <el-icon class="sch_icon">
+                <search />
+              </el-icon>
             </li>
           </ul>
           <ul class="nav_in_2">
             <li>
-             <router-link to="/join" class="router">회원가입</router-link>
+              <router-link to="/join" class="router" v-if="logined === false"
+                >회원가입</router-link
+              >
+              <router-link to="/mypage" class="router" v-if="logined === true"
+                >마이페이지</router-link
+              >
             </li>
             <li>
-              <router-link to="/login" class="router">로그인</router-link>
+              <router-link to="/login" class="router" v-if="logined === false"
+                >로그인</router-link
+              >
+              <router-link to="" class="router" v-if="logined === true"
+                >로그아웃</router-link
+              >
             </li>
           </ul>
         </div>
         <div class="nav2">
           <ul>
             <li>
-               <router-link to="/airline" class="router2"><img src="../src/assets/air.png" style="width:30px"> 항공권</router-link>
+              <router-link to="/airline" class="router2"
+                ><img src="../src/assets/air.png" style="width: 30px" />
+                항공권</router-link
+              >
             </li>
-            <li><router-link to="" class="router2"><img src="../src/assets/hotel.png" style="width:20px;height:14px"> 숙소</router-link></li>
-            <li><router-link to="" class="router2"><img src="../src/assets/car.png" style="width:20px"> 렌터카</router-link></li>
+            <li>
+              <router-link to="" class="router2"
+                ><img
+                  src="../src/assets/hotel.png"
+                  style="width: 20px; height: 14px"
+                />
+                숙소</router-link
+              >
+            </li>
+            <li>
+              <router-link to="" class="router2"
+                ><img src="../src/assets/car.png" style="width: 20px" />
+                렌터카</router-link
+              >
+            </li>
             <li>
               <router-link to="/search" class="router2">서치</router-link>
             </li>
             <li><router-link to="" class="router2">여행월드컵</router-link></li>
             <li><router-link to="" class="router2">게시판</router-link></li>
-        
           </ul>
         </div>
       </div>
     </div>
 
-    <router-view></router-view>
+    <router-view @changeLogged="changeLogged"></router-view>
     <div class="footer">footer</div>
   </div>
 </template>
@@ -53,24 +78,39 @@
 <script>
 import { Search } from "@element-plus/icons";
 export default {
-    components:{
+  components: {
     Search,
-
+  },
+  data() {
+    return {
+      logined: false,
+      token: sessionStorage.getItem("TOKEN"),
+    };
+  },
+  methods: {
+    changeLogged(logged) {
+      this.logined = logged;
+    },
+  },
+  created() {
+    if (this.token !== null) {
+      this.logined = true;
+    }
   },
 };
 </script>
 
 <style scoped>
-.li_sch{
-  margin-left:20px;
+.li_sch {
+  margin-left: 20px;
   position: relative;
 }
-.sch_icon{
+.sch_icon {
   position: absolute;
-  top:11px;
-  left:15px;
+  top: 11px;
+  left: 15px;
   font-size: 18px;
-  color:rgb(70, 64, 64)
+  color: rgb(70, 64, 64);
 }
 .footer {
   text-align: center;
@@ -123,7 +163,6 @@ export default {
   border: none;
 
   border-radius: 10px;
-  
 }
 .nav2 {
   height: 40px;

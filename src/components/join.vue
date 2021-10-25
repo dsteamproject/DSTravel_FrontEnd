@@ -4,11 +4,9 @@
       <ul class="ul_1">
         <li class="circle1">
           <span id="circle" v-bind:class="oncircle">
-        
-            <el-icon style="font-size:50px; line-height:30px;">
-        <document-checked />
-      </el-icon>
-    
+            <el-icon style="font-size: 50px; line-height: 30px">
+              <document-checked />
+            </el-icon>
           </span>
           <dl class="circle_dl">
             <dt class="cdt">Step1</dt>
@@ -17,9 +15,9 @@
         </li>
         <li class="circle1">
           <span id="circle" v-bind:class="offcircle1">
-           <el-icon style="font-size:50px">
-        <document />
-      </el-icon>
+            <el-icon style="font-size: 50px">
+              <document />
+            </el-icon>
           </span>
           <dl class="circle_dl">
             <dt class="cdt">Step2</dt>
@@ -28,9 +26,9 @@
         </li>
         <li class="circle1">
           <span id="circle" v-bind:class="offcircle2">
-            <el-icon style="font-size:50px">
-        <finished />
-      </el-icon>
+            <el-icon style="font-size: 50px">
+              <finished />
+            </el-icon>
           </span>
           <dl class="circle_dl">
             <dt class="cdt">Step3</dt>
@@ -42,7 +40,12 @@
       <div class="input_box" v-if="step === 1">
         <ul class="iul">
           <li>
-            <input type="checkbox" class="chk" v-model="checkall" @click="allcheck" />
+            <input
+              type="checkbox"
+              class="chk"
+              v-model="checkall"
+              @click="allcheck"
+            />
             <span class="chk1"
               >사이트 이용약관, 개인정보 수집 및 이용동의, 이벤트 및 프로모션
               안내메일 수신(선택)에 모두 동의 합니다.</span
@@ -82,24 +85,51 @@
       <div class="input_box1" v-if="step === 2">
         <p class="s2title">회원정보 입력</p>
         <label>아이디</label
-        ><input type="text" class="userid" v-model="userid" ref="userid" /><button
-          class="id_btn"
-        >
-          중복확인</button
-        ><br />
+        ><input
+          type="text"
+          class="userid"
+          v-model="userid"
+          ref="userid"
+        /><button class="id_btn" @click="checkid">중복확인</button><br />
         <label>비밀번호</label
         ><input type="password" class="userpw" v-model="userpw" ref="userpw" />
 
         <br />
         <label>비밀번호 확인</label
-        ><input type="password" class="userpw" v-model="userpw2" ref="userpw2" /><br />
+        ><input
+          type="password"
+          class="userpw"
+          v-model="userpw2"
+          ref="userpw2"
+        /><br />
         <label>이름</label
-        ><input type="text" class="userpw" v-model="username" ref="username" /><br />
+        ><input
+          type="text"
+          class="userpw"
+          v-model="username"
+          ref="username"
+        /><br />
         <label>닉네임</label
-        ><input type="text" class="userpw" v-model="usernickname" ref="usernickname" /><br />
+        ><input
+          type="text"
+          class="userpw"
+          v-model="usernickname"
+          ref="usernickname"
+        /><br />
         <label>이메일</label
-        ><input type="text" class="usermail" v-model="usermail" ref="usermail" />
-        <input type="text" class="userpw" v-model="email" ref="email" readonly />
+        ><input
+          type="text"
+          class="usermail"
+          v-model="usermail"
+          ref="usermail"
+        />
+        <input
+          type="text"
+          class="userpw"
+          v-model="email"
+          ref="email"
+          readonly
+        />
         <select class="sele" v-model="email">
           <option disabled selected>선택항목</option>
           <option>naver.com</option>
@@ -130,8 +160,9 @@
       <div class="input_box2" v-if="step === 3">
         <h1 class="last_title">환영합니다!</h1>
         <p class="last_1">
-          {{username}}님, 회원가입을 축하합니다!<br />
-          가입하신 ID는<span class="effect">{{userid}}</span>입니다.
+          {{ username }}님, 회원가입을 축하합니다!<br />
+          가입하신 ID는<span class="effect">{{ userid }}</span
+          >입니다.
         </p>
         <p class="last_2">
           travel 에서는 항상 회원님들의 입장에서<br />
@@ -149,7 +180,7 @@ import { Document } from "@element-plus/icons";
 import { DocumentChecked } from "@element-plus/icons";
 import { Finished } from "@element-plus/icons";
 export default {
-  components:{
+  components: {
     Document,
     Finished,
     DocumentChecked,
@@ -175,15 +206,23 @@ export default {
     };
   },
   methods: {
-    
-    handlenone2(){
+    async checkid() {
+      const url = `/REST/member/idcheck`;
+      const headers = { "Content-type": "application/json" };
+      const body = {
+        id: this.userid,
+      };
+      const response = await axios.post(url, body, { headers });
+      console.log(response);
+    },
+    handlenone2() {
       this.step = 1;
       this.offcircle1 = "graybg";
-       this.oncircle = "bluebg";
-       this.offcircle2= "graybg";
+      this.oncircle = "bluebg";
+      this.offcircle2 = "graybg";
     },
-    handlenone(){
-      this.$router.go(-1)
+    handlenone() {
+      this.$router.go(-1);
     },
     handleyes() {
       if (this.chk1 === false || this.chk2 === false) {
@@ -195,80 +234,85 @@ export default {
       }
     },
     async handlelast() {
-      if(this.userid === ""){
-        alert("아이디를 입력해주세요")
-         this.$refs.userid.focus();
-         return;
+      if (this.userid === "") {
+        alert("아이디를 입력해주세요");
+        this.$refs.userid.focus();
+        return;
       }
-      if(this.userpw ===""){
-         alert("비밀번호를 입력해주세요")
-          this.$refs.userpw.focus();
-          return;
+      if (this.userpw === "") {
+        alert("비밀번호를 입력해주세요");
+        this.$refs.userpw.focus();
+        return;
       }
-      if(this.userpw2 === ""){
-        alert("비밀번호 확인을 입력해주세요")
-         this.$refs.userpw2.focus();
-         return;
+      if (this.userpw2 === "") {
+        alert("비밀번호 확인을 입력해주세요");
+        this.$refs.userpw2.focus();
+        return;
       }
-       if(this.username === ""){
-        alert("이름을 입력해주세요")
-         this.$refs.username.focus();
-         return;
+      if (this.username === "") {
+        alert("이름을 입력해주세요");
+        this.$refs.username.focus();
+        return;
       }
-        if(this.usernickname=== ""){
-        alert("닉네임을 입력해주세요")
-         this.$refs.usernickname.focus();
-         return;
+      if (this.usernickname === "") {
+        alert("닉네임을 입력해주세요");
+        this.$refs.usernickname.focus();
+        return;
       }
-          if(this.usermail=== ""){
-        alert("이메일을 입력해주세요")
-         this.$refs.usermail.focus();
-         return;
+      if (this.usermail === "") {
+        alert("이메일을 입력해주세요");
+        this.$refs.usermail.focus();
+        return;
       }
-           if(this.email=== "선택항목"){
-        alert("메일을 선택해주세요")
-         this.$refs.email.focus();
-         return;
+      if (this.email === "선택항목") {
+        alert("메일을 선택해주세요");
+        this.$refs.email.focus();
+        return;
       }
-             if(this.gender=== ""){
-        alert("성별을 선택해주세요")
-         this.$refs.gender.focus();
-         return;
+      if (this.gender === "") {
+        alert("성별을 선택해주세요");
+        this.$refs.gender.focus();
+        return;
       }
-     //if(!/^[a-z0-9]{5,20}$/i.test(this.userid))  {
-     //   alert("아이디는 5~20자의 영문 소문자, 숫자만 사용 가능합니다");
-      //  return;
-    //  }
-     //  if(!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,15}$/i.test(this.userpw)) {
-     //    alert("암호는 5~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요")
-     //    return;
-     //  }
-     //   if(!/^[가-힣A-Za-z]+$/i.test(this.username)) {
-     //     alert("실명을 입력해주세요")
-     //     return;
-//}
- 
-    
+      if (!/^[a-z0-9]{5,20}$/i.test(this.userid)) {
+        alert("아이디는 5~20자의 영문 소문자, 숫자만 사용 가능합니다");
+        return;
+      }
+      if (
+        !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,15}$/i.test(
+          this.userpw
+        )
+      ) {
+        alert("암호는 5~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요");
+        return;
+      }
+      if (!/^[가-힣A-Za-z]+$/i.test(this.username)) {
+        alert("실명을 입력해주세요");
+        return;
+      }
+
       if (this.userpw !== this.userpw2) {
         alert("암호와 암호확인이 다릅니다");
       } else {
-        const url = `/REST/api/member/join`
+        const url = `/REST/member/join`;
         const headers = { "Content-type": "application/json" };
         const body = {
-        id: this.userid,
-        password: this.userpw,
-        name: this.username,
-        nicname: this.userphone,
-        email: this.usermail +"@" +this.email,
-        gender:this.gender
-      };
-       const response = await axios.post(url, body, { headers });
-       console.log(response);
-
-        this.step = 3;
-        this.offcircle2 = "bluebg";
-        this.offcircle1 = "graybg";
-        this.oncircle = "graybg";
+          id: this.userid,
+          password: this.userpw,
+          name: this.username,
+          nicname: this.usernickname,
+          email: this.usermail + "@" + this.email,
+          gender: this.gender,
+        };
+        const response = await axios.post(url, body, { headers });
+        console.log(response);
+        if (response.data.status === 200) {
+          alert("회원가입완료");
+          this.step = 3;
+          this.offcircle2 = "bluebg";
+          this.offcircle1 = "graybg";
+          this.oncircle = "graybg";
+        }
       }
     },
     gohome() {
@@ -285,7 +329,6 @@ export default {
           this.chk1 = true;
           this.chk2 = true;
           this.chk3 = true;
-         
         } else {
           this.chk1 = false;
           this.chk2 = false;
@@ -293,8 +336,6 @@ export default {
         }
       },
     },
-   
-    
   },
 };
 </script>
@@ -427,8 +468,8 @@ label {
 .iul li:nth-child(1) {
   background: #eee;
 }
-.iul{
-  margin-top:30px;
+.iul {
+  margin-top: 30px;
 }
 .center {
   width: 100%;
@@ -480,7 +521,7 @@ label {
 .cdd {
   text-align: center;
   font-weight: 600;
-  font-size:20px;
+  font-size: 20px;
 }
 #back {
   background: #eeeeee;
@@ -527,7 +568,7 @@ ul .circle1 {
   height: 520px;
   padding: 30px 50px;
   box-sizing: border-box;
-  margin-top:30px;
+  margin-top: 30px;
 }
 .input_box2 {
   text-align: center;
@@ -537,6 +578,6 @@ ul .circle1 {
   height: 520px;
   padding: 30px 50px;
   box-sizing: border-box;
-  margin-top:30px;
+  margin-top: 30px;
 }
 </style>
