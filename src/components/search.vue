@@ -52,10 +52,9 @@
         class="gmap"
       >
         <GMapMarker
-         
           :key="index"
           v-for="(m, index) in markers"
-           :icon="m.icon"
+          :icon="m.icon"
           :position="m.position"
           :clickable="true"
           :draggable="false"
@@ -106,16 +105,18 @@
       <div class="right_content" v-if="right === 2">내용2</div>
     </div>
   </div>
-    <el-dialog
+  <el-dialog
     v-model="dialogVisible"
     title="위치 추가"
     width="30%"
     :before-close="handleClose"
     class="sasa"
   >
-  <span class="ind">위도,경도가 뜨지않을경우 지도에서 추가할려는 장소를 클릭해주세요</span><br><br>
-   위도: {{this.sublat}} , 경도: {{this.sublng}}<br><br>
-   위치 이름:<input type="text">
+    <span class="ind"
+      >위도,경도가 뜨지않을경우 지도에서 추가할려는 장소를 클릭해주세요</span
+    ><br /><br />
+    위도: {{ this.sublat }} , 경도: {{ this.sublng }}<br /><br />
+    위치 이름:<input type="text" />
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">취소</el-button>
@@ -128,7 +129,6 @@
 </template>
 
 <script>
-
 export default {
   name: "search",
   created() {
@@ -137,9 +137,9 @@ export default {
   },
   data() {
     return {
-     dialogVisible:false,
-      sublat:"",
-      sublng:"",
+      dialogVisible: false,
+      sublat: "",
+      sublng: "",
       chclass: "chcss",
       btncolor: "active",
       btncolor2: "noneactive",
@@ -160,17 +160,18 @@ export default {
         },
         {
           id: 2,
-          
+
           position: {
             lat: 51.198429,
             lng: 6.69529,
           },
         },
-          {
-          id: 3,
-           icon:"https://developers.google.com/maps/documentation/javascript/examples/full/images/info-i_maps.png",
+        {
+          id: "추가할장소",
+
+          icon: "https://maps.google.com/mapfiles/ms/micons/green.png",
           position: {
-           lat: "",
+            lat: "",
             lng: "",
           },
         },
@@ -186,15 +187,13 @@ export default {
     });
   },
   methods: {
-    mark(event){
-       console.log(event.latLng.lat())
-       this.markers[2].position.lat = event.latLng.lat();
+    mark(event) {
+      console.log(event.latLng.lat());
+      this.markers[2].position.lat = event.latLng.lat();
       this.sublat = event.latLng.lat();
-     console.log(event.latLng.lng())
-       this.markers[2].position.lng = event.latLng.lng();
-        this.sublng= event.latLng.lng();
-       
-
+      console.log(event.latLng.lng());
+      this.markers[2].position.lng = event.latLng.lng();
+      this.sublng = event.latLng.lng();
     },
     openMarker(id) {
       this.openedMarkerID = id;
@@ -218,11 +217,9 @@ export default {
 </script>
 
 <style scoped>
-
-
-.ind{
-  color:red;
-  font-size:12px;
+.ind {
+  color: red;
+  font-size: 12px;
 }
 .chcss {
   text-align: center;
@@ -322,16 +319,16 @@ p {
   position: relative;
   float: left;
 }
-.addmarker{
+.addmarker {
   position: absolute;
-  top:60px;
-  right:10px;
-  width:40px;
-  border:none;
+  top: 60px;
+  right: 10px;
+  width: 40px;
+  border: none;
   background: white;
   height: 40px;
   cursor: pointer;
-  box-shadow: 1px 2px 3px rgba(0,0,0,0.3);
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
 }
 .right1 {
   width: 20%;
