@@ -7,6 +7,7 @@
         <img src="../assets/seoul3.jpg" />
         <img src="../assets/seoul4.jpg" />
         <img src="../assets/seoul5.jpg" />
+        <img src="../assets/seoul6.jpg" />
         <img src="../assets/seoul7.jpg" />
         <img src="../assets/seoul8.jpg" />
         <img src="../assets/seoul9.jpg" />
@@ -21,7 +22,7 @@
 
       <h1 v-if="rank === 16">16강</h1>
       <h1 v-if="rank === 8">8강</h1>
-      <h1 v-if="rank === 4">준결승</h1>
+      <h1 v-if="rank === 4">4강</h1>
       <h1 v-if="rank === 2">결승</h1>
       <span v-if="rank === 16">{{ this.step }}/8</span>
       <span v-if="rank === 8">{{ this.step2 }}/4</span>
@@ -151,65 +152,12 @@
           class="img2"
           @click="handlerightclick9($event)"
           v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
+        />{{ this.selectedtitle2 }} 1/4
       </div>
-      <div v-if="step2 === 2">
-        <img
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick10($event)"
-        />{{ this.selectedtitle }}<span> vs</span>
-        <img
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick10($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
-      <div v-if="step2 === 3">
-        <img
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick11($event)"
-        />{{ this.selectedtitle }}<span> vs</span>
-        <img
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick11($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
-      <div v-if="step2 === 4">
-        <img
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick12($event)"
-        />{{ this.selectedtitle }}<span> vs</span>
-        <img
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick12($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+   
 
-      <div v-if="step3 === 1">
-        <img
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick14($event)"
-        />{{ this.selectedtitle }}<span> vs</span>
-        <img
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick14($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+ 
+    
     </div>
   </div>
 </template>
@@ -308,6 +256,8 @@ export default {
     this.random2 = newnum2;
     this.random3 = newnum3;
     console.log(this.random2);
+    console.log("rand3");
+    console.log(this.random3);
 
     this.selectedImage = this.images[this.random[0]].img;
     this.selectedtitle = this.images[this.random[0]].title;
@@ -318,12 +268,19 @@ export default {
   },
   methods: {
     async handleleftclick(event) {
+       var index = this.images.findIndex(i => i.title == "남산"); 
+
+
+       console.log(index)
       if (this.images3.length < 4) {
+        // this.images[event.currentTarget.id].value=1;
         this.images3.push(this.images[event.currentTarget.id]);
       } else {
+          
         this.images4.push(this.images[event.currentTarget.id]);
       }
-
+            console.log(this.images3);
+        console.log(this.images4);
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
 
@@ -332,11 +289,14 @@ export default {
     },
     async handleleftclick2(event) {
       if (this.images3.length < 4) {
+      
         this.images3.push(this.images[event.currentTarget.id]);
       } else {
+      
         this.images4.push(this.images[event.currentTarget.id]);
       }
-
+            console.log(this.images3);
+        console.log(this.images4);
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
 
@@ -345,8 +305,10 @@ export default {
     },
     async handleleftclick3(event) {
       if (this.images3.length < 4) {
+          
         this.images3.push(this.images[event.currentTarget.id]);
       } else {
+        
         this.images4.push(this.images[event.currentTarget.id]);
       }
 
@@ -358,14 +320,17 @@ export default {
     },
     async handleleftclick4(event) {
       if (this.images3.length < 4) {
+            this.images["value"]=3;
         this.images3.push(this.images[event.currentTarget.id]);
       } else {
+            this.images["value"]=3;
         this.images4.push(this.images[event.currentTarget.id]);
       }
 
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
-
+        console.log(this.images3);
+        console.log(this.images4);
       this.step = this.step + 1;
       await this.randomimg4();
     },
@@ -437,40 +402,8 @@ export default {
       console.log(this.images4);
       await this.randomimg9();
     },
-    async handleleftclick10(event) {
-      if (this.images5.length < 2) {
-        this.images5.push(this.images3[event.currentTarget.id]);
-      } else {
-        this.images6.push(this.images3[event.currentTarget.id]);
-      }
-
-      this.step2 = this.step2 + 1;
-      this.rank = 8;
-      await this.randomimg10();
-    },
-    async handleleftclick11(event) {
-      if (this.images5.length < 2) {
-        this.images5.push(this.images3[event.currentTarget.id]);
-      } else {
-        this.images6.push(this.images3[event.currentTarget.id]);
-      }
-
-      this.step2 = this.step2 + 1;
-      this.rank = 8;
-      await this.randomimg11();
-    },
-    async handleleftclick12(event) {
-      if (this.images5.length < 2) {
-        this.images7.push(this.images5[event.currentTarget.id]);
-      } else {
-        this.images8.push(this.images5[event.currentTarget.id]);
-      }
-
-      this.step2 = 0;
-      this.step3 = this.step3 + 1;
-      this.rank = 4;
-      await this.randomimg12();
-    },
+  
+ 
 
     async handlerightclick(event) {
       if (this.images3.length < 4) {
@@ -578,52 +511,24 @@ export default {
       this.rank = 8;
       console.log(this.images3);
       console.log(this.images4);
-      await this.randomimg8();
+      await this.randomimg8();   // 16 -> 8
     },
     async handlerightclick9(event) {
-      if (this.images5.length < 2) {
+     if (this.images5.length < 2) {
         this.images5.push(this.images4[event.currentTarget.id]);
       } else {
         this.images6.push(this.images4[event.currentTarget.id]);
       }
-      console.log("click9");
+
       this.step2 = this.step2 + 1;
       this.rank = 8;
+      console.log(this.images5);
+      console.log(this.images6);
       await this.randomimg9();
     },
-    async handlerightclick10(event) {
-      if (this.images5.length < 2) {
-        this.images5.push(this.images4[event.currentTarget.id]);
-      } else {
-        this.images6.push(this.images4[event.currentTarget.id]);
-      }
-      console.log("click10");
-      this.step2 = this.step2 + 1;
-      this.rank = 8;
-      await this.randomimg10();
-    },
-    async handlerightclick11(event) {
-      if (this.images5.length < 2) {
-        this.images5.push(this.images4[event.currentTarget.id]);
-      } else {
-        this.images6.push(this.images4[event.currentTarget.id]);
-      }
-      console.log("click11");
-      this.step2 = this.step2 + 1;
-      this.rank = 8;
-      await this.randomimg11();
-    },
-    async handlerightclick12(event) {
-      if (this.images5.length < 2) {
-        this.images7.push(this.images6[event.currentTarget.id]);
-      } else {
-        this.images8.push(this.images6[event.currentTarget.id]);
-      }
-      console.log("click12");
-      this.step2 = this.step2 + 1;
-      this.rank = 8;
-      await this.randomimg12();
-    },
+    
+   
+
 
     async randomimg() {
       this.selectedImage = this.images[this.random[1]].img;
@@ -697,30 +602,8 @@ export default {
       this.selectedtitle2 = this.images4[this.random2[1]].title;
       this.selectedvalue2 = this.images4[this.random2[1]].value;
     },
-    async randomimg10() {
-      this.selectedImage = this.images3[this.random2[2]].img;
-      this.selectedtitle = this.images3[this.random2[2]].title;
-      this.selectedvalue = this.images3[this.random2[2]].value;
-      this.selectedImage2 = this.images4[this.random2[2]].img;
-      this.selectedtitle2 = this.images4[this.random2[2]].title;
-      this.selectedvalue2 = this.images4[this.random2[2]].value;
-    },
-    async randomimg11() {
-      this.selectedImage = this.images3[this.random2[3]].img;
-      this.selectedtitle = this.images3[this.random2[3]].title;
-      this.selectedvalue = this.images3[this.random2[3]].value;
-      this.selectedImage2 = this.images4[this.random2[3]].img;
-      this.selectedtitle2 = this.images4[this.random2[3]].title;
-      this.selectedvalue2 = this.images4[this.random2[3]].value;
-    },
-    async randomimg12() {
-      this.selectedImage = this.images3[this.random3[0]].img;
-      this.selectedtitle = this.images3[this.random3[0]].title;
-      this.selectedvalue = this.images3[this.random3[0]].value;
-      this.selectedImage2 = this.images4[this.random3[0]].img;
-      this.selectedtitle2 = this.images4[this.random3[0]].title;
-      this.selectedvalue2 = this.images4[this.random3[0]].value;
-    },
+  
+ 
   },
 };
 </script>
