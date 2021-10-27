@@ -24,18 +24,21 @@
       <h1 v-if="rank === 8">8강</h1>
       <h1 v-if="rank === 4">4강</h1>
       <h1 v-if="rank === 2">결승</h1>
+      <h1 v-if="rank === 1">우승 여행지</h1>
       <span v-if="rank === 16">{{ this.step }}/8</span>
       <span v-if="rank === 8">{{ this.step2 }}/4</span>
       <span v-if="rank === 4">{{ this.step3 }}/2</span>
       <span v-if="rank === 2">{{ this.step4 }}/1</span>
       <div v-if="step === 1">
         <img
+          ref="img1"
           :src="selectedImage"
           class="img1"
           v-bind:id="this.selectedvalue"
           @click="handleleftclick($event)"
         />{{ this.selectedtitle }}<span> vs</span>
         <img
+          ref="img2"
           :src="selectedImage2"
           class="img2"
           @click="handlerightclick($event)"
@@ -154,10 +157,97 @@
           v-bind:id="this.selectedvalue2"
         />{{ this.selectedtitle2 }} 1/4
       </div>
-   
-
- 
-    
+      <div v-if="step2 === 2">
+        <img
+          :src="selectedImage"
+          class="img1"
+          v-bind:id="this.selectedvalue"
+          @click="handleleftclick10($event)"
+        />{{ this.selectedtitle }}<span> vs</span>
+        <img
+          :src="selectedImage2"
+          class="img2"
+          @click="handlerightclick10($event)"
+          v-bind:id="this.selectedvalue2"
+        />{{ this.selectedtitle2 }} 1/4
+      </div>
+      <div v-if="step2 === 3">
+        <img
+          :src="selectedImage"
+          class="img1"
+          v-bind:id="this.selectedvalue"
+          @click="handleleftclick11($event)"
+        />{{ this.selectedtitle }}<span> vs</span>
+        <img
+          :src="selectedImage2"
+          class="img2"
+          @click="handlerightclick11($event)"
+          v-bind:id="this.selectedvalue2"
+        />{{ this.selectedtitle2 }} 1/4
+      </div>
+      <div v-if="step2 === 4">
+        <img
+          :src="selectedImage"
+          class="img1"
+          v-bind:id="this.selectedvalue"
+          @click="handleleftclick12($event)"
+        />{{ this.selectedtitle }}<span> vs</span>
+        <img
+          :src="selectedImage2"
+          class="img2"
+          @click="handlerightclick12($event)"
+          v-bind:id="this.selectedvalue2"
+        />{{ this.selectedtitle2 }} 1/4
+      </div>
+      <div v-if="step3 === 1">
+        <img
+          :src="selectedImage"
+          class="img1"
+          v-bind:id="this.selectedvalue"
+          @click="handleleftclick13($event)"
+        />{{ this.selectedtitle }}<span> vs</span>
+        <img
+          :src="selectedImage2"
+          class="img2"
+          @click="handlerightclick13($event)"
+          v-bind:id="this.selectedvalue2"
+        />{{ this.selectedtitle2 }} 1/4
+      </div>
+      <div v-if="step3 === 2">
+        <img
+          :src="selectedImage"
+          class="img1"
+          v-bind:id="this.selectedvalue"
+          @click="handleleftclick14($event)"
+        />{{ this.selectedtitle }}<span> vs</span>
+        <img
+          :src="selectedImage2"
+          class="img2"
+          @click="handlerightclick14($event)"
+          v-bind:id="this.selectedvalue2"
+        />{{ this.selectedtitle2 }} 1/4
+      </div>
+      <div v-if="step4 === 1">
+        <img
+          :src="selectedImage"
+          class="img1"
+          v-bind:id="this.selectedvalue"
+          @click="handleleftclick15($event)"
+        />{{ this.selectedtitle }}<span> vs</span>
+        <img
+          :src="selectedImage2"
+          class="img2"
+          @click="handlerightclick15($event)"
+          v-bind:id="this.selectedvalue2"
+        />{{ this.selectedtitle2 }} 1/4
+      </div>
+      <div v-if="step5 === 1">
+        <img
+          :src="selectedImage"
+          class="img1"
+          v-bind:id="this.selectedvalue"
+        />{{ this.selectedtitle }}
+      </div>
     </div>
   </div>
 </template>
@@ -208,6 +298,7 @@ export default {
       images6: [],
       images7: [],
       images8: [],
+      finalimage: [],
       selectedImage: "",
       selectedImage2: "",
       selectedvalue: "",
@@ -217,10 +308,13 @@ export default {
       step: 1,
       step2: 0,
       step3: 0,
+      step4: 0,
+      step5: 0,
       random: [],
       random2: [],
       random3: [],
       rank: 16,
+      scale: "scale",
     };
   },
   async created() {
@@ -268,35 +362,62 @@ export default {
   },
   methods: {
     async handleleftclick(event) {
-       var index = this.images.findIndex(i => i.title == "남산"); 
-
-
-       console.log(index)
+      var index = this.images3.findIndex((i) => i.value == 0);
+      var index2 = this.images4.findIndex((i) => i.value == 0);
       if (this.images3.length < 4) {
-        // this.images[event.currentTarget.id].value=1;
-        this.images3.push(this.images[event.currentTarget.id]);
+        if (index === -1) {
+          this.images[event.currentTarget.id].value = 0;
+          this.images3.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 1;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-          
-        this.images4.push(this.images[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images[event.currentTarget.id].value = 0;
+          this.images4.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 1;
+          this.images4.push(this.images[event.currentTarget.id]);
+        }
       }
-            console.log(this.images3);
-        console.log(this.images4);
+      var img1 = this.$refs.img1;
+      img1.style.transform = "scale(2)";
+      console.log(index);
+      console.log(this.images3);
+      console.log(this.images4);
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
 
+      const wait = (timeToDelay) =>
+        new Promise((resolve) => setTimeout(resolve, timeToDelay));
+      await wait(2000);
       this.step = this.step + 1;
-      await this.randomimg();
+
+      this.randomimg();
     },
     async handleleftclick2(event) {
+      var index = this.images3.findIndex((i) => i.value == 1);
+      var index2 = this.images4.findIndex((i) => i.value == 1);
       if (this.images3.length < 4) {
-      
-        this.images3.push(this.images[event.currentTarget.id]);
+        if (index === -1) {
+          this.images[event.currentTarget.id].value = 1;
+          this.images3.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 2;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-      
-        this.images4.push(this.images[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images[event.currentTarget.id].value = 1;
+          this.images4.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 2;
+          this.images4.push(this.images[event.currentTarget.id]);
+        }
       }
-            console.log(this.images3);
-        console.log(this.images4);
+      console.log(this.images3);
+      console.log(this.images4);
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
 
@@ -304,12 +425,24 @@ export default {
       await this.randomimg2();
     },
     async handleleftclick3(event) {
+      var index = this.images3.findIndex((i) => i.value == 2);
+      var index2 = this.images4.findIndex((i) => i.value == 2);
       if (this.images3.length < 4) {
-          
-        this.images3.push(this.images[event.currentTarget.id]);
+        if (index === -1) {
+          this.images[event.currentTarget.id].value = 2;
+          this.images3.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 3;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-        
-        this.images4.push(this.images[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images[event.currentTarget.id].value = 2;
+          this.images4.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 3;
+          this.images4.push(this.images[event.currentTarget.id]);
+        }
       }
 
       delete this.images2[event.currentTarget.id];
@@ -319,28 +452,55 @@ export default {
       await this.randomimg3();
     },
     async handleleftclick4(event) {
+      var index = this.images3.findIndex((i) => i.value == 3);
+      var index2 = this.images4.findIndex((i) => i.value == 3);
       if (this.images3.length < 4) {
-            this.images["value"]=3;
-        this.images3.push(this.images[event.currentTarget.id]);
+        if (index === -1) {
+          this.images[event.currentTarget.id].value = 3;
+          this.images3.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 4;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-            this.images["value"]=3;
-        this.images4.push(this.images[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images[event.currentTarget.id].value = 3;
+          this.images4.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 4;
+          this.images4.push(this.images[event.currentTarget.id]);
+        }
       }
 
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
-        console.log(this.images3);
-        console.log(this.images4);
+      console.log(this.images3);
+      console.log(this.images4);
       this.step = this.step + 1;
       await this.randomimg4();
     },
     async handleleftclick5(event) {
+      var index = this.images3.findIndex((i) => i.value == 0);
+      var index2 = this.images4.findIndex((i) => i.value == 0);
       if (this.images3.length < 4) {
-        this.images3.push(this.images[event.currentTarget.id]);
+        if (index === -1) {
+          this.images[event.currentTarget.id].value = 0;
+          this.images3.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 1;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images[event.currentTarget.id].value = 0;
+          this.images4.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 1;
+          this.images4.push(this.images[event.currentTarget.id]);
+        }
       }
-
+      console.log(this.images3);
+      console.log(this.images4);
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
 
@@ -348,11 +508,27 @@ export default {
       await this.randomimg5();
     },
     async handleleftclick6(event) {
+      var index = this.images3.findIndex((i) => i.value == 1);
+      var index2 = this.images4.findIndex((i) => i.value == 1);
       if (this.images3.length < 4) {
-        this.images3.push(this.images[event.currentTarget.id]);
+        if (index === -1) {
+          this.images[event.currentTarget.id].value = 1;
+          this.images3.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 2;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images[event.currentTarget.id].value = 1;
+          this.images4.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 2;
+          this.images4.push(this.images[event.currentTarget.id]);
+        }
       }
+      console.log(this.images3);
+      console.log(this.images4);
 
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
@@ -361,11 +537,27 @@ export default {
       await this.randomimg6();
     },
     async handleleftclick7(event) {
+      var index = this.images3.findIndex((i) => i.value == 2);
+      var index2 = this.images4.findIndex((i) => i.value == 2);
       if (this.images3.length < 4) {
-        this.images3.push(this.images[event.currentTarget.id]);
+        if (index === -1) {
+          this.images[event.currentTarget.id].value = 2;
+          this.images3.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 3;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images[event.currentTarget.id].value = 2;
+          this.images4.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 3;
+          this.images4.push(this.images[event.currentTarget.id]);
+        }
       }
+      console.log(this.images3);
+      console.log(this.images4);
 
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
@@ -374,11 +566,27 @@ export default {
       await this.randomimg7();
     },
     async handleleftclick8(event) {
+      var index = this.images3.findIndex((i) => i.value == 3);
+      var index2 = this.images4.findIndex((i) => i.value == 3);
       if (this.images3.length < 4) {
-        this.images3.push(this.images[event.currentTarget.id]);
+        if (index === -1) {
+          this.images[event.currentTarget.id].value = 3;
+          this.images3.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 4;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images[event.currentTarget.id].value = 3;
+          this.images4.push(this.images[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 4;
+          this.images4.push(this.images[event.currentTarget.id]);
+        }
       }
+      console.log(this.images3);
+      console.log(this.images4);
 
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
@@ -390,41 +598,206 @@ export default {
       await this.randomimg8();
     },
     async handleleftclick9(event) {
+      var index = this.images5.findIndex((i) => i.value == 0);
+      var index2 = this.images6.findIndex((i) => i.value == 0);
       if (this.images5.length < 2) {
-        this.images5.push(this.images3[event.currentTarget.id]);
+        if (index === -1) {
+          this.images3[event.currentTarget.id].value = 0;
+          this.images5.push(this.images3[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images5.push(this.images3[event.currentTarget.id]);
+        }
       } else {
-        this.images6.push(this.images3[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images3[event.currentTarget.id].value = 0;
+          this.images6.push(this.images3[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images6.push(this.images3[event.currentTarget.id]);
+        }
       }
-
+      console.log(this.images5);
+      console.log(this.images6);
       this.step2 = this.step2 + 1;
       this.rank = 8;
-      console.log(this.images3);
-      console.log(this.images4);
+
       await this.randomimg9();
     },
-  
- 
+    async handleleftclick10(event) {
+      var index = this.images5.findIndex((i) => i.value == 1);
+      var index2 = this.images6.findIndex((i) => i.value == 1);
+      if (this.images5.length < 2) {
+        if (index === -1) {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images5.push(this.images3[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 2;
+          this.images5.push(this.images3[event.currentTarget.id]);
+        }
+      } else {
+        if (index2 === -1) {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images6.push(this.images3[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 2;
+          this.images6.push(this.images3[event.currentTarget.id]);
+        }
+      }
+      console.log(this.images5);
+      console.log(this.images6);
+      this.step2 = this.step2 + 1;
+      this.rank = 8;
+
+      await this.randomimg10();
+    },
+    async handleleftclick11(event) {
+      var index = this.images5.findIndex((i) => i.value == 0);
+      var index2 = this.images6.findIndex((i) => i.value == 0);
+      if (this.images5.length < 2) {
+        if (index === -1) {
+          this.images3[event.currentTarget.id].value = 0;
+          this.images5.push(this.images3[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images5.push(this.images3[event.currentTarget.id]);
+        }
+      } else {
+        if (index2 === -1) {
+          this.images3[event.currentTarget.id].value = 0;
+          this.images6.push(this.images3[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images6.push(this.images3[event.currentTarget.id]);
+        }
+      }
+      console.log(this.images5);
+      console.log(this.images6);
+      this.step2 = this.step2 + 1;
+      this.rank = 8;
+
+      await this.randomimg11();
+    },
+    async handleleftclick12(event) {
+      var index = this.images5.findIndex((i) => i.value == 1);
+      var index2 = this.images6.findIndex((i) => i.value == 1);
+      if (this.images5.length < 2) {
+        if (index === -1) {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images5.push(this.images3[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 2;
+          this.images5.push(this.images3[event.currentTarget.id]);
+        }
+      } else {
+        if (index2 === -1) {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images6.push(this.images3[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 2;
+          this.images6.push(this.images3[event.currentTarget.id]);
+        }
+      }
+      console.log(this.images5);
+      console.log(this.images6);
+      this.step2 = 0;
+      this.step3 = this.step3 + 1;
+      this.rank = 4;
+
+      await this.randomimg12();
+    },
+    async handleleftclick13(event) {
+      this.images5[event.currentTarget.id].value = 0;
+      this.images7.push(this.images5[event.currentTarget.id]);
+
+      console.log(this.images7);
+      console.log(this.images8);
+      this.step2 = 0;
+      this.step3 = this.step3 + 1;
+      this.rank = 4;
+
+      await this.randomimg13();
+    },
+    async handleleftclick14(event) {
+      this.images5[event.currentTarget.id].value = 0;
+      this.images8.push(this.images5[event.currentTarget.id]);
+
+      console.log(this.images7);
+      console.log(this.images8);
+      this.step2 = 0;
+      this.step3 = 0;
+      this.step4 = 1;
+      this.rank = 2;
+
+      await this.randomimg14();
+    },
+    async handleleftclick15() {
+      this.finalimage.push(this.images7[0]);
+
+      this.step2 = 0;
+      this.step3 = 0;
+      this.step4 = 0;
+      this.step5 = 1;
+      this.rank = 1;
+      console.log(this.finalimage);
+      await this.randomimg15();
+    },
 
     async handlerightclick(event) {
+      var index = this.images3.findIndex((i) => i.value == 0);
+      var index2 = this.images4.findIndex((i) => i.value == 0);
       if (this.images3.length < 4) {
-        this.images3.push(this.images2[event.currentTarget.id]);
+        if (index === -1) {
+          this.images2[event.currentTarget.id].value = 0;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 1;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images2[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images2[event.currentTarget.id].value = 0;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 1;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        }
       }
+      var img2 = this.$refs.img2;
+      img2.style.transform = "scale(2)";
+      console.log(this.images3);
+      console.log(this.images4);
 
       delete this.images[event.currentTarget.id];
       delete this.images2[event.currentTarget.id];
 
+      const wait = (timeToDelay) =>
+        new Promise((resolve) => setTimeout(resolve, timeToDelay));
+      await wait(2000);
       this.step = this.step + 1;
-      await this.randomimg();
+
+      this.randomimg();
     },
     async handlerightclick2(event) {
+      var index = this.images3.findIndex((i) => i.value == 1);
+      var index2 = this.images4.findIndex((i) => i.value == 1);
       if (this.images3.length < 4) {
-        this.images3.push(this.images2[event.currentTarget.id]);
+        if (index === -1) {
+          this.images2[event.currentTarget.id].value = 1;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 2;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images2[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images2[event.currentTarget.id].value = 1;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 2;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        }
       }
-
       delete this.images[event.currentTarget.id];
       delete this.images2[event.currentTarget.id];
 
@@ -432,10 +805,24 @@ export default {
       await this.randomimg2();
     },
     async handlerightclick3(event) {
+      var index = this.images3.findIndex((i) => i.value == 2);
+      var index2 = this.images4.findIndex((i) => i.value == 2);
       if (this.images3.length < 4) {
-        this.images3.push(this.images2[event.currentTarget.id]);
+        if (index === -1) {
+          this.images2[event.currentTarget.id].value = 2;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 3;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images2[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images2[event.currentTarget.id].value = 2;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 3;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        }
       }
 
       delete this.images[event.currentTarget.id];
@@ -445,10 +832,24 @@ export default {
       await this.randomimg3();
     },
     async handlerightclick4(event) {
+      var index = this.images3.findIndex((i) => i.value == 3);
+      var index2 = this.images4.findIndex((i) => i.value == 3);
       if (this.images3.length < 4) {
-        this.images3.push(this.images2[event.currentTarget.id]);
+        if (index === -1) {
+          this.images2[event.currentTarget.id].value = 3;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 4;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images2[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images2[event.currentTarget.id].value = 3;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 4;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        }
       }
 
       delete this.images[event.currentTarget.id];
@@ -458,12 +859,27 @@ export default {
       await this.randomimg4();
     },
     async handlerightclick5(event) {
+      var index = this.images3.findIndex((i) => i.value == 0);
+      var index2 = this.images4.findIndex((i) => i.value == 0);
       if (this.images3.length < 4) {
-        this.images3.push(this.images2[event.currentTarget.id]);
+        if (index === -1) {
+          this.images2[event.currentTarget.id].value = 0;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 1;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images2[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images2[event.currentTarget.id].value = 0;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 1;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        }
       }
-
+      console.log(this.images3);
+      console.log(this.images4);
       delete this.images[event.currentTarget.id];
       delete this.images2[event.currentTarget.id];
 
@@ -471,11 +887,27 @@ export default {
       await this.randomimg5();
     },
     async handlerightclick6(event) {
+      var index = this.images3.findIndex((i) => i.value == 1);
+      var index2 = this.images4.findIndex((i) => i.value == 1);
       if (this.images3.length < 4) {
-        this.images3.push(this.images2[event.currentTarget.id]);
+        if (index === -1) {
+          this.images2[event.currentTarget.id].value = 1;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images[event.currentTarget.id].value = 2;
+          this.images3.push(this.images[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images2[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images2[event.currentTarget.id].value = 1;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 2;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        }
       }
+      console.log(this.images3);
+      console.log(this.images4);
 
       delete this.images[event.currentTarget.id];
       delete this.images2[event.currentTarget.id];
@@ -484,11 +916,27 @@ export default {
       await this.randomimg6();
     },
     async handlerightclick7(event) {
+      var index = this.images3.findIndex((i) => i.value == 2);
+      var index2 = this.images4.findIndex((i) => i.value == 2);
       if (this.images3.length < 4) {
-        this.images3.push(this.images2[event.currentTarget.id]);
+        if (index === -1) {
+          this.images2[event.currentTarget.id].value = 2;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 3;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images2[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images2[event.currentTarget.id].value = 2;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 3;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        }
       }
+      console.log(this.images3);
+      console.log(this.images4);
 
       delete this.images[event.currentTarget.id];
       delete this.images2[event.currentTarget.id];
@@ -497,11 +945,27 @@ export default {
       await this.randomimg7();
     },
     async handlerightclick8(event) {
+      var index = this.images3.findIndex((i) => i.value == 3);
+      var index2 = this.images4.findIndex((i) => i.value == 3);
       if (this.images3.length < 4) {
-        this.images3.push(this.images2[event.currentTarget.id]);
+        if (index === -1) {
+          this.images2[event.currentTarget.id].value = 3;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 4;
+          this.images3.push(this.images2[event.currentTarget.id]);
+        }
       } else {
-        this.images4.push(this.images2[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images2[event.currentTarget.id].value = 3;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        } else {
+          this.images2[event.currentTarget.id].value = 4;
+          this.images4.push(this.images2[event.currentTarget.id]);
+        }
       }
+      console.log(this.images3);
+      console.log(this.images4);
       console.log("click8");
       delete this.images[event.currentTarget.id];
       delete this.images2[event.currentTarget.id];
@@ -511,13 +975,27 @@ export default {
       this.rank = 8;
       console.log(this.images3);
       console.log(this.images4);
-      await this.randomimg8();   // 16 -> 8
+      await this.randomimg8(); // 16 -> 8
     },
     async handlerightclick9(event) {
-     if (this.images5.length < 2) {
-        this.images5.push(this.images4[event.currentTarget.id]);
+      var index = this.images5.findIndex((i) => i.value == 0);
+      var index2 = this.images6.findIndex((i) => i.value == 0);
+      if (this.images5.length < 2) {
+        if (index === -1) {
+          this.images4[event.currentTarget.id].value = 0;
+          this.images5.push(this.images4[event.currentTarget.id]);
+        } else {
+          this.images3[event.currentTarget.id].value = 1;
+          this.images5.push(this.images4[event.currentTarget.id]);
+        }
       } else {
-        this.images6.push(this.images4[event.currentTarget.id]);
+        if (index2 === -1) {
+          this.images4[event.currentTarget.id].value = 0;
+          this.images6.push(this.images4[event.currentTarget.id]);
+        } else {
+          this.images4[event.currentTarget.id].value = 1;
+          this.images6.push(this.images4[event.currentTarget.id]);
+        }
       }
 
       this.step2 = this.step2 + 1;
@@ -526,9 +1004,124 @@ export default {
       console.log(this.images6);
       await this.randomimg9();
     },
-    
-   
+    async handlerightclick10(event) {
+      var index = this.images5.findIndex((i) => i.value == 1);
+      var index2 = this.images6.findIndex((i) => i.value == 1);
+      if (this.images5.length < 2) {
+        if (index === -1) {
+          this.images4[event.currentTarget.id].value = 1;
+          this.images5.push(this.images4[event.currentTarget.id]);
+        } else {
+          this.images4[event.currentTarget.id].value = 2;
+          this.images5.push(this.images4[event.currentTarget.id]);
+        }
+      } else {
+        if (index2 === -1) {
+          this.images4[event.currentTarget.id].value = 1;
+          this.images6.push(this.images4[event.currentTarget.id]);
+        } else {
+          this.images4[event.currentTarget.id].value = 2;
+          this.images6.push(this.images4[event.currentTarget.id]);
+        }
+      }
 
+      this.step2 = this.step2 + 1;
+      this.rank = 8;
+      console.log(this.images5);
+      console.log(this.images6);
+      await this.randomimg10();
+    },
+    async handlerightclick11(event) {
+      var index = this.images5.findIndex((i) => i.value == 0);
+      var index2 = this.images6.findIndex((i) => i.value == 0);
+      if (this.images5.length < 2) {
+        if (index === -1) {
+          this.images4[event.currentTarget.id].value = 0;
+          this.images5.push(this.images4[event.currentTarget.id]);
+        } else {
+          this.images4[event.currentTarget.id].value = 1;
+          this.images5.push(this.images4[event.currentTarget.id]);
+        }
+      } else {
+        if (index2 === -1) {
+          this.images4[event.currentTarget.id].value = 0;
+          this.images6.push(this.images4[event.currentTarget.id]);
+        } else {
+          this.images4[event.currentTarget.id].value = 1;
+          this.images6.push(this.images4[event.currentTarget.id]);
+        }
+      }
+
+      this.step2 = this.step2 + 1;
+      this.rank = 8;
+      console.log(this.images5);
+      console.log(this.images6);
+      await this.randomimg11();
+    },
+    async handlerightclick12(event) {
+      var index = this.images5.findIndex((i) => i.value == 1);
+      var index2 = this.images6.findIndex((i) => i.value == 1);
+      if (this.images5.length < 2) {
+        if (index === -1) {
+          this.images4[event.currentTarget.id].value = 1;
+          this.images5.push(this.images4[event.currentTarget.id]);
+        } else {
+          this.images4[event.currentTarget.id].value = 2;
+          this.images5.push(this.images4[event.currentTarget.id]);
+        }
+      } else {
+        if (index2 === -1) {
+          this.images4[event.currentTarget.id].value = 1;
+          this.images6.push(this.images4[event.currentTarget.id]);
+        } else {
+          this.images4[event.currentTarget.id].value = 2;
+          this.images6.push(this.images4[event.currentTarget.id]);
+        }
+      }
+
+      this.step2 = 0;
+      this.step3 = this.step3 + 1;
+      this.rank = 4;
+      console.log(this.images5);
+      console.log(this.images6);
+      await this.randomimg12();
+    },
+    async handlerightclick13(event) {
+      this.images6[event.currentTarget.id].value = 0;
+      this.images7.push(this.images6[event.currentTarget.id]);
+
+      this.step2 = 0;
+      this.step3 = this.step3 + 1;
+      this.rank = 4;
+      console.log(this.images7);
+      console.log(this.images8);
+      await this.randomimg13();
+    },
+    async handlerightclick14(event) {
+      this.images6[event.currentTarget.id].value = 0;
+      this.images8.push(this.images6[event.currentTarget.id]);
+
+      this.step2 = 0;
+      this.step3 = 0;
+      this.step4 = 1;
+      console.log("14");
+      this.rank = 2;
+      console.log(this.images7);
+      console.log(this.images8);
+      await this.randomimg14();
+    },
+    async handlerightclick15() {
+      this.finalimage.push(this.images8[0]);
+
+      this.step2 = 0;
+      this.step3 = 0;
+      this.step4 = 0;
+      this.step5 = 1;
+
+      this.rank = 1;
+      console.log(this.finalimage);
+      await this.randomimg15();
+    },
 
     async randomimg() {
       this.selectedImage = this.images[this.random[1]].img;
@@ -602,8 +1195,51 @@ export default {
       this.selectedtitle2 = this.images4[this.random2[1]].title;
       this.selectedvalue2 = this.images4[this.random2[1]].value;
     },
-  
- 
+    async randomimg10() {
+      this.selectedImage = this.images3[this.random2[2]].img;
+      this.selectedtitle = this.images3[this.random2[2]].title;
+      this.selectedvalue = this.images3[this.random2[2]].value;
+      this.selectedImage2 = this.images4[this.random2[2]].img;
+      this.selectedtitle2 = this.images4[this.random2[2]].title;
+      this.selectedvalue2 = this.images4[this.random2[2]].value;
+    },
+    async randomimg11() {
+      this.selectedImage = this.images3[this.random2[3]].img;
+      this.selectedtitle = this.images3[this.random2[3]].title;
+      this.selectedvalue = this.images3[this.random2[3]].value;
+      this.selectedImage2 = this.images4[this.random2[3]].img;
+      this.selectedtitle2 = this.images4[this.random2[3]].title;
+      this.selectedvalue2 = this.images4[this.random2[3]].value;
+    },
+    async randomimg12() {
+      this.selectedImage = this.images5[this.random3[0]].img;
+      this.selectedtitle = this.images5[this.random3[0]].title;
+      this.selectedvalue = this.images5[this.random3[0]].value;
+      this.selectedImage2 = this.images6[this.random3[0]].img;
+      this.selectedtitle2 = this.images6[this.random3[0]].title;
+      this.selectedvalue2 = this.images6[this.random3[0]].value;
+    },
+    async randomimg13() {
+      this.selectedImage = this.images5[this.random3[1]].img;
+      this.selectedtitle = this.images5[this.random3[1]].title;
+      this.selectedvalue = this.images5[this.random3[1]].value;
+      this.selectedImage2 = this.images6[this.random3[1]].img;
+      this.selectedtitle2 = this.images6[this.random3[1]].title;
+      this.selectedvalue2 = this.images6[this.random3[1]].value;
+    },
+    async randomimg14() {
+      this.selectedImage = this.images7[0].img;
+      this.selectedtitle = this.images7[0].title;
+      this.selectedvalue = this.images7[0].value;
+      this.selectedImage2 = this.images8[0].img;
+      this.selectedtitle2 = this.images8[0].title;
+      this.selectedvalue2 = this.images8[0].value;
+    },
+    async randomimg15() {
+      this.selectedImage = this.finalimage[0].img;
+      this.selectedtitle = this.finalimage[0].title;
+      this.selectedvalue = this.finalimage[0].value;
+    },
   },
 };
 </script>
@@ -617,10 +1253,13 @@ export default {
   width: 200px;
   height: 300px;
   cursor: pointer;
+  transition: all 2s;
 }
+
 .img2 {
   width: 200px;
   height: 300px;
   cursor: pointer;
+  transition: all 2s;
 }
 </style>

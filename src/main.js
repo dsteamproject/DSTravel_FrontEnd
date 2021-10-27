@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './routes'
 import VCalendar from 'v-calendar';
 import VueCookies from 'vue3-cookies'
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 //ui 설정
 
@@ -14,6 +15,7 @@ import VueCookies from 'vue3-cookies'
 const app = createApp(App);
 
 app.use(ElementPlus)
+app.use(CKEditor).mount();
 app.use(router);
 app.mount('#app');
 app.use(VCalendar, {})
