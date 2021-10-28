@@ -1,7 +1,9 @@
 
 <template>
   <div>
+   
     <div class="wrap">
+      
       <div class="left1">
         <div class="fix">
           <router-link

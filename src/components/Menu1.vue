@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap"  >
     <div class="wrap_in">
       <el-carousel height="480px">
         <el-carousel-item v-for="item in 3" :key="item"> </el-carousel-item>
@@ -170,9 +170,11 @@ export default {
 
       kora: [],
       traveldate: "",
+  
     };
   },
   methods: {
+
     handlestep3() {
       console.log(this.range.start);
       console.log(this.range.end);
@@ -443,6 +445,8 @@ export default {
   background-size: cover;
 }
 .wrap {
+  width:100%;
+  height: auto;
 }
 .main_img {
   height: 80vh;

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="wrap">
+  <div id="main">
+    <div class="wrap9" >
       <div class="wrap_1">
         <div class="nav">
           <ul class="nav_in">
@@ -77,7 +77,9 @@
         </div>
       </div>
     </div>
+      <div class="blo">
 
+      </div>
     <router-view @changeLogged="changeLogged"></router-view>
     <div class="footer">footer</div>
   </div>
@@ -91,6 +93,7 @@ export default {
   },
   data() {
     return {
+      scrollPostion : 0,
       logined: false,
       token: sessionStorage.getItem("TOKEN"),
     };
@@ -110,6 +113,10 @@ export default {
         this.$router.push(-1);
       }
     },
+
+
+
+
   },
   created() {
     if (this.token !== null) {
@@ -121,6 +128,9 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
+.blo{
+  height: 133px;
+}
 .li_sch {
   margin-left: 20px;
   position: relative;
@@ -141,10 +151,14 @@ export default {
 .logo {
   text-decoration: none;
 }
-.wrap {
+.wrap9 {
   border-bottom: 1px solid #ccc;
   height: auto;
   width: 100%;
+  position: fixed;
+  z-index: 99;
+  background: white;
+ 
 }
 .wrap_1 {
   width: 1080px;

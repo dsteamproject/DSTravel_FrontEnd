@@ -79,7 +79,7 @@
     margin-top: 5px;
     outline: none;
   }
-  h3 {
+ .h31 {
     color: #000;
     font-size: 25px;
     padding: 20px 0;
@@ -180,7 +180,7 @@
     padding: 50px 80px;
     overflow: hidden;
   }
-  p {
+  .p1 {
     font-size: 25px;
   }
   .bottom_left {

@@ -4,7 +4,7 @@
       <div class="logo"><h1>LOGO</h1></div>
       <div class="join">
         <div class="left">
-          <h3>일반 로그인</h3>
+          <h3 class="h31">일반 로그인</h3>
           <input
             type="text"
             class="userid"
@@ -41,7 +41,7 @@
         </div>
         <img src="../assets/naver.png" />
         <div class="right">
-          <h3 class="login2">간편 로그인</h3>
+          <h3 class="login2 h31">간편 로그인</h3>
           <button class="easylogin">네이버로 로그인</button><br />
           <button class="easylogin">구글로 로그인</button><br />
           <button class="easylogin">카카오톡 로그인</button>
@@ -50,7 +50,7 @@
       <div class="bottom">
         <div class="bottom_in">
           <div class="bottom_left">
-            <p>
+            <p class="p1">
               아직<br />
               회원이 아니신가요?
             </p>

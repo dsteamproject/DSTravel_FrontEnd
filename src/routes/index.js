@@ -13,12 +13,20 @@ import boardinfo from '@/components/info'
 import boardfree from '@/components/free'
 import boardreview from '@/components/review'
 import boardque from '@/components/que'
-import mypage from '@/components/mypage'
+
 import vs from '@/components/vs'
 import vsseoul from '@/components/vsseoul'
 import findid from '@/components/id'
 import findpw from '@/components/pw'
 import freewrite from '@/components/freewrite'
+import freecontent from '@/components/freecontent'
+import mypage from '@/components/mypage'
+import mypagemypw from '@/components/mypw'
+import mypagemyinfo from '@/components/myinfo'
+import mypagemyboard from '@/components/myboard'
+import mypagemylike from '@/components/mylike'
+import mypagemymap from '@/components/mymap'
+import mypagemydel from '@/components/mydel'
 
 const routes = [
     { path: '/', name: "Menu1", component: Menu1 },
@@ -26,9 +34,10 @@ const routes = [
     { path: '/join', name: "join", component: join },
     { path: '/search', name: "search", component: search },
     { path: '/airline', name: "airline", component: airline },
-    { path: '/mypage', name: "mypage", component: mypage },
+
     { path: '/car', name: "car", component: car },
     { path: '/freewrite', name: "freewrite", component: freewrite },
+    { path: '/freecontent', name: "freecontent", component: freecontent },
 
     { path: '/vs', name: "vs", component: vs },
     { path: '/vsseoul', name: "vsseoul", component: vsseoul },
@@ -47,6 +56,17 @@ const routes = [
             { path: '/board/free', component: boardfree },
             { path: '/board/review', component: boardreview },
             { path: '/board/que', component: boardque }
+        ]
+    },
+    {
+        path: '/mypage', name: "mypage", component: mypage,
+        children: [
+            {path:'/mypage/mypw', component:mypagemypw},
+            {path:'/mypage/myinfo', component:mypagemyinfo},
+            {path:'/mypage/myboard', component:mypagemyboard},
+            {path:'/mypage/mylike', component:mypagemylike},
+            {path:'/mypage/mymap', component:mypagemymap},
+            {path:'/mypage/mydel', component:mypagemydel},
         ]
     },
 ];

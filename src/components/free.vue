@@ -1,5 +1,6 @@
 <template>
   <div>
+     <!--  :to="`/menu_3/boardcontent?_id=${scope.row._id}`" -->
     <!-- https://www.tripade.com/ -->
     <div class="wrap">
       <ul class="opt">
@@ -42,7 +43,7 @@
             <router-link
               class="idlink"
               @click="handleHit(scope.row._id)"
-              :to="`/menu_3/boardcontent?_id=${scope.row._id}`"
+              to="/freecontent"
               >{{ scope.row.title }}
             </router-link>
           </template>
