@@ -27,6 +27,8 @@ import mypagemyboard from '@/components/myboard'
 import mypagemylike from '@/components/mylike'
 import mypagemymap from '@/components/mymap'
 import mypagemydel from '@/components/mydel'
+import myho from '@/components/mmho'
+import mytr from '@/components/mmtr'
 
 const routes = [
     { path: '/', name: "Menu1", component: Menu1 },
@@ -64,7 +66,13 @@ const routes = [
             {path:'/mypage/mypw', component:mypagemypw},
             {path:'/mypage/myinfo', component:mypagemyinfo},
             {path:'/mypage/myboard', component:mypagemyboard},
-            {path:'/mypage/mylike', component:mypagemylike},
+            {
+                path: '/mypage/mylike', component: mypagemylike,
+                children: [
+                    {path:'/mypage/mylike/mmtr', component:mytr},
+                    {path:'/mypage/mylike/mmho', component:myho},
+                ]
+            },
             {path:'/mypage/mymap', component:mypagemymap},
             {path:'/mypage/mydel', component:mypagemydel},
         ]

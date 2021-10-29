@@ -7,7 +7,7 @@
         </div>
         <div class="bg2">
             <div class="bg2_in">
-                <span class="sub">2021-10-28</span>  <span class="sub1"> 조회수:3</span>
+                <span class="sub">2021-10-28</span>  <span class="sub1"> 조회수:3</span><button>수정</button><button>삭제</button>
             </div>
         </div>
 <div class="wrap">
@@ -24,7 +24,9 @@
     </li>
 </ul>
 <textarea class="replytext" ></textarea><button class="replybtn">댓글쓰기</button>
+<button>이전글</button><button>다음글</button><button>목록</button>
 </div>
+
 </div>
     </div>
 </template>
