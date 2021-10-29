@@ -247,6 +247,7 @@ export default {
   height: auto;
   padding-bottom: 150px;
   background:white;
+  box-shadow: 1px 1px 20px 1px rgba(0, 0, 0, 0.1);
 }
 .btn1{
   display: inline-block;

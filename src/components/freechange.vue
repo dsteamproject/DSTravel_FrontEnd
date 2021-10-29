@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="wrap">
-      <h2 class="tti">커뮤니티</h2>
+      <h2 class="tti">글 수정</h2>
       <div class="hr"></div>
       <label>작성자</label> <span>박병근</span><br />
       <label>말머리</label>
@@ -15,11 +15,11 @@
       <label>내용</label>
       <div class="ckeditor">
         <ckeditor
-          
+       
           :editor="editor"
           v-model="editorData"
           :config="editorConfig"
-          @ready="onReady"
+          
         >
         </ckeditor>
         <div class="btn2">
@@ -47,28 +47,15 @@ export default {
       components: {
             ckeditor: CKEditor.component
         },
-        created(){
-           
-        },
   data() {
     return {
-      
+ 
       editor: ClassicEditor,
       editorData: "",
    
       editorConfig: {
-          height: '500px',
         language: 'ko',
-        
-simpleUpload: {
-uploadUrl :  '/freewrite',
-  withCredentials: true,
-      headers: {
-                'X-CSRF-TOKEN': 'CSRF-Token',
-                Authorization: 'Bearer <JSON Web Token>'
-            }
-
-  },
+       
         editorConfig: {
       fontSize:{
         option:[
@@ -79,7 +66,19 @@ uploadUrl :  '/freewrite',
         ]
       },
  
-  
+            simpleUpload: {
+            // The URL that the images are uploaded to.
+            uploadUrl: 'http://example.com',
+
+            // Enable the XMLHttpRequest.withCredentials property.
+            withCredentials: true,
+
+            // Headers sent along with the XMLHttpRequest to the upload server.
+            headers: {
+                'X-CSRF-TOKEN': 'CSRF-Token',
+                Authorization: 'Bearer <JSON Web Token>'
+            }
+        },
   toolbar: {
     items: [
       
@@ -118,22 +117,6 @@ uploadUrl :  '/freewrite',
           'CKFinder'
         ]
       },
-        image: {
-        toolbar: [
-          'imageTextAlternative',
-          'imageStyle:full',
-          'imageStyle:side',
-          'linkImage'
-        ]
-      },
-         table: {
-        contentToolbar: [
-          'tableColumn',
-          'tableRow',
-          'mergeTableCells'
-        ]
-      },
-      licenseKey: ''
 
     },
       },
@@ -148,17 +131,8 @@ uploadUrl :  '/freewrite',
 
 };
 </script>
-<style>
-  .ck-editor__editable {
-        min-height: 500px;
-    }
-    </style>
-<style scoped>
 
-.ck-editor__editable {
-    min-height: 500px;
-   }
-   .ck-content { height:500px; }
+<style scoped>
 .ck-content .text-tiny {
     font-size: 0.7em;
 }

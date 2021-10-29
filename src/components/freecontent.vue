@@ -7,7 +7,7 @@
         </div>
         <div class="bg2">
             <div class="bg2_in">
-                <span class="sub">2021-10-28</span>  <span class="sub1"> 조회수:3</span><button>수정</button><button>삭제</button>
+                <div class="dech1"><span class="sub">2021-10-28</span>  <span class="sub1"> 조회수:3</span></div><div class="dech2"><router-link class="change" to="/freechange">수정</router-link><router-link class="delete" to="">삭제</router-link></div>
             </div>
         </div>
 <div class="wrap">
@@ -24,7 +24,7 @@
     </li>
 </ul>
 <textarea class="replytext" ></textarea><button class="replybtn">댓글쓰기</button>
-<button>이전글</button><button>다음글</button><button>목록</button>
+<div class="nepr"><button>이전글</button><button>다음글</button><button>목록</button></div>
 </div>
 
 </div>
@@ -43,6 +43,41 @@
 </script>
 
 <style scoped>
+.nepr button{
+    margin: 10px 0 0 5px;
+    padding: 2px 5px;
+    border: 1px solid #ccc;
+    background: white;
+    font-size: 14px;
+      
+}
+.nepr{
+    text-align: right;
+}
+.dech1{
+    width:20%;
+    float:left;
+    
+}
+.dech2{
+    width:80%;
+    text-align: right;
+    float:left;
+}
+.delete{
+
+      vertical-align: middle;
+    margin-left:15px;
+    text-decoration: none;
+       vertical-align: -13px;
+}
+.change{
+  
+          vertical-align: middle;
+    margin-left:10px;
+    text-decoration: none;
+       vertical-align: -13px;
+}
 .reply_content2{
     min-height: 100px;
     clear: both;

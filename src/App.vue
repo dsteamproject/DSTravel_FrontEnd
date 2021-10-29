@@ -99,6 +99,9 @@ export default {
     };
   },
   methods: {
+    onscroll(e){
+       console.log(e);
+    },
     changeLogged(logged) {
       this.logined = logged;
     },
