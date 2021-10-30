@@ -28,7 +28,7 @@
           </div>
          
            
-             <div v-html="editorData" class="ck-content"></div>
+  
       </div>
     
     </div>
@@ -51,7 +51,7 @@ export default {
     return {
  
       editor: ClassicEditor,
-      editorData: "",
+       editorData:'<figure class="table"><table><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure><p><strong>dasdsaddadasdad</strong></p><figure class="table"><table><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure><p><strong>dasdsaddadasdad</strong></p><figure class="table"><table><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure><p><strong>dasdsaddadasdad</strong></p>',
    
       editorConfig: {
         language: 'ko',
@@ -162,6 +162,7 @@ export default {
   background:#2752be  ;
   color:white;
   border-radius: 3px 3px 3px 3px;
+  margin-bottom: 50px;
 }
 
 
@@ -170,7 +171,7 @@ export default {
   box-sizing: border-box;
   float: right;
 
-  height: 500px;
+  height:auto;
 }
 .tti {
   margin-top: 30px;
@@ -202,6 +203,8 @@ label {
 .wrap {
   width: 1120px;
   margin: 0 auto;
+  height: auto;
+  
 }
 .hr {
   margin: 20px 0px;

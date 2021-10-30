@@ -28,9 +28,9 @@
           </div>
          
            
-             <div v-html="editorData" class="ck-content"></div>
+           
       </div>
-    
+      <img :src="this.firstimg">
     </div>
   </div>
 </template>
@@ -52,7 +52,7 @@ export default {
         },
   data() {
     return {
-      
+      firstimg:"",
       editor: ClassicEditor,
       editorData: "",
    
@@ -60,15 +60,14 @@ export default {
           height: '500px',
         language: 'ko',
         
-simpleUpload: {
-uploadUrl :  '/freewrite',
-  withCredentials: true,
-      headers: {
-                'X-CSRF-TOKEN': 'CSRF-Token',
-                Authorization: 'Bearer <JSON Web Token>'
-            }
-
-  },
+  ckfinder: {
+            // Upload the images to the server using the CKFinder QuickUpload command.
+          uploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
+             options: {
+                resourceType: 'Images'
+            },
+                openerMethod: 'popup'
+        },
         editorConfig: {
       fontSize:{
         option:[
@@ -143,6 +142,18 @@ uploadUrl :  '/freewrite',
   methods:{
     handleconfirm(){
       console.log(this.editorData)
+      const content = this.editorData
+       const image = content.split('img').map(v => v.includes('src') === true && v.split("src="));
+         const image2 = image.map(v => v && v[1]?.split("></figure>"))
+         console.log(image2);
+           image2.map(v => v && v[0].slice(1, v[0]?.length - 1)).filter(v => v !== false);
+           var first = image2[1];
+       console.log(first[0]);
+      this.firstimg = first[0].replace(/"/g,'');
+
+
+
+
     }
   }
 
@@ -151,7 +162,14 @@ uploadUrl :  '/freewrite',
 <style>
   .ck-editor__editable {
         min-height: 500px;
+      
     }
+    .ck.ck-editor__editable_inline {
+      margin-left: 20px;
+    width: auto;
+    margin: 0 auto;
+    list-style-position: inside;
+}
     </style>
 <style scoped>
 
@@ -188,6 +206,7 @@ uploadUrl :  '/freewrite',
   background:#2752be  ;
   color:white;
   border-radius: 3px 3px 3px 3px;
+   margin-bottom: 50px;
 }
 
 
@@ -196,7 +215,7 @@ uploadUrl :  '/freewrite',
   box-sizing: border-box;
   float: right;
 
-  height: 500px;
+  height: auto;
 }
 .tti {
   margin-top: 30px;
@@ -228,6 +247,7 @@ label {
 .wrap {
   width: 1120px;
   margin: 0 auto;
+  height: auto;
 }
 .hr {
   margin: 20px 0px;

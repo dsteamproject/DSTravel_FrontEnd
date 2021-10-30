@@ -68,10 +68,10 @@
               <router-link to="/search" class="router2">서치</router-link>
             </li>
             <li>
-              <router-link to="/vs" class="router2">여행월드컵</router-link>
+              <router-link to="/vs" class="router2">여행지월드컵</router-link>
             </li>
             <li>
-              <router-link to="/board/free" class="router2">게시판</router-link>
+              <router-link to="/board/free" class="router2">커뮤니티</router-link>
             </li>
           </ul>
         </div>
@@ -81,6 +81,7 @@
 
       </div>
     <router-view @changeLogged="changeLogged"></router-view>
+    <div></div>
     <div class="footer">footer</div>
   </div>
 </template>
@@ -148,7 +149,7 @@ export default {
 .footer {
   text-align: center;
   height: 300px;
-  background: #fafafa;
+  background: #1d1616;
   clear: both;
 }
 .logo {

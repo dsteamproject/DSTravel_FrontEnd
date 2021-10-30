@@ -110,7 +110,7 @@ export default defineComponent({
   box-sizing: border-box;
 }
 .wrap {
-  height: 3000px;
+ 
 }
 .img {
   width: 30%;
@@ -147,7 +147,7 @@ export default defineComponent({
 }
 .right1 {
   width: 75%;
-  height: 900px;
+  height: auto;
   box-sizing: border-box;
   float: left;
 

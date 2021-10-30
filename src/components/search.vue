@@ -215,7 +215,16 @@ export default {
   },
 };
 </script>
+<style>
 
+.el-collapse-item__header{
+  text-align: center;
+  display: block;
+  background: #98DDE3;
+  color:white
+ 
+}
+</style>
 <style scoped>
 .ind {
   color: red;

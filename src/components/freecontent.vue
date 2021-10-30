@@ -3,11 +3,14 @@
         <div class="bg1">
             <div class="bg1_in">
             <h2 class="title">제목들어갈공간</h2>
+            
             </div>
+              
         </div>
         <div class="bg2">
             <div class="bg2_in">
                 <div class="dech1"><span class="sub">2021-10-28</span>  <span class="sub1"> 조회수:3</span></div><div class="dech2"><router-link class="change" to="/freechange">수정</router-link><router-link class="delete" to="">삭제</router-link></div>
+          
             </div>
         </div>
 <div class="wrap">
@@ -43,6 +46,13 @@
 </script>
 
 <style scoped>
+.title{
+    color:white;
+    font-size:30px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    z-index: 99;
+}
 .nepr button{
     margin: 10px 0 0 5px;
     padding: 2px 5px;
@@ -142,13 +152,25 @@
     margin:0 auto;
     
 }
+.black_box{
+    position:absolute;
+    top:0;
+    width:100%;
+    height: 200px;
+    background: black;
+    opacity: 0.2;
+    z-index: 98;
+}
 .bg1{
-    background: #ccc;
+    
+    background: url(../assets/bg.jpg);
+
     height: 200px;
 }
 .bg2{
-    background: #eee;
+    background: rgb(128, 182, 245);
     height: 50px;
+    color:white;
 }
 .ck-content{
     width:952px;
