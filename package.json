@@ -21,6 +21,7 @@
     "v-calendar": "^3.0.0-alpha.6",
     "vue": "^3.0.0",
     "vue-router": "^4.0.11",
+    "vue-zoomer": "^0.4.0-beta.1",
     "vue3-carousel": "^0.1.28",
     "vue3-cookies": "^1.0.1"
   },

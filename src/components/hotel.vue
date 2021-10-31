@@ -36,7 +36,7 @@
                 </div>
                 <div class="text_left">
                   <h3>₩356,031</h3>
-                  <button class="text_btn">상세 보기</button>
+                  <button class="text_btn" @click="$router.push('/hotelcontent')">상세 보기</button>
                 </div>
                 <div class="text_right">
                   <span>무료 와이파이</span><br />

@@ -7,6 +7,7 @@ import search from '@/components/search'
 import airline from '@/components/airline'
 import car from '@/components/car'
 import hotel from '@/components/hotel'
+import hotelcontent from '@/components/hotelcontent'
 import find from '@/components/find'
 import board from '@/components/board'
 import boardinfo from '@/components/info'
@@ -46,6 +47,7 @@ const routes = [
     { path: '/vs', name: "vs", component: vs },
     { path: '/vsseoul', name: "vsseoul", component: vsseoul },
     { path: '/hotel', name: "hotel", component: hotel },
+    { path: '/hotelcontent', name: "hotelcontent", component: hotelcontent },
     {
         path: '/find', name: "find", component: find,
         children: [

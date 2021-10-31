@@ -30,7 +30,7 @@
            
            
       </div>
-      <img :src="this.firstimg">
+     
     </div>
   </div>
 </template>
@@ -141,15 +141,15 @@ export default {
   },
   methods:{
     handleconfirm(){
-      console.log(this.editorData)
-      const content = this.editorData
-       const image = content.split('img').map(v => v.includes('src') === true && v.split("src="));
-         const image2 = image.map(v => v && v[1]?.split("></figure>"))
-         console.log(image2);
-           image2.map(v => v && v[0].slice(1, v[0]?.length - 1)).filter(v => v !== false);
-           var first = image2[1];
-       console.log(first[0]);
-      this.firstimg = first[0].replace(/"/g,'');
+      
+      const image = this.editorData;
+const regex =  /<img[^>]+src=["']?([^>"']+)["']?[^>]*>/g
+         let extractUrl = '';
+         extractUrl = regex.exec(image)
+     
+          this.firstimg =extractUrl[1]
+
+
 
 
 

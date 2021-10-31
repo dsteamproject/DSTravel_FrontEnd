@@ -7,6 +7,7 @@ import router from './routes'
 import VCalendar from 'v-calendar';
 import VueCookies from 'vue3-cookies'
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import VueZoomer from 'vue-zoomer'
 
 //ui 설정
 
@@ -15,6 +16,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 const app = createApp(App);
 
 app.use(ElementPlus)
+app.use(VueZoomer)
 app.use(CKEditor).mount();
 app.use(router);
 app.mount('#app');
@@ -31,4 +33,4 @@ app.use(VueCookies, {
 // 설치한 모듈 
 // ==> vue router (npm install vue-router@next --save),
 // ==> axios (npm install axios--save),
-// 
+// ==> vuezoomer (npm install vue-zoomer@next)
