@@ -52,6 +52,7 @@
 <script>
 import axios from "axios";
 export default {
+
   data() {
     return {
       no: this.$route.query.no,

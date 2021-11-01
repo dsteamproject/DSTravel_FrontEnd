@@ -89,7 +89,9 @@ export default {
       token : this.token };
     
       const body = {
-        title: "123",
+        title: this.title,
+        keyword:this.keyword,
+        content:this.editorData
         
       };
       console.log(headers)

@@ -3,7 +3,7 @@
     <div class="wrap">
       <h2 class="tti">글 수정</h2>
       <div class="hr"></div>
-      <label>작성자</label> <span>박병근</span><br />
+      <label>작성자</label> <span>{{list.writer}}</span><br />
       <label>말머리</label>
       <select class="keyword" v-model="keyword">
         <option value="free">잡담</option>
@@ -45,6 +45,7 @@ export default {
       editor: ClassicEditor,
       editorData: "",
       no: this.$route.query.no,
+            token: sessionStorage.getItem("TOKEN"),
       editorConfig: {
         language: "ko",
       },
@@ -53,7 +54,7 @@ export default {
   methods: {
     async handleconfirm() {
       const url = `/REST/board/update`;
-      const headers = { "Content-type": "application/json" };
+      const headers = { "Content-type": "application/json" ,  token : this.token };
       const body = {
         no: this.no,
         title: this.title,
@@ -62,6 +63,10 @@ export default {
       };
       const response = await axios.post(url, body, { headers });
       console.log(response);
+      if(response.data.status === 200){
+        alert("수정 완료되었습니다");
+        this.$router.push(`/freecontent?no=${this.no}`)
+      }
     },
     async refresh() {
       const url = `/REST/board/selectone?no=${this.no}`;

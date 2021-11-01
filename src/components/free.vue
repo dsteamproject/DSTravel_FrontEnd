@@ -71,6 +71,15 @@
 <script>
 import axios from "axios";
 export default {
+    watch:{
+       orderby:async function(){
+          await this.start();
+    },
+    size:async function(){
+      await this.start();
+    },
+   
+  },
   data() {
     return {
       list: [],
