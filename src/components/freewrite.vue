@@ -83,16 +83,16 @@ export default {
       // }
 
       // ===================================================================
-
-      const url = `/REST/board/insert`;
-      const headers = {
-        "Content-type": "application/json",
-        "token": this.token,
-      };
+      
+          const url = `/REST/board/insert`;
+      const headers = { "Content-type": "application/json" ,
+      token : this.token };
+    
       const body = {
-        title: this.title,
+        title: "123",
         
       };
+      console.log(headers)
       const response = await axios.post(url, body, { headers });
       console.log(response);
       if (response.data.status === 200) {
