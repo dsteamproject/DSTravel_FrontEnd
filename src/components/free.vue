@@ -1,11 +1,11 @@
 <template>
   <div>
-     <!--  :to="`/menu_3/boardcontent?_id=${scope.row._id}`" -->
+    <!--  :to="`/menu_3/boardcontent?_id=${scope.row._id}`" -->
     <!-- https://www.tripade.com/ -->
     <div class="wrap">
       <ul class="opt">
         <li>
-          <select class="boardlength">
+          <select class="boardlength" v-model="size">
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="30">30</option>
@@ -13,50 +13,53 @@
           </select>
         </li>
         <li>
-          <select class="boardro">
-            <option value="recent">최신순</option>
+          <select class="boardro" v-model="orderby">
+            <option value="latest">최신순</option>
             <option value="old">오래된순</option>
           </select>
         </li>
         <li>
-          <button class="sbtn">검색</button>
+          <button class="sbtn" @click="searchclick">검색</button>
         </li>
         <li>
-          <input type="text" class="sch" />
+          <input type="text" class="sch" v-model="keyword" />
         </li>
         <li>
-          <select class="schsel">
-            <option value="recent">제목</option>
-            <option value="old">작성자</option>
+          <select class="schsel" v-model="type">
+            <option value="title">제목</option>
+            <option value="writer">작성자</option>
           </select>
         </li>
       </ul>
 
       <el-table
-        :data="tableData"
+        :data="list"
         style="width: 100%"
         header-cell-style="border-top:2px solid #E2E2E2; background:#FAFAFA;"
       >
         <el-table-column prop="no" label="번호" width="100" />
+
         <el-table-column prop="title" label="제목">
           <template #default="scope">
+            <span class="keyword">{{ scope.row.keyword }}</span>
             <router-link
               class="idlink"
-              @click="handleHit(scope.row._id)"
-              to="/freecontent"
-              >{{ scope.row.title }}
+              @click="handleHit(scope.row.no)"
+              :to="`/freecontent?no=${scope.row.no}`"
+              ><span class="title">{{ scope.row.title }}</span>
             </router-link>
           </template>
         </el-table-column>
         <el-table-column prop="writer" label="작성자명" width="180" />
         <el-table-column prop="regdate" label="작성일" width="120" />
-        <el-table-column prop="cno" label="조회수" width="120" />
+        <el-table-column prop="hit" label="조회수" width="120" />
         <el-table-column prop="gno" label="따봉" width="120" />
       </el-table>
       <el-pagination
         background
+        @current-change="handleCurrentChange"
         layout="prev, pager, next"
-        :total="100"
+        :total="pages"
         class="pag"
       >
       </el-pagination>
@@ -66,78 +69,96 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          no: "1",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "2",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "3",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-      ],
+      list: [],
+      regdate: [],
+      size: "10",
+      orderby: "latest",
+      keyword: "",
+      type: "title",
+      pages: "", // 전체 페이지수
+      page: 1,
     };
   },
   methods: {
+    async searchclick() {
+      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}`;
+      const headers = { "Content-type": "application/json" };
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        this.list = response.data.list;
+        this.pages = Number(response.data.cnt) * 10;
+        for (var i = 0; i < this.list.length; i++) {
+          const regdate1 = this.list[i].regdate.split("T");
+          console.log(regdate1[0]);
+          this.list[i].regdate = regdate1[0];
+        }
+      }
+    },
+    async start() {
+      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        this.list = response.data.list;
+        this.pages = Number(response.data.cnt) * 10;
+        for (var i = 0; i < this.list.length; i++) {
+          const regdate1 = this.list[i].regdate.split("T");
+          console.log(regdate1[0]);
+          this.list[i].regdate = regdate1[0];
+        }
+      }
+    },
+
+    async handleCurrentChange(val) {
+      console.log(val);
+      this.page = val;
+      await this.start();
+    },
+    async handleHit(no) {
+      console.log(no);
+      const url = `/REST/board/updateHit?no=${no}`;
+      await axios.put(url);
+    },
     writer() {
       this.$router.push({ path: "/freewrite" });
     },
   },
+  async created() {
+    await this.start();
+  },
 };
 </script>
-
+<style>
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background: #2752be;
+}
+</style>
 <style scoped>
+.idlink {
+  color: black;
+  margin-left: 5px;
+  text-decoration: none;
+}
+.idlink:link {
+  color: black;
+}
+.idlink:visited {
+  color: rgb(158, 155, 155);
+}
+
+.keyword {
+  padding: 2px 13px;
+  color: white;
+  background: #9dd3ec;
+  border-radius: 100px;
+}
 .pag {
   float: left;
   margin-top: 20px;
@@ -152,6 +173,7 @@ export default {
   color: white;
   margin-top: 20px;
   border-radius: 2px 2px 2px 2px;
+  margin-bottom: 50px;
 }
 .sbtn {
   padding: 10px 35px;

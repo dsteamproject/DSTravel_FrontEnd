@@ -1,9 +1,7 @@
 
 <template>
   <div>
-   
     <div class="wrap">
-      
       <div class="left1">
         <div class="fix">
           <router-link
@@ -156,7 +154,7 @@ export default {
 }
 .right1 {
   width: 90%;
-  background: #eee;
+
   float: left;
   margin-left: 10%;
 }

@@ -5,173 +5,120 @@
       <div class="hr"></div>
       <label>작성자</label> <span>박병근</span><br />
       <label>말머리</label>
-      <select class="keyword">
-        <option>잡담</option>
-        <option>여행후기</option>
-        <option>여행정보</option>
-        <option>질문</option></select
+      <select class="keyword" v-model="keyword">
+        <option value="free">잡담</option>
+        <option value="review">여행후기</option>
+        <option value="info">여행정보</option>
+        <option value="que">질문</option></select
       ><br />
-      <label>제목</label><input type="text" class="title" /><br />
+      <label>제목</label
+      ><input type="text" class="title" v-model="title" /><br />
       <label>내용</label>
       <div class="ckeditor">
-        <ckeditor
-       
-          :editor="editor"
-          v-model="editorData"
-          :config="editorConfig"
-          
-        >
+        <ckeditor :editor="editor" v-model="editorData" :config="editorConfig">
         </ckeditor>
         <div class="btn2">
           <button class="confirm" @click="handleconfirm">완료</button>
-         
-          </div>
-         
-           
-  
+        </div>
       </div>
-    
     </div>
   </div>
 </template>
 
 <script>
-
-
- import CKEditor from '@ckeditor/ckeditor5-vue';
-import '@ckeditor/ckeditor5-build-classic/build/translations/ko';
-
-
+import CKEditor from "@ckeditor/ckeditor5-vue";
+import "@ckeditor/ckeditor5-build-classic/build/translations/ko";
+import axios from "axios";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 export default {
-      components: {
-            ckeditor: CKEditor.component
-        },
+  components: {
+    ckeditor: CKEditor.component,
+  },
+  async created() {
+    await this.refresh();
+  },
   data() {
     return {
- 
+      keyword: "",
+      list: [],
+      title: "",
       editor: ClassicEditor,
-       editorData:'<figure class="table"><table><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure><p><strong>dasdsaddadasdad</strong></p><figure class="table"><table><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure><p><strong>dasdsaddadasdad</strong></p><figure class="table"><table><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure><p><strong>dasdsaddadasdad</strong></p>',
-   
+      editorData: "",
+      no: this.$route.query.no,
       editorConfig: {
-        language: 'ko',
-       
-        editorConfig: {
-      fontSize:{
-        option:[
-         'tiny',
-'small',
-'big',
-'huge',
-        ]
+        language: "ko",
       },
- 
-            simpleUpload: {
-            // The URL that the images are uploaded to.
-            uploadUrl: 'http://example.com',
-
-            // Enable the XMLHttpRequest.withCredentials property.
-            withCredentials: true,
-
-            // Headers sent along with the XMLHttpRequest to the upload server.
-            headers: {
-                'X-CSRF-TOKEN': 'CSRF-Token',
-                Authorization: 'Bearer <JSON Web Token>'
-            }
-        },
-  toolbar: {
-    items: [
-      
-          'heading',
-          '|',
-          'fontSize',
-          'fontFamily',
-          'fontColor',
-          'fontBackgroundColor',
-          'imageInsert',
-          '|',
-          'bold',
-          'italic',
-          'underline',
-          'strikethrough',
-          'highlight',
-          'removeFormat',
-          '|',
-          'alignment',
-          '|',
-          'numberedList',
-          'bulletedList',
-          '|',
-          'indent',
-          'outdent',
-          '|',
-          'todoList',
-          'link',
-          'blockQuote',
-          'imageUpload',
-          'insertTable',
-          'mediaEmbed',
-          '|',
-          'undo',
-          'redo',
-          'CKFinder'
-        ]
-      },
-
-    },
-      },
-      
     };
   },
-  methods:{
-    handleconfirm(){
-      console.log(this.editorData)
-    }
-  }
+  methods: {
+    async handleconfirm() {
+      const url = `/REST/board/update`;
+      const headers = { "Content-type": "application/json" };
+      const body = {
+        no: this.no,
+        title: this.title,
+        content: this.editorData,
+        keyword: this.keyword,
+      };
+      const response = await axios.post(url, body, { headers });
+      console.log(response);
+    },
+    async refresh() {
+      const url = `/REST/board/selectone?no=${this.no}`;
 
+      const headers = { "Content-type": "application/json" };
+      const response = await axios.get(url, headers);
+      console.log(response);
+      if (response.data.status === 200) {
+        this.list = response.data.board;
+        this.editorData = this.list.content;
+        this.title = this.list.title;
+        this.keyword = this.list.keyword;
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .ck-content .text-tiny {
-    font-size: 0.7em;
+  font-size: 0.7em;
 }
 
 .ck-content .text-small {
-    font-size: 0.85em;
+  font-size: 0.85em;
 }
 
 .ck-content .text-big {
-    font-size: 1.4em;
+  font-size: 1.4em;
 }
 
 .ck-content .text-huge {
-    font-size: 1.8em;
+  font-size: 1.8em;
 }
 
-.btn2{
+.btn2 {
   text-align: center;
 }
-.confirm{
+.confirm {
   text-align: center;
   clear: both;
-  margin-top:30px;
-  padding:10px 50px;
-  border:none;
+  margin-top: 30px;
+  padding: 10px 50px;
+  border: none;
   cursor: pointer;
-  background:#2752be  ;
-  color:white;
+  background: #2752be;
+  color: white;
   border-radius: 3px 3px 3px 3px;
   margin-bottom: 50px;
 }
-
 
 .ckeditor {
   width: 85%;
   box-sizing: border-box;
   float: right;
 
-  height:auto;
+  height: auto;
 }
 .tti {
   margin-top: 30px;
@@ -204,7 +151,6 @@ label {
   width: 1120px;
   margin: 0 auto;
   height: auto;
-  
 }
 .hr {
   margin: 20px 0px;
