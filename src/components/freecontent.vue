@@ -29,9 +29,15 @@
         <ul class="replyul">
           <li v-for="item in reply" :key="item">
             <div class="reply_content">
-              <span>{{item.writer}}</span><span class="regdate">{{item.regdate}}  </span>
+              <span>{{item.writer}}</span>
+              <span v-if="this.today = item.regdate2 " class="regdate">{{item.regdate3}}  </span>
+              <span v-if="this.today != item.regdate2 " class="regdate">{{item.regdate3}}  </span>
               <div class="reply_content2">
+                <div class="reply_in">
               {{item.reply}}
+              </div>
+              <span>수정</span>
+              <span>삭제</span>
               </div>
             </div>
           </li>
@@ -82,6 +88,7 @@ export default {
       next1: "",
       replytext:"",
       reply:"",
+      today:"",
     };
   },
   async created() {
@@ -138,13 +145,22 @@ export default {
           this.list = response.data.board;
         this.loginid = response.data.LoginId
         this.reply = response.data.reply
-      
-        const sample = this.reply[0].regdate
+      for(var i=0; i<this.reply.length; i++){
+        const sample = this.reply[i].regdate
         console.log(sample)
         const dada = new Date(sample)
-        const simpledate = dada.getFullYear() + "/" + (dada.getMonth() + 1) + "/" + dada.getDate();
+        const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
+        const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
         console.log(simpledate);
-      
+         this.reply[i].regdate2 = simpledate;
+         this.reply[i].regdate3 = simpledate2;
+         console.log(this.reply)
+         const today2 = new Date();
+         const today = today2.getFullYear() + "-" + ("0" + (today2.getMonth() + 1)).slice(-2) + "-" + ("0" + today2.getDate()).slice(-2)
+         
+         this.today = today;
+         console.log(this.today);
+      }
          
        
       
@@ -163,6 +179,10 @@ export default {
 
 
 <style scoped>
+.reply_in{
+  width:90%;
+  display: inline-block;
+}
 .prev {
   cursor: pointer;
 }

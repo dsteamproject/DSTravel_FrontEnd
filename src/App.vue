@@ -112,7 +112,7 @@ export default {
         sessionStorage.removeItem("TOKEN");
       
         this.logined = false;
-        this.$router.push(-1);
+        this.$router.push("/");
       } else {
         this.logined = true;
         this.$router.push(-1);

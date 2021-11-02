@@ -46,12 +46,17 @@
               class="idlink"
               @click="handleHit(scope.row.no)"
               :to="`/freecontent?no=${scope.row.no}`"
-              ><span class="title">{{ scope.row.title }}</span>
+              ><span  class="title">{{ scope.row.title }}</span>
+             
             </router-link>
           </template>
         </el-table-column>
         <el-table-column prop="writer" label="작성자명" width="180" align="center" />
-        <el-table-column prop="regdate" label="작성일" width="120" align="center" />
+        <el-table-column prop="regdate" label="작성일" width="120" align="center"  >
+                <template #default="scope" >
+          <span v-if="this.todays === 1" class="datec" @mouseover="dateclick(scope.row.no)" @mouseout="datedown">{{scope.row.regdate2}}</span>      
+          <span v-if="this.todays === 2" class="datec" @mouseout="datedown">{{scope.row.regdate3}}</span>      
+          </template></el-table-column>
         <el-table-column prop="hit" label="조회수" width="120" align="center" />
         <el-table-column prop="gno" label="따봉" width="120" align="center" />
       </el-table>
@@ -82,6 +87,7 @@ export default {
   },
   data() {
     return {
+      reg:"regdate2",
       list: [],
       regdate: [],
       size: "10",
@@ -90,9 +96,18 @@ export default {
       type: "title",
       pages: "", // 전체 페이지수
       page: 1,
+      todays:1,
     };
   },
   methods: {
+    datedown(no){
+      console.log(no)
+      this.todays=1
+    },
+    dateclick(no){
+      console.log(no)
+      this.todays=2
+    },
     async searchclick() {
       const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}`;
       const headers = { "Content-type": "application/json" };
@@ -118,9 +133,17 @@ export default {
         this.list = response.data.list;
         this.pages = Number(response.data.cnt) * 10;
         for (var i = 0; i < this.list.length; i++) {
-          const regdate1 = this.list[i].regdate.split("T");
-          console.log(regdate1[0]);
-          this.list[i].regdate = regdate1[0];
+          const regdate1 = this.list[i].regdate
+        
+          const dada = new Date(regdate1)
+          console.log(dada);
+             const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
+        
+        const simpledate2 = dada.getHours() +":"+ dada.getMinutes();
+           console.log(simpledate);
+              console.log(simpledate2);
+          this.list[i].regdate2 = simpledate;
+          this.list[i].regdate3 = simpledate2;
         }
       }
     },
@@ -150,6 +173,11 @@ export default {
 }
 </style>
 <style scoped>
+.datec{
+  cursor: pointer;
+  z-index: 99;
+  padding:10px 10px;
+}
 .idlink {
   color: black;
   margin-left: 5px;

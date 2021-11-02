@@ -1,0 +1,9 @@
+2021-11-02 19:45:31 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "REPLY VARCHAR(255)": "STRINGDECODE('\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313... (408)"; SQL statement:
+insert into reply (bno, regdate, reply, writer, no) values (?, ?, ?, ?, ?) [22001-200]
+2021-11-02 19:45:32 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "REPLY VARCHAR(255)": "STRINGDECODE('\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313... (408)"; SQL statement:
+insert into reply (bno, regdate, reply, writer, no) values (?, ?, ?, ?, ?) [22001-200]
+2021-11-02 19:45:32 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "REPLY VARCHAR(255)": "STRINGDECODE('\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313\uae00\ub313... (408)"; SQL statement:
+insert into reply (bno, regdate, reply, writer, no) values (?, ?, ?, ?, ?) [22001-200]

@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       title: "",
-      keyword: "",
+      keyword: "free",
       firstimg: "",
       editor: ClassicEditor,
       editorData: "",

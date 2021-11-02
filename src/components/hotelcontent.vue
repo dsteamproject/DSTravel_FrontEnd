@@ -54,7 +54,12 @@
                 </div>
             </div>
             <div class="right1">
-
+                <div class="right_in1">
+                    <span>1박</span><span>62,000원</span><br>
+                    <button class="ribtn">예약하기</button>
+                    <button class="ribtn2">위시리스트에 담기</button>
+                    <span class="ritext">941명이 이 상품을 위시리스트에 담았습니다.</span>
+                </div>
             </div>
         </div>
             <vue-easy-lightbox
@@ -141,6 +146,39 @@
 </script>
 
 <style scoped>
+.ritext{
+    margin-top:10px;
+    font-size:13px;
+}
+.ribtn2{
+    width:100%;
+    height: 45px;
+    border:1px solid rgb(53, 52, 52);
+    background: #ffffff;
+    color:black;
+    margin-top:30px;
+       border-radius: 5px;
+       cursor: pointer;
+}
+.ribtn{
+    width:100%;
+    height: 50px;
+    border:none;
+    background: #2752BE;
+    color:white;
+    margin-top:30px;
+       border-radius: 5px;
+       cursor: pointer;
+}
+.right_in1{
+    position: fixed;
+    border:1px solid #ddd;
+    width:330px;
+    height: auto;
+       border-radius: 10px;
+       padding:20px;
+       box-sizing: border-box;
+}
 .label3{
     vertical-align: top;
 }
@@ -254,6 +292,6 @@ label{
     width: 330px;
         height: 1000px;
          float:left;
-     background: #ccc;
+  
 }
 </style>
