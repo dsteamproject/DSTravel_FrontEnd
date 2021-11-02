@@ -245,14 +245,10 @@ export default {
       console.log(this.step1value);
       const kor = this.step1value;
       this.kora = kor.split(".");
-      console.log(this.kora);
       this.step1valuekor = this.kora[0];
-      console.log(this.step1valuekor);
       this.step1valueeng = this.kora[1];
-      console.log(this.end);
-      console.log(this.start);
-      console.log(this.startmonth);
-      console.log(this.endmonth);
+     
+   
 
       //const url = `/REST/추가할곳/추가할곳`;
       //const headers = { "Content-type": "application/json" };
@@ -278,7 +274,10 @@ export default {
           endmonth: this.endmonth,
           betday: this.betday + 1,
         },
+        
       });
+           window.scrollTo(0,0)
+  
     },
   },
 };

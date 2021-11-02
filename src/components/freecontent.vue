@@ -16,8 +16,9 @@
             class="change"
             :to="`/freechange?no=${this.no}`"
             @click="handleupdate"
+            v-if="this.loginid === this.list.writer"
             >수정</router-link
-          ><router-link class="delete" to="">삭제</router-link>
+          ><router-link class="delete" to=""  @click="dialogVisible = true" v-if="this.loginid === this.list.writer">삭제</router-link>
         </div>
       </div>
     </div>
@@ -26,19 +27,19 @@
       <div class="reply_box">
         <div class="hr"></div>
         <ul class="replyul">
-          <li v-for="item in 4" :key="item">
+          <li v-for="item in reply" :key="item">
             <div class="reply_content">
-              <span>user01</span><span class="regdate">2021-10-28</span>
+              <span>{{item.writer}}</span><span class="regdate">{{item.regdate}}  </span>
               <div class="reply_content2">
-                댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+              {{item.reply}}
               </div>
             </div>
           </li>
         </ul>
-        <textarea class="replytext"></textarea
-        ><button class="replybtn">댓글쓰기</button>
+        <textarea class="replytext" v-model="replytext"></textarea
+        ><button class="replybtn" @click="writereply">댓글쓰기</button>
         <div class="nepr">
-          <button v-if="this.prev1 !== 0" class="prev" @click="prevclick">
+          <button v-if="this.prev1 !== 0" class="prev" @click="prevclick" >
             이전글</button
           ><button v-if="this.next1 !== 0" class="next" @click="nextclick">
             다음글</button
@@ -46,7 +47,25 @@
         </div>
       </div>
     </div>
+
+      <el-dialog
+    v-model="dialogVisible"
+    title="글 삭제"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <span>현재 게시글을 삭제하시겠습니까?</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">취소</el-button>
+        <el-button type="primary" @click="handledelete"
+          >삭제</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
   </div>
+  
 </template>
 
 <script>
@@ -57,31 +76,78 @@ export default {
     return {
       no: this.$route.query.no,
       list: [],
-
+      dialogVisible:false,  
+      token: sessionStorage.getItem("TOKEN"),
       prev1: "",
       next1: "",
+      replytext:"",
+      reply:"",
     };
   },
   async created() {
     await this.refresh();
   },
   methods: {
+    async writereply(){
+      console.log(this.replytext)
+      const url = `/REST/board/reply?no=${this.no}`;
+       const body = {
+         reply:this.replytext,
+       
+        
+      };
+      const headers = { "Content-type": "application/json",  token : this.token };
+      const response = await axios.post(url,body, {headers});
+      console.log(response);
+      if(response.data.status === 200){
+        alert("댓글 작성완료")
+          await this.refresh();
+      }
+    },  
+      async handledelete(){
+            const url = `/REST/board/delete?no=${this.no}`;
+
+      const headers = { "Content-type": "application/json",  token : this.token };
+      const response = await axios.delete(url, {headers});
+      console.log(response);
+      if(response.data.status === 200){
+     
+             this.$router.push({ path: "/board/free" });
+      }
+    },
     async nextclick() {
       this.no = this.next1;
       await this.refresh();
+      window.scrollTo(0,0);
     },
     async prevclick() {
       this.no = this.prev1;
       await this.refresh();
+      window.scrollTo(0,0);
     },
     async refresh() {
       const url = `/REST/board/selectone?no=${this.no}`;
 
-      const headers = { "Content-type": "application/json" };
-      const response = await axios.get(url, headers);
+      const headers = {
+         "Content-type": "application/json",
+          token : this.token
+           };
+      const response = await axios.get(url, {headers});
       console.log(response);
       if (response.data.status === 200) {
-        this.list = response.data.board;
+          this.list = response.data.board;
+        this.loginid = response.data.LoginId
+        this.reply = response.data.reply
+      
+        const sample = this.reply[0].regdate
+        console.log(sample)
+        const dada = new Date(sample)
+        const simpledate = dada.getFullYear() + "/" + (dada.getMonth() + 1) + "/" + dada.getDate();
+        console.log(simpledate);
+      
+         
+       
+      
         this.prev1 = response.data.prev;
         console.log(this.prev1);
         this.next1 = response.data.next;
@@ -94,6 +160,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .prev {
@@ -148,6 +215,8 @@ export default {
   clear: both;
   border-bottom: 1px solid #ddd;
   margin-top: 10px;
+  margin-left: 10px;
+ 
 }
 .regdate {
   float: right;

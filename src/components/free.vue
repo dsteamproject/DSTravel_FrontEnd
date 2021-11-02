@@ -22,7 +22,7 @@
           <button class="sbtn" @click="searchclick">검색</button>
         </li>
         <li>
-          <input type="text" class="sch" v-model="keyword" />
+          <input type="text" class="sch" v-model="keyword"  v-on:keyup.enter="searchclick" />
         </li>
         <li>
           <select class="schsel" v-model="type">
@@ -37,7 +37,7 @@
         style="width: 100%"
         header-cell-style="border-top:2px solid #E2E2E2; background:#FAFAFA;"
       >
-        <el-table-column prop="no" label="번호" width="100" />
+        <el-table-column prop="no" label="번호" width="100" align="center" />
 
         <el-table-column prop="title" label="제목">
           <template #default="scope">
@@ -50,10 +50,10 @@
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column prop="writer" label="작성자명" width="180" />
-        <el-table-column prop="regdate" label="작성일" width="120" />
-        <el-table-column prop="hit" label="조회수" width="120" />
-        <el-table-column prop="gno" label="따봉" width="120" />
+        <el-table-column prop="writer" label="작성자명" width="180" align="center" />
+        <el-table-column prop="regdate" label="작성일" width="120" align="center" />
+        <el-table-column prop="hit" label="조회수" width="120" align="center" />
+        <el-table-column prop="gno" label="따봉" width="120" align="center" />
       </el-table>
       <el-pagination
         background

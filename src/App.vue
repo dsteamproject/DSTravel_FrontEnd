@@ -110,6 +110,7 @@ export default {
       const result = confirm("로그아웃 하시겠습니까?");
       if (result) {
         sessionStorage.removeItem("TOKEN");
+      
         this.logined = false;
         this.$router.push(-1);
       } else {

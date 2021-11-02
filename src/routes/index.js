@@ -31,10 +31,12 @@ import mypagemymap from '@/components/mymap'
 import mypagemydel from '@/components/mydel'
 import myho from '@/components/mmho'
 import mytr from '@/components/mmtr'
+import sample from '@/components/sample'
 
 const routes = [
     { path: '/', name: "Menu1", component: Menu1 },
     { path: '/login', name: "login", component: login },
+    { path: '/sample', name: "sample", component: sample },
     { path: '/join', name: "join", component: join },
     { path: '/search', name: "search", component: search },
     { path: '/airline', name: "airline", component: airline },
@@ -82,8 +84,10 @@ const routes = [
         ]
     },
 ];
+
 const router = createRouter({
     history: createWebHistory(),
+
     routes,
 });
 export default router;

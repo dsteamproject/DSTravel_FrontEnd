@@ -35,6 +35,7 @@ export default {
     ckeditor: CKEditor.component,
   },
   async created() {
+    
     await this.refresh();
   },
   data() {

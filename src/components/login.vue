@@ -90,6 +90,7 @@ export default {
       console.log(response);
       if (response.data.status === 200) {
         sessionStorage.setItem("TOKEN", response.data.token);
+   
 
         if (this.saved === true) {
           this.$cookies.set("cookieid", this.userid);
