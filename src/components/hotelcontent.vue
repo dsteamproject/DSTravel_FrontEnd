@@ -233,6 +233,7 @@ label{
 .zoomimg{
     width:100%;
     transition: all 0.5s;
+    cursor: pointer;
 }
 
 .img2{

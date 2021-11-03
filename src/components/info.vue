@@ -1,11 +1,11 @@
 <template>
   <div>
-     <!--  :to="`/menu_3/boardcontent?_id=${scope.row._id}`" -->
+    <!--  :to="`/menu_3/boardcontent?_id=${scope.row._id}`" -->
     <!-- https://www.tripade.com/ -->
     <div class="wrap">
       <ul class="opt">
         <li>
-          <select class="boardlength">
+          <select class="boardlength" v-model="size">
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="30">30</option>
@@ -13,50 +13,62 @@
           </select>
         </li>
         <li>
-          <select class="boardro">
-            <option value="recent">최신순</option>
+          <select class="boardro" v-model="orderby">
+            <option value="latest">최신순</option>
             <option value="old">오래된순</option>
           </select>
         </li>
         <li>
-          <button class="sbtn">검색</button>
+          <button class="sbtn" @click="searchclick">검색</button>
         </li>
         <li>
-          <input type="text" class="sch" />
+          <input type="text" class="sch" v-model="keyword"  v-on:keyup.enter="searchclick" />
         </li>
         <li>
-          <select class="schsel">
-            <option value="recent">제목</option>
-            <option value="old">작성자</option>
+          <select class="schsel" v-model="type">
+            <option value="title">제목</option>
+            <option value="writer">작성자</option>
           </select>
         </li>
       </ul>
 
       <el-table
-        :data="tableData"
+        :data="list"
         style="width: 100%"
         header-cell-style="border-top:2px solid #E2E2E2; background:#FAFAFA;"
+        header-row-class-name="cellt"
       >
-        <el-table-column prop="no" label="번호" width="100" />
+        <el-table-column prop="no" label="번호" width="100" align="center" />
+
         <el-table-column prop="title" label="제목">
           <template #default="scope">
+            <span class="keyword">여행정보</span>
             <router-link
               class="idlink"
-              @click="handleHit(scope.row._id)"
-              to="/freecontent"
-              >{{ scope.row.title }}
+              @click="handleHit(scope.row.no)"
+            
+              :to="`/freecontent?no=${scope.row.no}&category=${this.category}`"
+              ><span  class="title">{{ scope.row.title }} <span v-if="scope.row.countreply !== 0">({{scope.row.countreply}})</span>
+                <span class="new" v-if="scope.row.hours < 1">new</span>
+              </span>
+             
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column prop="writer" label="작성자명" width="180" />
-        <el-table-column prop="regdate" label="작성일" width="120" />
-        <el-table-column prop="cno" label="조회수" width="120" />
-        <el-table-column prop="gno" label="따봉" width="120" />
+        <el-table-column prop="writer" label="작성자명" width="180" align="center" />
+        <el-table-column prop="regdate" label="작성일" width="120" align="center"  >
+                <template #default="scope" >
+          <span v-if="this.todays === 1" class="datec" @mouseover="dateclick(scope.row.no)" @mouseout="datedown">{{scope.row.regdate2}}</span>      
+          <span v-if="this.todays === 2" class="datec" @mouseout="datedown">{{scope.row.regdate3}}</span>      
+          </template></el-table-column>
+        <el-table-column prop="hit" label="조회수" width="120" align="center" />
+        <el-table-column prop="gno" label="👍" width="120" align="center" label-class-name="asd"  />
       </el-table>
       <el-pagination
         background
+        @current-change="handleCurrentChange"
         layout="prev, pager, next"
-        :total="100"
+        :total="pages"
         class="pag"
       >
       </el-pagination>
@@ -66,78 +78,181 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
+    watch:{
+       orderby:async function(){
+          await this.start();
+    },
+    size:async function(){
+      await this.start();
+    },
+   
+  },
   data() {
     return {
-      tableData: [
-        {
-          no: "1",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "2",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "3",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "박병근",
-          regdate: "2021-10-27",
-          cno: 1,
-          gno: 2,
-        },
-      ],
+      reg:"regdate2",
+      list: [],
+      regdate: [],
+      size: "10",
+      orderby: "latest",
+      keyword: "",
+      type: "title",
+      pages: "", // 전체 페이지수
+      page: 1,
+      todays:1,
+      token: sessionStorage.getItem("TOKEN"),
+      category:"info",
+      todayhours: "",
     };
   },
   methods: {
-    writer() {
-      this.$router.push({ path: "/freewrite" });
+
+      scrollToTop() {
+                window.scrollTo(0,0);
+           },
+    datedown(no){
+      console.log(no)
+      this.todays=1
     },
+    dateclick(no){
+      console.log(no)
+      this.todays=2
+    },
+    async searchclick() {
+      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}&category=${this.category}`;
+      const headers = { "Content-type": "application/json" };
+      const response = await axios.get(url, { headers });
+      console.log(response);
+     if (response.data.status === 200) {
+        this.list = response.data.list;
+        this.pages = Number(response.data.cnt) * 10;
+        for (var i = 0; i < this.list.length; i++) {
+          const regdate1 = this.list[i].regdate
+        
+          const dada = new Date(regdate1)
+          console.log(dada);
+             const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
+        
+    const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
+    const simpledate3 = ("0"+ dada.getHours()).slice(-2) 
+           console.log(simpledate);
+              console.log(simpledate2);
+                     const todaydate = new Date();
+           const todaydate2 =("0"+ todaydate.getHours()).slice(-2) 
+           console.log(todaydate2)  // 15
+           this.todayhours = todaydate2;
+           console.log(simpledate3)  // 12
+           const Timeremaining = Number(todaydate2) - Number(simpledate3)
+           console.log(Timeremaining) 
+          this.list[i].regdate2 = simpledate;
+          this.list[i].regdate3 = simpledate2;
+          this.list[i].hours = Timeremaining;
+
+          
+        }
+      }
+    },
+    async start() {
+      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}&category=${this.category}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        this.list = response.data.list;
+        this.pages = Number(response.data.cnt) * 10;
+        for (var i = 0; i < this.list.length; i++) {
+          const regdate1 = this.list[i].regdate
+        
+          const dada = new Date(regdate1)
+          console.log(dada);
+             const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
+        
+    const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
+    const simpledate3 = ("0"+ dada.getHours()).slice(-2) 
+           console.log(simpledate);
+              console.log(simpledate2);
+                     const todaydate = new Date();
+           const todaydate2 =("0"+ todaydate.getHours()).slice(-2) 
+           console.log(todaydate2)  // 15
+           this.todayhours = todaydate2;
+           console.log(simpledate3)  // 12
+           const Timeremaining = Number(todaydate2) - Number(simpledate3)
+           console.log(Timeremaining) 
+          this.list[i].regdate2 = simpledate;
+          this.list[i].regdate3 = simpledate2;
+          this.list[i].hours = Timeremaining;
+
+          
+        }
+      }
+    },
+
+    async handleCurrentChange(val) {
+      console.log(val);
+      this.page = val;
+      await this.start();
+    },
+    async handleHit(no) {
+      console.log(no);
+      const url = `/REST/board/updateHit?no=${no}`;
+      await axios.put(url);
+    },
+    writer() {
+      if(this.token !== null){
+       this.$router.push({ path: "/freewrite", query: { category: this.category } });
+        }else{
+          alert("글작성은 로그인후 가능합니다")
+        }
+    },
+  },
+  async created() {
+    await this.start();
   },
 };
 </script>
+<style>
+.asd{
+  font-size:20px;
+  margin-bottom: 8px;
 
+
+}
+.new{
+  
+  color:rgb(144, 184, 36);
+  margin-left: 3px;
+  
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background: #2752be;
+}
+</style>
 <style scoped>
+.datec{
+  cursor: pointer;
+  z-index: 99;
+  padding:10px 10px;
+}
+.idlink {
+  color: black;
+  margin-left: 5px;
+  text-decoration: none;
+}
+.idlink:link {
+  color: black;
+}
+.idlink:visited {
+  color: rgb(158, 155, 155);
+}
+
+.keyword {
+  padding: 2px 13px;
+  color: white;
+  background: #9dd3ec;
+  border-radius: 100px;
+}
 .pag {
   float: left;
   margin-top: 20px;
@@ -152,6 +267,7 @@ export default {
   color: white;
   margin-top: 20px;
   border-radius: 2px 2px 2px 2px;
+  margin-bottom: 50px;
 }
 .sbtn {
   padding: 10px 35px;

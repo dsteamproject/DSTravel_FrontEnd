@@ -36,17 +36,21 @@
         :data="list"
         style="width: 100%"
         header-cell-style="border-top:2px solid #E2E2E2; background:#FAFAFA;"
+        header-row-class-name="cellt"
       >
         <el-table-column prop="no" label="번호" width="100" align="center" />
 
         <el-table-column prop="title" label="제목">
           <template #default="scope">
-            <span class="keyword">{{ scope.row.keyword }}</span>
+            <span class="keyword">잡담</span>
             <router-link
               class="idlink"
               @click="handleHit(scope.row.no)"
-              :to="`/freecontent?no=${scope.row.no}`"
-              ><span  class="title">{{ scope.row.title }}</span>
+            
+              :to="`/freecontent?no=${scope.row.no}&category=${this.category}`"
+              ><span  class="title">{{ scope.row.title }} <span v-if="scope.row.countreply !== 0">({{scope.row.countreply}})</span>
+                <span class="new" v-if="scope.row.hours < 1">new</span>
+              </span>
              
             </router-link>
           </template>
@@ -58,7 +62,7 @@
           <span v-if="this.todays === 2" class="datec" @mouseout="datedown">{{scope.row.regdate3}}</span>      
           </template></el-table-column>
         <el-table-column prop="hit" label="조회수" width="120" align="center" />
-        <el-table-column prop="gno" label="따봉" width="120" align="center" />
+        <el-table-column prop="gno" label="👍" width="120" align="center" label-class-name="asd"  />
       </el-table>
       <el-pagination
         background
@@ -97,9 +101,16 @@ export default {
       pages: "", // 전체 페이지수
       page: 1,
       todays:1,
+      token: sessionStorage.getItem("TOKEN"),
+      category:"free",
+      todayhours: "",
     };
   },
   methods: {
+
+      scrollToTop() {
+                window.scrollTo(0,0);
+           },
     datedown(no){
       console.log(no)
       this.todays=1
@@ -109,22 +120,41 @@ export default {
       this.todays=2
     },
     async searchclick() {
-      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}`;
+      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}&category=${this.category}`;
       const headers = { "Content-type": "application/json" };
       const response = await axios.get(url, { headers });
       console.log(response);
-      if (response.data.status === 200) {
+     if (response.data.status === 200) {
         this.list = response.data.list;
         this.pages = Number(response.data.cnt) * 10;
         for (var i = 0; i < this.list.length; i++) {
-          const regdate1 = this.list[i].regdate.split("T");
-          console.log(regdate1[0]);
-          this.list[i].regdate = regdate1[0];
+          const regdate1 = this.list[i].regdate
+        
+          const dada = new Date(regdate1)
+          console.log(dada);
+             const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
+        
+    const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
+    const simpledate3 = ("0"+ dada.getHours()).slice(-2) 
+           console.log(simpledate);
+              console.log(simpledate2);
+                     const todaydate = new Date();
+           const todaydate2 =("0"+ todaydate.getHours()).slice(-2) 
+           console.log(todaydate2)  // 15
+           this.todayhours = todaydate2;
+           console.log(simpledate3)  // 12
+           const Timeremaining = Number(todaydate2) - Number(simpledate3)
+           console.log(Timeremaining) 
+          this.list[i].regdate2 = simpledate;
+          this.list[i].regdate3 = simpledate2;
+          this.list[i].hours = Timeremaining;
+
+          
         }
       }
     },
     async start() {
-      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}`;
+      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}&category=${this.category}`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
@@ -139,11 +169,22 @@ export default {
           console.log(dada);
              const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
         
-        const simpledate2 = dada.getHours() +":"+ dada.getMinutes();
+    const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
+    const simpledate3 = ("0"+ dada.getHours()).slice(-2) 
            console.log(simpledate);
               console.log(simpledate2);
+                     const todaydate = new Date();
+           const todaydate2 =("0"+ todaydate.getHours()).slice(-2) 
+           console.log(todaydate2)  // 15
+           this.todayhours = todaydate2;
+           console.log(simpledate3)  // 12
+           const Timeremaining = Number(todaydate2) - Number(simpledate3)
+           console.log(Timeremaining) 
           this.list[i].regdate2 = simpledate;
           this.list[i].regdate3 = simpledate2;
+          this.list[i].hours = Timeremaining;
+
+          
         }
       }
     },
@@ -159,7 +200,11 @@ export default {
       await axios.put(url);
     },
     writer() {
-      this.$router.push({ path: "/freewrite" });
+      if(this.token !== null){
+       this.$router.push({ path: "/freewrite", query: { category: this.category } });
+        }else{
+          alert("글작성은 로그인후 가능합니다")
+        }
     },
   },
   async created() {
@@ -168,6 +213,18 @@ export default {
 };
 </script>
 <style>
+.asd{
+  font-size:20px;
+  margin-bottom: 8px;
+
+
+}
+.new{
+  
+  color:rgb(144, 184, 36);
+  margin-left: 3px;
+  
+}
 .el-pagination.is-background .el-pager li:not(.disabled).active {
   background: #2752be;
 }

@@ -24,32 +24,43 @@
     </div>
     <div class="wrap">
       <div v-html="this.list.content" class="ck-content"></div>
+    
       <div class="reply_box">
+    
+        <div class="likebox"><img @click="likeup" class="likeicon" src="../assets/like.png"><span style="vertical-align:5px;"> {{this.likenum}} </span> </div>
         <div class="hr"></div>
-        <ul class="replyul">
+        <div class="nonereply" v-if="this.reply.length === 0">현재 댓글이 없습니다.</div>
+        <ul class="replyul" v-if="this.reply.length !== 0">
           <li v-for="item in reply" :key="item">
             <div class="reply_content">
-              <span>{{item.writer}}</span>
-              <span v-if="this.today = item.regdate2 " class="regdate">{{item.regdate3}}  </span>
-              <span v-if="this.today != item.regdate2 " class="regdate">{{item.regdate3}}  </span>
+              <span class="rewriter">{{item.writer}}</span>
+              <span v-if="this.today === item.regdate2 " class="regdate">{{item.regdate3}}  </span>
+              <span v-if="this.today !== item.regdate2 " class="regdate">{{item.regdate2}}  </span>
               <div class="reply_content2">
                 <div class="reply_in">
               {{item.reply}}
               </div>
-              <span>수정</span>
-              <span>삭제</span>
+              <div class="reply_in2">
+              <button class="re_change">수정</button>
+              <button class="re_delete">삭제</button>
               </div>
+              </div>
+            
             </div>
           </li>
         </ul>
-        <textarea class="replytext" v-model="replytext"></textarea
-        ><button class="replybtn" @click="writereply">댓글쓰기</button>
+        <textarea v-if="this.token === null" class="replytext1" disabled v-model="replytext1"></textarea
+        >
+         <textarea v-if="this.token !== null" class="replytext" v-model="replytext"></textarea
+        >
+        <button class="replybtn" v-if="this.token === null" disabled @click="writereply">댓글쓰기</button>
+        <button class="replybtn" v-if="this.token !== null" @click="writereply">댓글쓰기</button>
         <div class="nepr">
           <button v-if="this.prev1 !== 0" class="prev" @click="prevclick" >
             이전글</button
           ><button v-if="this.next1 !== 0" class="next" @click="nextclick">
             다음글</button
-          ><button class="list">목록</button>
+          ><button class="list" @click="golist">목록</button>
         </div>
       </div>
     </div>
@@ -89,14 +100,30 @@ export default {
       replytext:"",
       reply:"",
       today:"",
+      replytext1:"댓글작성은 로그인후 가능합니다",
+      likenum:0,
+      category:this.$route.query.category,
     };
   },
   async created() {
+   
     await this.refresh();
+   
   },
   methods: {
+    golist(){
+        this.$router.push(`/board/${this.list.category}`);
+               window.scrollTo(0,0);
+    },
+    likeup(){
+      if(this.token === null){
+        alert("로그인 후 이용가능한 서비스입니다")
+      }
+    },
     async writereply(){
-      console.log(this.replytext)
+      if(this.replytext===""){
+        alert("댓글을 입력해주세요")
+        }else{
       const url = `/REST/board/reply?no=${this.no}`;
        const body = {
          reply:this.replytext,
@@ -105,21 +132,24 @@ export default {
       };
       const headers = { "Content-type": "application/json",  token : this.token };
       const response = await axios.post(url,body, {headers});
-      console.log(response);
+
       if(response.data.status === 200){
         alert("댓글 작성완료")
+        this.replytext="";
           await this.refresh();
       }
+      }
     },  
+    // put = > 변경 데이터 전송   
       async handledelete(){
             const url = `/REST/board/delete?no=${this.no}`;
-
+      const data={};
       const headers = { "Content-type": "application/json",  token : this.token };
-      const response = await axios.delete(url, {headers});
-      console.log(response);
+      const response = await axios.put(url, {data},{headers});
+    console.log(response)
       if(response.data.status === 200){
      
-             this.$router.push({ path: "/board/free" });
+             this.$router.push({ path: `/board/${this.list.category}` });
       }
     },
     async nextclick() {
@@ -133,43 +163,53 @@ export default {
       window.scrollTo(0,0);
     },
     async refresh() {
-      const url = `/REST/board/selectone?no=${this.no}`;
-
-      const headers = {
+    
+      const url = `/REST/board/selectone?no=${this.no}&category=${this.category}`;
+      if(this.token !== null){
+      var headers = {
          "Content-type": "application/json",
           token : this.token
            };
+      } else{
+            headers = {
+         "Content-type": "application/json",
+          
+           };
+      }
       const response = await axios.get(url, {headers});
-      console.log(response);
+      console.log(response)
+  
       if (response.data.status === 200) {
           this.list = response.data.board;
+        
         this.loginid = response.data.LoginId
         this.reply = response.data.reply
       for(var i=0; i<this.reply.length; i++){
         const sample = this.reply[i].regdate
-        console.log(sample)
+     
         const dada = new Date(sample)
         const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
         const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
-        console.log(simpledate);
+      
          this.reply[i].regdate2 = simpledate;
          this.reply[i].regdate3 = simpledate2;
-         console.log(this.reply)
+ 
          const today2 = new Date();
          const today = today2.getFullYear() + "-" + ("0" + (today2.getMonth() + 1)).slice(-2) + "-" + ("0" + today2.getDate()).slice(-2)
          
          this.today = today;
-         console.log(this.today);
+       
+    
       }
          
        
       
         this.prev1 = response.data.prev;
-        console.log(this.prev1);
+      
         this.next1 = response.data.next;
         const regdate1 = response.data.board.regdate;
         const regdate2 = regdate1.split("T");
-        console.log(regdate2);
+   
         this.regdate = regdate2[0];
       }
     },
@@ -179,9 +219,47 @@ export default {
 
 
 <style scoped>
+.likebox{
+  text-align: right;
+  padding-right: 20px;
+}
+.likeicon{
+  width:30px;
+  cursor: pointer;
+}
+.nonereply{
+  text-align: center;
+  padding-top:30px;
+  height: 30px;
+
+}
+.rewriter{
+  font-weight: bold;
+}
+.re_change{
+  background: none;
+  border:none;
+  cursor: pointer;
+  
+}
+.re_delete{
+  background: none;
+    border:none;
+    cursor: pointer;
+    margin-left:8px;
+    margin-right: 3px;
+}
+.reply_in2{
+  width:10%;
+  display: inline-block;
+  height: auto;
+  text-align: right;
+}
 .reply_in{
   width:90%;
   display: inline-block;
+  height: auto;
+  float: left;
 }
 .prev {
   cursor: pointer;
@@ -237,6 +315,7 @@ export default {
   margin-top: 10px;
   margin-left: 10px;
  
+ 
 }
 .regdate {
   float: right;
@@ -253,12 +332,14 @@ export default {
 }
 .replybtn {
   width: 10%;
-  padding: 41px 0px;
+  padding: 40px 0px;
   border: none;
   box-sizing: border-box;
   outline: 0;
-  vertical-align: 43px;
+  vertical-align: 44px;
   cursor: pointer;
+  background: #2752BE;
+  color:white
 }
 .replytext {
   width: 90%;
@@ -267,10 +348,25 @@ export default {
   outline: 0;
   box-sizing: border-box;
   resize: none;
+  padding:10px;
+  border:1px solid rgb(182, 182, 182);
+}
+.replytext1 {
+  width: 90%;
+  height: 98px;
+  margin-top: 30px;
+  outline: 0;
+  box-sizing: border-box;
+  resize: none;
+  padding:10px;
+  border:1px solid rgb(182, 182, 182);
+  text-align: center;
+  padding-top:40px;
+  padding-left:118px;
 }
 .hr {
   border-bottom: 1px solid #ddd;
-  margin-top: 55px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 .reply_box {

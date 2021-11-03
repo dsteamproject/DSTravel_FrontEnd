@@ -16,6 +16,7 @@
             class="userpw"
             placeholder="비밀번호"
             v-model="userpw"
+            v-on:keyup.enter="handlelogin"
           /><br />
           <input
             type="button"

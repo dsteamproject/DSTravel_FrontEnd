@@ -5,7 +5,7 @@
         <div class="nav">
           <ul class="nav_in">
             <li>
-              <h2><router-link to="/" class="logo">DS TRAVEL</router-link></h2>
+              <h2><router-link to="/" class="logo" @click="scrollToTop()">DS TRAVEL</router-link></h2>
             </li>
             <li class="li_sch">
               <input
@@ -20,15 +20,15 @@
           </ul>
           <ul class="nav_in_2">
             <li>
-              <router-link to="/join" class="router" v-if="logined === false"
+              <router-link to="/join" class="router" v-if="logined === false" @click="scrollToTop()"
                 >회원가입</router-link
               >
-              <router-link to="/mypage" class="router" v-if="logined === true"
+              <router-link to="/mypage" class="router" v-if="logined === true" @click="scrollToTop()"
                 >마이페이지</router-link
               >
             </li>
             <li>
-              <router-link to="/login" class="router" v-if="logined === false"
+              <router-link to="/login" class="router" v-if="logined === false" @click="scrollToTop()"
                 >로그인</router-link
               >
               <router-link
@@ -44,13 +44,13 @@
         <div class="nav2">
           <ul>
             <li>
-              <router-link to="/airline" class="router2"
+              <router-link to="/airline" class="router2" @click="scrollToTop()"
                 ><img src="../src/assets/air.png" style="width: 30px" />
                 항공권</router-link
               >
             </li>
             <li>
-              <router-link to="/hotel" class="router2"
+              <router-link to="/hotel" class="router2" @click="scrollToTop()"
                 ><img
                   src="../src/assets/hotel.png"
                   style="width: 20px; height: 14px"
@@ -59,19 +59,19 @@
               >
             </li>
             <li>
-              <router-link to="/car" class="router2"
+              <router-link to="/car" class="router2" @click="scrollToTop()"
                 ><img src="../src/assets/car.png" style="width: 20px" />
                 렌터카</router-link
               >
             </li>
             <li>
-              <router-link to="/search" class="router2">서치</router-link>
+              <router-link to="/search" class="router2" @click="scrollToTop()">서치</router-link>
             </li>
             <li>
-              <router-link to="/vs" class="router2">여행지월드컵</router-link>
+              <router-link to="/vs" class="router2" @click="scrollToTop()">여행지월드컵</router-link>
             </li>
             <li>
-              <router-link to="/board/free" class="router2">커뮤니티</router-link>
+              <router-link to="/board/free" class="router2" @click="scrollToTop()">커뮤니티</router-link>
             </li>
           </ul>
         </div>
@@ -100,6 +100,9 @@ export default {
     };
   },
   methods: {
+      scrollToTop() {
+                window.scrollTo(0,0);
+           },
     onscroll(e){
        console.log(e);
     },

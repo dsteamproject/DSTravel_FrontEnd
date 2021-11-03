@@ -4,7 +4,7 @@
       <h2 class="tti">커뮤니티</h2>
       <div class="hr"></div>
       <label>작성자</label> <span>박병근</span><br />
-      <label>말머리</label>
+      <label>카테고리</label>
       <select class="keyword" v-model="keyword">
         <option value="free">잡담</option>
         <option value="review">여행후기</option>
@@ -35,12 +35,14 @@ export default {
     ckeditor: CKEditor.component,
   },
   created() {
-    console.log(this.token);
+    console.log(this.$route.query.category)
+    this.keyword = this.$route.query.category
   },
   data() {
     return {
+      category:"",
       title: "",
-      keyword: "free",
+      keyword: "",
       firstimg: "",
       editor: ClassicEditor,
       editorData: "",
@@ -90,7 +92,7 @@ export default {
     
       const body = {
         title: this.title,
-        keyword:this.keyword,
+        category:this.keyword,
         content:this.editorData
         
       };
@@ -99,7 +101,7 @@ export default {
       console.log(response);
       if (response.data.status === 200) {
         alert("글 작성완료");
-        this.$router.push({ path: "/board/free" });
+        this.$router.push({ path: `/board/${this.keyword}` });
       }
     },
   },
