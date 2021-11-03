@@ -7,22 +7,22 @@
         <div class="hr"></div>
         <h4>가격</h4>
         <div class="slider-demo-block">
-          <el-slider v-model="value" range show-stops :min="100" :max="400">
+          <el-slider v-model="value" range show-stops :min="0" :max="100" step="1">
           </el-slider>
         </div>
-        {{ this.value }}
+        {{ this.value[0] }}원 ~ {{ this.value[1]}}만원<span v-if="this.value[1] === 100">이상</span>
         <div class="hr"></div>
         <h4>스타일</h4>
-        <input type="checkbox" /> <label>가성비</label><br />
-        <input type="checkbox" /> <label>중간급</label><br />
-        <input type="checkbox" /> <label>럭셔리</label><br />
-        <input type="checkbox" /> <label>가족친화형</label>
+        <input type="radio" name="style" /> <label>가성비</label><br />
+        <input type="radio" name="style"  /> <label>중간급</label><br />
+        <input type="radio" name="style" /> <label>럭셔리</label><br />
+        <input type="radio" name="style" /> <label>가족친화형</label>
         <div class="hr"></div>
         <h4>호텔등급</h4>
-        <input type="checkbox" /> <label>5성급</label><br />
-        <input type="checkbox" /> <label>4성급</label><br />
-        <input type="checkbox" /> <label>3성급</label><br />
-        <input type="checkbox" /> <label>2성급</label><br />
+        <input type="radio" name="grade"/> <label>5성급</label><br />
+        <input type="radio" name="grade"/> <label>4성급</label><br />
+        <input type="radio" name="grade"/> <label>3성급</label><br />
+        <input type="radio" name="grade"/> <label>2성급</label><br />
         <div class="hr"></div>
       </div>
       <div class="right1">
@@ -55,8 +55,11 @@
 <script>
 import { ref, defineComponent } from "vue";
 export default defineComponent({
+  created(){
+    console.log(this.value)
+  },
   setup() {
-    const value = ref([1, 2]);
+    const value = ref([0, 1000000]);
     console.log(value);
 
     return {
@@ -129,6 +132,7 @@ export default defineComponent({
 .hr {
   border-bottom: 1px solid #ccc;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 .wrap {
   width: 1320px;

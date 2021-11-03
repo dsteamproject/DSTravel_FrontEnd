@@ -27,6 +27,7 @@ app.use(VCalendar, {})
 app.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyAk3JtD4rmjVoNiVZHGcUTIs5-xU6FrbT4',
+        libraries: "places"
     },
 })
 app.use(VueCookies, {

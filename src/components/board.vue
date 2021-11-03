@@ -1,7 +1,15 @@
 
 <template>
   <div>
+         <div class="mainimg">
+           <div class="mainimg_text">
+             <h1>커뮤니티</h1>
+             <p>조금 더 특별한 여행을 위한 정보공유의 공간</p>
+           </div>
+         </div>
     <div class="wrap">
+
+ 
       <div class="left1">
         <div class="fix">
           <router-link
@@ -122,6 +130,20 @@ export default {
 </script>
 
 <style scoped>
+.mainimg_text{
+      padding-top:70px;
+      width: 1040px;
+    max-width: 100%;
+    margin:0px auto;
+  color:white
+}
+.mainimg{
+  background: url(../assets/tabelimg2.jpg) no-repeat;
+  width:100%;
+  height: 228px;
+   background-size:cover;
+   background-position:10% 83% ;
+}
 .btnoff {
   background: #fff;
 }

@@ -214,10 +214,10 @@ export default {
 </script>
 <style>
 .asd{
-  font-size:20px;
+ 
   margin-bottom: 8px;
-
-
+   font-size:18px!important;
+   
 }
 .new{
   
@@ -230,6 +230,7 @@ export default {
 }
 </style>
 <style scoped>
+
 .datec{
   cursor: pointer;
   z-index: 99;

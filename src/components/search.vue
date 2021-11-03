@@ -42,6 +42,16 @@
       </div>
     </div>
     <div class="center1">
+        <GMapAutocomplete
+       placeholder="This is a placeholder"
+       @place_changed="setPlace"
+           :options="{
+                                bounds: {north: 127, south: 37, east: 4.7, west: 5.0},
+                                strictBounds: true,
+                                types: ['establishment'],
+                                componentRestrictions: {country: 'nl'}
+                            }">
+  </GMapAutocomplete>
       <GMapMap
         ref="myMapRef"
         :center="center"
@@ -187,6 +197,9 @@ export default {
     });
   },
   methods: {
+      setPlace() {
+        console.log("1111")
+    },
     mark(event) {
       console.log(event.latLng.lat());
       this.markers[2].position.lat = event.latLng.lat();
