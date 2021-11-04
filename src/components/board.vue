@@ -44,8 +44,11 @@
       </div>
       <div class="right1">
         <router-view></router-view>
+   
       </div>
+       
     </div>
+        <div class="br"></div>
   </div>
 </template>
 
@@ -130,6 +133,10 @@ export default {
 </script>
 
 <style scoped>
+.br{
+  height: 200px;
+  clear: both;
+}
 .mainimg_text{
       padding-top:70px;
       width: 1040px;

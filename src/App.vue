@@ -89,6 +89,7 @@
 <script>
 import { Search } from "@element-plus/icons";
 export default {
+
   components: {
     Search,
   },
@@ -127,6 +128,8 @@ export default {
 
   },
   created() {
+
+
     if (this.token !== null) {
       this.logined = true;
     }

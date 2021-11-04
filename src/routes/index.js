@@ -34,24 +34,25 @@ import mytr from '@/components/mmtr'
 import sample from '@/components/sample'
 
 const routes = [
-    { path: '/', name: "Menu1", component: Menu1 },
-    { path: '/login', name: "login", component: login },
+    {
+        path: '/', name: "Menu1", component: Menu1 },
+    { path: '/login', name: "login", component: login ,meta :{auth:true} },
     { path: '/sample', name: "sample", component: sample },
     { path: '/join', name: "join", component: join },
     { path: '/search', name: "search", component: search },
     { path: '/airline', name: "airline", component: airline },
 
     { path: '/car', name: "car", component: car },
-    { path: '/freewrite', name: "freewrite", component: freewrite },
+    { path: '/freewrite', name: "freewrite", component: freewrite , meta :{auth2:true}, },
     { path: '/freecontent', name: "freecontent", component: freecontent },
-    { path: '/freechange', name: "freechange", component: freechange },
+    { path: '/freechange', name: "freechange", component: freechange ,meta :{auth2:true} },
 
     { path: '/vs', name: "vs", component: vs },
     { path: '/vsseoul', name: "vsseoul", component: vsseoul },
     { path: '/hotel', name: "hotel", component: hotel },
     { path: '/hotelcontent', name: "hotelcontent", component: hotelcontent },
     {
-        path: '/find', name: "find", component: find,
+        path: '/find', name: "find", component: find, meta :{auth:true},
         children: [
             { path: '/find/id', component: findid },
             { path: '/find/pw', component: findpw }
@@ -67,7 +68,7 @@ const routes = [
         ]
     },
     {
-        path: '/mypage', name: "mypage", component: mypage,
+        path: '/mypage', name: "mypage", component: mypage, meta :{auth2:true},
         children: [
             {path:'/mypage/mypw', component:mypagemypw},
             {path:'/mypage/myinfo', component:mypagemyinfo},
@@ -85,6 +86,7 @@ const routes = [
     },
 ];
 
+
 const router = createRouter({
     history: createWebHistory(),
   
@@ -92,4 +94,23 @@ const router = createRouter({
 
     routes,
 });
+
+router.beforeEach(function (to, from, next) {
+   
+    
+    const token = sessionStorage.getItem("TOKEN");
+    console.log(token);
+    console.log("123")
+    if (to.meta.auth && token !== null) { // 로그인시 막기
+        console.log(from);
+        next('/')
+        return;
+    }
+    if (to.meta.auth2 && token === null) {  //비로그인시 막기
+        console.log("잘못된 접근입니다");
+        next('/')
+        return;
+    }
+    next();
+})
 export default router;

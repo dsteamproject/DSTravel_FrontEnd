@@ -73,8 +73,11 @@
       >
       </el-pagination>
       <button class="wrbtn" @click="writer">글 쓰기</button>
+     
     </div>
+    
   </div>
+ 
 </template>
 
 <script>
@@ -224,6 +227,9 @@ export default {
 };
 </script>
 <style>
+.asdddd{
+  clear:both;
+}
 .asd{
  
   margin-bottom: 8px;
@@ -279,7 +285,7 @@ export default {
   color: white;
   margin-top: 20px;
   border-radius: 2px 2px 2px 2px;
-  margin-bottom: 50px;
+ 
 }
 .sbtn {
   padding: 10px 35px;

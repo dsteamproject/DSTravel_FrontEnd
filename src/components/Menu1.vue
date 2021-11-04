@@ -1,5 +1,6 @@
 <template>
   <div class="wrap"  >
+    <div class="fixedbtn"></div>
     <div class="wrap_in">
       <el-carousel height="480px">
         <el-carousel-item v-for="item in 3" :key="item"> </el-carousel-item>
@@ -284,6 +285,24 @@ export default {
 </script>
 
 <style scoped>
+.fixedbtn{
+  width:50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgb(205, 242, 248);
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.3);
+  position:fixed;
+  bottom:5%;
+  right:2%;
+  cursor: pointer;
+  background: url(../assets/queicon.png) no-repeat;
+  background-size: 70%;
+  background-position: center;
+  
+}
 .traveltitle {
   color: #000;
   font-size: 25px;

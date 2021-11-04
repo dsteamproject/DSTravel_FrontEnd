@@ -46,7 +46,8 @@
 
 
                 <div class="reply_in">
-              <span v-if="this.repch !==index">{{item.reply}}</span>
+              <!--<span v-if="this.repch !==index" v-html="item.reply"></span>-->
+              <textarea v-html="item.reply" disabled class="replychange1" v-if="this.repch !==index"></textarea>
               <div class="btn_replybox">
               <textarea class="replychange" v-model="item.reply" v-if="this.repch=== index"></textarea>
                 <button v-if="this.repch=== index " @click="cancelreply(index)" class="cancel">취소</button> <span v-if="this.repch=== index">│</span><button v-if="this.repch=== index" @click="changereply(index)" class="confirm">수정</button>
@@ -222,6 +223,7 @@ export default {
       }
     },
     async writereply(){
+      console.log(this.replytext)
       if(this.replytext===""){
         alert("댓글을 입력해주세요")
         }else{
@@ -338,6 +340,17 @@ export default {
   border:none;
    background: none;
    padding:3px;
+}
+.replychange1{
+    width: 100%;
+    height: 85px;
+ background: white;
+  outline: 0;
+  box-sizing: border-box;
+  resize: none;
+  padding:10px;
+  border:none;
+  font-size:15px;
 }
 .replychange{
     width: 100%;
