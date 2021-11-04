@@ -301,6 +301,7 @@ export default {
   background: url(../assets/queicon.png) no-repeat;
   background-size: 70%;
   background-position: center;
+ 
   
 }
 .traveltitle {
