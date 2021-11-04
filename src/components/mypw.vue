@@ -7,17 +7,38 @@
             <div class="wrap1_in">
               
             <label>아이디</label><span class="userid1">test12</span><br>
-          
-            <input type="text" class="userpw" placeholder="새 비밀번호"> <br>
-            <input type="text" class="userpw" placeholder="새 비밀번호 확인"> 
+                <input type="password" class="userpw" v-model="nowpw" placeholder="현재 비밀번호"> <br>
+            <input type="password" class="userpw" v-model="newpw1" placeholder="새 비밀번호"> <br>
+            <input type="password" class="userpw" v-model="newpw2" placeholder="새 비밀번호 확인"> 
             </div>
-            <button class="pwbtn">비밀번호 변경</button>
+            <button class="pwbtn" @click="handlechange">비밀번호 변경</button>
         </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
     export default {
+        data(){
+            return{
+                nowpw:"",
+                newpw1:"",
+                newpw2:"",
+                 token: sessionStorage.getItem("TOKEN"),
+            }
+        },
+        methods:{
+       async handlechange(){
+      const url = `/REST/mypage/memberchange`;
+      const headers = { "Content-type": "application/json" ,token : this.token };
+      const body = {
+        password:this.nowpw,
+        newpw:this.newpw1
+      };
+      const response = await axios.put(url, body, { headers });
+      console.log(response);
+            }
+        }
         
     }
 </script>

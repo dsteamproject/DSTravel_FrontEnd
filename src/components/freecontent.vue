@@ -31,20 +31,42 @@
         <div class="hr"></div>
         <div class="nonereply" v-if="this.reply.length === 0">현재 댓글이 없습니다.</div>
         <ul class="replyul" v-if="this.reply.length !== 0">
-          <li v-for="item in reply" :key="item">
-            <div class="reply_content">
+
+
+
+
+
+          <li v-for="(item, index) in reply" :key="index">
+            <div class="reply_content"> 
               <span class="rewriter">{{item.writer}}</span>
               <span v-if="this.today === item.regdate2 " class="regdate">{{item.regdate3}}  </span>
               <span v-if="this.today !== item.regdate2 " class="regdate">{{item.regdate2}}  </span>
               <div class="reply_content2">
+
+
+
                 <div class="reply_in">
-              {{item.reply}}
+              <span v-if="this.repch !==index">{{item.reply}}</span>
+              <div class="btn_replybox">
+              <textarea class="replychange" v-model="item.reply" v-if="this.repch=== index"></textarea>
+                <button v-if="this.repch=== index " @click="cancelreply(index)" class="cancel">취소</button> <span v-if="this.repch=== index">│</span><button v-if="this.repch=== index" @click="changereply(index)" class="confirm">수정</button>
               </div>
+              </div>
+
+
+
+           
+
+
+
               <div class="reply_in2">
-              <button class="re_change">수정</button>
-              <button class="re_delete">삭제</button>
+              <button class="re_change" @click="replychange(index)" v-if="this.loginid === item.writer">수정</button>
+          
+              <button class="re_delete" @click="dialog(index)" v-if="this.loginid === item.writer">삭제</button>
               </div>
+           
               </div>
+            
             
             </div>
           </li>
@@ -65,6 +87,7 @@
       </div>
     </div>
 
+<!-- 글 삭제 다이얼로그 -->
       <el-dialog
     v-model="dialogVisible"
     title="글 삭제"
@@ -81,6 +104,26 @@
       </span>
     </template>
   </el-dialog>
+
+  <!-- 댓글 삭제 다이얼로그  -->
+        <el-dialog
+    
+    v-model="dialogVisible1"
+    title="댓글 삭제"
+    width="30%"
+    :before-close="handleClose"
+  >
+  
+    <span>선택하신 댓글을 삭제하시겠습니까?</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible1 = false">취소</el-button>
+        <el-button type="primary" @click="replydelete(i)"
+          >삭제</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
   </div>
   
 </template>
@@ -91,9 +134,11 @@ export default {
 
   data() {
     return {
+      repch:'off',
       no: this.$route.query.no,
       list: [],
       dialogVisible:false,  
+      dialogVisible1:false,  
       token: sessionStorage.getItem("TOKEN"),
       prev1: "",
       next1: "",
@@ -103,14 +148,70 @@ export default {
       replytext1:"댓글작성은 로그인후 가능합니다",
       likenum:0,
       category:this.$route.query.category,
+      push:"",
+      loginid:"",
     };
   },
   async created() {
-   
+    
     await this.refresh();
-   
+    console.log(this.list)
+   console.log(this.loginid)
   },
   methods: {
+    cancelreply(){
+     this.repch='off'
+    },
+    dialog(i){
+      console.log(i)
+      this.dialogVisible1 = true;
+      this.push= i ;
+    },
+    
+    async replydelete(){
+      const url = `/REST/board/reply_delete?no=${this.reply[this.push].no}`;
+      const headers = { "Content-type": "application/json" ,token : this.token };
+      const body = {
+        no:this.list.no
+      };
+      const response = await axios.put(url, body, { headers });
+      console.log(response);
+      if(response.data.status === 200){
+         this.dialogVisible1 = false;
+         await this.refresh();
+      }
+    },
+    async changereply(i){
+      console.log(i)
+      console.log(this.reply[i].reply) // 선택된 변경상자 값 
+            const url = `/REST/board/reply_update`;
+      const headers = { "Content-type": "application/json" ,token : this.token };
+      const body = {
+       no : this.reply[i].no,
+       reply : this.reply[i].reply
+      };
+      const response = await axios.put(url, body, { headers });
+      console.log(response);
+      if(response.data.status === 200){
+        alert("수정완료되었습니다")
+        this.repch="off"
+      }
+    },
+
+
+
+
+    async replychange(i){
+      console.log(i)
+        this.repch=i
+        console.log(this.reply[i].reply) // 선택된 변경상자 값 
+        console.log(this.reply[i].no) // 선택된 변경상자 값 
+
+   
+       
+      
+
+    },
     golist(){
         this.$router.push(`/board/${this.list.category}`);
                window.scrollTo(0,0);
@@ -181,9 +282,11 @@ export default {
   
       if (response.data.status === 200) {
           this.list = response.data.board;
-        
+          this.loginid = response.data.LoginId;
+          console.log(this.loginid)
         this.loginid = response.data.LoginId
         this.reply = response.data.reply
+        console.log(this.reply)
       for(var i=0; i<this.reply.length; i++){
         const sample = this.reply[i].regdate
      
@@ -219,6 +322,33 @@ export default {
 
 
 <style scoped>
+.btn_replybox{
+  text-align: right;
+}
+.cancel{
+  cursor: pointer;
+  border:none;
+ background: none;
+ 
+  
+ 
+}
+.confirm{
+  cursor: pointer;
+  border:none;
+   background: none;
+   padding:3px;
+}
+.replychange{
+    width: 100%;
+    height: 85px;
+ 
+  outline: 0;
+  box-sizing: border-box;
+  resize: none;
+  padding:10px;
+  border:1px solid rgb(182, 182, 182);
+}
 .likebox{
   text-align: right;
   padding-right: 20px;
@@ -235,6 +365,7 @@ export default {
 }
 .rewriter{
   font-weight: bold;
+  
 }
 .re_change{
   background: none;
@@ -309,7 +440,7 @@ export default {
   vertical-align: -13px;
 }
 .reply_content2 {
-  min-height: 100px;
+  min-height: 120px;
   clear: both;
   border-bottom: 1px solid #ddd;
   margin-top: 10px;
@@ -319,9 +450,12 @@ export default {
 }
 .regdate {
   float: right;
+  margin-right:10px;
+  font-weight: bold;
 }
 .reply_content {
   height: 40px;
+  margin-top:10px;
 }
 
 .replyul {

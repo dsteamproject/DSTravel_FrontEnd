@@ -3,7 +3,7 @@
         <div class="app">
     <dl>
     <dt> 등록된 회원정보로 찾기</dt>
-        <dd><span class="O1">.</span>회원정보에 등록된 아이디, 이름, 이메일이 일치해야지만 아이디를 확인할 수 있습니다.</dd>
+        <dd><span class="O1">.</span>회원정보에 등록된 아이디, 이름, 이메일이 일치하면 가입하셨던 메일로 임시 비밀번호를 발송해드립니다</dd>
          <label>아이디</label
         ><input type="text" class="userpw" v-model="userid" ref="username" /><br />
          <label>이름</label
@@ -15,14 +15,39 @@
 </div>
   <div class="center">
          
-          <button class="yesbtn" @click="handlelast">비밀번호찾기</button>
+          <button class="yesbtn" @click="handlepw">임시 비밀번호 발송</button>
         </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
     export default {
-        
+        data(){
+          return{
+            userid:"",
+            userpw:"",
+            usermail:"",
+            email:"",
+
+          }
+        },
+        methods:{
+          async handlepw(){
+                  const url = `/REST/member/check/findPw/sendEmail`;
+                  const headers = { "Content-type": "application/json" };
+      const body = {
+          id: this.userid,
+          name: this.username,
+          email: this.usermail + "@" + this.email,
+      };
+      const response = await axios.post(url, body, { headers });
+      console.log(response);
+      if(response.data.status === 200){
+        alert("임시 비밀번호 발송이 완료되었습니다\n 발송된 비밀번호로 로그인후 비밀번호를 변경해주세요")
+      }
+          }
+        }
     }
 </script>
 

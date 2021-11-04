@@ -49,7 +49,7 @@
             
               :to="`/freecontent?no=${scope.row.no}&category=${this.category}`"
               ><span  class="title">{{ scope.row.title }} <span v-if="scope.row.countreply !== 0">({{scope.row.countreply}})</span>
-                <span class="new" v-if="scope.row.hours < 1">new</span>
+                <span class="new" v-if="scope.row.regdate2 === this.todayfull && scope.row.hours < 1 ">new</span>
               </span>
              
             </router-link>
@@ -104,6 +104,7 @@ export default {
       token: sessionStorage.getItem("TOKEN"),
       category:"info",
       todayhours: "",
+      todayfull:"",
     };
   },
   methods: {
@@ -111,54 +112,58 @@ export default {
       scrollToTop() {
                 window.scrollTo(0,0);
            },
-    datedown(no){
-      console.log(no)
+    datedown(){
+  
       this.todays=1
     },
-    dateclick(no){
-      console.log(no)
+    dateclick(){
+
       this.todays=2
     },
     async searchclick() {
-      const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}&category=${this.category}`;
-      const headers = { "Content-type": "application/json" };
-      const response = await axios.get(url, { headers });
-      console.log(response);
-     if (response.data.status === 200) {
-        this.list = response.data.list;
-        this.pages = Number(response.data.cnt) * 10;
-        for (var i = 0; i < this.list.length; i++) {
-          const regdate1 = this.list[i].regdate
+    //   const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}&category=${this.category}`;
+    //   const headers = { "Content-type": "application/json" };
+    //   const response = await axios.get(url, { headers });
+    //   console.log(response);
+    //  if (response.data.status === 200) {
+    //     this.list = response.data.list;
+    //     this.pages = Number(response.data.cnt) * 10;
+    //     for (var i = 0; i < this.list.length; i++) {
+    //       const regdate1 = this.list[i].regdate
         
-          const dada = new Date(regdate1)
-          console.log(dada);
-             const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
+    //       const dada = new Date(regdate1)
+    //       console.log(dada);
+    //          const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
         
-    const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
-    const simpledate3 = ("0"+ dada.getHours()).slice(-2) 
-           console.log(simpledate);
-              console.log(simpledate2);
-                     const todaydate = new Date();
-           const todaydate2 =("0"+ todaydate.getHours()).slice(-2) 
-           console.log(todaydate2)  // 15
-           this.todayhours = todaydate2;
-           console.log(simpledate3)  // 12
-           const Timeremaining = Number(todaydate2) - Number(simpledate3)
-           console.log(Timeremaining) 
-          this.list[i].regdate2 = simpledate;
-          this.list[i].regdate3 = simpledate2;
-          this.list[i].hours = Timeremaining;
+    // const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
+    // const simpledate3 = ("0"+ dada.getHours()).slice(-2) 
+    //        console.log(simpledate);
+    //           console.log(simpledate2);
+    //                  const todaydate = new Date();
+    //        const todaydate2 =("0"+ todaydate.getHours()).slice(-2) 
+    //        console.log("오늘현재시간",todaydate2)  // 15
+    //        this.todayhours = todaydate2;
+    //        console.log("작성 시간",simpledate3)  // 12
+    //        const Timeremaining = Number(todaydate2) - Number(simpledate3)
+    //        console.log(Timeremaining) 
+    //       this.list[i].regdate2 = simpledate;
+    //       this.list[i].regdate3 = simpledate2;
+    //       this.list[i].hours = Timeremaining;
+   
 
           
-        }
-      }
+    //    }
+    
+    //  }
+     await this.start()
     },
     async start() {
       const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}&category=${this.category}`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
-      console.log(response);
+  
+
       if (response.data.status === 200) {
         this.list = response.data.list;
         this.pages = Number(response.data.cnt) * 10;
@@ -166,36 +171,41 @@ export default {
           const regdate1 = this.list[i].regdate
         
           const dada = new Date(regdate1)
-          console.log(dada);
+        
              const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
         
     const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
     const simpledate3 = ("0"+ dada.getHours()).slice(-2) 
-           console.log(simpledate);
-              console.log(simpledate2);
+          
+  
                      const todaydate = new Date();
-           const todaydate2 =("0"+ todaydate.getHours()).slice(-2) 
-           console.log(todaydate2)  // 15
+              const todayfull = todaydate.getFullYear() + "-" + ("0" + (todaydate.getMonth() + 1)).slice(-2) + "-" + ("0" + todaydate.getDate()).slice(-2)
+    
+            this.todayfull = todayfull
+ const todaydate2 =("0"+ todaydate.getHours()).slice(-2) 
+       
            this.todayhours = todaydate2;
-           console.log(simpledate3)  // 12
+       
            const Timeremaining = Number(todaydate2) - Number(simpledate3)
-           console.log(Timeremaining) 
+        
           this.list[i].regdate2 = simpledate;
+          this.list[i].todayfull = todayfull;
           this.list[i].regdate3 = simpledate2;
           this.list[i].hours = Timeremaining;
 
+   
           
         }
       }
     },
 
     async handleCurrentChange(val) {
-      console.log(val);
+    
       this.page = val;
       await this.start();
     },
     async handleHit(no) {
-      console.log(no);
+    
       const url = `/REST/board/updateHit?no=${no}`;
       await axios.put(url);
     },
@@ -214,10 +224,10 @@ export default {
 </script>
 <style>
 .asd{
-  font-size:20px;
+ 
   margin-bottom: 8px;
-
-
+   font-size:18px!important;
+   
 }
 .new{
   
@@ -230,6 +240,7 @@ export default {
 }
 </style>
 <style scoped>
+
 .datec{
   cursor: pointer;
   z-index: 99;

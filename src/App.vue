@@ -23,7 +23,7 @@
               <router-link to="/join" class="router" v-if="logined === false" @click="scrollToTop()"
                 >회원가입</router-link
               >
-              <router-link to="/mypage" class="router" v-if="logined === true" @click="scrollToTop()"
+              <router-link to="/mypage/mypw" class="router" v-if="logined === true" @click="scrollToTop()"
                 >마이페이지</router-link
               >
             </li>

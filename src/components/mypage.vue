@@ -3,7 +3,9 @@
     <div class="wrap">
       <div class="profile">
         <div class="sqwrap">
-        <div class="square" @click="gomypage"><img v-if="this.chk.name === undefinded" src="../assets/mypage.png" class="myimg"><img v-if="this.chk.name !== undefinded" :src="uploadImageFile" width="90px" height="90px" class="myimg"></div>
+        <div class="square" @click="gomypage">
+          <img v-if="this.chk.name === undefinded" src="../assets/mypage.png" class="myimg">
+        <img v-if="this.chk.name !== undefinded" :src="uploadImageFile" width="90px" height="90px" class="myimg"></div>
         <button class="imgbtn"><el-icon style="font-size:20px">
         <camera />
       </el-icon></button>
@@ -38,7 +40,7 @@
 
 <script>
 import { Camera } from "@element-plus/icons";
-
+import axios from "axios";
 export default {
   created(){
  
@@ -110,6 +112,7 @@ export default {
       btn5:"btn1",
       btn6:"btn1",
       menu:"",
+      token: sessionStorage.getItem("TOKEN"),
     }
   },
   methods:{
@@ -125,7 +128,7 @@ export default {
 
       }
     },
-    onFileSelected(event){
+   async onFileSelected(event){
        var input = event.target;
               console.log(this.uploadImageFile)
         if (input.files && input.files[0]) {
@@ -135,6 +138,15 @@ export default {
             this.chk = input.files[0]
             } 
              console.log(this.chk)
+
+      const url = `/REST/mypage/insertMemberImg`
+      const headers = { "Content-Type": "multipart/form-data" ,token:this.token };
+      const body = new FormData();
+      body.append("file", this.chk);
+        const response = await axios.put(url, body, { headers });
+      console.log(response)
+
+
             },
 
      changeMenu(val) {
