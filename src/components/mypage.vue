@@ -4,8 +4,9 @@
       <div class="profile">
         <div class="sqwrap">
         <div class="square" @click="gomypage">
-          <img v-if="this.chk.name === undefinded" src="../assets/mypage.png" class="myimg">
+            <img v-if="this.chk.name === undefinded" :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${this.list.id}`" class="myimg">
         <img v-if="this.chk.name !== undefinded" :src="uploadImageFile" width="90px" height="90px" class="myimg"></div>
+      
         <button class="imgbtn"><el-icon style="font-size:20px">
         <camera />
       </el-icon></button>
@@ -20,11 +21,11 @@
 
 
         </div>
-        <p>박병근</p>
+        <p>{{this.list.name}}</p>
       </div>
       <router-link to="/mypage/mypw"   @click="changeMenu(0)" :class="btn1">암호변경</router-link>
-      <router-link to="/mypage/myinfo"   @click="changeMenu(1)" :class="btn2">정보변경</router-link>
-      <router-link to="/mypage/myboard"   @click="changeMenu(2)" :class="btn3">게시물</router-link>
+      <router-link to='/mypage/myinfo' @click="changeMenu(1)" :class="btn2">정보변경</router-link>
+      <router-link to="/mypage/myboard/mbwrite"   @click="changeMenu(2)" :class="btn3">게시물</router-link>
       <router-link to="/mypage/mylike/mmtr"   @click="changeMenu(3)" :class="btn4">위시리스트</router-link>
       <router-link to="/mypage/mymap"   @click="changeMenu(4)" :class="btn5">지도요청</router-link>
       <router-link to="/mypage/mydel"   @click="changeMenu(5)" :class="btn6">회원탈퇴</router-link>
@@ -32,7 +33,7 @@
 
 
       <div class="content">
-        <router-view @chmenu="chmenu"></router-view>
+        <router-view @chmenu="chmenu" @changeLogged="changeLogged"></router-view>
       </div>
     </div>
   </div>
@@ -42,8 +43,17 @@
 import { Camera } from "@element-plus/icons";
 import axios from "axios";
 export default {
-  created(){
- 
+ async created(){
+        const url = `/REST/mypage/home`
+        const headers = { "Content-type": "application/json",  token : this.token };
+        const response = await axios.get(url, { headers });
+        console.log(response);
+        this.list = response.data.member
+
+
+      // ========================================================
+      
+      // ========================================================
  const currentPath = window.location.pathname;
  console.log(currentPath)
  if(currentPath === "/mypage"){
@@ -65,7 +75,7 @@ export default {
       this.btn5 = "btn1";
       this.btn6 = "btn1";
     }
-        if (currentPath === "/mypage/myboard") {
+        if (currentPath === "/mypage/myboard/mbwrite" || currentPath === "/mypage/myboard/mblike") {
       this.btn1 = "btn1";
       this.btn2 = "btn1";
       this.btn3 = "btn2";
@@ -97,12 +107,14 @@ export default {
       this.btn5 = "btn1";
       this.btn6 = "btn2";
     }
+
   },
   components: {
    Camera 
   },
   data(){
     return{
+       
       uploadImageFile:[],
       chk:[],
       btn1:"btn1",
@@ -113,9 +125,16 @@ export default {
       btn6:"btn1",
       menu:"",
       token: sessionStorage.getItem("TOKEN"),
+      list:[],
     }
   },
+
+ 
   methods:{
+     changeLogged() {
+      
+      this.$emit("changeLogged", false);
+    },
     chmenu(val){
       console.log(val);
         if (val === 1) {
@@ -136,18 +155,16 @@ export default {
             reader.onload = (e) => { this.uploadImageFile = e.target.result; } 
             reader.readAsDataURL(input.files[0]); 
             this.chk = input.files[0]
-            } 
+          
              console.log(this.chk)
-
       const url = `/REST/mypage/insertMemberImg`
       const headers = { "Content-Type": "multipart/form-data" ,token:this.token };
       const body = new FormData();
       body.append("file", this.chk);
         const response = await axios.put(url, body, { headers });
       console.log(response)
-
-
-            },
+        } 
+      },
 
      changeMenu(val) {
        console.log(val)

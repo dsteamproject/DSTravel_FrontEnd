@@ -329,6 +329,7 @@ export default {
   width: 1188px;
   padding-top: 30px;
 }
+.opt{height: 60px;}
 .opt li {
   display: inline-block;
 }

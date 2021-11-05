@@ -1,11 +1,12 @@
 <template>
     <div>
         <div class="wrap1">
+        
             <p class="title">회원정보 수정</p>
             <div class="hr"></div>
           <label>아이디</label
         >
-        <span> test12 </span>
+        <span> {{this.list.id}} </span>
        
         <span v-bind:class="idchk">{{ idcheck }}</span
         ><br />
@@ -67,23 +68,64 @@
       
         </div>
         <div class="btn_box">
-          <button class="chbtn">변경</button>
+          <button class="chbtn" @click="handlechange">변경</button>
           </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
     export default {
+   
+      async created(){
+      await this.refresh();
+      },
+ 
           data() {
     return {
- 
+      list:"",
+      username:"",
+      usernickname:"",
+      usermail:"",
+      gender:"",
       email: "선택항목",
+           token: sessionStorage.getItem("TOKEN"),
     };
   },
   methods:{
+    async refresh(){
+        const url = `/REST/mypage/home`
+        const headers = { "Content-type": "application/json",  token : this.token };
+        const response = await axios.get(url, { headers });
+        console.log(response);
+        this.list = response.data.member
+        this.username = response.data.member.name
+        const mail = response.data.member.email.split("@");
+        console.log(mail)
+        this.usermail = mail[0];
+        this.email = mail[1];
+        this.usernickname = response.data.member.nicname;
+        this.gender =response.data.member.gender;
+      
+    },
       handlepw(){
         this.$emit("chmenu", 1);
+      },
+    async handlechange(){
+      const url = `/REST/mypage/memberchange`;
+      const headers = { "Content-type": "application/json" , token : this.token };
+      const body = {
+          name: this.username,
+          nicname: this.usernickname,
+          email: this.usermail + "@" + this.email,
+          gender: this.gender,
+      };
+      const response = await axios.put(url, body, {headers});
+      console.log(response);
+      if(response.data.status === 200){
+        alert("회원정보 수정이 완료되었습니다")
       }
+    }
   }
         
     }

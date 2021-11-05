@@ -57,40 +57,8 @@ export default {
     };
   },
   methods: {
+    // 글작성 POST
     async handleconfirm() {
-//      console.log(this.editorData);
-//      const image = this.editorData;
-//      const imgReg = /(<img[^>]*src\s*=\s*["']?([^>"']+)["']?[^>]*>)/g;
-//      const regex = /<img[^>]+src=["']?([^>"']+)["']?[^>]*>/g;
-//     let extractUrl = [];
-//       if (image.indexOf("img") === true) {
-//        extractUrl = regex.exec(image);
-//        this.firstimg = extractUrl[1];
-//        let imagearray = [];
-//        while (imgReg.test(image)) {
-//          imagearray.push(RegExp.$2.trim());
-//        }
-//        console.log(imagearray)
-//
-//        const dataURLtoFile = (dataurl, fileName) => {
-//          var arr = dataurl.split(",");
-//          var mime = arr[0].match(/:(.*?);/)[1];
- //         var bstr = atob(arr[1]);
- //         var n = bstr.length;
- //         var u8arr = new Uint8Array(n);
-
-//          while (n--) {
-//            u8arr[n] = bstr.charCodeAt(n);
-//          }
-//          return new File([u8arr], fileName, { type: mime });
-//        };
-
-//        var file = dataURLtoFile(this.firstimg, "파일이름", { type: "mime" });
-//        console.log(file);
-//      }
-
-      // ===================================================================
-      
           const url = `/REST/board/insert`;
       const headers = { "Content-type": "application/json" ,
       token : this.token };

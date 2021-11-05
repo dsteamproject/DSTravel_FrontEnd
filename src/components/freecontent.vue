@@ -11,6 +11,7 @@
           <span class="sub">{{ this.regdate }}</span>
           <span class="sub1">조회수: {{ this.list.hit }}</span>
         </div>
+      
         <div class="dech2">
           <router-link
             class="change"
@@ -20,14 +21,21 @@
             >수정</router-link
           ><router-link class="delete" to=""  @click="dialogVisible = true" v-if="this.loginid === this.list.writer">삭제</router-link>
         </div>
+      
       </div>
+        
     </div>
+    
     <div class="wrap">
+        <div class="userdetail">
+          <img :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${this.list.writer}`" class="myimg">
+          <p>{{this.list.writer}} </p>
+          </div>
       <div v-html="this.list.content" class="ck-content"></div>
     
       <div class="reply_box">
     
-        <div class="likebox"><img @click="likeup" class="likeicon" src="../assets/like.png"><span style="vertical-align:5px;"> {{this.likenum}} </span> </div>
+        <div class="likebox"><img @click="likeup" class="likeicon" src="../assets/like.png"><span style="vertical-align:5px;"> {{this.good}} </span> </div>
         <div class="hr"></div>
         <div class="nonereply" v-if="this.reply.length === 0">현재 댓글이 없습니다.</div>
         <ul class="replyul" v-if="this.reply.length !== 0">
@@ -151,6 +159,7 @@ export default {
       category:this.$route.query.category,
       push:"",
       loginid:"",
+      good:0,
     };
   },
   async created() {
@@ -168,7 +177,7 @@ export default {
       this.dialogVisible1 = true;
       this.push= i ;
     },
-    
+    // 댓글 삭제 PUT
     async replydelete(){
       const url = `/REST/board/reply_delete?no=${this.reply[this.push].no}`;
       const headers = { "Content-type": "application/json" ,token : this.token };
@@ -182,10 +191,11 @@ export default {
          await this.refresh();
       }
     },
+    // 댓글 수정 PUT
     async changereply(i){
       console.log(i)
       console.log(this.reply[i].reply) // 선택된 변경상자 값 
-            const url = `/REST/board/reply_update`;
+      const url = `/REST/board/reply_update`;
       const headers = { "Content-type": "application/json" ,token : this.token };
       const body = {
        no : this.reply[i].no,
@@ -198,30 +208,36 @@ export default {
         this.repch="off"
       }
     },
-
-
-
-
+      // 댓글수정 상자 변환 
     async replychange(i){
       console.log(i)
         this.repch=i
         console.log(this.reply[i].reply) // 선택된 변경상자 값 
         console.log(this.reply[i].no) // 선택된 변경상자 값 
-
-   
-       
-      
-
     },
+    // 해당 카테고리 리스트로 이동
     golist(){
         this.$router.push(`/board/${this.list.category}`);
                window.scrollTo(0,0);
     },
-    likeup(){
+    // 좋아요 UP
+    async likeup(){
       if(this.token === null){
         alert("로그인 후 이용가능한 서비스입니다")
+      }else{
+      const url = `/REST/good/board`;
+      const headers = { "Content-type": "application/json" ,token : this.token };
+      const body = {
+        no:this.list.no,
+      };
+      const response = await axios.post(url, body, { headers });
+      console.log(response);
+      if(response.data.status === 200){
+        this.good =response.data.good
+      }
       }
     },
+    // 댓글 작성 POST
     async writereply(){
       console.log(this.replytext)
       if(this.replytext===""){
@@ -230,8 +246,6 @@ export default {
       const url = `/REST/board/reply?no=${this.no}`;
        const body = {
          reply:this.replytext,
-       
-        
       };
       const headers = { "Content-type": "application/json",  token : this.token };
       const response = await axios.post(url,body, {headers});
@@ -244,6 +258,7 @@ export default {
       }
     },  
     // put = > 변경 데이터 전송   
+    // 글삭제 PUT
       async handledelete(){
             const url = `/REST/board/delete?no=${this.no}`;
       const data={};
@@ -251,22 +266,23 @@ export default {
       const response = await axios.put(url, {data},{headers});
     console.log(response)
       if(response.data.status === 200){
-     
              this.$router.push({ path: `/board/${this.list.category}` });
       }
     },
+    // 다음글
     async nextclick() {
       this.no = this.next1;
       await this.refresh();
       window.scrollTo(0,0);
     },
+    // 이전글
     async prevclick() {
       this.no = this.prev1;
       await this.refresh();
       window.scrollTo(0,0);
     },
+    // 상세글 가져오기 GET
     async refresh() {
-    
       const url = `/REST/board/selectone?no=${this.no}&category=${this.category}`;
       if(this.token !== null){
       var headers = {
@@ -287,6 +303,7 @@ export default {
           this.loginid = response.data.LoginId;
           console.log(this.loginid)
         this.loginid = response.data.LoginId
+        this.good = response.data.good
         this.reply = response.data.reply
         console.log(this.reply)
       for(var i=0; i<this.reply.length; i++){
@@ -303,12 +320,7 @@ export default {
          const today = today2.getFullYear() + "-" + ("0" + (today2.getMonth() + 1)).slice(-2) + "-" + ("0" + today2.getDate()).slice(-2)
          
          this.today = today;
-       
-    
       }
-         
-       
-      
         this.prev1 = response.data.prev;
       
         this.next1 = response.data.next;
@@ -324,6 +336,19 @@ export default {
 
 
 <style scoped>
+.userdetail{
+  text-align: center;
+  margin-top:25px;
+}
+.userdetail p{
+  font-weight: 500;
+  font-size: 1.7rem
+}
+.myimg{
+  width:150px;
+  height: 150px;
+  border-radius: 50%;
+}
 .btn_replybox{
   text-align: right;
 }
@@ -580,6 +605,7 @@ export default {
   font-size: 1.8em;
 }
 .app {
-  height: 3000px;
+  height: auto;
+  margin-bottom: 50px;
 }
 </style>

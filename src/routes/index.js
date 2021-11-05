@@ -31,6 +31,8 @@ import mypagemymap from '@/components/mymap'
 import mypagemydel from '@/components/mydel'
 import myho from '@/components/mmho'
 import mytr from '@/components/mmtr'
+import mbwrite from '@/components/mbwrite'
+import mblike from '@/components/mblike'
 import sample from '@/components/sample'
 
 const routes = [
@@ -71,8 +73,14 @@ const routes = [
         path: '/mypage', name: "mypage", component: mypage, meta :{auth2:true},
         children: [
             {path:'/mypage/mypw', component:mypagemypw},
-            {path:'/mypage/myinfo', component:mypagemyinfo},
-            {path:'/mypage/myboard', component:mypagemyboard},
+            {path:'/mypage/myinfo',name:"mypagemyinfo", component:mypagemyinfo} ,
+            {
+                path: '/mypage/myboard', component: mypagemyboard,
+                children: [
+                    {path:'/mypage/myboard/mbwrite', component:mbwrite},
+                    {path:'/mypage/myboard/mblike', component:mblike},
+                ]
+            },
             {
                 path: '/mypage/mylike', component: mypagemylike,
                 children: [
@@ -89,18 +97,11 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
-  
-
-
     routes,
 });
 
 router.beforeEach(function (to, from, next) {
-   
-    
     const token = sessionStorage.getItem("TOKEN");
-    console.log(token);
-    console.log("123")
     if (to.meta.auth && token !== null) { // 로그인시 막기
         console.log(from);
         next('/')

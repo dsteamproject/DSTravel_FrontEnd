@@ -301,7 +301,7 @@ export default {
           this.userpw
         )
       ) {
-        alert("암호는 5~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요");
+        alert("암호는 5~15자 영문 대 소문자, 숫자, 특수문자를 포함해서 사용하세요");
         return;
       }
       if (!/^[가-힣A-Za-z]+$/i.test(this.username)) {

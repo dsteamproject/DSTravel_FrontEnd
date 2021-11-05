@@ -264,6 +264,7 @@ export default {
   background: #9dd3ec;
   border-radius: 100px;
 }
+.opt{height: 60px;}
 .pag {
   float: left;
   margin-top: 20px;
