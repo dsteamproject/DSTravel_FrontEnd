@@ -61,14 +61,15 @@
         </div>
         <div v-if="step === 3" class="step1">
         
- 
-  <Datepicker id="manual"  :enableTimePicker="false" inline locale="kr"  range twoCalendars :modelValue="date" @update:modelValue="setDate"  >
 
-  </Datepicker>
-       
-<br>
-  {{this.date}}
-{{this.datevalue}}
+  <v-date-picker
+      is-range
+    v-model="range"
+    @click="range1"
+    :columns="$screens({ default: 1, lg: 2 })"
+    show-caps>
+  </v-date-picker>
+
 
 
 
@@ -77,8 +78,8 @@
    
           <br>
         
-          <span>시작일 : {{ start }} </span><br />
-          <span>종료일 : {{ end }} </span><br />
+          <span>시작일 : {{ range.start }} </span><br />
+          <span>종료일 : {{ range.end }} </span><br />
           <button class="last_btn" @click="handlesearch">추천여행 보기</button>
         </div>
       </div>
@@ -186,46 +187,33 @@
 <script>
 
 
-import { ref, onMounted } from 'vue';
+
+
 import { Search } from "@element-plus/icons";
 
 export default {
-   setup() {
-     
-        const date = ref();
 
-  
-            
-     
-             onMounted(() => {
-            const startDate = new Date();
-            const endDate = new Date(new Date().setDate(startDate.getDate() + 1));
-            date.value = [startDate, endDate];
-
-          
-        })
-
-
-
-      
-      
-        return {
-          date,
-        
-         
-         
-        }
-    },
 
   components: {
     Search,
-  
+
 
   },
+    created() {
+ 
+
+
+    if (this.token !== null) {
+      this.logined = true;
+    }
+  },
   data() {
+ 
     return {
-      start1:"",
-      end2:"",
+      selectedDate: {
+        start: new Date(2018, 0, 9),
+        end: new Date(2018, 0, 18)
+      },
         today: new Date(),
       location: [
         { title: "서울", sub: "SEOUL" },
@@ -277,6 +265,10 @@ export default {
     };
   },
   methods: {
+      async range1(){
+      console.log(this.range)
+      await this.handlestep3();
+    },
     datechange(){
       console.log(this.date)
     },
@@ -410,13 +402,7 @@ export default {
 
 
   },
-  created() {
 
-
-    if (this.token !== null) {
-      this.logined = true;
-    }
-  },
 };
 </script>
 <style>
