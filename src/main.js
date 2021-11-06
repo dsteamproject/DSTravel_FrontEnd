@@ -9,14 +9,15 @@ import VueCookies from 'vue3-cookies'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import VueZoomer from 'vue-zoomer'
 import VueEasyLightbox from 'vue-easy-lightbox'
-
+import Datepicker from 'vue3-date-time-picker';
+import 'vue3-date-time-picker/dist/main.css'
 
 //ui 설정
 
 
 
 const app = createApp(App);
-
+app.component('Datepicker', Datepicker);
 app.use(VueEasyLightbox)
 app.use(ElementPlus)
 app.use(VueZoomer)
