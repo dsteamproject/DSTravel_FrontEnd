@@ -1,7 +1,9 @@
 <template>
   <div class="wrap">
     <div class="left1">
-      <h3>{{ this.$route.query.locationkor }}</h3>
+      <h3 @change="locationchange">
+        {{ this.$route.query.locationkor }}
+      </h3>
       <span class="sub_area">{{ this.$route.query.locationeng }}</span
       ><br />
       <span class="day">{{ this.$route.query.betday }}day</span><br />
@@ -42,11 +44,11 @@
       </div>
     </div>
     <div class="center1">
-
+      <button @click="locationdistance">3123</button>
       <GMapMap
         ref="myMapRef"
         :center="center"
-        :zoom="16"
+        :zoom="zoom"
         map-type-id="roadmap"
         style="width: 100vw; height: 20rem"
         @click="mark"
@@ -130,14 +132,18 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "search",
-  created() {
+  async created() {
     console.log(this.$route.query.locationkor);
     console.log(this.$route.query.locationeng);
+    await this.replacerefresh();
   },
   data() {
     return {
+      lockor: this.$route.query.locationkor,
+      zoom: 14,
       dialogVisible: false,
       sublat: "",
       sublng: "",
@@ -150,7 +156,7 @@ export default {
       num2: 0,
       num1: 0,
       openedMarkerID: null,
-      center: { lat: 35.15267616865169, lng: 129.05961009117254 },
+      center: { lat: 1, lng: 2 },
       markers: [
         {
           id: "동성직업전문학교",
@@ -179,7 +185,7 @@ export default {
       ],
     };
   },
-  mounted() {
+  async mounted() {
     this.$refs.myMapRef.$mapPromise.then((map) => {
       map.addListener("click", (mapsMouseEvent) => {
         console.log(mapsMouseEvent.latLng.lat());
@@ -187,9 +193,75 @@ export default {
       });
     });
   },
+  watch: {
+    async $route(to, from) {
+      console.log(to);
+      console.log(from);
+      await this.replacerefresh();
+    },
+  },
+
   methods: {
-      setPlace() {
-        console.log("1111")
+    // 위도 경도로 직선거리 구하는 REST.API
+    async locationdistance() {
+      // 경로 json 출력
+      //https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=129.10239277274485&endY=35.17444316729922&reqCoordType=WGS84GEO&endRpFlag=G&startX=129.09522188698028&startY=35.17354426079996&sort=index
+      // 경로 화면출력
+      // https://apis.openapi.sk.com/tmap/routeStaticMap?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&endX=129.10239277274485&endY=35.17444316729922&startX=129.09522188698028&startY=35.17354426079996&reqCoordType=WGS84GEO&endPoiId=1000560149&passList=129.10239277274485,35.17444316729922,1000560149,G,0_129.09522188698028,35.17354426079996,160886,G,0&lineColor=red&width=500&height=500
+      // 자동차 경로안내// http://tmapapi.sktelecom.com/main.html#webservice/docs/tmapRouteDoc
+      // https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=129.07579349764512&endY=35.17883196265564&reqCoordType=WGS84GEO&endRpFlag=G&startX=126.98217734415019&startY=37.56468648536046
+      const url = `https://apis.openapi.sk.com/tmap/routes/distance?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&version=1&startX=126.926139&startY=37.557495&endX=126.82613&endY=37.657495&reqCoordType=WGS84GEO&callback=function`;
+      const headers = {};
+      const response = await axios.get(url, { headers });
+      console.log(response.data.distanceInfo.distance);
+    },
+    async locationchange() {
+      await this.replacerefresh();
+    },
+    replacerefresh() {
+      if (this.$route.query.locationkor === "서울") {
+        this.center.lat = 37.549824070293155;
+        this.center.lng = 126.9852119711522;
+        this.zoom = 14;
+      }
+      if (this.$route.query.locationkor === "부산") {
+        this.center.lat = 35.1563960364172;
+        this.center.lng = 129.05290996776543;
+        this.zoom = 13;
+      }
+      if (this.$route.query.locationkor === "대구") {
+        this.center.lat = 35.828005238339074;
+        this.center.lng = 128.56567195613573;
+        this.zoom = 12;
+      }
+      if (this.$route.query.locationkor === "인천") {
+        this.center.lat = 37.460431911450016;
+        this.center.lng = 126.63023780388498;
+        this.zoom = 12;
+      }
+      if (this.$route.query.locationkor === "광주") {
+        this.center.lat = 35.15523093137521;
+        this.center.lng = 126.83460715205861;
+        this.zoom = 14;
+      }
+      if (this.$route.query.locationkor === "대전") {
+        this.center.lat = 36.33921817956586;
+        this.center.lng = 127.39410278706835;
+        this.zoom = 13;
+      }
+      if (this.$route.query.locationkor === "울산") {
+        this.center.lat = 35.5457310316843;
+        this.center.lng = 129.2560979752397;
+        this.zoom = 14;
+      }
+      if (this.$route.query.locationkor === "제주도") {
+        this.center.lat = 33.37627377623203;
+        this.center.lng = 126.56056736909964;
+        this.zoom = 11.1;
+      }
+    },
+    setPlace() {
+      console.log("1111");
     },
     mark(event) {
       console.log(event.latLng.lat());
@@ -220,13 +292,11 @@ export default {
 };
 </script>
 <style>
-
-.el-collapse-item__header{
+.el-collapse-item__header {
   text-align: center;
   display: block;
-  background: #98DDE3;
-  color:white
- 
+  background: #98dde3;
+  color: white;
 }
 </style>
 <style scoped>

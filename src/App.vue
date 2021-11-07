@@ -1,32 +1,32 @@
 <template>
-
   <div id="main">
-            <el-dialog
-    v-model="dialogVisible"
-    title=""
-    width="50%"
-    :before-close="handleClose"
-  >
-          <div id="box1">
+    <el-dialog
+      v-model="dialogVisible"
+      title=""
+      width="50%"
+      :before-close="handleClose"
+      top="4vh"
+    >
+      <div id="box1">
         <h3>여행의 시작부터 끝까지,</h3>
         <p class="sub">나에게 맞는 여행경로를 추천받아보세요</p>
         <ul class="step_travel">
-          <li id="main_step" v-bind:class="stepbg">
+          <li id="main_step" v-bind:class="stepbg" @click="step1go">
             <span
               >Step.1<br />
               <span class="sub_step">여행지</span>
             </span>
           </li>
-          <li id="main_step" v-bind:class="stepbg1">
+          <li id="main_step" v-bind:class="stepbg1" @click="step2go">
             <span
               >step2<br />
               <span class="sub_step"> 여행테마</span>
             </span>
           </li>
-          <li id="main_step" v-bind:class="stepbg2">
+          <li id="main_step" v-bind:class="stepbg2" @click="step3go">
             <span
               >step.3<br />
-              <span class="sub_step">여행날짜</span>
+              <span class="sub_step" @click="step = 3">여행날짜</span>
             </span>
           </li>
         </ul>
@@ -36,14 +36,26 @@
               v-for="item in location"
               :key="item"
               class="item"
-              :value="item.title"
-              @click="handlestep1($event.target.textContent)"
+              :id="item.title"
+              @click="handlestep1(item.title + '.' + item.sub)"
             >
-              <p>{{ item.title }}</p>
-              <p><span style="display: none">.</span>{{ item.sub }}</p>
+              <img src="./assets/mapfood.jpg" style="display: none" />
+              <img src="./assets/active.jpg" style="display: none" />
+              <img src="./assets/daegu.jpg" style="display: none" />
+              <img src="./assets/incheon.jpg" style="display: none" />
+              <img src="./assets/gwangju.jpg" style="display: none" />
+              <img src="./assets/gwangju.jpg" style="display: none" />
+              <img src="./assets/daejeon.jpg" style="display: none" />
+              <img src="./assets/ulsan.jpg" style="display: none" />
+              <img src="./assets/tripA.jpg" style="display: none" />
+
+              <img :src="item.src" />
+              <div class="item_in">
+                <p>{{ item.title }}</p>
+                <p><span style="display: none">.</span>{{ item.sub }}</p>
+              </div>
             </li>
           </ul>
-          <button class="last_btn" @click="handlenext">다음</button>
         </div>
         <div v-if="step === 2" class="step">
           <ul>
@@ -53,53 +65,46 @@
               class="item2"
               @click="handlestep2($event.target.textContent)"
             >
-              <p>{{ item2.title }}</p>
+              <img :src="item2.src" />
+              <div class="item2_in">
+                <p>{{ item2.title }}</p>
+              </div>
             </li>
           </ul>
-     
-          <button class="last_btn" @click="handlenext2">다음</button>
         </div>
         <div v-if="step === 3" class="step1">
-        
+          <div class="range_box">
+            <v-date-picker
+              is-range
+              v-model="range"
+              @click="range1"
+              :columns="$screens({ default: 1, lg: 2 })"
+              :is-expanded="$screens({ default: true, lg: true })"
+              :min-date="new Date()"
+              show-caps
+            >
+            </v-date-picker>
+          </div>
 
-  <v-date-picker
-      is-range
-    v-model="range"
-    @click="range1"
-    :columns="$screens({ default: 1, lg: 2 })"
-    show-caps>
-  </v-date-picker>
+          <br />
 
-
-
-
-
-
-   
-          <br>
-        
-          <span>시작일 : {{ range.start }} </span><br />
-          <span>종료일 : {{ range.end }} </span><br />
+          <span>시작일 : {{ start }} </span> ~ <span>종료일 : {{ end }} </span
+          ><br />
           <button class="last_btn" @click="handlesearch">추천여행 보기</button>
         </div>
       </div>
+    </el-dialog>
 
-
-
-
-
-
-
-
-  
-  </el-dialog>
-    
-    <div class="wrap9" >
+    <div class="wrap9">
       <div class="wrap_1">
         <div class="nav">
           <ul class="nav_in">
             <li>
-              <h2><router-link to="/" class="logo" @click="scrollToTop()">DS TRAVEL</router-link></h2>
+              <h2>
+                <router-link to="/" class="logo" @click="scrollToTop()"
+                  >DS TRAVEL</router-link
+                >
+              </h2>
             </li>
             <li class="li_sch">
               <input
@@ -114,15 +119,27 @@
           </ul>
           <ul class="nav_in_2">
             <li>
-              <router-link to="/join" class="router" v-if="logined === false" @click="scrollToTop()"
+              <router-link
+                to="/join"
+                class="router"
+                v-if="logined === false"
+                @click="scrollToTop()"
                 >회원가입</router-link
               >
-              <router-link to="/mypage/mypw" class="router" v-if="logined === true" @click="scrollToTop()"
+              <router-link
+                to="/mypage/mypw"
+                class="router"
+                v-if="logined === true"
+                @click="scrollToTop()"
                 >마이페이지</router-link
               >
             </li>
             <li>
-              <router-link to="/login" class="router" v-if="logined === false" @click="scrollToTop()"
+              <router-link
+                to="/login"
+                class="router"
+                v-if="logined === false"
+                @click="scrollToTop()"
                 >로그인</router-link
               >
               <router-link
@@ -159,81 +176,78 @@
               >
             </li>
             <li>
-              <router-link to="" class="router2" @click="dialogVisible = true">서치</router-link>
+              <router-link to="" class="router2" @click="dialogVisible = true"
+                >서치</router-link
+              >
             </li>
             <li>
-              <router-link to="/vs" class="router2" @click="scrollToTop()">여행지월드컵</router-link>
+              <router-link to="/vs" class="router2" @click="scrollToTop()"
+                >여행지월드컵</router-link
+              >
             </li>
             <li>
-              <router-link to="/board/free" class="router2" @click="scrollToTop()">커뮤니티</router-link>
+              <router-link
+                to="/board/free"
+                class="router2"
+                @click="scrollToTop()"
+                >커뮤니티</router-link
+              >
             </li>
           </ul>
         </div>
       </div>
     </div>
-      <div class="blo">
-
-      </div>
-    <router-view @changeLogged="changeLogged">
-
-
-    </router-view>
+    <div class="blo"></div>
+    <router-view @changeLogged="changeLogged"> </router-view>
     <div></div>
     <div class="footer">footer</div>
   </div>
-   
 </template>
 
 <script>
-
-
-
-
 import { Search } from "@element-plus/icons";
 
 export default {
-
-
   components: {
     Search,
-
-
   },
-    created() {
- 
-
-
+  created() {
     if (this.token !== null) {
       this.logined = true;
     }
   },
   data() {
- 
     return {
-      selectedDate: {
-        start: new Date(2018, 0, 9),
-        end: new Date(2018, 0, 18)
-      },
-        today: new Date(),
+      comma: ".",
+      today: new Date(),
       location: [
-        { title: "서울", sub: "SEOUL" },
-        { title: "인천", sub: "SEOUL" },
-        { title: "부산", sub: "SEOUL" },
-        { title: "울산", sub: "SEOUL" },
-        { title: "대구", sub: "SEOUL" },
-        { title: "경주", sub: "SEOUL" },
-        { title: "광주", sub: "SEOUL" },
-        { title: "제주도", sub: "SEOUL" },
+        { title: "서울", sub: "SEOUL", src: "/img/seoul.92f4ef72.png" },
+        { title: "부산", sub: "BUSAN", src: "/img/busan.867f30bc.jpg" },
+        { title: "대구", sub: "Daegu", src: "/img/daegu.8f368f57.jpg" },
+        { title: "인천", sub: "Incheon", src: "/img/incheon.a3c3f074.jpg" },
+        { title: "광주", sub: "Gwangju", src: "/img/gwangju.5f11e492.jpg" },
+        { title: "대전", sub: "Daejeon", src: "/img/daejeon.77979afe.jpg" },
+        { title: "울산", sub: "Ulsan", src: "/img/ulsan.5de67486.jpg" },
+        { title: "제주도", sub: "JEJU", src: "/img/jeju.49b444ad.jpg" },
       ],
       travellike: [
-        { title: "미식" },
-        { title: "힐링" },
-        { title: "액티비티" },
-        { title: "전통" },
-        { title: "당일치기" },
-        { title: "가이드" },
-        { title: "랜선투어" },
-        { title: "감성" },
+        { title: "체험", src: "/img/tripA.9a03f755.jpg" },
+        { title: "액티비티", src: "/img/active.07446c8c.jpg" },
+        { title: "전통", src: "https://ktourtop10.kr/images/main_con02-6.png" },
+        { title: "힐링", src: "https://ktourtop10.kr/images/main_con02-1.png" },
+        { title: "미식", src: "/img/mapfood.bbfbdcd4.jpg" },
+        {
+          title: "가족이랑",
+          src: "https://ktourtop10.kr/images/main_con02-7.png",
+        },
+        {
+          title: "아이랑",
+          src: "https://ktourtop10.kr/images/main_con02-10.png",
+        },
+        {
+          title: "친구랑",
+          src: "https://ktourtop10.kr/images/main_con02-3.png",
+        },
       ],
       range: new Date(),
       step: 1,
@@ -257,22 +271,65 @@ export default {
 
       kora: [],
       traveldate: "",
-      scrollPostion : 0,
+      scrollPostion: 0,
       logined: false,
       token: sessionStorage.getItem("TOKEN"),
- 
+
       dialogVisible: false,
     };
   },
   methods: {
-      async range1(){
-      console.log(this.range)
+    step1go() {
+      this.step = 1;
+      this.stepbg = "sbg";
+      this.stepbg1 = "nonesbg";
+      this.stepbg2 = "nonesbg";
+    },
+    step2go() {
+      if (this.step1value === "") {
+        alert("여행지를 선택해주세요");
+      } else {
+        this.step = 2;
+        this.stepbg = "nonesbg";
+        this.stepbg1 = "sbg";
+        this.stepbg2 = "nonesbg";
+      }
+    },
+    step3go() {
+      if (this.step2value === "" && this.step1value === "") {
+        alert("여행테마를 선택해주세요");
+        return;
+      }
+      if (this.step1value === "") {
+        alert("여행지를 선택해주세요");
+        return;
+      } else {
+        this.step = 3;
+        this.stepbg = "noesbg";
+        this.stepbg1 = "noesbg";
+        this.stepbg2 = "sbg";
+      }
+    },
+    handleClose() {
+      this.step = 1;
+      this.dialogVisible = false;
+      this.step2value = "";
+      this.step1value = "";
+      this.start = "";
+      this.end = "";
+      this.range = "";
+      this.stepbg = "sbg";
+      this.stepbg1 = "nonesbg";
+      this.stepbg2 = "nonesbg";
+    },
+    async range1() {
+      console.log(this.range);
       await this.handlestep3();
     },
-    datechange(){
-      console.log(this.date)
+    datechange() {
+      console.log(this.date);
     },
-     handlestep3() {
+    handlestep3() {
       console.log(this.range.start);
       console.log(this.range.end);
       this.start =
@@ -344,21 +401,7 @@ export default {
       this.kora = kor.split(".");
       this.step1valuekor = this.kora[0];
       this.step1valueeng = this.kora[1];
-     
-   
-
-      //const url = `/REST/추가할곳/추가할곳`;
-      //const headers = { "Content-type": "application/json" };
-      //const body = {
-      // 여행지: this.step1value,
-      // 여행테마: this.step2value,
-      //  시작일: this.start,
-      //  종료일: this.end,
-      //  시작월: this.startmonth,
-      //  종료월: this.endmonth,
-      //};
-      //const response = await axios.post(url, body, { headers });
-      //console.log(response);
+      this.dialogVisible = false;
       this.$router.push({
         name: "search",
         query: {
@@ -371,16 +414,23 @@ export default {
           endmonth: this.endmonth,
           betday: this.betday + 1,
         },
-        
       });
-           window.scrollTo(0,0)
-  
+      this.step = 1;
+      this.start = "";
+      this.end = "";
+      this.step1value = "";
+      this.step2value = "";
+      this.range = "";
+      this.stepbg = "sbg";
+      this.stepbg1 = "nonesbg";
+      this.stepbg2 = "nonesbg";
+      window.scrollTo(0, 0);
     },
-      scrollToTop() {
-                window.scrollTo(0,0);
-           },
-    onscroll(e){
-       console.log(e);
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
+    onscroll(e) {
+      console.log(e);
     },
     changeLogged(logged) {
       this.logined = logged;
@@ -389,7 +439,7 @@ export default {
       const result = confirm("로그아웃 하시겠습니까?");
       if (result) {
         sessionStorage.removeItem("TOKEN");
-      
+
         this.logined = false;
         this.$router.push("/");
       } else {
@@ -397,37 +447,36 @@ export default {
         this.$router.push(-1);
       }
     },
-
-
-
-
   },
-
 };
 </script>
 <style>
-
-.dp__calendar{
-  width:305px;
-  padding:5px 20px;
+.dp__calendar {
+  width: 305px;
+  padding: 5px 20px;
 }
-.dp__calendar dp__calendar_next{
-  width:305px;
-    padding:5px 20px;
+.dp__calendar dp__calendar_next {
+  width: 305px;
+  padding: 5px 20px;
 }
 .dp__flex_display {
-  display: inline-flex!important;
+  display: inline-flex !important;
 }
 
-.dp__theme_light{
-  --dp-hover-color: #caddf0!important;
+.dp__theme_light {
+  --dp-hover-color: #caddf0 !important;
 }
-
 </style>
 <style scoped>
-
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
-.blo{
+#main_step {
+  cursor: pointer;
+}
+.range_box {
+  width: 70%;
+  margin: 10px auto;
+}
+.blo {
   height: 133px;
 }
 .li_sch {
@@ -457,7 +506,6 @@ export default {
   position: fixed;
   z-index: 99;
   background: white;
- 
 }
 .wrap_1 {
   width: 1080px;
@@ -551,10 +599,53 @@ export default {
   border: 1px solid #ccc;
   display: inline-block;
   margin: 20px;
+  position: relative;
+  transition: all 0.5s;
+}
+.item:hover {
+  filter: brightness(70%);
+}
+.item img {
+  width: 100%;
+  height: 100%;
+}
+.item_in {
+  position: absolute;
+  top: 40%;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+.item2_in {
+  position: absolute;
+  top: 40%;
+  color: rgb(15, 15, 14);
+  text-align: center;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+.item2_in p {
+  font-weight: 900;
+  font-size: 20px;
+  text-shadow: 1px 1px 1px rgb(255, 255, 255);
+}
+
+.item_in p {
+  font-weight: bold;
+  font-size: 20px;
+  text-shadow: 1px 1px 1px #000;
+}
+.item2 img {
+  width: 100%;
+  height: 100%;
 }
 .item2 {
-  width: 270px;
-  height: 100px;
+  position: relative;
+  width: 150px;
+  height: 150px;
   border: 1px solid #ccc;
   display: inline-block;
   margin: 20px;
@@ -567,7 +658,6 @@ export default {
   margin: 20px;
 }
 .step {
- 
   margin: 0 auto;
   cursor: pointer;
 }
@@ -591,7 +681,7 @@ export default {
 .step_travel li {
   display: inline-block;
   margin: 20px;
-  padding: 8px 30px;
+  padding: 12px 81px;
   border: 1px solid #ccc;
 }
 
@@ -643,7 +733,7 @@ export default {
 }
 
 .wrap {
-  width:100%;
+  width: 100%;
   height: auto;
 }
 
@@ -655,8 +745,6 @@ h1 {
   padding-bottom: 50px;
   color: white;
 }
-
-
 
 .content {
   text-align: center;
@@ -680,7 +768,7 @@ h3 {
   text-align: center;
   box-sizing: border-box;
 }
-#box1{
+#box1 {
   text-align: center;
 }
 </style>
