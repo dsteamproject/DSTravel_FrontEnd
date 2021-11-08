@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="center1">
-      <button @click="locationdistance">3123</button>
+   
       <GMapMap
         ref="myMapRef"
         :center="center"
@@ -53,14 +53,16 @@
         style="width: 100vw; height: 20rem"
         @click="mark"
         class="gmap"
+           
       >
+          <GMapCluster :zoomOnClick="true" :styles="clusterIcon">
         <GMapMarker
           :key="index"
           v-for="(m, index) in markers"
           :icon="m.icon"
           :position="m.position"
           :clickable="true"
-          :draggable="false"
+          :draggable="true"
           @click="openMarker(m.id)"
           @closeclick="openMarker(null)"
         >
@@ -72,6 +74,10 @@
             <div>{{ m.id }}</div>
           </GMapInfoWindow>
         </GMapMarker>
+        </GMapCluster>
+          
+  
+      
       </GMapMap>
       <button class="addmarker" @click="dialogVisible = true">추가</button>
     </div>
@@ -136,12 +142,40 @@ import axios from "axios";
 export default {
   name: "search",
   async created() {
+    const url = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&contentTypeId=12&MobileApp=AppTest&MobileOS=ETC&arrange=B&areaCode=6&listYN=Y`
+    const headers = { "Content-type": "application/json" };
+    const body = {}
+      const response = await axios.get(url,body, {headers});
+   
+      this.busanlist =  response.data.response.body.items.item
+      console.log(typeof(Number(this.busanlist[1].mapy)))
+     for(var i=0; i<this.busanlist.length; i++){
+       this.markers.push(
+         {
+          "id":this.busanlist[i].title,
+         "position":{
+           "lat":Number(this.busanlist[i].mapy),
+           "lng":Number(this.busanlist[i].mapx)
+           }
+           }
+         )
+     
+     }
+       console.log(this.markers)
+       console.log(String(this.markers[4].position.lng))
     console.log(this.$route.query.locationkor);
     console.log(this.$route.query.locationeng);
+    
     await this.replacerefresh();
   },
   data() {
     return {
+      clusterIcon:{
+        textColor: 'white',
+        url: 'https://github.com/googlearchive/js-marker-clusterer/blob/gh-pages/images/m2.png',
+        height: 50,
+        width: 50},
+      busanlist:[],
       lockor: this.$route.query.locationkor,
       zoom: 14,
       dialogVisible: false,
@@ -156,32 +190,9 @@ export default {
       num2: 0,
       num1: 0,
       openedMarkerID: null,
-      center: { lat: 1, lng: 2 },
+      center: { lat: 35.15267616865169, lng: 129.05961009117254 },
       markers: [
-        {
-          id: "동성직업전문학교",
-          position: {
-            lat: 35.15267616865169,
-            lng: 129.05961009117254,
-          },
-        },
-        {
-          id: 2,
-
-          position: {
-            lat: 51.198429,
-            lng: 6.69529,
-          },
-        },
-        {
-          id: "추가할장소",
-
-          icon: "https://maps.google.com/mapfiles/ms/micons/green.png",
-          position: {
-            lat: "",
-            lng: "",
-          },
-        },
+ 
       ],
     };
   },
@@ -204,6 +215,14 @@ export default {
   methods: {
     // 위도 경도로 직선거리 구하는 REST.API
     async locationdistance() {
+      //
+      //https://www.data.go.kr/data/15088773/openapi.do
+      // 도로명 주소 api 검색 
+      // https://www.juso.go.kr/addrlink/addrLinkApiJsonp.do?confmKey=devU01TX0FVVEgyMDIxMTEwODEwMDgzNzExMTg1NDU=&currentPage=1&countPerPage=10&keyword=망미배산로&=
+      // 위치검색
+      // https://apis.openapi.sk.com/tmap/geo/convertAddress?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&version=1&searchTypCd=NtoO&reqAdd=부산 서면&reqMulti=M&resCoordType=WGS84GEO
+      // 위치검색 
+      //https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&format=json&fullAddr=부산시 수영구 망미배산로56 3001&callback=json&page=1&count=20&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55
       // 경로 json 출력
       //https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=129.10239277274485&endY=35.17444316729922&reqCoordType=WGS84GEO&endRpFlag=G&startX=129.09522188698028&startY=35.17354426079996&sort=index
       // 경로 화면출력
@@ -214,6 +233,7 @@ export default {
       const headers = {};
       const response = await axios.get(url, { headers });
       console.log(response.data.distanceInfo.distance);
+     
     },
     async locationchange() {
       await this.replacerefresh();

@@ -9,8 +9,8 @@ import VueCookies from 'vue3-cookies'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import VueZoomer from 'vue-zoomer'
 import VueEasyLightbox from 'vue-easy-lightbox'
-import Datepicker from 'vue3-date-time-picker';
-import 'vue3-date-time-picker/dist/main.css'
+
+
 import VCalendar from 'v-calendar';
 
 //ui 설정
@@ -19,7 +19,7 @@ import VCalendar from 'v-calendar';
 
 const app = createApp(App);
 app.use(VCalendar);
-app.component('Datepicker', Datepicker);
+
 app.use(VueEasyLightbox)
 app.use(ElementPlus)
 app.use(VueZoomer)
