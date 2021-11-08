@@ -13,39 +13,18 @@
       >
 
       <div class="demo-collapse">
-        <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item
-            title="인원 상세설정"
-            name="1"
-            style="background-color: black"
-            v-bind:class="chclass"
-          >
-            <div>
-              <div v-if="check === 1" class="check">
-                <p class="text1">인원</p>
-                <p class="text2">성인</p>
-                <span class="text3">만 13세 이상</span><br />
-                <el-input-number v-model="num" :step="1" size="mini" />
-
-                <p class="text2">어린이</p>
-                <span class="text3">만 2~12세</span><br />
-                <el-input-number v-model="num1" :step="1" size="mini" />
-
-                <p class="text2">유아</p>
-                <span class="text3">만 2세 미만</span><br />
-                <el-input-number v-model="num2" :step="1" size="mini" />
-              </div>
-
-              <br />
-              <button class="btn_last">검색</button>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
+        <ul>
+          <li v-for="list in choice" :key="list">
+            {{list.title}}
+          </li>
+        </ul>
+   
+  
       </div>
     </div>
     <div class="center1">
    
-      <GMapMap
+      <GMapMap 
         ref="myMapRef"
         :center="center"
         :zoom="zoom"
@@ -55,7 +34,7 @@
         class="gmap"
            
       >
-          <GMapCluster :zoomOnClick="true" :styles="clusterIcon">
+          <GMapCluster :zoomOnClick="true" :style="clusterIcon" imagePath='https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m'>
         <GMapMarker
           :key="index"
           v-for="(m, index) in markers"
@@ -64,6 +43,7 @@
           :clickable="true"
           :draggable="true"
           @click="openMarker(m.id)"
+          v-on:click="center = m.position"
           @closeclick="openMarker(null)"
         >
           <GMapInfoWindow
@@ -83,35 +63,30 @@
     </div>
     <div class="right1">
       <button id="right_btn" @click="handleright" v-bind:class="btncolor">
-        추천코스
+        관광지
       </button>
       <button id="right_btn" @click="handleright2" v-bind:class="btncolor2">
         숙소
       </button>
+      <button id="right_btn" @click="handleright3" v-bind:class="btncolor3">
+        음식점
+      </button>
       <div class="right_content" v-if="right === 1">
         <h4>추천코스</h4>
         <ul class="travel_list">
-          <li>
-            <div class="imgdiv">
-              <img src="../assets/gam.jpg" style="height: 100px" />
+          <li v-for="list in busanlist10" :key="list"  class="listmap">
+            <div class="imgdiv"  @click="openMarker1(list.title,list.mapx,list.mapy)">
+              <img :src="list.firstimage" style="height: 100px" />
             </div>
-            <div class="textdiv">감천문화마을</div>
-          </li>
-          <li>
-            <div class="imgdiv">
-              <img src="../assets/gam.jpg" style="height: 100px" />
+            <div class="textdiv">{{list.title}}
+              <button @click="listpush(list)">일정에 추가하기</button>
             </div>
-            <div class="textdiv">감천문화마을</div>
           </li>
-          <li>
-            <div class="imgdiv">
-              <img src="../assets/gam.jpg" style="height: 100px" />
-            </div>
-            <div class="textdiv">감천문화마을</div>
-          </li>
+     
         </ul>
       </div>
       <div class="right_content" v-if="right === 2">내용2</div>
+         <div class="right_content" v-if="right === 3">내용3</div>
     </div>
   </div>
   <el-dialog
@@ -142,11 +117,22 @@ import axios from "axios";
 export default {
   name: "search",
   async created() {
-    const url = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&contentTypeId=12&MobileApp=AppTest&MobileOS=ETC&arrange=B&areaCode=6&listYN=Y`
+      const url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=6&contentTypeId=12&MobileApp=AppTest&MobileOS=ETC&arrange=P&areaCode=6&listYN=Y`
+    const headers1 = { "Content-type": "application/json" };
+    const body1 = {}
+      const response1 = await axios.get(url1,body1, {headers1});
+      console.log(response1.data.response.body.items.item)
+      this.busanlist10 = response1.data.response.body.items.item
+     
+    
+   
+   
+
+    const url = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&contentTypeId=12&MobileApp=AppTest&MobileOS=ETC&arrange=P&areaCode=6&listYN=Y`
     const headers = { "Content-type": "application/json" };
     const body = {}
       const response = await axios.get(url,body, {headers});
-   
+      console.log(response.data.response.body.items)
       this.busanlist =  response.data.response.body.items.item
       console.log(typeof(Number(this.busanlist[1].mapy)))
      for(var i=0; i<this.busanlist.length; i++){
@@ -156,7 +142,8 @@ export default {
          "position":{
            "lat":Number(this.busanlist[i].mapy),
            "lng":Number(this.busanlist[i].mapx)
-           }
+           },
+           "icon":"https://ifh.cc/g/ZgAcfN.png"
            }
          )
      
@@ -169,12 +156,10 @@ export default {
     await this.replacerefresh();
   },
   data() {
-    return {
-      clusterIcon:{
-        textColor: 'white',
-        url: 'https://github.com/googlearchive/js-marker-clusterer/blob/gh-pages/images/m2.png',
-        height: 50,
-        width: 50},
+    return {     
+      choice:[],
+      busan10ll:[],
+      busanlist10:[],
       busanlist:[],
       lockor: this.$route.query.locationkor,
       zoom: 14,
@@ -184,6 +169,7 @@ export default {
       chclass: "chcss",
       btncolor: "active",
       btncolor2: "noneactive",
+      btncolor3: "noneactive",
       right: 1,
       check: 1,
       num: 0,
@@ -283,16 +269,34 @@ export default {
     setPlace() {
       console.log("1111");
     },
-    mark(event) {
-      console.log(event.latLng.lat());
-      this.markers[2].position.lat = event.latLng.lat();
-      this.sublat = event.latLng.lat();
-      console.log(event.latLng.lng());
-      this.markers[2].position.lng = event.latLng.lng();
-      this.sublng = event.latLng.lng();
+    // mark(event) {
+    //   console.log(event.latLng.lat());
+    //   this.markers[2].position.lat = event.latLng.lat();
+    //   this.sublat = event.latLng.lat();
+    //   console.log(event.latLng.lng());
+    //   this.markers[2].position.lng = event.latLng.lng();
+    //   this.sublng = event.latLng.lng();
+    // },
+    listpush(i){
+      console.log(i)
+      this.choice.push(i)
+      console.log(this.choice)
+    },
+    openMarker1(title,mapx,mapy){
+      console.log(title,mapx)
+     
+      this.openedMarkerID = title;
+      
+     
+      this.center ={lat: Number(mapy), lng: Number(mapx)}
+      this.zoom =18;
     },
     openMarker(id) {
+    
+     
       this.openedMarkerID = id;
+   
+      
     },
     showPosition(event, two) {
       console.log(event.latLng);
@@ -300,6 +304,7 @@ export default {
     },
     handleright() {
       this.right = 1;
+      this.btncolor3 ="noneactive"
       this.btncolor2 = "noneactive";
       this.btncolor = "active";
     },
@@ -307,6 +312,13 @@ export default {
       this.right = 2;
       this.btncolor2 = "active";
       this.btncolor = "noneactive";
+      this.btncolor3 = "noneactive"
+    },
+        handleright3() {
+      this.right = 3;
+      this.btncolor2 = "noneactive";
+      this.btncolor = "noneactive";
+      this.btncolor3 = "active";
     },
   },
 };
@@ -333,6 +345,7 @@ export default {
   height: 100px;
   width: 100px;
   float: left;
+  cursor: pointer;
 }
 .textdiv {
   float: left;
@@ -454,10 +467,14 @@ body {
   margin: 0;
 }
 #right_btn {
-  width: 50%;
+  width: 33%;
   height: 35px;
   border: none;
   cursor: pointer;
+}
+#right_btn:nth-child(2){
+  border-right:1px solid #ddd;
+  border-left:1px solid #ddd;
 }
 .right_content {
   margin-top: 10px;
@@ -470,4 +487,5 @@ body {
   font-weight: 900;
   font-size: 20px;
 }
+
 </style>
