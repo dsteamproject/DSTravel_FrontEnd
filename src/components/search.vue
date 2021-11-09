@@ -13,8 +13,13 @@
       >
 
       <div class="demo-collapse">
+        <h3>여행일정 </h3>
+        <p>1일차</p>
         <ul>
-          <li v-for="list in choice" :key="list">
+          <li v-for="list in choice" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 80px; width:100px" />
+            </div>
             {{list.title}}
           </li>
         </ul>
@@ -22,18 +27,20 @@
   
       </div>
     </div>
-    <div class="center1">
-   
+    <div :class="centercss">
+
       <GMapMap 
         ref="myMapRef"
+        
         :center="center"
         :zoom="zoom"
         map-type-id="roadmap"
         style="width: 100vw; height: 20rem"
         @click="mark"
         class="gmap"
-           
       >
+   
+ 
           <GMapCluster :zoomOnClick="true" :style="clusterIcon" imagePath='https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m'>
         <GMapMarker
           :key="index"
@@ -46,13 +53,21 @@
           v-on:click="center = m.position"
           @closeclick="openMarker(null)"
         >
+         <GMapPolyline 
+      :path="path"
+      :key="componentKey"
+      :editable="false"
+      ref="polyline" />
+  
           <GMapInfoWindow
             :closeclick="true"
             @closeclick="openMarker(null)"
             :opened="openedMarkerID === m.id"
           >
+          
             <div>{{ m.id }}</div>
           </GMapInfoWindow>
+  
         </GMapMarker>
         </GMapCluster>
           
@@ -61,7 +76,10 @@
       </GMapMap>
       <button class="addmarker" @click="dialogVisible = true">추가</button>
     </div>
-    <div class="right1">
+    <div :class="rightcss" >
+      <div class="rightfull_btn"  v-if="rightc === 'off'" @click="handlefull"><span>◀</span></div>
+       <div class="rightfull_btn" v-if="rightc === 'on'" @click="handlefull2"><span>▶</span></div>
+      <div style="float:left; padding:10px; box-sizing:border-box; width:93.8%" >
       <button id="right_btn" @click="handleright" v-bind:class="btncolor">
         관광지
       </button>
@@ -88,6 +106,7 @@
       <div class="right_content" v-if="right === 2">내용2</div>
          <div class="right_content" v-if="right === 3">내용3</div>
     </div>
+    </div>
   </div>
   <el-dialog
     v-model="dialogVisible"
@@ -110,31 +129,31 @@
       </span>
     </template>
   </el-dialog>
+
+  
 </template>
 
 <script>
 import axios from "axios";
 export default {
   name: "search",
+ 
+  
   async created() {
-      const url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=6&contentTypeId=12&MobileApp=AppTest&MobileOS=ETC&arrange=P&areaCode=6&listYN=Y`
-    const headers1 = { "Content-type": "application/json" };
-    const body1 = {}
-      const response1 = await axios.get(url1,body1, {headers1});
-      console.log(response1.data.response.body.items.item)
-      this.busanlist10 = response1.data.response.body.items.item
-     
-    
-   
-   
-
-    const url = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&contentTypeId=12&MobileApp=AppTest&MobileOS=ETC&arrange=P&areaCode=6&listYN=Y`
+    // 오른쪽 상세창
+     await this.rightrefresh();
+ 
+ // ========
+ // 구글맵 화면용 
+       const url =`/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
     const headers = { "Content-type": "application/json" };
-    const body = {}
-      const response = await axios.get(url,body, {headers});
-      console.log(response.data.response.body.items)
-      this.busanlist =  response.data.response.body.items.item
-      console.log(typeof(Number(this.busanlist[1].mapy)))
+  
+      const response = await axios.get(url, {headers});
+      console.log(response.data.list)
+
+
+      this.busanlist =  response.data.list
+   
      for(var i=0; i<this.busanlist.length; i++){
        this.markers.push(
          {
@@ -148,15 +167,20 @@ export default {
          )
      
      }
-       console.log(this.markers)
-       console.log(String(this.markers[4].position.lng))
-    console.log(this.$route.query.locationkor);
-    console.log(this.$route.query.locationeng);
+  
     
     await this.replacerefresh();
   },
   data() {
-    return {     
+    return {
+      middleload:[], // 경로 
+      componentKey:0,
+      path1:[],
+        path: [],
+      rightc:"off",
+      centercss:"center1",
+      rightcss:"right1",
+    
       choice:[],
       busan10ll:[],
       busanlist10:[],
@@ -196,9 +220,29 @@ export default {
       console.log(from);
       await this.replacerefresh();
     },
+  
   },
 
   methods: {
+   async rightrefresh(){
+          // 오른쪽 상세창
+      const url1 = `/REST/travel/tourapi/select?page=1&cnt=6&arrange=P&contentTypeId=12&areaCode=6`
+    const headers1 = { "Content-type": "application/json" };
+ 
+      const response1 = await axios.get(url1,{headers1});
+      console.log(response1)
+      this.busanlist10 = response1.data.list
+    },
+    handlefull(){
+      this.rightcss ="right2"
+      this.centercss ="center2"
+      this.rightc ="on"
+    },
+    handlefull2(){
+       this.rightcss ="right1"
+      this.centercss ="center1"
+      this.rightc ="off"
+    },
     // 위도 경도로 직선거리 구하는 REST.API
     async locationdistance() {
       //
@@ -215,10 +259,10 @@ export default {
       // https://apis.openapi.sk.com/tmap/routeStaticMap?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&endX=129.10239277274485&endY=35.17444316729922&startX=129.09522188698028&startY=35.17354426079996&reqCoordType=WGS84GEO&endPoiId=1000560149&passList=129.10239277274485,35.17444316729922,1000560149,G,0_129.09522188698028,35.17354426079996,160886,G,0&lineColor=red&width=500&height=500
       // 자동차 경로안내// http://tmapapi.sktelecom.com/main.html#webservice/docs/tmapRouteDoc
       // https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=129.07579349764512&endY=35.17883196265564&reqCoordType=WGS84GEO&endRpFlag=G&startX=126.98217734415019&startY=37.56468648536046
-      const url = `https://apis.openapi.sk.com/tmap/routes/distance?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&version=1&startX=126.926139&startY=37.557495&endX=126.82613&endY=37.657495&reqCoordType=WGS84GEO&callback=function`;
-      const headers = {};
-      const response = await axios.get(url, { headers });
-      console.log(response.data.distanceInfo.distance);
+      //const url = `https://apis.openapi.sk.com/tmap/routes/distance?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&version=1&startX=126.926139&startY=37.557495&endX=126.82613&endY=37.657495&reqCoordType=WGS84GEO&callback=function`;
+      //const headers = {};
+      //const response = await axios.get(url, { headers });
+      //console.log(response.data.distanceInfo.distance);
      
     },
     async locationchange() {
@@ -266,9 +310,7 @@ export default {
         this.zoom = 11.1;
       }
     },
-    setPlace() {
-      console.log("1111");
-    },
+   
     // mark(event) {
     //   console.log(event.latLng.lat());
     //   this.markers[2].position.lat = event.latLng.lat();
@@ -277,10 +319,38 @@ export default {
     //   this.markers[2].position.lng = event.latLng.lng();
     //   this.sublng = event.latLng.lng();
     // },
-    listpush(i){
-      console.log(i)
+    async listpush(i){
+         console.log(i)
       this.choice.push(i)
       console.log(this.choice)
+  
+      if(this.choice.length >= 2){
+        // 자동차 경로 REST api
+        const url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice[1].mapx}&endY=${this.choice[1].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice[0].mapx}&startY=${this.choice[0].mapy}`;
+      const headers = {};
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      for(var e=0; e<response.data.features.length; e++){
+       //console.log(response.data.features[e].geometry.coordinates[0])
+       if(response.data.features[e].geometry.coordinates[0].length === 2){
+        this.middleload.push(response.data.features[e].geometry.coordinates[e]);
+          }
+  
+     
+  
+     
+       }
+         console.log(this.middleload)
+         for(var a=0; a<this.middleload.length; a++){
+       this.path.push({"lat":Number(this.middleload[a][1]),"lng":Number(this.middleload[a][0])})
+       }
+       }
+  
+
+     
+     
+    console.log(this.path)
+   this.componentKey += 1;
     },
     openMarker1(title,mapx,mapy){
       console.log(title,mapx)
@@ -332,6 +402,34 @@ export default {
 }
 </style>
 <style scoped>
+.mytimg{
+  float:left;
+  height: 80px;
+}
+.mytravel_list{
+  border:1px solid #ddd;
+  width: 100%;
+    height: 80px;
+    box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+  background: #ffffff;
+  list-style: none;
+
+}
+.rightfull_btn{
+  height: 100%;
+  width:20px;
+  background: rgba(0, 0, 0, 0.1);
+  float:left;
+  line-height: 50;
+  color:darkslateblue;
+  cursor: pointer;
+  transition: all 1s;
+}
+.rightfull_btn:hover{
+   background: rgba(0, 0, 0, 0.3);
+   color:white;
+}
 .ind {
   color: red;
   font-size: 12px;
@@ -347,11 +445,9 @@ export default {
   float: left;
   cursor: pointer;
 }
-.textdiv {
-  float: left;
-}
+
 .travel_list li {
-  width: 100%;
+  width: 282px;
   height: 100px;
   box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
   margin-top: 20px;
@@ -434,6 +530,14 @@ p {
   height: 900px;
   position: relative;
   float: left;
+  transition: all 1.5s;
+}
+.center2 {
+  width: 40%;
+  height: 900px;
+  position: relative;
+  float: left;
+  transition: all 1.5s;
 }
 .addmarker {
   position: absolute;
@@ -452,7 +556,16 @@ p {
   background: rgb(238, 237, 237);
   float: left;
   box-sizing: border-box;
-  padding: 10px;
+  transition: all 1.5s;
+
+}
+.right2 {
+  width: 40%;
+  height: 900px;
+  background: rgb(238, 237, 237);
+  float: left;
+  box-sizing: border-box;
+    transition: all 1.5s;
 }
 .btn_last {
   width: 100%;
@@ -471,8 +584,11 @@ body {
   height: 35px;
   border: none;
   cursor: pointer;
+  margin-top:10px;
+
 }
-#right_btn:nth-child(2){
+
+#right_btn:nth-child(3){
   border-right:1px solid #ddd;
   border-left:1px solid #ddd;
 }

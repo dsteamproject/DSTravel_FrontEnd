@@ -55,7 +55,7 @@
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column prop="writer" label="작성자명" width="180" align="center" />
+        <el-table-column prop="member.id" label="작성자명" width="180" align="center" />
         <el-table-column prop="regdate" label="작성일" width="120" align="center"  >
                 <template #default="scope" >
           <span v-if="this.todays === 1" class="datec" @mouseover="dateclick(scope.row.no)" @mouseout="datedown">{{scope.row.regdate2}}</span>      

@@ -17,9 +17,9 @@
             class="change"
             :to="`/freechange?no=${this.no}`"
             @click="handleupdate"
-            v-if="this.loginid === this.list.writer"
+            v-if="this.loginid === this.list.member.id"
             >수정</router-link
-          ><router-link class="delete" to=""  @click="dialogVisible = true" v-if="this.loginid === this.list.writer">삭제</router-link>
+          ><router-link class="delete" to=""  @click="dialogVisible = true" v-if="this.loginid === this.list.member.id">삭제</router-link>
         </div>
       
       </div>
@@ -28,8 +28,8 @@
     
     <div class="wrap">
         <div class="userdetail">
-          <img :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${this.list.writer}`" class="myimg">
-          <p>{{this.list.writer}} </p>
+          <img :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${this.list.member.id}`" class="myimg">
+          <p>{{this.list.member.id}} </p>
           </div>
       <div v-html="this.list.content" class="ck-content"></div>
     
@@ -46,7 +46,7 @@
 
           <li v-for="(item, index) in reply" :key="index">
             <div class="reply_content"> 
-              <span class="rewriter">{{item.writer}}</span>
+              <span class="rewriter">{{item.member.id}}</span>
               <span v-if="this.today === item.regdate2 " class="regdate">{{item.regdate3}}  </span>
               <span v-if="this.today !== item.regdate2 " class="regdate">{{item.regdate2}}  </span>
               <div class="reply_content2">
@@ -55,9 +55,9 @@
 
                 <div class="reply_in">
               <!--<span v-if="this.repch !==index" v-html="item.reply"></span>-->
-              <textarea v-html="item.reply" disabled class="replychange1" v-if="this.repch !==index"></textarea>
+              <textarea v-html="item.replycontent" disabled class="replychange1" v-if="this.repch !==index"></textarea>
               <div class="btn_replybox">
-              <textarea class="replychange" v-model="item.reply" v-if="this.repch=== index"></textarea>
+              <textarea class="replychange" v-model="item.replycontent" v-if="this.repch=== index"></textarea>
                 <button v-if="this.repch=== index " @click="cancelreply(index)" class="cancel">취소</button> <span v-if="this.repch=== index">│</span><button v-if="this.repch=== index" @click="changereply(index)" class="confirm">수정</button>
               </div>
               </div>
@@ -69,9 +69,9 @@
 
 
               <div class="reply_in2">
-              <button class="re_change" @click="replychange(index)" v-if="this.loginid === item.writer">수정</button>
+              <button class="re_change" @click="replychange(index)" v-if="this.loginid === item.member.id">수정</button>
           
-              <button class="re_delete" @click="dialog(index)" v-if="this.loginid === item.writer">삭제</button>
+              <button class="re_delete" @click="dialog(index)" v-if="this.loginid === item.member.id">삭제</button>
               </div>
            
               </div>
@@ -245,7 +245,7 @@ export default {
         }else{
       const url = `/REST/board/reply?no=${this.no}`;
        const body = {
-         reply:this.replytext,
+         replycontent:this.replytext,
       };
       const headers = { "Content-type": "application/json",  token : this.token };
       const response = await axios.post(url,body, {headers});
@@ -303,7 +303,7 @@ export default {
           this.loginid = response.data.LoginId;
           console.log(this.loginid)
         this.loginid = response.data.LoginId
-        this.good = response.data.good
+        
         this.reply = response.data.reply
         console.log(this.reply)
       for(var i=0; i<this.reply.length; i++){
