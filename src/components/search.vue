@@ -331,9 +331,10 @@ export default {
       const response = await axios.get(url, { headers });
       console.log(response);
       for(var e=0; e<response.data.features.length; e++){
-       //console.log(response.data.features[e].geometry.coordinates[0])
+       console.log(response.data.features[e])
        if(response.data.features[e].geometry.coordinates[0].length === 2){
-        this.middleload.push(response.data.features[e].geometry.coordinates[e]);
+        this.middleload.push(response.data.features[e].geometry.coordinates[0]);
+      
           }
   
      
