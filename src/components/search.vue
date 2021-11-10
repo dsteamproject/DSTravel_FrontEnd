@@ -48,12 +48,13 @@
           :icon="m.icon"
           :position="m.position"
           :clickable="true"
-          :draggable="true"
+          :draggable="false"
           @click="openMarker(m.id)"
           v-on:click="center = m.position"
           @closeclick="openMarker(null)"
         >
          <GMapPolyline 
+         :options="options"
       :path="path"
       :key="componentKey"
       :editable="false"
@@ -89,11 +90,11 @@
       <button id="right_btn" @click="handleright3" v-bind:class="btncolor3">
         음식점
       </button>
-      <div class="right_content" v-if="right === 1">
-        <h4>추천코스</h4>
+      <div class="right_content" v-if="right === 1" >
+     검색<input type="text" class="searchinput">
         <ul class="travel_list">
           <li v-for="list in busanlist10" :key="list"  class="listmap">
-            <div class="imgdiv"  @click="openMarker1(list.title,list.mapx,list.mapy)">
+            <div class="imgdiv"  @click="openMarker1(list)">
               <img :src="list.firstimage" style="height: 100px" />
             </div>
             <div class="textdiv">{{list.title}}
@@ -130,6 +131,28 @@
     </template>
   </el-dialog>
 
+      <el-dialog
+    v-model="dialogVisible1"
+    :title="this.dialoglist.title"
+    top="30vh"
+    width="50%"
+    :before-close="handleClose"
+    append-to-body
+    class="sasa"
+  >
+  <div>
+    <div class="dialogimg"  >
+      <img :src="this.dialoglist.firstimage" style="height:310px">
+    </div>
+    <div class="dialogtext">
+      <span>{{this.dialoglist.title}}</span>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+  
+  
+    
+  </el-dialog>
   
 </template>
 
@@ -145,7 +168,7 @@ export default {
  
  // ========
  // 구글맵 화면용 
-       const url =`/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
+       const url =`/REST/travel/tourapi/select?page=1&cnt=300&arrange=P&contentTypeId=12&areaCode=6`;
     const headers = { "Content-type": "application/json" };
   
       const response = await axios.get(url, {headers});
@@ -173,6 +196,10 @@ export default {
   },
   data() {
     return {
+      abc:"dialog <br> <br/> adsdd",
+      startnum:0,
+      endnum:1,
+      middleload1:[], // 경로 
       middleload:[], // 경로 
       componentKey:0,
       path1:[],
@@ -180,7 +207,8 @@ export default {
       rightc:"off",
       centercss:"center1",
       rightcss:"right1",
-    
+      dialoglist:[],
+      dialogcontent:"",
       choice:[],
       busan10ll:[],
       busanlist10:[],
@@ -188,6 +216,7 @@ export default {
       lockor: this.$route.query.locationkor,
       zoom: 14,
       dialogVisible: false,
+      dialogVisible1: false,
       sublat: "",
       sublng: "",
       chclass: "chcss",
@@ -204,6 +233,12 @@ export default {
       markers: [
  
       ],
+      numberp:[],
+       options: {
+         strokeColor: "#FF0000",
+         strokeWeight:"5"
+        
+      }
     };
   },
   async mounted() {
@@ -320,47 +355,87 @@ export default {
     //   this.sublng = event.latLng.lng();
     // },
     async listpush(i){
+      this.busanlist10=[];
          console.log(i)
       this.choice.push(i)
-      console.log(this.choice)
-  
+      // =====================================
+        //한개 선택후 오른쪽 list 변경
+        const url1 =`/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=2&xmap=${i.mapx}&ymap=${i.mapy}`
+        const headers1 ={};
+        const response1 = await axios.get(url1,{headers1});
+        console.log(response1)
+        this.busanlist10 =response1.data.list
+
+
+
+
+      // =====================================
+   
       if(this.choice.length >= 2){
         // 자동차 경로 REST api
-        const url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice[1].mapx}&endY=${this.choice[1].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice[0].mapx}&startY=${this.choice[0].mapy}`;
+     
+        console.log(this.startnum)
+        console.log(this.choice[this.startnum].mapx)
+        const url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice[Number(this.endnum)].mapx}&endY=${this.choice[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice[Number(this.startnum)].mapx}&startY=${this.choice[Number(this.startnum)].mapy}`;
       const headers = {};
       const response = await axios.get(url, { headers });
-      console.log(response);
-      for(var e=0; e<response.data.features.length; e++){
-       console.log(response.data.features[e])
-       if(response.data.features[e].geometry.coordinates[0].length === 2){
-        this.middleload.push(response.data.features[e].geometry.coordinates[0]);
-      
+        console.log(response.data);
+      for(var e=1; e<response.data.features.length; e++){
+        if(response.data.features[e].geometry.coordinates.length === 2){
+          if(response.data.features[e].geometry.coordinates[0].length === 2){
+            console.log("123");
           }
-  
+       else{this.middleload.push(response.data.features[e].geometry.coordinates)}
+       }else{
+         for(var q=0; q<response.data.features[e].geometry.coordinates.length; q++){
+            this.middleload.push(response.data.features[e].geometry.coordinates[q])
+         }
+       }
      
   
+     
+  // && response.data.features[e].geometry.coordinates[0].length===1
      
        }
-         console.log(this.middleload)
+      
+     
+
+
+        console.log( this.middleload)
+        
+         
+           
+      
          for(var a=0; a<this.middleload.length; a++){
        this.path.push({"lat":Number(this.middleload[a][1]),"lng":Number(this.middleload[a][0])})
        }
+            this.startnum+=1;
+      this.endnum +=1;
+      this.middleload=[];
        }
-  
 
-     
-     
+
+   
+       
     console.log(this.path)
    this.componentKey += 1;
+ 
     },
-    openMarker1(title,mapx,mapy){
-      console.log(title,mapx)
-     
-      this.openedMarkerID = title;
-      
-     
-      this.center ={lat: Number(mapy), lng: Number(mapx)}
+    async openMarker1(i){
+      console.log(i)
+      this.openedMarkerID = i.title;
+      this.center ={lat: Number(i.mapy), lng: Number(i.mapx)}
       this.zoom =18;
+
+    const url = `/REST/travel/tourapi/selectone?contentId=${i.contentid}`
+    const headers = { "Content-type": "application/json" };
+ 
+      const response = await axios.get(url,{headers});
+      console.log(response)
+      this.dialoglist = response.data.list
+      this.dialogcontent = this.dialoglist.overview.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n');
+     
+      this.dialogVisible1 =true;
     },
     openMarker(id) {
     
@@ -395,6 +470,12 @@ export default {
 };
 </script>
 <style>
+.el-dialog__header{
+  display: none;
+}
+.el-dialog__body{
+  padding:unset;
+}
 .el-collapse-item__header {
   text-align: center;
   display: block;
@@ -420,6 +501,8 @@ export default {
 .rightfull_btn{
   height: 100%;
   width:20px;
+ 
+
   background: rgba(0, 0, 0, 0.1);
   float:left;
   line-height: 50;
@@ -603,6 +686,37 @@ body {
 .right_content h4 {
   font-weight: 900;
   font-size: 20px;
+}
+.dialogimg{
+  overflow: hidden;
+    height: 286px;
+    width: 35%;
+  float:left;
+   
+}
+.dialogtext{
+  float: left;
+  width:65%;
+  padding:20px 10px 20px 10px;
+  box-sizing: border-box;
+
+}
+.diatextarea{
+  border:none;
+  height: 200px;
+  width: 100%;
+  padding:20px;
+  box-sizing: border-box;
+  resize: none;
+  outline:none;
+   -ms-overflow-style: none;
+}
+.diatextarea::-webkit-scrollbar{
+  display: none;
+}
+.searchinput{
+  padding:5px 10px;
+  border:1px solid #ddd;
 }
 
 </style>
