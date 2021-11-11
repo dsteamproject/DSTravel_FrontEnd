@@ -14,7 +14,7 @@ import VueEasyLightbox from 'vue-easy-lightbox'
 import VCalendar from 'v-calendar';
 
 //ui 설정
-
+window.Kakao.init('83596c76e04bc391ea007eff354d1d23');
 
 
 const app = createApp(App);

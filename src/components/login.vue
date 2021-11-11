@@ -5,6 +5,7 @@
       <div class="join">
         <div class="left">
           <h3 class="h31">일반 로그인</h3>
+          
           <input
             type="text"
             class="userid"
@@ -66,12 +67,15 @@
         </div>
       </div>
     </div>
+ 
   </div>
 </template>
 
 <script>
+
 import axios from "axios";
 export default {
+
   data() {
     return {
       userid: "",

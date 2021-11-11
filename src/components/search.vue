@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" style="position: fixed; ">
     <div class="left1">
       <h3 @change="locationchange">
         {{ this.$route.query.locationkor }}
@@ -13,12 +13,96 @@
       >
 
       <div class="demo-collapse">
-        <h3>여행일정 </h3>
-        <p>1일차</p>
-        <ul>
-          <li v-for="list in choice" :key="list" class="mytravel_list" >
+        <div>
+        <h5>여행일정 </h5>
+        <button @click="this.num3 -= 1">&lt;</button>
+  <el-input-number
+    v-model="num3"
+    :controls="false"
+    :min="1"
+    :max="Number(this.$route.query.betday)"
+    controls-position="right"
+    @change="handleChange"
+  /><span>일차</span>
+    <button @click="numplus"> &gt;</button>
+      
+        </div>
+        <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===1">
+          <li v-for="list in choice1" :key="list" class="mytravel_list" >
             <div class="mytimg">
-            <img :src="list.firstimage" style="height: 80px; width:100px" />
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===2">
+          <li v-for="list in choice2" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===3">
+          <li v-for="list in choice3" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===4">
+          <li v-for="list in choice4" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===5">
+          <li v-for="list in choice5" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===6">
+          <li v-for="list in choice6" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===7">
+          <li v-for="list in choice7" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===8">
+          <li v-for="list in choice8" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===9">
+          <li v-for="list in choice9" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
+            </div>
+            {{list.title}}
+          </li>
+        </ul>
+             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===10">
+          <li v-for="list in choice10" :key="list" class="mytravel_list" >
+            <div class="mytimg">
+            <img :src="list.firstimage" style="height: 70px; width:90px" />
             </div>
             {{list.title}}
           </li>
@@ -31,7 +115,7 @@
 
       <GMapMap 
         ref="myMapRef"
-        
+         
         :center="center"
         :zoom="zoom"
         map-type-id="roadmap"
@@ -41,9 +125,10 @@
       >
    
  
-          <GMapCluster :zoomOnClick="true" :style="clusterIcon" imagePath='https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m'>
+          <GMapCluster :minimumClusterSize="4"  :zoomOnClick="true" :style="clusterIcon" imagePath='https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m'>
         <GMapMarker
-          :key="index"
+          
+          :key="(index,componentKey)"
           v-for="(m, index) in markers"
           :icon="m.icon"
           :position="m.position"
@@ -163,12 +248,17 @@ export default {
  
   
   async created() {
+    console.log(this.$route.query.betday)
+    for(var o=0; o<this.$route.query.betday; o++){
+    this.traveldate.push(o)
+    }
+    console.log(this.traveldate)
     // 오른쪽 상세창
      await this.rightrefresh();
  
  // ========
  // 구글맵 화면용 
-       const url =`/REST/travel/tourapi/select?page=1&cnt=300&arrange=P&contentTypeId=12&areaCode=6`;
+       const url =`/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
     const headers = { "Content-type": "application/json" };
   
       const response = await axios.get(url, {headers});
@@ -196,6 +286,9 @@ export default {
   },
   data() {
     return {
+      num3:1,
+      startdate:1,
+      traveldate:[],
       abc:"dialog <br> <br/> adsdd",
       startnum:0,
       endnum:1,
@@ -209,7 +302,17 @@ export default {
       rightcss:"right1",
       dialoglist:[],
       dialogcontent:"",
-      choice:[],
+      choice1:[],
+      choice2:[],
+      choice3:[],
+      choice4:[],
+      choice5:[],
+      choice6:[],
+      choice7:[],
+      choice8:[],
+      choice9:[],
+      choice10:[],
+   
       busan10ll:[],
       busanlist10:[],
       busanlist:[],
@@ -259,9 +362,12 @@ export default {
   },
 
   methods: {
+    numplus(){
+      this.num3 += 1;
+    },
    async rightrefresh(){
           // 오른쪽 상세창
-      const url1 = `/REST/travel/tourapi/select?page=1&cnt=6&arrange=P&contentTypeId=12&areaCode=6`
+      const url1 = `/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`
     const headers1 = { "Content-type": "application/json" };
  
       const response1 = await axios.get(url1,{headers1});
@@ -355,12 +461,41 @@ export default {
     //   this.sublng = event.latLng.lng();
     // },
     async listpush(i){
+      console.log(i.title)
+  
+       var marknum = this.markers.findIndex(e =>e.id == i.title)
+       console.log(marknum)
+        this.markers[marknum].icon = "https://ifh.cc/g/q7v7ZO.png"
+          console.log(this.markers[marknum].icon)
       this.busanlist10=[];
          console.log(i)
-      this.choice.push(i)
+         if(this.num3 === 1){
+      this.choice1.push(i)
+      }else if(this.num3 ===2){
+        this.choice2.push(i)
+      }else if(this.num3 === 3){
+        this.choice3.push(i)
+      }else if(this.num3 === 4){
+        this.choice4.push(i)
+      }else if(this.num3 === 5){
+        this.choice5.push(i)
+      }else if(this.num3 === 6){
+        this.choice6.push(i)
+      }else if(this.num3 === 7){
+        this.choice7.push(i)
+      }else if(this.num3 === 8){
+        this.choice8.push(i)
+      }else if(this.num3 === 9){
+        this.choice9.push(i)
+      }else if(this.num3 === 10){
+        this.choice10.push(i)
+      } 
+      
+     
       // =====================================
         //한개 선택후 오른쪽 list 변경
-        const url1 =`/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=2&xmap=${i.mapx}&ymap=${i.mapy}`
+        
+        const url1 =`/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=1&xmap=${i.mapx}&ymap=${i.mapy}`
         const headers1 ={};
         const response1 = await axios.get(url1,{headers1});
         console.log(response1)
@@ -371,12 +506,43 @@ export default {
 
       // =====================================
    
-      if(this.choice.length >= 2){
+      if(this.choice1.length >= 2){
         // 자동차 경로 REST api
      
         console.log(this.startnum)
-        console.log(this.choice[this.startnum].mapx)
-        const url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice[Number(this.endnum)].mapx}&endY=${this.choice[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice[Number(this.startnum)].mapx}&startY=${this.choice[Number(this.startnum)].mapy}`;
+        console.log(this.choice1[this.startnum].mapx)
+        let url 
+        if(this.num3 === 1){
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice1[Number(this.endnum)].mapx}&endY=${this.choice1[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice1[Number(this.startnum)].mapx}&startY=${this.choice1[Number(this.startnum)].mapy}`;
+        }
+        else if(this.num3 === 2){
+         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice2[Number(this.endnum)].mapx}&endY=${this.choice2[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice2[Number(this.startnum)].mapx}&startY=${this.choice2[Number(this.startnum)].mapy}`;
+        console.log(url)
+        }
+        else if(this.num3 === 3){
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice3[Number(this.endnum)].mapx}&endY=${this.choice3[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice3[Number(this.startnum)].mapx}&startY=${this.choice3[Number(this.startnum)].mapy}`;
+        }
+        else if(this.num3 === 4){
+       url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice4[Number(this.endnum)].mapx}&endY=${this.choice4[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice4[Number(this.startnum)].mapx}&startY=${this.choice4[Number(this.startnum)].mapy}`;
+        }
+        else if(this.num3 === 5){
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice5[Number(this.endnum)].mapx}&endY=${this.choice5[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice5[Number(this.startnum)].mapx}&startY=${this.choice5[Number(this.startnum)].mapy}`;
+        }
+        else if(this.num3 === 6){
+         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice6[Number(this.endnum)].mapx}&endY=${this.choice6[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice6[Number(this.startnum)].mapx}&startY=${this.choice6[Number(this.startnum)].mapy}`;
+        }
+        else if(this.num3 === 7){
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice7[Number(this.endnum)].mapx}&endY=${this.choice7[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice7[Number(this.startnum)].mapx}&startY=${this.choice7[Number(this.startnum)].mapy}`;
+        }
+        else if(this.num3 === 8){
+         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice8[Number(this.endnum)].mapx}&endY=${this.choice8[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice8[Number(this.startnum)].mapx}&startY=${this.choice8[Number(this.startnum)].mapy}`;
+        }
+        else if(this.num3 === 9){
+         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice9[Number(this.endnum)].mapx}&endY=${this.choice9[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice9[Number(this.startnum)].mapx}&startY=${this.choice9[Number(this.startnum)].mapy}`;
+        }
+        else if(this.num3 === 10){
+         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice10[Number(this.endnum)].mapx}&endY=${this.choice10[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice10[Number(this.startnum)].mapx}&startY=${this.choice10[Number(this.startnum)].mapy}`;
+        }
       const headers = {};
       const response = await axios.get(url, { headers });
         console.log(response.data);
@@ -390,22 +556,9 @@ export default {
          for(var q=0; q<response.data.features[e].geometry.coordinates.length; q++){
             this.middleload.push(response.data.features[e].geometry.coordinates[q])
          }
+       } 
        }
-     
-  
-     
-  // && response.data.features[e].geometry.coordinates[0].length===1
-     
-       }
-      
-     
-
-
-        console.log( this.middleload)
-        
-         
-           
-      
+       console.log(this.middleload1);
          for(var a=0; a<this.middleload.length; a++){
        this.path.push({"lat":Number(this.middleload[a][1]),"lng":Number(this.middleload[a][0])})
        }
@@ -419,7 +572,7 @@ export default {
        
     console.log(this.path)
    this.componentKey += 1;
- 
+   
     },
     async openMarker1(i){
       console.log(i)
@@ -470,6 +623,14 @@ export default {
 };
 </script>
 <style>
+.el-input-number{
+  width: 23px;
+}
+.el-input__inner{
+  border:none;
+  padding-left:0px!important;
+  padding-right: 0px!important;
+}
 .el-dialog__header{
   display: none;
 }
@@ -488,15 +649,21 @@ export default {
   float:left;
   height: 80px;
 }
+.travel_list{
+  overflow: auto;
+  height:760px;
+  margin-top:5px;
+}
 .mytravel_list{
   border:1px solid #ddd;
-  width: 100%;
-    height: 80px;
+
+    height: 70px;
     box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
   margin-top: 20px;
   background: #ffffff;
   list-style: none;
-
+display: inline-flex;
+width:90%;
 }
 .rightfull_btn{
   height: 100%;
@@ -533,7 +700,7 @@ export default {
 .travel_list li {
   width: 282px;
   height: 100px;
-  box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
+box-shadow: 1px 2px 0px rgb(0 0 0 / 20%);
   margin-top: 20px;
   background: #ffffff;
   list-style: none;
@@ -550,7 +717,7 @@ export default {
   margin: 0px !important;
 }
 .vue-map-container {
-  height: 900px !important;
+  height: 86.5vh !important;
 }
 .text1 {
   font-size: 19px;
@@ -570,14 +737,14 @@ h5 {
   color: white;
 }
 .full_day {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #696969;
   text-decoration: none;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   display: block;
 }
 .day {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
   display: block;
   margin-top: 10px;
@@ -588,10 +755,10 @@ h5 {
   color: #999;
 }
 h3 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
   padding: 0px;
-  margin-top: 17px;
+  margin-top: 10px;
   margin-bottom: 3px;
 }
 p {
@@ -602,7 +769,7 @@ p {
 }
 .left1 {
   width: 20%;
-  height: 900px;
+  height: 850px;
   background: #ffffff;
   text-align: center;
   float: left;
@@ -611,14 +778,14 @@ p {
 }
 .center1 {
   width: 60%;
-  height: 900px;
+  height: 850px;
   position: relative;
   float: left;
   transition: all 1.5s;
 }
 .center2 {
   width: 40%;
-  height: 900px;
+  height: 850px;
   position: relative;
   float: left;
   transition: all 1.5s;
@@ -678,7 +845,7 @@ body {
 }
 .right_content {
   margin-top: 10px;
-  background: #f1f1f1;
+ 
   height: 800px;
   padding: 10px;
   text-align: center;
@@ -717,6 +884,14 @@ body {
 .searchinput{
   padding:5px 10px;
   border:1px solid #ddd;
+}
+.rightscroll::-webkit-scrollbar {
+    width: 1px;
+    background-color: rgba(145, 210, 229, 0.0);
+}
+.travel_list::-webkit-scrollbar {
+   width: 3px;
+    background-color: rgba(145, 210, 229, 0.0);
 }
 
 </style>

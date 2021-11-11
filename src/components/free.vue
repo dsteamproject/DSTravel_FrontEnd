@@ -48,7 +48,7 @@
               @click="handleHit(scope.row.no)"
             
               :to="`/freecontent?no=${scope.row.no}&category=${this.category}`"
-              ><span  class="title">{{ scope.row.title }} <span v-if="scope.row.countreply !== 0">({{scope.row.countreply}})</span>
+              ><span  class="title">{{ scope.row.title }} <span v-if="scope.row.reply !== 0">({{scope.row.reply}})</span>
                 <span class="new" v-if="scope.row.regdate2 === this.todayfull && scope.row.hours < 1 ">new</span>
               </span>
              
@@ -62,7 +62,7 @@
           <span v-if="this.todays === 2" class="datec" @mouseout="datedown">{{scope.row.regdate3}}</span>      
           </template></el-table-column>
         <el-table-column prop="hit" label="조회수" width="120" align="center" />
-        <el-table-column prop="gno" label="👍" width="120" align="center" label-class-name="asd"  />
+        <el-table-column prop="good" label="👍" width="120" align="center" label-class-name="asd"  />
       </el-table>
       <el-pagination
         background
