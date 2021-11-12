@@ -35,7 +35,7 @@
     
       <div class="reply_box">
     
-        <div class="likebox"><img @click="likeup" class="likeicon" src="../assets/like.png"><span style="vertical-align:5px;"> {{this.good}} </span> </div>
+        <div class="likebox"><img @click="likeup" class="likeicon" src="../assets/like.png"><span style="vertical-align:5px;"> {{this.list.good}} </span> </div>
         <div class="hr"></div>
         <div class="nonereply" v-if="this.reply.length === 0">현재 댓글이 없습니다.</div>
         <ul class="replyul" v-if="this.reply.length !== 0">
@@ -194,18 +194,19 @@ export default {
     // 댓글 수정 PUT
     async changereply(i){
       console.log(i)
-      console.log(this.reply[i].reply) // 선택된 변경상자 값 
+      console.log(this.reply[i].replycontent) // 선택된 변경상자 값 
       const url = `/REST/board/reply_update`;
       const headers = { "Content-type": "application/json" ,token : this.token };
       const body = {
        no : this.reply[i].no,
-       reply : this.reply[i].reply
+       replycontent : this.reply[i].replycontent
       };
       const response = await axios.put(url, body, { headers });
       console.log(response);
       if(response.data.status === 200){
         alert("수정완료되었습니다")
         this.repch="off"
+        
       }
     },
       // 댓글수정 상자 변환 
@@ -225,7 +226,7 @@ export default {
       if(this.token === null){
         alert("로그인 후 이용가능한 서비스입니다")
       }else{
-      const url = `/REST/good/board`;
+      const url = `/REST/board/good`;
       const headers = { "Content-type": "application/json" ,token : this.token };
       const body = {
         no:this.list.no,
@@ -234,6 +235,7 @@ export default {
       console.log(response);
       if(response.data.status === 200){
         this.good =response.data.good
+        await this.refresh();
       }
       }
     },

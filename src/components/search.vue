@@ -1,197 +1,537 @@
 <template>
-  <div class="wrap" style="position: fixed; ">
-    <div class="left1">
-      <h3 @change="locationchange">
-        {{ this.$route.query.locationkor }}
-      </h3>
-      <span class="sub_area">{{ this.$route.query.locationeng }}</span
-      ><br />
-      <span class="day">{{ this.$route.query.betday }}day</span><br />
-
-      <a href="#" class="full_day"
-        >{{ this.$route.query.start }} - {{ this.$route.query.end }}</a
+  <div class="wrap" style="position: fixed">
+    <div class="newleft" v-if="newleft === 'on'">
+      <p class="nltext1">일정</p>
+      <button class="nltext2" @click="allview">전체일정</button>
+      <button
+        v-for="item in traveldate"
+        :key="item"
+        class="lastleft_bth"
+        @click="handledatego(item)"
       >
+        DAY{{ item + 1 }}
+      </button>
+    </div>
+    <div class="left1">
+      <div v-if="newleft === 'off'">
+        <h3 @change="locationchange">
+          {{ this.$route.query.locationkor }}
+        </h3>
+        <span class="sub_area">{{ this.$route.query.locationeng }}</span
+        ><br />
+        <span class="day">{{ this.$route.query.betday }}day</span><br />
 
-      <div class="demo-collapse">
-        <div>
-        <h5>여행일정 </h5>
-        <button @click="this.num3 -= 1">&lt;</button>
-  <el-input-number
-    v-model="num3"
-    :controls="false"
-    :min="1"
-    :max="Number(this.$route.query.betday)"
-    controls-position="right"
-    @change="handleChange"
-  /><span>일차</span>
-    <button @click="numplus"> &gt;</button>
-      
+        <a href="#" class="full_day"
+          >{{ this.$route.query.start }} - {{ this.$route.query.end }}</a
+        >
+
+        <div class="demo-collapse">
+          <div>
+            <h5>여행일정</h5>
+            <button @click="this.num3 -= 1" class="prev">&lt;</button>
+            <el-input-number
+              v-model="num3"
+              :controls="false"
+              :min="1"
+              :max="Number(this.$route.query.betday)"
+              controls-position="right"
+              @change="handleChange"
+            /><span>일차</span>
+            <button @click="numplus" class="next">&gt;</button>
+          </div>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 1"
+          >
+            <li v-for="list in choice1" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 2"
+          >
+            <li v-for="list in choice2" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 3"
+          >
+            <li v-for="list in choice3" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 4"
+          >
+            <li v-for="list in choice4" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 5"
+          >
+            <li v-for="list in choice5" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 6"
+          >
+            <li v-for="list in choice6" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 7"
+          >
+            <li v-for="list in choice7" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 8"
+          >
+            <li v-for="list in choice8" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 9"
+          >
+            <li v-for="list in choice9" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 10"
+          >
+            <li v-for="list in choice10" :key="list" class="mytravel_list">
+              <div class="mytimg">
+                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+              </div>
+              {{ list.title }}
+            </li>
+          </ul>
         </div>
-        <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===1">
-          <li v-for="list in choice1" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
+      </div>
+      <div v-if="newleft0 === 'on'">
+        <ul class="alldate">
+          <li class="alldatetitle" v-if="this.choice1.length > 0">Day 1</li>
+          <li class="alldatecontent" v-for="item in choice1" :key="item">
+            <div class="ads" style="width: 10%; float: left">
+              <img :src="item.firstimage" style="width: 50px; height: 50px" />
             </div>
-            {{list.title}}
+            <div class="ads2" style="width: 90%; float: left">
+              <span class="choice_title"> {{ item.title }}</span>
+            </div>
+          </li>
+
+          <li class="alldatetitle" v-if="this.choice2.length > 0">Day 2</li>
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice2"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+          <li class="alldatetitle" v-if="this.choice3.length > 0">Day 3</li>
+          <li class="alldatecontent" v-for="item in choice3" :key="item">
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+          <li class="alldatetitle" v-if="this.choice4.length > 0">Day 4</li>
+          <li class="alldatecontent" v-for="item in choice4" :key="item">
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+          <li class="alldatetitle" v-if="this.choice5.length > 0">Day 5</li>
+          <li class="alldatecontent" v-for="item in choice5" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice6.length > 0">Day 6</li>
+          <li class="alldatecontent" v-for="item in choice6" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice7.length > 0">Day 7</li>
+          <li class="alldatecontent" v-for="item in choice7" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice8.length > 0">Day 8</li>
+          <li class="alldatecontent" v-for="item in choice8" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice9.length > 0">Day 9</li>
+          <li class="alldatecontent" v-for="item in choice9" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice10.length > 0">Day 10</li>
+          <li class="alldatecontent" v-for="item in choice10" :key="item">
+            {{ item.title }}
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===2">
-          <li v-for="list in choice2" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 0">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice1"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===3">
-          <li v-for="list in choice3" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 1">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice2"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===4">
-          <li v-for="list in choice4" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 2">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice3"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===5">
-          <li v-for="list in choice5" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 3">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice4"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===6">
-          <li v-for="list in choice6" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 4">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice5"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===7">
-          <li v-for="list in choice7" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 5">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice6"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===8">
-          <li v-for="list in choice8" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 6">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice7"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===9">
-          <li v-for="list in choice9" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 7">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice8"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-             <ul style="overflow:auto; height:530px; " class="rightscroll" v-if="this.num3 ===10">
-          <li v-for="list in choice10" :key="list" class="mytravel_list" >
-            <div class="mytimg">
-            <img :src="list.firstimage" style="height: 70px; width:90px" />
-            </div>
-            {{list.title}}
+      </div>
+      <div v-if="newleft1 === 8">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice9"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
           </li>
         </ul>
-   
-  
+      </div>
+      <div v-if="newleft1 === 9">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice10"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
       </div>
     </div>
     <div :class="centercss">
-
-      <GMapMap 
+      <GMapMap
         ref="myMapRef"
-         
+        :key="key"
         :center="center"
         :zoom="zoom"
         map-type-id="roadmap"
         style="width: 100vw; height: 20rem"
         @click="mark"
         class="gmap"
+        :options="{
+          zoomControl: false,
+          mapTypeControl: false,
+          scaleControl: false,
+          streetViewControl: false,
+          rotateControl: false,
+          fullscreenControl: false,
+        }"
       >
-   
- 
-          <GMapCluster :minimumClusterSize="4"  :zoomOnClick="true" :style="clusterIcon" imagePath='https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m'>
-        <GMapMarker
-          
-          :key="(index,componentKey)"
-          v-for="(m, index) in markers"
-          :icon="m.icon"
-          :position="m.position"
-          :clickable="true"
-          :draggable="false"
-          @click="openMarker(m.id)"
-          v-on:click="center = m.position"
-          @closeclick="openMarker(null)"
+        <GMapCluster
+          :minimumClusterSize="4"
+          :zoomOnClick="true"
+          :style="clusterIcon"
+          imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m"
         >
-         <GMapPolyline 
-         :options="options"
-      :path="path"
-      :key="componentKey"
-      :editable="false"
-      ref="polyline" />
-  
-          <GMapInfoWindow
-            :closeclick="true"
+          <GMapMarker
+            :key="(index, componentKey)"
+            v-for="(m, index) in markers"
+            :icon="m.icon"
+            :position="m.position"
+            :clickable="true"
+            :draggable="false"
+            @click="openMarker(m.id)"
+            v-on:click="center = m.position"
             @closeclick="openMarker(null)"
-            :opened="openedMarkerID === m.id"
           >
-          
-            <div>{{ m.id }}</div>
-          </GMapInfoWindow>
-  
-        </GMapMarker>
+            <GMapPolyline
+              v-if="this.num3 === 1"
+              :options="options"
+              :path="path1"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 2"
+              :options="options"
+              :path="path2"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 3"
+              :options="options"
+              :path="path3"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 4"
+              :options="options"
+              :path="path4"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 5"
+              :options="options"
+              :path="path5"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 6"
+              :options="options"
+              :path="path6"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 7"
+              :options="options"
+              :path="path7"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 8"
+              :options="options"
+              :path="path8"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 9"
+              :options="options"
+              :path="path9"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 10"
+              :options="options"
+              :path="path10"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+
+            <GMapInfoWindow
+              :closeclick="true"
+              @closeclick="openMarker(null)"
+              :opened="openedMarkerID === m.id"
+            >
+              <div>{{ m.id }}</div>
+            </GMapInfoWindow>
+          </GMapMarker>
         </GMapCluster>
-          
-  
-      
       </GMapMap>
-      <button class="addmarker" @click="dialogVisible = true">추가</button>
+      <button class="addmarker" @click="dialogVisible = true">장소등록</button>
+      <button class="addmarker2" @click="lastaction">일정생성</button>
     </div>
-    <div :class="rightcss" >
-      <div class="rightfull_btn"  v-if="rightc === 'off'" @click="handlefull"><span>◀</span></div>
-       <div class="rightfull_btn" v-if="rightc === 'on'" @click="handlefull2"><span>▶</span></div>
-      <div style="float:left; padding:10px; box-sizing:border-box; width:93.8%" >
-      <button id="right_btn" @click="handleright" v-bind:class="btncolor">
-        관광지
-      </button>
-      <button id="right_btn" @click="handleright2" v-bind:class="btncolor2">
-        숙소
-      </button>
-      <button id="right_btn" @click="handleright3" v-bind:class="btncolor3">
-        음식점
-      </button>
-      <div class="right_content" v-if="right === 1" >
-     검색<input type="text" class="searchinput">
-        <ul class="travel_list">
-          <li v-for="list in busanlist10" :key="list"  class="listmap">
-            <div class="imgdiv"  @click="openMarker1(list)">
-              <img :src="list.firstimage" style="height: 100px" />
-            </div>
-            <div class="textdiv">{{list.title}}
-              <button @click="listpush(list)">일정에 추가하기</button>
-            </div>
-          </li>
-     
-        </ul>
+    <div :class="rightcss">
+      <div class="rightfull_btn" v-if="rightc === 'off'" @click="handlefull">
+        <span>◀</span>
       </div>
-      <div class="right_content" v-if="right === 2">내용2</div>
-         <div class="right_content" v-if="right === 3">내용3</div>
-    </div>
+      <div class="rightfull_btn" v-if="rightc === 'on'" @click="handlefull2">
+        <span>▶</span>
+      </div>
+      <div
+        style="float: left; padding: 10px; box-sizing: border-box; width: 93.8%"
+      >
+        <button id="right_btn" @click="handleright" v-bind:class="btncolor">
+          관광지
+        </button>
+        <button id="right_btn" @click="handleright2" v-bind:class="btncolor2">
+          숙소
+        </button>
+        <button id="right_btn" @click="handleright3" v-bind:class="btncolor3">
+          음식점
+        </button>
+        <div class="right_content" v-if="right === 1">
+          검색<input type="text" class="searchinput" />
+          <ul class="travel_list">
+            <li v-for="list in busanlist10" :key="list" class="listmap">
+              <div class="imgdiv" @click="openMarker1(list)">
+                <img :src="list.firstimage" style="height: 100px" />
+              </div>
+              <div class="textdiv">
+                <span class="td_title">{{ list.title }}</span>
+              </div>
+              <button class="info_btn" @click="openinfo(list)">i</button>
+              <button class="plus_btn" @click="listpush(list)">+</button>
+            </li>
+          </ul>
+        </div>
+        <div class="right_content" v-if="right === 2">내용2</div>
+        <div class="right_content" v-if="right === 3">내용3</div>
+      </div>
     </div>
   </div>
   <el-dialog
@@ -216,7 +556,7 @@
     </template>
   </el-dialog>
 
-      <el-dialog
+  <el-dialog
     v-model="dialogVisible1"
     :title="this.dialoglist.title"
     top="30vh"
@@ -225,97 +565,118 @@
     append-to-body
     class="sasa"
   >
-  <div>
-    <div class="dialogimg"  >
-      <img :src="this.dialoglist.firstimage" style="height:310px">
+    <div>
+      <div class="dialogimg">
+        <img :src="this.dialoglist.firstimage" style="height: 310px" />
+      </div>
+      <div class="dialogtext">
+        <span>{{ this.dialoglist.title }}</span>
+      </div>
+      <div style="clear: both"></div>
     </div>
-    <div class="dialogtext">
-      <span>{{this.dialoglist.title}}</span>
-    </div>
-    <div style="clear:both"></div>
-  </div>
-  
-  
-    
   </el-dialog>
-  
 </template>
 
 <script>
 import axios from "axios";
 export default {
   name: "search",
- 
-  
+
   async created() {
-    console.log(this.$route.query.betday)
-    for(var o=0; o<this.$route.query.betday; o++){
-    this.traveldate.push(o)
+    console.log(this.$route.query.betday);
+    for (var o = 0; o < this.$route.query.betday; o++) {
+      this.traveldate.push(o);
     }
-    console.log(this.traveldate)
+    console.log(this.traveldate);
     // 오른쪽 상세창
-     await this.rightrefresh();
- 
- // ========
- // 구글맵 화면용 
-       const url =`/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
+    await this.rightrefresh();
+
+    // ========
+    // 구글맵 화면용
+    //const url = `/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
+    const url = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=6`;
     const headers = { "Content-type": "application/json" };
-  
-      const response = await axios.get(url, {headers});
-      console.log(response.data.list)
 
+    const response = await axios.get(url, { headers });
+    console.log(response);
 
-      this.busanlist =  response.data.list
-   
-     for(var i=0; i<this.busanlist.length; i++){
-       this.markers.push(
-         {
-          "id":this.busanlist[i].title,
-         "position":{
-           "lat":Number(this.busanlist[i].mapy),
-           "lng":Number(this.busanlist[i].mapx)
-           },
-           "icon":"https://ifh.cc/g/ZgAcfN.png"
-           }
-         )
-     
-     }
-  
-    
+    this.busanlist = response.data.list;
+
+    for (var i = 0; i < this.busanlist.length; i++) {
+      this.markers.push({
+        id: this.busanlist[i].title,
+        position: {
+          lat: Number(this.busanlist[i].ylocation),
+          lng: Number(this.busanlist[i].xlocaion),
+        },
+        icon: "https://ifh.cc/g/3qp9x6.png",
+      });
+    }
+
     await this.replacerefresh();
   },
   data() {
     return {
-      num3:1,
-      startdate:1,
-      traveldate:[],
-      abc:"dialog <br> <br/> adsdd",
-      startnum:0,
-      endnum:1,
-      middleload1:[], // 경로 
-      middleload:[], // 경로 
-      componentKey:0,
-      path1:[],
-        path: [],
-      rightc:"off",
-      centercss:"center1",
-      rightcss:"right1",
-      dialoglist:[],
-      dialogcontent:"",
-      choice1:[],
-      choice2:[],
-      choice3:[],
-      choice4:[],
-      choice5:[],
-      choice6:[],
-      choice7:[],
-      choice8:[],
-      choice9:[],
-      choice10:[],
-   
-      busan10ll:[],
-      busanlist10:[],
-      busanlist:[],
+      newleft0: "off",
+      newleft: "off",
+      newleft1: "",
+      key: 1,
+      num3: 1,
+      startdate: 1,
+      traveldate: [],
+      abc: "dialog <br> <br/> adsdd",
+      startnum: 0,
+      startnum2: 0,
+      startnum3: 0,
+      startnum4: 0,
+      startnum5: 0,
+      startnum6: 0,
+      startnum7: 0,
+      startnum8: 0,
+      startnum9: 0,
+      startnum10: 0,
+      endnum: 1,
+      endnum2: 1,
+      endnum3: 1,
+      endnum4: 1,
+      endnum5: 1,
+      endnum6: 1,
+      endnum7: 1,
+      endnum8: 1,
+      endnum9: 1,
+      endnum10: 1,
+      middleload1: [], // 경로
+      middleload: [], // 경로
+      componentKey: 0,
+      path1: [],
+      path2: [],
+      path3: [],
+      path4: [],
+      path5: [],
+      path6: [],
+      path7: [],
+      path8: [],
+      path9: [],
+      path10: [],
+      rightc: "off",
+      centercss: "center1",
+      rightcss: "right1",
+      dialoglist: [],
+      dialogcontent: "",
+      choice1: [],
+      choice2: [],
+      choice3: [],
+      choice4: [],
+      choice5: [],
+      choice6: [],
+      choice7: [],
+      choice8: [],
+      choice9: [],
+      choice10: [],
+
+      busan10ll: [],
+      busanlist10: [],
+      busanlist: [],
       lockor: this.$route.query.locationkor,
       zoom: 14,
       dialogVisible: false,
@@ -333,18 +694,17 @@ export default {
       num1: 0,
       openedMarkerID: null,
       center: { lat: 35.15267616865169, lng: 129.05961009117254 },
-      markers: [
- 
-      ],
-      numberp:[],
-       options: {
-         strokeColor: "#FF0000",
-         strokeWeight:"5"
-        
-      }
+      markers: [],
+      numberp: [],
+      options: {
+        strokeColor: "#FF0000",
+        strokeWeight: "3",
+      },
     };
   },
   async mounted() {
+    console.log(this.$refs.myMapRef);
+
     this.$refs.myMapRef.$mapPromise.then((map) => {
       map.addListener("click", (mapsMouseEvent) => {
         console.log(mapsMouseEvent.latLng.lat());
@@ -358,41 +718,56 @@ export default {
       console.log(from);
       await this.replacerefresh();
     },
-  
   },
 
   methods: {
-    numplus(){
+    allview() {
+      this.newleft0 = "on";
+      this.newleft1 = "off";
+    },
+    handledatego(i) {
+      console.log(i);
+      this.newleft1 = i;
+      this.newleft0 = "off";
+    },
+    lastaction() {
+      this.rightcss = "right3";
+      this.centercss = "center3";
+      this.newleft = "on";
+      this.newleft0 = "on";
+      console.log(this.choice1);
+    },
+    numplus() {
       this.num3 += 1;
     },
-   async rightrefresh(){
-          // 오른쪽 상세창
-      const url1 = `/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`
-    const headers1 = { "Content-type": "application/json" };
- 
-      const response1 = await axios.get(url1,{headers1});
-      console.log(response1)
-      this.busanlist10 = response1.data.list
+    async rightrefresh() {
+      // 오른쪽 상세창
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=6`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
     },
-    handlefull(){
-      this.rightcss ="right2"
-      this.centercss ="center2"
-      this.rightc ="on"
+    handlefull() {
+      this.rightcss = "right2";
+      this.centercss = "center2";
+      this.rightc = "on";
     },
-    handlefull2(){
-       this.rightcss ="right1"
-      this.centercss ="center1"
-      this.rightc ="off"
+    handlefull2() {
+      this.rightcss = "right1";
+      this.centercss = "center1";
+      this.rightc = "off";
     },
     // 위도 경도로 직선거리 구하는 REST.API
     async locationdistance() {
       //
       //https://www.data.go.kr/data/15088773/openapi.do
-      // 도로명 주소 api 검색 
+      // 도로명 주소 api 검색
       // https://www.juso.go.kr/addrlink/addrLinkApiJsonp.do?confmKey=devU01TX0FVVEgyMDIxMTEwODEwMDgzNzExMTg1NDU=&currentPage=1&countPerPage=10&keyword=망미배산로&=
       // 위치검색
       // https://apis.openapi.sk.com/tmap/geo/convertAddress?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&version=1&searchTypCd=NtoO&reqAdd=부산 서면&reqMulti=M&resCoordType=WGS84GEO
-      // 위치검색 
+      // 위치검색
       //https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&format=json&fullAddr=부산시 수영구 망미배산로56 3001&callback=json&page=1&count=20&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55
       // 경로 json 출력
       //https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=129.10239277274485&endY=35.17444316729922&reqCoordType=WGS84GEO&endRpFlag=G&startX=129.09522188698028&startY=35.17354426079996&sort=index
@@ -404,7 +779,6 @@ export default {
       //const headers = {};
       //const response = await axios.get(url, { headers });
       //console.log(response.data.distanceInfo.distance);
-     
     },
     async locationchange() {
       await this.replacerefresh();
@@ -451,7 +825,7 @@ export default {
         this.zoom = 11.1;
       }
     },
-   
+
     // mark(event) {
     //   console.log(event.latLng.lat());
     //   this.markers[2].position.lat = event.latLng.lat();
@@ -460,142 +834,293 @@ export default {
     //   this.markers[2].position.lng = event.latLng.lng();
     //   this.sublng = event.latLng.lng();
     // },
-    async listpush(i){
-      console.log(i.title)
-  
-       var marknum = this.markers.findIndex(e =>e.id == i.title)
-       console.log(marknum)
-        this.markers[marknum].icon = "https://ifh.cc/g/q7v7ZO.png"
-          console.log(this.markers[marknum].icon)
-      this.busanlist10=[];
-         console.log(i)
-         if(this.num3 === 1){
-      this.choice1.push(i)
-      }else if(this.num3 ===2){
-        this.choice2.push(i)
-      }else if(this.num3 === 3){
-        this.choice3.push(i)
-      }else if(this.num3 === 4){
-        this.choice4.push(i)
-      }else if(this.num3 === 5){
-        this.choice5.push(i)
-      }else if(this.num3 === 6){
-        this.choice6.push(i)
-      }else if(this.num3 === 7){
-        this.choice7.push(i)
-      }else if(this.num3 === 8){
-        this.choice8.push(i)
-      }else if(this.num3 === 9){
-        this.choice9.push(i)
-      }else if(this.num3 === 10){
-        this.choice10.push(i)
-      } 
-      
-     
-      // =====================================
-        //한개 선택후 오른쪽 list 변경
-        
-        const url1 =`/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=1&xmap=${i.mapx}&ymap=${i.mapy}`
-        const headers1 ={};
-        const response1 = await axios.get(url1,{headers1});
-        console.log(response1)
-        this.busanlist10 =response1.data.list
+    async listpush(i) {
+      console.log(i);
+      console.log(i.title);
 
-
-
+      var marknum = this.markers.findIndex((e) => e.id == i.title);
+      console.log(marknum);
+      console.log(this.choice1.length + 1);
+      this.markers[marknum].icon = "https://ifh.cc/g/q7v7ZO.png";
+      console.log(this.markers[marknum].icon);
+      this.busanlist10 = [];
+      console.log(i);
+      if (this.num3 === 1) {
+        this.choice1.push(i);
+      } else if (this.num3 === 2) {
+        this.choice2.push(i);
+      } else if (this.num3 === 3) {
+        this.choice3.push(i);
+      } else if (this.num3 === 4) {
+        this.choice4.push(i);
+      } else if (this.num3 === 5) {
+        this.choice5.push(i);
+      } else if (this.num3 === 6) {
+        this.choice6.push(i);
+      } else if (this.num3 === 7) {
+        this.choice7.push(i);
+      } else if (this.num3 === 8) {
+        this.choice8.push(i);
+      } else if (this.num3 === 9) {
+        this.choice9.push(i);
+      } else if (this.num3 === 10) {
+        this.choice10.push(i);
+      }
 
       // =====================================
-   
-      if(this.choice1.length >= 2){
-        // 자동차 경로 REST api
-     
-        console.log(this.startnum)
-        console.log(this.choice1[this.startnum].mapx)
-        let url 
-        if(this.num3 === 1){
-        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice1[Number(this.endnum)].mapx}&endY=${this.choice1[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice1[Number(this.startnum)].mapx}&startY=${this.choice1[Number(this.startnum)].mapy}`;
-        }
-        else if(this.num3 === 2){
-         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice2[Number(this.endnum)].mapx}&endY=${this.choice2[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice2[Number(this.startnum)].mapx}&startY=${this.choice2[Number(this.startnum)].mapy}`;
-        console.log(url)
-        }
-        else if(this.num3 === 3){
-        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice3[Number(this.endnum)].mapx}&endY=${this.choice3[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice3[Number(this.startnum)].mapx}&startY=${this.choice3[Number(this.startnum)].mapy}`;
-        }
-        else if(this.num3 === 4){
-       url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice4[Number(this.endnum)].mapx}&endY=${this.choice4[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice4[Number(this.startnum)].mapx}&startY=${this.choice4[Number(this.startnum)].mapy}`;
-        }
-        else if(this.num3 === 5){
-        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice5[Number(this.endnum)].mapx}&endY=${this.choice5[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice5[Number(this.startnum)].mapx}&startY=${this.choice5[Number(this.startnum)].mapy}`;
-        }
-        else if(this.num3 === 6){
-         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice6[Number(this.endnum)].mapx}&endY=${this.choice6[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice6[Number(this.startnum)].mapx}&startY=${this.choice6[Number(this.startnum)].mapy}`;
-        }
-        else if(this.num3 === 7){
-        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice7[Number(this.endnum)].mapx}&endY=${this.choice7[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice7[Number(this.startnum)].mapx}&startY=${this.choice7[Number(this.startnum)].mapy}`;
-        }
-        else if(this.num3 === 8){
-         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice8[Number(this.endnum)].mapx}&endY=${this.choice8[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice8[Number(this.startnum)].mapx}&startY=${this.choice8[Number(this.startnum)].mapy}`;
-        }
-        else if(this.num3 === 9){
-         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice9[Number(this.endnum)].mapx}&endY=${this.choice9[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice9[Number(this.startnum)].mapx}&startY=${this.choice9[Number(this.startnum)].mapy}`;
-        }
-        else if(this.num3 === 10){
-         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${this.choice10[Number(this.endnum)].mapx}&endY=${this.choice10[Number(this.endnum)].mapy}&reqCoordType=WGS84GEO&endRpFlag=G&startX=${this.choice10[Number(this.startnum)].mapx}&startY=${this.choice10[Number(this.startnum)].mapy}`;
-        }
+      //한개 선택후 오른쪽 list 변경
+
+      //const url1 = `/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=1&xmap=${i.mapx}&ymap=${i.mapy}`;
+      const url1 = `/REST/travel/distance?areaCode=6&size=100&contentTypeId=12&kilometer=5&page=1&xmap=${i.xlocaion}&ymap=${i.ylocation}`;
+      const headers1 = {};
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.distanceList;
+
+      // =====================================
+
+      // 자동차 경로 REST api
+      console.log(this.startnum);
+      console.log(this.endnum);
+
+      let url;
+      if (this.num3 === 1) {
+        console.log(this.choice1);
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice1[Number(this.endnum)].xlocaion
+        }&endY=${
+          this.choice1[Number(this.endnum)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice1[Number(this.startnum)].xlocaion
+        }&startY=${this.choice1[Number(this.startnum)].ylocation}`;
+      } else if (this.num3 === 2) {
+        console.log(this.choice2);
+        console.log(this.endnum2);
+        console.log(this.choice2[Number(this.endnum2)].mapx);
+        console.log(this.choice2[Number(this.endnum2)].mapy);
+        console.log(this.choice2[Number(this.startnum2)].mapy);
+        console.log(this.choice2[Number(this.startnum2)].mapx);
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice2[Number(this.endnum2)].mapx
+        }&endY=${
+          this.choice2[Number(this.endnum2)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice2[Number(this.startnum2)].mapx
+        }&startY=${this.choice2[Number(this.startnum2)].mapy}`;
+        console.log(url);
+      } else if (this.num3 === 3) {
+        console.log(this.choice3);
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice3[Number(this.endnum3)].mapx
+        }&endY=${
+          this.choice3[Number(this.endnum3)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice3[Number(this.startnum3)].mapx
+        }&startY=${this.choice3[Number(this.startnum3)].mapy}`;
+      } else if (this.num3 === 4) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice4[Number(this.endnum4)].mapx
+        }&endY=${
+          this.choice4[Number(this.endnum4)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice4[Number(this.startnum4)].mapx
+        }&startY=${this.choice4[Number(this.startnum4)].mapy}`;
+      } else if (this.num3 === 5) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice5[Number(this.endnum5)].mapx
+        }&endY=${
+          this.choice5[Number(this.endnum5)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice5[Number(this.startnum5)].mapx
+        }&startY=${this.choice5[Number(this.startnum5)].mapy}`;
+      } else if (this.num3 === 6) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice6[Number(this.endnum6)].mapx
+        }&endY=${
+          this.choice6[Number(this.endnum6)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice6[Number(this.startnum6)].mapx
+        }&startY=${this.choice6[Number(this.startnum6)].mapy}`;
+      } else if (this.num3 === 7) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice7[Number(this.endnum7)].mapx
+        }&endY=${
+          this.choice7[Number(this.endnum7)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice7[Number(this.startnum7)].mapx
+        }&startY=${this.choice7[Number(this.startnum7)].mapy}`;
+      } else if (this.num3 === 8) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice8[Number(this.endnum8)].mapx
+        }&endY=${
+          this.choice8[Number(this.endnum8)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice8[Number(this.startnum8)].mapx
+        }&startY=${this.choice8[Number(this.startnum8)].mapy}`;
+      } else if (this.num3 === 9) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice9[Number(this.endnum9)].mapx
+        }&endY=${
+          this.choice9[Number(this.endnum9)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice9[Number(this.startnum9)].mapx
+        }&startY=${this.choice9[Number(this.startnum9)].mapy}`;
+      } else if (this.num3 === 10) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice10[Number(this.endnum10)].mapx
+        }&endY=${
+          this.choice10[Number(this.endnum10)].mapy
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice10[Number(this.startnum10)].mapx
+        }&startY=${this.choice10[Number(this.startnum10)].mapy}`;
+      }
       const headers = {};
       const response = await axios.get(url, { headers });
-        console.log(response.data);
-      for(var e=1; e<response.data.features.length; e++){
-        if(response.data.features[e].geometry.coordinates.length === 2){
-          if(response.data.features[e].geometry.coordinates[0].length === 2){
+      console.log(response.data);
+      for (var e = 1; e < response.data.features.length; e++) {
+        if (response.data.features[e].geometry.coordinates.length === 2) {
+          if (response.data.features[e].geometry.coordinates[0].length === 2) {
             console.log("123");
+          } else {
+            this.middleload.push(
+              response.data.features[e].geometry.coordinates
+            );
           }
-       else{this.middleload.push(response.data.features[e].geometry.coordinates)}
-       }else{
-         for(var q=0; q<response.data.features[e].geometry.coordinates.length; q++){
-            this.middleload.push(response.data.features[e].geometry.coordinates[q])
-         }
-       } 
-       }
-       console.log(this.middleload1);
-         for(var a=0; a<this.middleload.length; a++){
-       this.path.push({"lat":Number(this.middleload[a][1]),"lng":Number(this.middleload[a][0])})
-       }
-            this.startnum+=1;
-      this.endnum +=1;
-      this.middleload=[];
-       }
+        } else {
+          for (
+            var q = 0;
+            q < response.data.features[e].geometry.coordinates.length;
+            q++
+          ) {
+            this.middleload.push(
+              response.data.features[e].geometry.coordinates[q]
+            );
+          }
+        }
+      }
+      console.log(this.middleload1);
 
+      for (var a = 0; a < this.middleload.length; a++) {
+        if (this.num3 === 1) {
+          this.path1.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 2) {
+          this.path2.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 3) {
+          this.path3.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 4) {
+          this.path4.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 5) {
+          this.path5.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 6) {
+          this.path6.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 7) {
+          this.path7.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 8) {
+          this.path8.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 9) {
+          this.path9.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 10) {
+          this.path10.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        }
+      }
+      if (this.num3 === 1) {
+        this.startnum += 1;
+        this.endnum += 1;
+        this.middleload = [];
+      } else if (this.num3 === 2) {
+        this.startnum2 += 1;
+        this.endnum2 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 3) {
+        this.startnum3 += 1;
+        this.endnum3 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 4) {
+        this.startnum4 += 1;
+        this.endnum4 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 5) {
+        this.startnum5 += 1;
+        this.endnum5 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 6) {
+        this.startnum6 += 1;
+        this.endnum6 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 7) {
+        this.startnum7 += 1;
+        this.endnum7 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 8) {
+        this.startnum8 += 1;
+        this.endnum8 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 9) {
+        this.startnum9 += 1;
+        this.endnum9 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 10) {
+        this.startnum10 += 1;
+        this.endnum10 += 1;
+        this.middleload = [];
+      }
 
-   
-       
-    console.log(this.path)
-   this.componentKey += 1;
-   
+      // 강제  렌더링
+      console.log(this.path);
+      this.componentKey += 1;
     },
-    async openMarker1(i){
-      console.log(i)
-      this.openedMarkerID = i.title;
-      this.center ={lat: Number(i.mapy), lng: Number(i.mapx)}
-      this.zoom =18;
+    async openinfo(i) {
+      const url = `/REST/travel/tourapi/selectone?contentId=${i.contentid}`;
+      const headers = { "Content-type": "application/json" };
 
-    const url = `/REST/travel/tourapi/selectone?contentId=${i.contentid}`
-    const headers = { "Content-type": "application/json" };
- 
-      const response = await axios.get(url,{headers});
-      console.log(response)
-      this.dialoglist = response.data.list
-      this.dialogcontent = this.dialoglist.overview.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n');
-     
-      this.dialogVisible1 =true;
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.dialoglist = response.data.list;
+      this.dialogcontent = this.dialoglist.overview.replace(
+        /(<br>|<br\/>|<br \/>)/g,
+        "\r\n"
+      );
+
+      this.dialogVisible1 = true;
+    },
+    async openMarker1(i) {
+      this.openedMarkerID = null;
+      this.openedMarkerID = i.title;
+      this.center = { lat: Number(i.mapy), lng: Number(i.mapx) };
+      this.zoom = 18;
     },
     openMarker(id) {
-    
-     
       this.openedMarkerID = id;
-   
-      
     },
     showPosition(event, two) {
       console.log(event.latLng);
@@ -603,7 +1128,7 @@ export default {
     },
     handleright() {
       this.right = 1;
-      this.btncolor3 ="noneactive"
+      this.btncolor3 = "noneactive";
       this.btncolor2 = "noneactive";
       this.btncolor = "active";
     },
@@ -611,9 +1136,9 @@ export default {
       this.right = 2;
       this.btncolor2 = "active";
       this.btncolor = "noneactive";
-      this.btncolor3 = "noneactive"
+      this.btncolor3 = "noneactive";
     },
-        handleright3() {
+    handleright3() {
       this.right = 3;
       this.btncolor2 = "noneactive";
       this.btncolor = "noneactive";
@@ -623,19 +1148,19 @@ export default {
 };
 </script>
 <style>
-.el-input-number{
+.el-input-number {
   width: 23px;
 }
-.el-input__inner{
-  border:none;
-  padding-left:0px!important;
-  padding-right: 0px!important;
+.el-input__inner {
+  border: none;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 }
-.el-dialog__header{
+.el-dialog__header {
   display: none;
 }
-.el-dialog__body{
-  padding:unset;
+.el-dialog__body {
+  padding: unset;
 }
 .el-collapse-item__header {
   text-align: center;
@@ -645,41 +1170,117 @@ export default {
 }
 </style>
 <style scoped>
-.mytimg{
-  float:left;
+.listmap {
+  position: relative;
+}
+.info_btn {
+  border: none;
+  padding: 4px 10px;
+  color: white;
+  background: #ccc;
+  position: absolute;
+  border-radius: 50%;
+  bottom: 6.5px;
+  right: 50px;
+}
+.plus_btn {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  border: none;
+  background: none;
+  font-weight: 500;
+  font-size: 30px;
+  cursor: pointer;
+}
+.td_title {
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 10px;
+  margin-top: 10px;
+  vertical-align: -11px;
+}
+.textdiv {
+  text-align: left;
+}
+.nltext1 {
+  display: inline-block;
+  padding: 5px 10px;
+  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
+  background-color: #fff;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.nltext2 {
+  display: inline-block;
+  padding: 20px 10px;
+  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
+  background-color: #fff;
+  font-size: 13px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  border: none;
+}
+.lastleft_bth {
+  border: none;
+  padding: 0px 15px;
+  margin: 6px;
+  border-radius: 0px;
+  backdrop-filter: blur(4px);
+  /* color: rgb(255, 255, 255); */
+  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
+  cursor: pointer;
+  height: 50px;
+
+  justify-content: center;
+  align-items: center;
+  font-family: "Montserrat";
+  background-color: #fff;
+  font-size: 13px;
+}
+.newleft {
+  width: 5%;
+  float: left;
+  height: 850px;
+  text-align: center;
+  background: #fafafa;
+  transition: all 1s;
+}
+.mytimg {
+  float: left;
   height: 80px;
 }
-.travel_list{
+.travel_list {
   overflow: auto;
-  height:760px;
-  margin-top:5px;
+  height: 72vh;
+  margin-top: 5px;
 }
-.mytravel_list{
-  border:1px solid #ddd;
+.mytravel_list {
+  border: 1px solid #ddd;
 
-    height: 70px;
-    box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
+  height: 70px;
+  box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
   margin-top: 20px;
   background: #ffffff;
   list-style: none;
-display: inline-flex;
-width:90%;
+  display: inline-flex;
+  width: 90%;
 }
-.rightfull_btn{
+.rightfull_btn {
   height: 100%;
-  width:20px;
- 
+  width: 20px;
 
   background: rgba(0, 0, 0, 0.1);
-  float:left;
+  float: left;
   line-height: 50;
-  color:darkslateblue;
+  color: darkslateblue;
   cursor: pointer;
   transition: all 1s;
 }
-.rightfull_btn:hover{
-   background: rgba(0, 0, 0, 0.3);
-   color:white;
+.rightfull_btn:hover {
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
 }
 .ind {
   color: red;
@@ -691,16 +1292,18 @@ width:90%;
 }
 .imgdiv {
   overflow: hidden;
-  height: 100px;
+  height: 88px;
   width: 100px;
   float: left;
   cursor: pointer;
+  border-radius: 10px 0px 0px 10px;
 }
 
 .travel_list li {
-  width: 282px;
-  height: 100px;
-box-shadow: 1px 2px 0px rgb(0 0 0 / 20%);
+  border-radius: 10px;
+  width: 16.7vw;
+  height: 88px;
+  box-shadow: rgb(31 38 135 / 15%) 0px 8px 16px 0px;
   margin-top: 20px;
   background: #ffffff;
   list-style: none;
@@ -790,25 +1393,68 @@ p {
   float: left;
   transition: all 1.5s;
 }
+.center3 {
+  width: 75%;
+  height: 850px;
+  position: relative;
+  float: left;
+  transition: all 1.5s;
+}
 .addmarker {
   position: absolute;
-  top: 60px;
-  right: 10px;
-  width: 40px;
+  top: 20px;
+  left: 10px;
   border: none;
-  background: white;
-  height: 40px;
   cursor: pointer;
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+  width: 120px;
+  height: 56px;
+  padding: 0;
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #000 !important;
+  box-shadow: unset;
+  /* background: rgba(255, 255, 255, 0.25); */
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px !important;
+  text-decoration: unset !important;
+}
+.addmarker2 {
+  position: absolute;
+  top: 100px;
+  left: 10px;
+  border: none;
+  cursor: pointer;
+  width: 120px;
+  height: 56px;
+  padding: 0;
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #000 !important;
+  box-shadow: unset;
+  /* background: rgba(255, 255, 255, 0.25); */
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px !important;
+  text-decoration: unset !important;
 }
 .right1 {
   width: 20%;
   height: 900px;
-  background: rgb(238, 237, 237);
+  background: #f7f7f7;
   float: left;
   box-sizing: border-box;
   transition: all 1.5s;
-
 }
 .right2 {
   width: 40%;
@@ -816,7 +1462,10 @@ p {
   background: rgb(238, 237, 237);
   float: left;
   box-sizing: border-box;
-    transition: all 1.5s;
+  transition: all 1.5s;
+}
+.right3 {
+  display: none;
 }
 .btn_last {
   width: 100%;
@@ -835,63 +1484,126 @@ body {
   height: 35px;
   border: none;
   cursor: pointer;
-  margin-top:10px;
-
+  margin-top: 10px;
 }
 
-#right_btn:nth-child(3){
-  border-right:1px solid #ddd;
-  border-left:1px solid #ddd;
+#right_btn:nth-child(3) {
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
 }
 .right_content {
   margin-top: 10px;
- 
+
   height: 800px;
-  padding: 10px;
+  padding: 10px 0px 10px 10px;
   text-align: center;
 }
 .right_content h4 {
   font-weight: 900;
   font-size: 20px;
 }
-.dialogimg{
+.dialogimg {
   overflow: hidden;
-    height: 286px;
-    width: 35%;
-  float:left;
-   
-}
-.dialogtext{
+  height: 286px;
+  width: 35%;
   float: left;
-  width:65%;
-  padding:20px 10px 20px 10px;
-  box-sizing: border-box;
-
 }
-.diatextarea{
-  border:none;
+.dialogtext {
+  float: left;
+  width: 65%;
+  padding: 20px 10px 20px 10px;
+  box-sizing: border-box;
+}
+.diatextarea {
+  border: none;
   height: 200px;
   width: 100%;
-  padding:20px;
+  padding: 20px;
   box-sizing: border-box;
   resize: none;
-  outline:none;
-   -ms-overflow-style: none;
+  outline: none;
+  -ms-overflow-style: none;
 }
-.diatextarea::-webkit-scrollbar{
+.diatextarea::-webkit-scrollbar {
   display: none;
 }
-.searchinput{
-  padding:5px 10px;
-  border:1px solid #ddd;
+.searchinput {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
 }
 .rightscroll::-webkit-scrollbar {
-    width: 1px;
-    background-color: rgba(145, 210, 229, 0.0);
+  width: 1px;
+  background-color: rgba(145, 210, 229, 0);
 }
 .travel_list::-webkit-scrollbar {
-   width: 3px;
-    background-color: rgba(145, 210, 229, 0.0);
+  width: 3px;
+  background-color: rgba(145, 210, 229, 0);
+}
+.prev {
+  float: left;
+  font-size: 30px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+  line-height: 38px;
+}
+.next {
+  float: right;
+  font-size: 30px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  margin-right: 15px;
+  cursor: pointer;
+  line-height: 38px;
+}
+/* 결과창 css */
+.alldate li {
+  list-style: none;
 }
 
+.alldate {
+  text-align: center;
+  height: 732px;
+  overflow: auto;
+}
+.alldatetitle {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.alldatecontent {
+  font-size: 13px;
+  text-align: center;
+  width: 80%;
+  height: 6vh;
+
+  margin-top: 10px;
+  display: inline-table;
+  box-shadow: rgb(31 38 135 / 8%) 0px 8px 16px 0px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 4px !important;
+  border-width: initial !important;
+  border-style: none !important;
+  border-color: initial !important;
+  border-image: initial !important;
+  margin: 8px;
+  background-color: transparent !important;
+
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  padding: 8px;
+  position: relative;
+}
+
+.choice_title {
+  vertical-align: -100%;
+}
+.choice_no {
+  margin-right: 50px;
+  color: #ffba3b;
+}
 </style>
