@@ -39,18 +39,59 @@
             /><span>일차</span>
             <button @click="numplus" class="next">&gt;</button>
           </div>
+
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 1"
+            v-on:after-enter="fadeNext"
           >
-            <li v-for="list in choice1" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice1"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo">상세경로</button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice1.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+              </li>
+            </transition-group>
           </ul>
+
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
@@ -58,7 +99,7 @@
           >
             <li v-for="list in choice2" :key="list" class="mytravel_list">
               <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
+                <img :src="list.firstimage" style="height: 100%; width: 100%" />
               </div>
               {{ list.title }}
             </li>
@@ -503,7 +544,7 @@
         <span>▶</span>
       </div>
       <div
-        style="float: left; padding: 10px; box-sizing: border-box; width: 93.8%"
+        style="float: left; padding: 10px; box-sizing: border-box; width: 95%"
       >
         <button id="right_btn" @click="handleright" v-bind:class="btncolor">
           관광지
@@ -515,10 +556,20 @@
           음식점
         </button>
         <div class="right_content" v-if="right === 1">
-          검색<input type="text" class="searchinput" />
+          <input
+            type="text"
+            class="searchinput"
+            v-model="rightsearch"
+            placeholder="검색어를 입력하세요"
+            v-on:keyup.enter="submit"
+          />
           <ul class="travel_list">
             <li v-for="list in busanlist10" :key="list" class="listmap">
-              <div class="imgdiv" @click="openMarker1(list)">
+              <div
+                class="imgdiv"
+                @mouseout="outMarker1(list)"
+                @mouseover="openMarker1(list)"
+              >
                 <img :src="list.firstimage" style="height: 100px" />
               </div>
               <div class="textdiv">
@@ -617,6 +668,7 @@ export default {
   },
   data() {
     return {
+      rightsearch: "",
       newleft0: "off",
       newleft: "off",
       newleft1: "",
@@ -700,6 +752,8 @@ export default {
         strokeColor: "#FF0000",
         strokeWeight: "3",
       },
+      snum1: 0,
+      lnum1: 1,
     };
   },
   async mounted() {
@@ -721,6 +775,135 @@ export default {
   },
 
   methods: {
+    async submit() {
+      // 작업중
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch}&contentTypeId=12&areaCode=6`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.busanlist10 = response.data.list;
+    },
+    async listdelete(i) {
+      console.log(i);
+      var chonum = this.choice1.findIndex((e) => e.title == i.title);
+      console.log(chonum);
+      this.choice1.splice(chonum, 1);
+      var marknum = this.markers.findIndex((e) => e.id == i.title);
+      console.log(marknum);
+
+      this.markers[marknum].icon = "https://ifh.cc/g/3qp9x6.png";
+
+      for (var cc = 0; cc < this.choice1.length; cc++) {
+        console.log(this.choice1[cc].title);
+        var marknum1 = this.markers.findIndex(
+          (e) => e.id == this.choice1[cc].title
+        );
+        console.log(marknum1);
+        this.markers[marknum1].icon = `http://127.0.0.1:8080/REST/travel/image${
+          cc + 1
+        }`;
+      }
+
+      //"https://ifh.cc/g/3qp9x6.png"
+    },
+    async listdown(i) {
+      console.log(i);
+      console.log(this.choice1);
+      var chonum = this.choice1.findIndex((e) => e.title == i.title);
+      console.log(chonum);
+      let list = this.choice1.splice(chonum, 1);
+      console.log(list);
+      this.choice1.splice(chonum + 1, 0, list[0]);
+
+      for (var cc = 0; cc < this.choice1.length; cc++) {
+        console.log(this.choice1[cc].title);
+        var marknum = this.markers.findIndex(
+          (e) => e.id == this.choice1[cc].title
+        );
+        console.log(marknum);
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          cc + 1
+        }`;
+      }
+    },
+    async listup(i, index) {
+      console.log(this.choice1.length);
+      console.log(i);
+      console.log(index + 1);
+      console.log(this.choice1);
+      var chonum = this.choice1.findIndex((e) => e.title == i.title);
+      console.log(chonum);
+      let list = this.choice1.splice(chonum, 1);
+      console.log(list);
+      this.choice1.splice(chonum - 1, 0, list[0]);
+
+      for (var cc = 0; cc < this.choice1.length; cc++) {
+        console.log(this.choice1[cc].title);
+        var marknum = this.markers.findIndex(
+          (e) => e.id == this.choice1[cc].title
+        );
+        console.log(marknum);
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          cc + 1
+        }`;
+      }
+
+      // 경로 재탐색
+      // console.log(this.choice1);
+      // this.path1 = [];
+      // for (var h = 1; h < this.choice1.length; h++) {
+      //   console.log(this.choice1.length);
+      //   console.log(h);
+      //   let url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+      //     this.choice1[Number(this.choice1.length - h)].xlocaion
+      //   }&endY=${
+      //     this.choice1[Number(this.choice1.length - h)].ylocation
+      //   }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+      //     this.choice1[Number(this.choice1.length - (h + 1))].xlocaion
+      //   }&startY=${
+      //     this.choice1[Number(this.choice1.length - (h + 1))].ylocation
+      //   }`;
+      //   const headers = {};
+      //   const response = await axios.get(url, { headers });
+      //   console.log(response.data);
+      //   for (var e = 1; e < response.data.features.length; e++) {
+      //     if (response.data.features[e].geometry.coordinates.length === 2) {
+      //       if (
+      //         response.data.features[e].geometry.coordinates[0].length === 2
+      //       ) {
+      //         console.log("123");
+      //       } else {
+      //         this.middleload.push(
+      //           response.data.features[e].geometry.coordinates
+      //         );
+      //       }
+      //     } else {
+      //       for (
+      //         var q = 0;
+      //         q < response.data.features[e].geometry.coordinates.length;
+      //         q++
+      //       ) {
+      //         this.middleload.push(
+      //           response.data.features[e].geometry.coordinates[q]
+      //         );
+      //       }
+      //     }
+      //   }
+      //   console.log(this.middleload);
+      //   for (var a = 0; a < this.middleload.length; a++) {
+      //     if (this.num3 === 1) {
+      //       this.path1.push({
+      //         lat: Number(this.middleload[a][1]),
+      //         lng: Number(this.middleload[a][0]),
+      //       });
+      //     }
+      //   }
+      //   console.log(this.path1);
+      //   this.middleload = [];
+      //   this.componentKey += 1;
+      // }
+    },
     allview() {
       this.newleft0 = "on";
       this.newleft1 = "off";
@@ -835,16 +1018,48 @@ export default {
     //   this.sublng = event.latLng.lng();
     // },
     async listpush(i) {
-      console.log(i);
-      console.log(i.title);
+      if (this.choice1.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice2.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice3.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice4.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice5.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice6.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice7.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice8.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice9.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice10.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      }
 
+      console.log(this.choice1.length);
       var marknum = this.markers.findIndex((e) => e.id == i.title);
-      console.log(marknum);
-      console.log(this.choice1.length + 1);
-      this.markers[marknum].icon = "https://ifh.cc/g/q7v7ZO.png";
-      console.log(this.markers[marknum].icon);
+
+      this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+        this.choice1.length + 1
+      }`;
+      //https://ifh.cc/g/q7v7ZO.png
+
       this.busanlist10 = [];
-      console.log(i);
+
       if (this.num3 === 1) {
         this.choice1.push(i);
       } else if (this.num3 === 2) {
@@ -880,6 +1095,11 @@ export default {
       // =====================================
 
       // 자동차 경로 REST api
+      //await this.loadcar();
+    },
+
+    async loadcar() {
+      this.path1 = [];
       console.log(this.startnum);
       console.log(this.endnum);
 
@@ -894,85 +1114,79 @@ export default {
           this.choice1[Number(this.startnum)].xlocaion
         }&startY=${this.choice1[Number(this.startnum)].ylocation}`;
       } else if (this.num3 === 2) {
-        console.log(this.choice2);
-        console.log(this.endnum2);
-        console.log(this.choice2[Number(this.endnum2)].mapx);
-        console.log(this.choice2[Number(this.endnum2)].mapy);
-        console.log(this.choice2[Number(this.startnum2)].mapy);
-        console.log(this.choice2[Number(this.startnum2)].mapx);
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice2[Number(this.endnum2)].mapx
+          this.choice2[Number(this.endnum2)].xlocaion
         }&endY=${
-          this.choice2[Number(this.endnum2)].mapy
+          this.choice2[Number(this.endnum2)].ylocaion
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice2[Number(this.startnum2)].mapx
-        }&startY=${this.choice2[Number(this.startnum2)].mapy}`;
+          this.choice2[Number(this.startnum2)].xlocaion
+        }&startY=${this.choice2[Number(this.startnum2)].ylocaion}`;
         console.log(url);
       } else if (this.num3 === 3) {
         console.log(this.choice3);
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice3[Number(this.endnum3)].mapx
+          this.choice3[Number(this.endnum3)].xlocaion
         }&endY=${
-          this.choice3[Number(this.endnum3)].mapy
+          this.choice3[Number(this.endnum3)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice3[Number(this.startnum3)].mapx
-        }&startY=${this.choice3[Number(this.startnum3)].mapy}`;
+          this.choice3[Number(this.startnum3)].xlocaion
+        }&startY=${this.choice3[Number(this.startnum3)].ylocaion}`;
       } else if (this.num3 === 4) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice4[Number(this.endnum4)].mapx
+          this.choice4[Number(this.endnum4)].xlocation
         }&endY=${
-          this.choice4[Number(this.endnum4)].mapy
+          this.choice4[Number(this.endnum4)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice4[Number(this.startnum4)].mapx
-        }&startY=${this.choice4[Number(this.startnum4)].mapy}`;
+          this.choice4[Number(this.startnum4)].xlocaion
+        }&startY=${this.choice4[Number(this.startnum4)].ylocation}`;
       } else if (this.num3 === 5) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice5[Number(this.endnum5)].mapx
+          this.choice5[Number(this.endnum5)].xlocation
         }&endY=${
-          this.choice5[Number(this.endnum5)].mapy
+          this.choice5[Number(this.endnum5)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice5[Number(this.startnum5)].mapx
-        }&startY=${this.choice5[Number(this.startnum5)].mapy}`;
+          this.choice5[Number(this.startnum5)].xlocaion
+        }&startY=${this.choice5[Number(this.startnum5)].ylocation}`;
       } else if (this.num3 === 6) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice6[Number(this.endnum6)].mapx
+          this.choice6[Number(this.endnum6)].xlocation
         }&endY=${
-          this.choice6[Number(this.endnum6)].mapy
+          this.choice6[Number(this.endnum6)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice6[Number(this.startnum6)].mapx
-        }&startY=${this.choice6[Number(this.startnum6)].mapy}`;
+          this.choice6[Number(this.startnum6)].xlocation
+        }&startY=${this.choice6[Number(this.startnum6)].ylocation}`;
       } else if (this.num3 === 7) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice7[Number(this.endnum7)].mapx
+          this.choice7[Number(this.endnum7)].xlocation
         }&endY=${
-          this.choice7[Number(this.endnum7)].mapy
+          this.choice7[Number(this.endnum7)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice7[Number(this.startnum7)].mapx
-        }&startY=${this.choice7[Number(this.startnum7)].mapy}`;
+          this.choice7[Number(this.startnum7)].xlocation
+        }&startY=${this.choice7[Number(this.startnum7)].ylocation}`;
       } else if (this.num3 === 8) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice8[Number(this.endnum8)].mapx
+          this.choice8[Number(this.endnum8)].xlocation
         }&endY=${
-          this.choice8[Number(this.endnum8)].mapy
+          this.choice8[Number(this.endnum8)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice8[Number(this.startnum8)].mapx
-        }&startY=${this.choice8[Number(this.startnum8)].mapy}`;
+          this.choice8[Number(this.startnum8)].xlocaion
+        }&startY=${this.choice8[Number(this.startnum8)].ylocation}`;
       } else if (this.num3 === 9) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice9[Number(this.endnum9)].mapx
+          this.choice9[Number(this.endnum9)].xlocation
         }&endY=${
-          this.choice9[Number(this.endnum9)].mapy
+          this.choice9[Number(this.endnum9)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice9[Number(this.startnum9)].mapx
-        }&startY=${this.choice9[Number(this.startnum9)].mapy}`;
+          this.choice9[Number(this.startnum9)].xlocaion
+        }&startY=${this.choice9[Number(this.startnum9)].ylocation}`;
       } else if (this.num3 === 10) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice10[Number(this.endnum10)].mapx
+          this.choice10[Number(this.endnum10)].xlocation
         }&endY=${
-          this.choice10[Number(this.endnum10)].mapy
+          this.choice10[Number(this.endnum10)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice10[Number(this.startnum10)].mapx
-        }&startY=${this.choice10[Number(this.startnum10)].mapy}`;
+          this.choice10[Number(this.startnum10)].xlocaion
+        }&startY=${this.choice10[Number(this.startnum10)].ylocation}`;
       }
       const headers = {};
       const response = await axios.get(url, { headers });
@@ -1100,23 +1314,29 @@ export default {
       this.componentKey += 1;
     },
     async openinfo(i) {
-      const url = `/REST/travel/tourapi/selectone?contentId=${i.contentid}`;
+      console.log(i);
+      const url = `/REST/travel/selectone?contentId=${i.code}`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
       console.log(response);
-      this.dialoglist = response.data.list;
-      this.dialogcontent = this.dialoglist.overview.replace(
-        /(<br>|<br\/>|<br \/>)/g,
-        "\r\n"
-      );
+      this.dialoglist = response.data.TD;
+      // this.dialogcontent = this.dialoglist.overview.replace(
+      //   /(<br>|<br\/>|<br \/>)/g,
+      //   "\r\n"
+      // );
 
       this.dialogVisible1 = true;
     },
-    async openMarker1(i) {
+    async outMarker1() {
       this.openedMarkerID = null;
+    },
+    async openMarker1(i) {
+      console.log(i);
+      this.openedMarkerID = null;
+
       this.openedMarkerID = i.title;
-      this.center = { lat: Number(i.mapy), lng: Number(i.mapx) };
+      this.center = { lat: Number(i.ylocation), lng: Number(i.xlocaion) };
       this.zoom = 18;
     },
     openMarker(id) {
@@ -1170,6 +1390,23 @@ export default {
 }
 </style>
 <style scoped>
+.l_btn {
+  width: 20px;
+  height: 20px;
+  padding: 1px;
+  border: none;
+  background: unset;
+  cursor: pointer;
+}
+.l_btn img {
+  width: 19px;
+  height: 19px;
+}
+.mylist_text {
+  font-size: 14px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
 .listmap {
   position: relative;
 }
@@ -1239,6 +1476,18 @@ export default {
   background-color: #fff;
   font-size: 13px;
 }
+.fade-enter-active {
+  transition: opacity 0.5s;
+}
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-leave-to {
+  opacity: 0;
+}
 .newleft {
   width: 5%;
   float: left;
@@ -1247,9 +1496,50 @@ export default {
   background: #fafafa;
   transition: all 1s;
 }
+.myt3 {
+  padding-top: 10px;
+  position: relative;
+  width: 10%;
+}
+.loadinfo {
+  padding: 5px 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  background: rgb(51, 51, 51);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.btn11 {
+  position: absolute;
+  top: 35%;
+  left: -19px;
+}
+.btn12 {
+  position: absolute;
+  top: 35%;
+  left: 0px;
+}
+.btn13 {
+  position: absolute;
+  bottom: 0;
+
+  right: 0;
+}
+.myt2 {
+  width: 70%;
+  text-align: left;
+}
 .mytimg {
   float: left;
-  height: 80px;
+  height: 70px;
+  width: 20%;
+}
+.mytimg img {
+  padding: 9px;
+  box-sizing: border-box;
 }
 .travel_list {
   overflow: auto;
@@ -1258,7 +1548,7 @@ export default {
 }
 .mytravel_list {
   border: 1px solid #ddd;
-
+  border-radius: 10px;
   height: 70px;
   box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
   margin-top: 20px;
@@ -1266,17 +1556,27 @@ export default {
   list-style: none;
   display: inline-flex;
   width: 90%;
+  position: relative;
+  transition: all 2s;
+}
+.ml_img {
+  position: absolute;
+  top: -5px;
+  left: -10px;
 }
 .rightfull_btn {
   height: 100%;
-  width: 20px;
-
+  width: 5%;
+  text-align: center;
   background: rgba(0, 0, 0, 0.1);
   float: left;
   line-height: 50;
   color: darkslateblue;
   cursor: pointer;
   transition: all 1s;
+}
+.rightfull_btn span {
+  display: inline-block;
 }
 .rightfull_btn:hover {
   background: rgba(0, 0, 0, 0.3);
@@ -1496,7 +1796,6 @@ body {
 
   height: 800px;
   padding: 10px 0px 10px 10px;
-  text-align: center;
 }
 .right_content h4 {
   font-weight: 900;
@@ -1528,8 +1827,10 @@ body {
   display: none;
 }
 .searchinput {
-  padding: 5px 10px;
+  width: 95%;
+  padding: 10px 0px;
   border: 1px solid #ddd;
+  margin: 0 auto;
 }
 .rightscroll::-webkit-scrollbar {
   width: 1px;
@@ -1558,6 +1859,21 @@ body {
   margin-right: 15px;
   cursor: pointer;
   line-height: 38px;
+}
+
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-enter-active,
+.list-leave-active {
+  opacity: 0;
+  transition: all 0.1s;
+  transform: translateY(30px);
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
 }
 /* 결과창 css */
 .alldate li {

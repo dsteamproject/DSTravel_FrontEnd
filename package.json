@@ -33,6 +33,7 @@
     "vue3-carousel": "^0.1.28",
     "vue3-cookies": "^1.0.1",
     "vue3-date-time-picker": "^2.3.3",
+    "vuedraggable": "^4.1.0",
     "vuelendar": "^1.0.0"
   },
   "devDependencies": {
