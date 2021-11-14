@@ -28,7 +28,7 @@
         <div class="demo-collapse">
           <div>
             <h5>여행일정</h5>
-            <button @click="this.num3 -= 1" class="prev">&lt;</button>
+            <button @click="numnegative" class="prev">&lt;</button>
             <el-input-number
               v-model="num3"
               :controls="false"
@@ -61,7 +61,9 @@
                 <div class="myt2">
                   <span class="mylist_text">{{ list.title }}</span>
                   <br />
-                  <button class="loadinfo">상세경로</button>
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
                   <img
                     :src="`/REST/travel/image${index + 1}`"
                     class="ml_img"
@@ -88,6 +90,18 @@
                     />
                   </button>
                 </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
               </li>
             </transition-group>
           </ul>
@@ -97,108 +111,576 @@
             class="rightscroll"
             v-if="this.num3 === 2"
           >
-            <li v-for="list in choice2" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 100%; width: 100%" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice2"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice2.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 3"
           >
-            <li v-for="list in choice3" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice3"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice3.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 4"
           >
-            <li v-for="list in choice4" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice4"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice4.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 5"
           >
-            <li v-for="list in choice5" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice5"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice5.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 6"
           >
-            <li v-for="list in choice6" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice6"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice6.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 7"
           >
-            <li v-for="list in choice7" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice7"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice7.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 8"
           >
-            <li v-for="list in choice8" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice8"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice8.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 9"
           >
-            <li v-for="list in choice9" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice9"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice9.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
           <ul
             style="overflow: auto; height: 530px"
             class="rightscroll"
             v-if="this.num3 === 10"
           >
-            <li v-for="list in choice10" :key="list" class="mytravel_list">
-              <div class="mytimg">
-                <img :src="list.firstimage" style="height: 70px; width: 90px" />
-              </div>
-              {{ list.title }}
-            </li>
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice10"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice10.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
           </ul>
         </div>
       </div>
@@ -426,7 +908,7 @@
         }"
       >
         <GMapCluster
-          :minimumClusterSize="4"
+          :minimumClusterSize="5"
           :zoomOnClick="true"
           :style="clusterIcon"
           imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m"
@@ -535,6 +1017,7 @@
       </GMapMap>
       <button class="addmarker" @click="dialogVisible = true">장소등록</button>
       <button class="addmarker2" @click="lastaction">일정생성</button>
+      <div class="lo"></div>
     </div>
     <div :class="rightcss">
       <div class="rightfull_btn" v-if="rightc === 'off'" @click="handlefull">
@@ -747,13 +1230,27 @@ export default {
       openedMarkerID: null,
       center: { lat: 35.15267616865169, lng: 129.05961009117254 },
       markers: [],
+      markers1: [],
+      markers2: [],
+      markers3: [],
+      markers4: [],
+      markers5: [],
+      markers6: [],
+      markers7: [],
+      markers8: [],
+      markers9: [],
+      markers10: [],
       numberp: [],
+      loadtexton: false,
       options: {
         strokeColor: "#FF0000",
         strokeWeight: "3",
       },
+      loadtext: [],
+      loadfirst: [],
       snum1: 0,
       lnum1: 1,
+      loadnumb: "",
     };
   },
   async mounted() {
@@ -775,6 +1272,101 @@ export default {
   },
 
   methods: {
+    async loadinfo(i, index) {
+      if (this.choice1.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      }
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+      }
+
+      this.path1 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      var chonum = this.choice1.findIndex((e) => e.title == i.title);
+      this.loadnumb = chonum;
+      console.log(this.choice1);
+      this.loadtext = [];
+      this.loadtexton = true;
+      console.log(i);
+      console.log(index);
+      var url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+        this.choice1[Number(index + 1)].xlocaion
+      }&endY=${
+        this.choice1[Number(index + 1)].ylocation
+      }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+        this.choice1[Number(index)].xlocaion
+      }&startY=${this.choice1[Number(index)].ylocation}`;
+
+      const headers = {};
+      const response = await axios.get(url, { headers });
+      console.log(response.data);
+      for (var aa = 1; aa < response.data.features.length; aa++) {
+        console.log(response.data.features[aa].properties.description);
+        this.loadtext.push(response.data.features[aa].properties.description);
+      }
+      for (var bb = 0; bb < response.data.features.length; bb++) {
+        console.log(typeof response.data.features[bb].geometry.coordinates[0]);
+        if (
+          typeof response.data.features[bb].geometry.coordinates[0] === "number"
+        ) {
+          this.loadfirst.push(response.data.features[bb].geometry.coordinates);
+        } else {
+          this.loadfirst.push(
+            response.data.features[bb].geometry.coordinates[0]
+          );
+        }
+      }
+      this.loadfirst.splice(0, 1);
+      this.loadfirst.splice(this.loadfirst.length - 1, 1);
+      console.log(this.loadfirst);
+      console.log(this.loadtext);
+      for (var cc = 0; cc < this.loadfirst.length; cc++) {
+        this.markers.push({
+          id: this.loadtext[cc],
+          position: {
+            lat: Number(this.loadfirst[cc][1]),
+            lng: Number(this.loadfirst[cc][0]),
+          },
+          icon: "https://ifh.cc/g/u6WanN.png",
+        });
+      }
+      console.log(this.loadfirst);
+      console.log(this.loadtext);
+      for (var e = 1; e < response.data.features.length; e++) {
+        if (response.data.features[e].geometry.coordinates.length === 2) {
+          if (response.data.features[e].geometry.coordinates[0].length === 2) {
+            console.log("123");
+          } else {
+            this.middleload.push(
+              response.data.features[e].geometry.coordinates
+            );
+          }
+        } else {
+          for (
+            var q = 0;
+            q < response.data.features[e].geometry.coordinates.length;
+            q++
+          ) {
+            this.middleload.push(
+              response.data.features[e].geometry.coordinates[q]
+            );
+          }
+        }
+      }
+      for (var a = 0; a < this.middleload.length; a++) {
+        if (this.num3 === 1) {
+          this.path1.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        }
+      }
+      this.componentKey += 1;
+    },
     async submit() {
       // 작업중
       const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch}&contentTypeId=12&areaCode=6`;
@@ -785,6 +1377,15 @@ export default {
       this.busanlist10 = response.data.list;
     },
     async listdelete(i) {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum2 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum2, 1);
+      }
+      this.path1 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.loadtexton = false;
       console.log(i);
       var chonum = this.choice1.findIndex((e) => e.title == i.title);
       console.log(chonum);
@@ -808,6 +1409,15 @@ export default {
       //"https://ifh.cc/g/3qp9x6.png"
     },
     async listdown(i) {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+      }
+      this.path1 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.loadtexton = false;
       console.log(i);
       console.log(this.choice1);
       var chonum = this.choice1.findIndex((e) => e.title == i.title);
@@ -828,6 +1438,15 @@ export default {
       }
     },
     async listup(i, index) {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+      }
+      this.path1 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.loadtexton = false;
       console.log(this.choice1.length);
       console.log(i);
       console.log(index + 1);
@@ -920,8 +1539,35 @@ export default {
       this.newleft0 = "on";
       console.log(this.choice1);
     },
+    numnegative() {
+      console.log(this.markers);
+      console.log(this.markers1.length);
+      this.num3 -= 1;
+      for (var vv = 0; vv < this.markers.length; vv++) {
+        this.markers[vv].icon = "https://ifh.cc/g/3qp9x6.png";
+      }
+      if (this.num3 === 1) {
+        for (var ii = 0; ii < this.markers1.length; ii++) {
+          var marknum5 = this.markers.findIndex(
+            (e) => e.id == this.markers1[ii].id
+          );
+          this.markers[marknum5].icon = this.markers1[ii].icon;
+        }
+      } else if (this.num3 === 2) {
+        for (var ii2 = 0; ii2 < this.markers2.length; ii2++) {
+          var marknum6 = this.markers.findIndex(
+            (e) => e.id == this.markers2[ii2].id
+          );
+          this.markers[marknum6].icon = this.markers2[ii2].icon;
+        }
+      }
+    },
     numplus() {
       this.num3 += 1;
+      console.log(this.markers);
+      for (var vv = 0; vv < this.markers.length; vv++) {
+        this.markers[vv].icon = "https://ifh.cc/g/3qp9x6.png";
+      }
     },
     async rightrefresh() {
       // 오른쪽 상세창
@@ -1049,13 +1695,164 @@ export default {
         alert("일일 여행지 선택은 12개를 초과할수 없습니다");
         return;
       }
+      // ==========================================================
+      if (this.num3 === 1) {
+        this.markers1.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice1.length + 1
+          }`,
+        });
+      } else if (this.num3 === 2) {
+        this.markers2.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice2.length + 1
+          }`,
+        });
+      } else if (this.num3 === 3) {
+        this.markers3.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice3.length + 1
+          }`,
+        });
+      } else if (this.num3 === 4) {
+        this.markers4.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice4.length + 1
+          }`,
+        });
+      } else if (this.num3 === 5) {
+        this.markers5.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice5.length + 1
+          }`,
+        });
+      } else if (this.num3 === 6) {
+        this.markers6.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice6.length + 1
+          }`,
+        });
+      } else if (this.num3 === 7) {
+        this.markers7.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice7.length + 1
+          }`,
+        });
+      } else if (this.num3 === 8) {
+        this.markers8.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice8.length + 1
+          }`,
+        });
+      } else if (this.num3 === 9) {
+        this.markers9.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice9.length + 1
+          }`,
+        });
+      } else if (this.num3 === 10) {
+        this.markers10.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice10.length + 1
+          }`,
+        });
+      }
+
+      // ==========================================================
 
       console.log(this.choice1.length);
       var marknum = this.markers.findIndex((e) => e.id == i.title);
-
-      this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
-        this.choice1.length + 1
-      }`;
+      if (this.num3 === 1) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice1.length + 1
+        }`;
+      } else if (this.num3 === 2) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice2.length + 1
+        }`;
+      } else if (this.num3 === 3) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice3.length + 1
+        }`;
+      } else if (this.num3 === 4) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice4.length + 1
+        }`;
+      } else if (this.num3 === 5) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice5.length + 1
+        }`;
+      } else if (this.num10 === 6) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice6.length + 1
+        }`;
+      } else if (this.num3 === 7) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice7.length + 1
+        }`;
+      } else if (this.num3 === 8) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice8.length + 1
+        }`;
+      } else if (this.num3 === 9) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice9.length + 1
+        }`;
+      } else if (this.num3 === 10) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice10.length + 1
+        }`;
+      }
       //https://ifh.cc/g/q7v7ZO.png
 
       this.busanlist10 = [];
@@ -1500,6 +2297,17 @@ export default {
   padding-top: 10px;
   position: relative;
   width: 10%;
+  float: left;
+}
+.myt4 {
+  display: inherit;
+}
+.myt4_in {
+  border-top: 1px solid #ddd;
+  padding: 0px 50px;
+}
+.loadcss {
+  font-size: 11px;
 }
 .loadinfo {
   padding: 5px 10px;
@@ -1513,24 +2321,15 @@ export default {
   cursor: pointer;
 }
 .btn11 {
-  position: absolute;
-  top: 35%;
-  left: -19px;
 }
 .btn12 {
-  position: absolute;
-  top: 35%;
-  left: 0px;
 }
 .btn13 {
-  position: absolute;
-  bottom: 0;
-
-  right: 0;
 }
 .myt2 {
   width: 70%;
   text-align: left;
+  float: left;
 }
 .mytimg {
   float: left;
@@ -1549,12 +2348,12 @@ export default {
 .mytravel_list {
   border: 1px solid #ddd;
   border-radius: 10px;
-  height: 70px;
+  height: auto;
   box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
   margin-top: 20px;
   background: #ffffff;
   list-style: none;
-  display: inline-flex;
+  display: inline-block;
   width: 90%;
   position: relative;
   transition: all 2s;
@@ -1868,7 +2667,7 @@ body {
 .list-enter-active,
 .list-leave-active {
   opacity: 0;
-  transition: all 0.1s;
+  transition: all 1s;
   transform: translateY(30px);
 }
 .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
