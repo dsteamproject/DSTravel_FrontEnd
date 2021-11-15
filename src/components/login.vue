@@ -5,7 +5,7 @@
       <div class="join">
         <div class="left">
           <h3 class="h31">일반 로그인</h3>
-          
+
           <input
             type="text"
             class="userid"
@@ -46,7 +46,9 @@
           <h3 class="login2 h31">간편 로그인</h3>
           <button class="easylogin">네이버로 로그인</button><br />
           <button class="easylogin">구글로 로그인</button><br />
-          <button class="easylogin">카카오톡 로그인</button>
+          <button class="easylogin" @click="loginWithKakao">
+            카카오톡 로그인
+          </button>
         </div>
       </div>
       <div class="bottom">
@@ -67,15 +69,12 @@
         </div>
       </div>
     </div>
- 
   </div>
 </template>
 
 <script>
-
 import axios from "axios";
 export default {
-
   data() {
     return {
       userid: "",
@@ -84,6 +83,12 @@ export default {
     };
   },
   methods: {
+    async loginWithKakao() {
+      const params = {
+        redirectUri: "http://127.0.0.1:9090/login",
+      };
+      window.Kakao.Auth.authorize(params);
+    },
     async handlelogin() {
       const url = `/REST/member/login`;
       const headers = { "Content-type": "application/json" };
@@ -95,7 +100,6 @@ export default {
       console.log(response);
       if (response.data.status === 200) {
         sessionStorage.setItem("TOKEN", response.data.token);
-   
 
         if (this.saved === true) {
           this.$cookies.set("cookieid", this.userid);

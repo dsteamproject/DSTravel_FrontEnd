@@ -1063,8 +1063,56 @@
             </li>
           </ul>
         </div>
-        <div class="right_content" v-if="right === 2">내용2</div>
-        <div class="right_content" v-if="right === 3">내용3</div>
+        <div class="right_content" v-if="right === 2">
+          <input
+            type="text"
+            class="searchinput"
+            v-model="rightsearch2"
+            placeholder="검색어를 입력하세요"
+            v-on:keyup.enter="submit2"
+          />
+          <ul class="travel_list">
+            <li v-for="list in busanlist10" :key="list" class="listmap">
+              <div
+                class="imgdiv"
+                @mouseout="outMarker1(list)"
+                @mouseover="openMarker1(list)"
+              >
+                <img :src="list.firstimage" style="height: 100px" />
+              </div>
+              <div class="textdiv">
+                <span class="td_title">{{ list.title }}</span>
+              </div>
+              <button class="info_btn" @click="openinfo(list)">i</button>
+              <button class="plus_btn" @click="listpush(list)">+</button>
+            </li>
+          </ul>
+        </div>
+        <div class="right_content" v-if="right === 3">
+          <input
+            type="text"
+            class="searchinput"
+            v-model="rightsearch3"
+            placeholder="검색어를 입력하세요"
+            v-on:keyup.enter="submit3"
+          />
+          <ul class="travel_list">
+            <li v-for="list in busanlist10" :key="list" class="listmap">
+              <div
+                class="imgdiv"
+                @mouseout="outMarker1(list)"
+                @mouseover="openMarker1(list)"
+              >
+                <img :src="list.firstimage" style="height: 100px" />
+              </div>
+              <div class="textdiv">
+                <span class="td_title">{{ list.title }}</span>
+              </div>
+              <button class="info_btn" @click="openinfo(list)">i</button>
+              <button class="plus_btn" @click="listpush(list)">+</button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -1117,6 +1165,7 @@ export default {
   name: "search",
 
   async created() {
+    this.contenttypeid = "12";
     console.log(this.$route.query.betday);
     for (var o = 0; o < this.$route.query.betday; o++) {
       this.traveldate.push(o);
@@ -1135,7 +1184,7 @@ export default {
     console.log(response);
 
     this.busanlist = response.data.list;
-
+    this.markersTOURIST = response.data.list;
     for (var i = 0; i < this.busanlist.length; i++) {
       this.markers.push({
         id: this.busanlist[i].title,
@@ -1147,11 +1196,19 @@ export default {
       });
     }
 
-    await this.replacerefresh();
+    console.log(this.markersTOURIST);
+
+    // await this.replacerefresh();
   },
   data() {
     return {
+      markersTOURIST: [],
+      markershotel: [],
+      markersfood: [],
+      contenttypeid: "",
       rightsearch: "",
+      rightsearch2: "",
+      rightsearch3: "",
       newleft0: "off",
       newleft: "off",
       newleft1: "",
@@ -1228,7 +1285,8 @@ export default {
       num2: 0,
       num1: 0,
       openedMarkerID: null,
-      center: { lat: 35.15267616865169, lng: 129.05961009117254 },
+
+      center: { lat: 37.549824070293155, lng: 126.9852119711522 },
       markers: [],
       markers1: [],
       markers2: [],
@@ -1273,7 +1331,36 @@ export default {
 
   methods: {
     async loadinfo(i, index) {
-      if (this.choice1.length === index + 1) {
+      if (this.num3 === 1) {
+        if (this.choice1.length === index + 1) {
+          alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+          return;
+        }
+      } else if (this.choice2.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice3.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice4.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice5.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice6.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice7.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice8.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice9.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice10.length === index + 1) {
         alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
         return;
       }
@@ -1286,21 +1373,116 @@ export default {
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
-      var chonum = this.choice1.findIndex((e) => e.title == i.title);
+      let chonum;
+      if (this.num3 === 1) {
+        chonum = this.choice1.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 2) {
+        chonum = this.choice2.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 3) {
+        chonum = this.choice3.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 4) {
+        chonum = this.choice4.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 5) {
+        chonum = this.choice5.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 6) {
+        chonum = this.choice6.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 7) {
+        chonum = this.choice7.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 8) {
+        chonum = this.choice8.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 9) {
+        chonum = this.choice9.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 10) {
+        chonum = this.choice10.findIndex((e) => e.title == i.title);
+      }
       this.loadnumb = chonum;
       console.log(this.choice1);
       this.loadtext = [];
       this.loadtexton = true;
       console.log(i);
       console.log(index);
-      var url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-        this.choice1[Number(index + 1)].xlocaion
-      }&endY=${
-        this.choice1[Number(index + 1)].ylocation
-      }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-        this.choice1[Number(index)].xlocaion
-      }&startY=${this.choice1[Number(index)].ylocation}`;
-
+      let url;
+      if (this.num3 === 1) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice1[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice1[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice1[Number(index)].xlocaion
+        }&startY=${this.choice1[Number(index)].ylocation}`;
+      } else if (this.num3 === 2) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice2[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice2[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice2[Number(index)].xlocaion
+        }&startY=${this.choice2[Number(index)].ylocation}`;
+      } else if (this.num3 === 3) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice3[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice3[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice3[Number(index)].xlocaion
+        }&startY=${this.choice3[Number(index)].ylocation}`;
+      } else if (this.num3 === 4) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice4[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice4[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice4[Number(index)].xlocaion
+        }&startY=${this.choice4[Number(index)].ylocation}`;
+      } else if (this.num3 === 5) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice5[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice5[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice5[Number(index)].xlocaion
+        }&startY=${this.choice5[Number(index)].ylocation}`;
+      } else if (this.num3 === 6) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice6[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice6[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice6[Number(index)].xlocaion
+        }&startY=${this.choice6[Number(index)].ylocation}`;
+      } else if (this.num3 === 7) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice7[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice7[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice7[Number(index)].xlocaion
+        }&startY=${this.choice7[Number(index)].ylocation}`;
+      } else if (this.num3 === 8) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice8[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice8[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice8[Number(index)].xlocaion
+        }&startY=${this.choice8[Number(index)].ylocation}`;
+      } else if (this.num3 === 9) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice9[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice9[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice9[Number(index)].xlocaion
+        }&startY=${this.choice9[Number(index)].ylocation}`;
+      } else if (this.num3 === 10) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice10[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice10[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice10[Number(index)].xlocaion
+        }&startY=${this.choice10[Number(index)].ylocation}`;
+      }
       const headers = {};
       const response = await axios.get(url, { headers });
       console.log(response.data);
@@ -1320,6 +1502,7 @@ export default {
           );
         }
       }
+
       this.loadfirst.splice(0, 1);
       this.loadfirst.splice(this.loadfirst.length - 1, 1);
       console.log(this.loadfirst);
@@ -1363,13 +1546,76 @@ export default {
             lat: Number(this.middleload[a][1]),
             lng: Number(this.middleload[a][0]),
           });
+        } else if (this.num3 === 2) {
+          this.path2.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 3) {
+          this.path3.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 4) {
+          this.path4.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 5) {
+          this.path5.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 6) {
+          this.path6.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 7) {
+          this.path7.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 8) {
+          this.path8.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 9) {
+          this.path9.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 10) {
+          this.path10.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
         }
       }
       this.componentKey += 1;
     },
     async submit() {
       // 작업중
-      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch}&contentTypeId=12&areaCode=6`;
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch}&contentTypeId=${this.contenttypeid}&areaCode=6`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.busanlist10 = response.data.list;
+    },
+    async submit2() {
+      // 작업중
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch2}&contentTypeId=${this.contenttypeid}&areaCode=6`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.busanlist10 = response.data.list;
+    },
+    async submit3() {
+      // 작업중
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch3}&contentTypeId=${this.contenttypeid}&areaCode=6`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
@@ -1382,6 +1628,15 @@ export default {
         this.markers.splice(marknum2, 1);
       }
       this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
@@ -1414,27 +1669,197 @@ export default {
         this.markers.splice(marknum1, 1);
       }
       this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path4 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
       this.loadtexton = false;
       console.log(i);
       console.log(this.choice1);
-      var chonum = this.choice1.findIndex((e) => e.title == i.title);
-      console.log(chonum);
-      let list = this.choice1.splice(chonum, 1);
-      console.log(list);
-      this.choice1.splice(chonum + 1, 0, list[0]);
 
-      for (var cc = 0; cc < this.choice1.length; cc++) {
-        console.log(this.choice1[cc].title);
-        var marknum = this.markers.findIndex(
-          (e) => e.id == this.choice1[cc].title
-        );
-        console.log(marknum);
-        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
-          cc + 1
-        }`;
+      let chonum;
+      let list;
+      if (this.num3 === 1) {
+        chonum = this.choice1.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+        list = this.choice1.splice(chonum, 1);
+        console.log(list);
+        this.choice1.splice(chonum + 1, 0, list[0]);
+
+        for (var cc = 0; cc < this.choice1.length; cc++) {
+          console.log(this.choice1[cc].title);
+          var marknum = this.markers.findIndex(
+            (e) => e.id == this.choice1[cc].title
+          );
+          console.log(marknum);
+          this.markers[
+            marknum
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc + 1}`;
+        }
+      } else if (this.num3 === 2) {
+        chonum = this.choice2.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice2.splice(chonum, 1);
+        console.log(list);
+        this.choice2.splice(chonum + 1, 0, list[0]);
+
+        for (var cc2 = 0; cc2 < this.choice2.length; cc2++) {
+          console.log(this.choice2[cc2].title);
+          var marknum2 = this.markers.findIndex(
+            (e) => e.id == this.choice2[cc2].title
+          );
+
+          this.markers[
+            marknum2
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc2 + 1}`;
+        }
+      } else if (this.num3 === 3) {
+        chonum = this.choice3.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice3.splice(chonum, 1);
+        console.log(list);
+        this.choice3.splice(chonum + 1, 0, list[0]);
+
+        for (var cc3 = 0; cc3 < this.choice3.length; cc3++) {
+          console.log(this.choice3[cc3].title);
+          var marknum3 = this.markers.findIndex(
+            (e) => e.id == this.choice3[cc3].title
+          );
+
+          this.markers[
+            marknum3
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc3 + 1}`;
+        }
+      } else if (this.num3 === 4) {
+        chonum = this.choice4.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice4.splice(chonum, 1);
+        console.log(list);
+        this.choice4.splice(chonum + 1, 0, list[0]);
+
+        for (var cc4 = 0; cc4 < this.choice4.length; cc4++) {
+          console.log(this.choice4[cc4].title);
+          var marknum4 = this.markers.findIndex(
+            (e) => e.id == this.choice4[cc4].title
+          );
+
+          this.markers[
+            marknum4
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc4 + 1}`;
+        }
+      } else if (this.num3 === 5) {
+        chonum = this.choice5.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice5.splice(chonum, 1);
+        console.log(list);
+        this.choice5.splice(chonum + 1, 0, list[0]);
+        for (var cc5 = 0; cc5 < this.choice2.length; cc5++) {
+          console.log(this.choice5[cc5].title);
+          var marknum5 = this.markers.findIndex(
+            (e) => e.id == this.choice5[cc5].title
+          );
+
+          this.markers[
+            marknum5
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc5 + 1}`;
+        }
+      } else if (this.num3 === 6) {
+        chonum = this.choice6.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice6.splice(chonum, 1);
+        console.log(list);
+        this.choice6.splice(chonum + 1, 0, list[0]);
+        for (var cc6 = 0; cc6 < this.choice6.length; cc6++) {
+          console.log(this.choice6[cc6].title);
+          var marknum6 = this.markers.findIndex(
+            (e) => e.id == this.choice2[cc6].title
+          );
+
+          this.markers[
+            marknum6
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc6 + 1}`;
+        }
+      } else if (this.num3 === 7) {
+        chonum = this.choice7.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice7.splice(chonum, 1);
+        console.log(list);
+        this.choice7.splice(chonum + 1, 0, list[0]);
+        for (var cc7 = 0; cc7 < this.choice7.length; cc7++) {
+          console.log(this.choice7[cc7].title);
+          var marknum7 = this.markers.findIndex(
+            (e) => e.id == this.choice7[cc7].title
+          );
+
+          this.markers[
+            marknum7
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc7 + 1}`;
+        }
+      } else if (this.num3 === 8) {
+        chonum = this.choice8.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice8.splice(chonum, 1);
+        console.log(list);
+        this.choice8.splice(chonum + 1, 0, list[0]);
+        for (var cc8 = 0; cc8 < this.choice8.length; cc8++) {
+          console.log(this.choice2[cc8].title);
+          var marknum8 = this.markers.findIndex(
+            (e) => e.id == this.choice8[cc8].title
+          );
+
+          this.markers[
+            marknum8
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc8 + 1}`;
+        }
+      } else if (this.num3 === 9) {
+        chonum = this.choice9.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice9.splice(chonum, 1);
+        console.log(list);
+        this.choice9.splice(chonum + 1, 0, list[0]);
+        for (var cc9 = 0; cc9 < this.choice9.length; cc9++) {
+          console.log(this.choice2[cc9].title);
+          var marknum9 = this.markers.findIndex(
+            (e) => e.id == this.choice9[cc9].title
+          );
+
+          this.markers[
+            marknum9
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc9 + 1}`;
+        }
+      } else if (this.num3 === 10) {
+        chonum = this.choice10.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice10.splice(chonum, 1);
+        console.log(list);
+        this.choice10.splice(chonum + 1, 0, list[0]);
+        for (var cc10 = 0; cc10 < this.choice10.length; cc10++) {
+          console.log(this.choice10[cc10].title);
+          var marknum10 = this.markers.findIndex(
+            (e) => e.id == this.choice10[cc10].title
+          );
+
+          this.markers[
+            marknum10
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc10 + 1}`;
+        }
       }
     },
     async listup(i, index) {
@@ -1443,6 +1868,15 @@ export default {
         this.markers.splice(marknum1, 1);
       }
       this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path4 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
@@ -1451,77 +1885,182 @@ export default {
       console.log(i);
       console.log(index + 1);
       console.log(this.choice1);
-      var chonum = this.choice1.findIndex((e) => e.title == i.title);
-      console.log(chonum);
-      let list = this.choice1.splice(chonum, 1);
-      console.log(list);
-      this.choice1.splice(chonum - 1, 0, list[0]);
+      let chonum;
+      let list;
+      if (this.num3 === 1) {
+        chonum = this.choice1.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+        list = this.choice1.splice(chonum, 1);
+        console.log(list);
+        this.choice1.splice(chonum - 1, 0, list[0]);
 
-      for (var cc = 0; cc < this.choice1.length; cc++) {
-        console.log(this.choice1[cc].title);
-        var marknum = this.markers.findIndex(
-          (e) => e.id == this.choice1[cc].title
-        );
-        console.log(marknum);
-        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
-          cc + 1
-        }`;
+        for (var cc = 0; cc < this.choice1.length; cc++) {
+          console.log(this.choice1[cc].title);
+          var marknum = this.markers.findIndex(
+            (e) => e.id == this.choice1[cc].title
+          );
+          console.log(marknum);
+          this.markers[
+            marknum
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc + 1}`;
+        }
+      } else if (this.num3 === 2) {
+        chonum = this.choice2.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice2.splice(chonum, 1);
+        console.log(list);
+        this.choice2.splice(chonum - 1, 0, list[0]);
+
+        for (var cc2 = 0; cc2 < this.choice2.length; cc2++) {
+          console.log(this.choice2[cc2].title);
+          var marknum2 = this.markers.findIndex(
+            (e) => e.id == this.choice2[cc2].title
+          );
+
+          this.markers[
+            marknum2
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc2 + 1}`;
+        }
+      } else if (this.num3 === 3) {
+        chonum = this.choice3.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice3.splice(chonum, 1);
+        console.log(list);
+        this.choice3.splice(chonum - 1, 0, list[0]);
+
+        for (var cc3 = 0; cc3 < this.choice3.length; cc3++) {
+          console.log(this.choice3[cc3].title);
+          var marknum3 = this.markers.findIndex(
+            (e) => e.id == this.choice3[cc3].title
+          );
+
+          this.markers[
+            marknum3
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc3 + 1}`;
+        }
+      } else if (this.num3 === 4) {
+        chonum = this.choice4.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice4.splice(chonum, 1);
+        console.log(list);
+        this.choice4.splice(chonum - 1, 0, list[0]);
+
+        for (var cc4 = 0; cc4 < this.choice4.length; cc4++) {
+          console.log(this.choice4[cc4].title);
+          var marknum4 = this.markers.findIndex(
+            (e) => e.id == this.choice4[cc4].title
+          );
+
+          this.markers[
+            marknum4
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc4 + 1}`;
+        }
+      } else if (this.num3 === 5) {
+        chonum = this.choice5.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice5.splice(chonum, 1);
+        console.log(list);
+        this.choice5.splice(chonum - 1, 0, list[0]);
+        for (var cc5 = 0; cc5 < this.choice2.length; cc5++) {
+          console.log(this.choice5[cc5].title);
+          var marknum5 = this.markers.findIndex(
+            (e) => e.id == this.choice5[cc5].title
+          );
+
+          this.markers[
+            marknum5
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc5 + 1}`;
+        }
+      } else if (this.num3 === 6) {
+        chonum = this.choice6.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice6.splice(chonum, 1);
+        console.log(list);
+        this.choice6.splice(chonum - 1, 0, list[0]);
+        for (var cc6 = 0; cc6 < this.choice6.length; cc6++) {
+          console.log(this.choice6[cc6].title);
+          var marknum6 = this.markers.findIndex(
+            (e) => e.id == this.choice2[cc6].title
+          );
+
+          this.markers[
+            marknum6
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc6 + 1}`;
+        }
+      } else if (this.num3 === 7) {
+        chonum = this.choice7.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice7.splice(chonum, 1);
+        console.log(list);
+        this.choice7.splice(chonum - 1, 0, list[0]);
+        for (var cc7 = 0; cc7 < this.choice7.length; cc7++) {
+          console.log(this.choice7[cc7].title);
+          var marknum7 = this.markers.findIndex(
+            (e) => e.id == this.choice7[cc7].title
+          );
+
+          this.markers[
+            marknum7
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc7 + 1}`;
+        }
+      } else if (this.num3 === 8) {
+        chonum = this.choice8.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice8.splice(chonum, 1);
+        console.log(list);
+        this.choice8.splice(chonum - 1, 0, list[0]);
+        for (var cc8 = 0; cc8 < this.choice8.length; cc8++) {
+          console.log(this.choice2[cc8].title);
+          var marknum8 = this.markers.findIndex(
+            (e) => e.id == this.choice8[cc8].title
+          );
+
+          this.markers[
+            marknum8
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc8 + 1}`;
+        }
+      } else if (this.num3 === 9) {
+        chonum = this.choice9.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice9.splice(chonum, 1);
+        console.log(list);
+        this.choice9.splice(chonum - 1, 0, list[0]);
+        for (var cc9 = 0; cc9 < this.choice9.length; cc9++) {
+          console.log(this.choice2[cc9].title);
+          var marknum9 = this.markers.findIndex(
+            (e) => e.id == this.choice9[cc9].title
+          );
+
+          this.markers[
+            marknum9
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc9 + 1}`;
+        }
+      } else if (this.num3 === 10) {
+        chonum = this.choice10.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice10.splice(chonum, 1);
+        console.log(list);
+        this.choice10.splice(chonum - 1, 0, list[0]);
+        for (var cc10 = 0; cc10 < this.choice10.length; cc10++) {
+          console.log(this.choice10[cc10].title);
+          var marknum10 = this.markers.findIndex(
+            (e) => e.id == this.choice10[cc10].title
+          );
+
+          this.markers[
+            marknum10
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc10 + 1}`;
+        }
       }
-
-      // 경로 재탐색
-      // console.log(this.choice1);
-      // this.path1 = [];
-      // for (var h = 1; h < this.choice1.length; h++) {
-      //   console.log(this.choice1.length);
-      //   console.log(h);
-      //   let url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-      //     this.choice1[Number(this.choice1.length - h)].xlocaion
-      //   }&endY=${
-      //     this.choice1[Number(this.choice1.length - h)].ylocation
-      //   }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-      //     this.choice1[Number(this.choice1.length - (h + 1))].xlocaion
-      //   }&startY=${
-      //     this.choice1[Number(this.choice1.length - (h + 1))].ylocation
-      //   }`;
-      //   const headers = {};
-      //   const response = await axios.get(url, { headers });
-      //   console.log(response.data);
-      //   for (var e = 1; e < response.data.features.length; e++) {
-      //     if (response.data.features[e].geometry.coordinates.length === 2) {
-      //       if (
-      //         response.data.features[e].geometry.coordinates[0].length === 2
-      //       ) {
-      //         console.log("123");
-      //       } else {
-      //         this.middleload.push(
-      //           response.data.features[e].geometry.coordinates
-      //         );
-      //       }
-      //     } else {
-      //       for (
-      //         var q = 0;
-      //         q < response.data.features[e].geometry.coordinates.length;
-      //         q++
-      //       ) {
-      //         this.middleload.push(
-      //           response.data.features[e].geometry.coordinates[q]
-      //         );
-      //       }
-      //     }
-      //   }
-      //   console.log(this.middleload);
-      //   for (var a = 0; a < this.middleload.length; a++) {
-      //     if (this.num3 === 1) {
-      //       this.path1.push({
-      //         lat: Number(this.middleload[a][1]),
-      //         lng: Number(this.middleload[a][0]),
-      //       });
-      //     }
-      //   }
-      //   console.log(this.path1);
-      //   this.middleload = [];
-      //   this.componentKey += 1;
-      // }
     },
     allview() {
       this.newleft0 = "on";
@@ -1539,13 +2078,8 @@ export default {
       this.newleft0 = "on";
       console.log(this.choice1);
     },
-    numnegative() {
-      console.log(this.markers);
-      console.log(this.markers1.length);
-      this.num3 -= 1;
-      for (var vv = 0; vv < this.markers.length; vv++) {
-        this.markers[vv].icon = "https://ifh.cc/g/3qp9x6.png";
-      }
+    // 여행일차 변경시 선택된 마커 변경
+    numchagnelist() {
       if (this.num3 === 1) {
         for (var ii = 0; ii < this.markers1.length; ii++) {
           var marknum5 = this.markers.findIndex(
@@ -1560,18 +2094,123 @@ export default {
           );
           this.markers[marknum6].icon = this.markers2[ii2].icon;
         }
+      } else if (this.num3 === 3) {
+        for (var ii3 = 0; ii3 < this.markers3.length; ii3++) {
+          var marknum7 = this.markers.findIndex(
+            (e) => e.id == this.markers3[ii3].id
+          );
+          this.markers[marknum7].icon = this.markers3[ii3].icon;
+        }
+      } else if (this.num3 === 4) {
+        for (var ii4 = 0; ii4 < this.markers4.length; ii4++) {
+          var marknum8 = this.markers.findIndex(
+            (e) => e.id == this.markers4[ii4].id
+          );
+          this.markers[marknum8].icon = this.markers4[ii4].icon;
+        }
+      } else if (this.num3 === 5) {
+        for (var ii5 = 0; ii5 < this.markers5.length; ii5++) {
+          var marknum9 = this.markers.findIndex(
+            (e) => e.id == this.markers5[ii5].id
+          );
+          this.markers[marknum9].icon = this.markers5[ii5].icon;
+        }
+      } else if (this.num3 === 6) {
+        for (var ii6 = 0; ii6 < this.markers6.length; ii6++) {
+          var marknum10 = this.markers.findIndex(
+            (e) => e.id == this.markers6[ii6].id
+          );
+          this.markers[marknum10].icon = this.markers6[ii6].icon;
+        }
+      } else if (this.num3 === 7) {
+        for (var ii7 = 0; ii7 < this.markers7.length; ii7++) {
+          var marknum11 = this.markers.findIndex(
+            (e) => e.id == this.markers7[ii7].id
+          );
+          this.markers[marknum11].icon = this.markers7[ii7].icon;
+        }
+      } else if (this.num3 === 6) {
+        for (var ii8 = 0; ii8 < this.markers8.length; ii8++) {
+          var marknum12 = this.markers.findIndex(
+            (e) => e.id == this.markers6[ii8].id
+          );
+          this.markers[marknum12].icon = this.markers8[ii8].icon;
+        }
+      } else if (this.num3 === 6) {
+        for (var ii9 = 0; ii9 < this.markers9.length; ii9++) {
+          var marknum13 = this.markers.findIndex(
+            (e) => e.id == this.markers9[ii9].id
+          );
+          this.markers[marknum13].icon = this.markers9[ii9].icon;
+        }
+      } else if (this.num3 === 10) {
+        for (var ii10 = 0; ii10 < this.markers10.length; ii10++) {
+          var marknum14 = this.markers.findIndex(
+            (e) => e.id == this.markers10[ii10].id
+          );
+          this.markers[marknum14].icon = this.markers10[ii10].icon;
+        }
       }
     },
-    numplus() {
+    async numnegative() {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+      }
+      console.log(this.markers);
+      console.log(this.markers1.length);
+      this.num3 -= 1;
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.loadtexton = false;
+      for (var vv2 = 0; vv2 < this.markers.length; vv2++) {
+        this.markers[vv2].icon = "https://ifh.cc/g/3qp9x6.png";
+      }
+      await this.numchagnelist();
+    },
+    async numplus() {
+      for (var vv1 = 0; vv1 < this.loadfirst.length; vv1++) {
+        var marknum1 = this.markers.findIndex(
+          (e) => e.id == this.loadtext[vv1]
+        );
+        this.markers.splice(marknum1, 1);
+      }
       this.num3 += 1;
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
       console.log(this.markers);
       for (var vv = 0; vv < this.markers.length; vv++) {
         this.markers[vv].icon = "https://ifh.cc/g/3qp9x6.png";
       }
+      await this.numchagnelist();
     },
     async rightrefresh() {
       // 오른쪽 상세창
-      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=6`;
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=6`;
       const headers1 = { "Content-type": "application/json" };
 
       const response1 = await axios.get(url1, { headers1 });
@@ -1883,7 +2522,7 @@ export default {
       //한개 선택후 오른쪽 list 변경
 
       //const url1 = `/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=1&xmap=${i.mapx}&ymap=${i.mapy}`;
-      const url1 = `/REST/travel/distance?areaCode=6&size=100&contentTypeId=12&kilometer=5&page=1&xmap=${i.xlocaion}&ymap=${i.ylocation}`;
+      const url1 = `/REST/travel/distance?areaCode=6&size=100&contentTypeId=${this.contenttypeid}&kilometer=5&page=1&xmap=${i.xlocaion}&ymap=${i.ylocation}`;
       const headers1 = {};
       const response1 = await axios.get(url1, { headers1 });
       console.log(response1);
@@ -2143,23 +2782,257 @@ export default {
       console.log(event.latLng);
       console.log(two);
     },
-    handleright() {
+    async handleright() {
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.contenttypeid = "12";
       this.right = 1;
       this.btncolor3 = "noneactive";
       this.btncolor2 = "noneactive";
       this.btncolor = "active";
+      this.busanlist10 = [];
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=6`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+      this.markers = [];
+      console.log(this.busanlist10);
+      console.log(this.markers);
+      for (var i = 0; i < this.busanlist10.length; i++) {
+        this.markers.push({
+          id: this.busanlist10[i].title,
+          position: {
+            lat: Number(this.busanlist10[i].ylocation),
+            lng: Number(this.busanlist10[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/3qp9x6.png",
+        });
+      }
+      await this.savemarker2();
     },
-    handleright2() {
+    savemarker2() {
+      if (this.num3 === 1) {
+        console.log(this.markers1);
+        // 기존 마커 제거
+        for (var vv1 = 0; vv1 < this.markers1.length; vv1++) {
+          var marknum1 = this.markers.findIndex(
+            (e) => e.id == this.markers1[vv1].id
+          );
+          console.log(marknum1);
+          this.markers.splice(marknum1, 1);
+        }
+        // 새 마커 추가
+        for (var num1 = 0; num1 < this.markers1.length; num1++) {
+          this.markers.push(this.markers1[num1]);
+        }
+        console.log(this.markers);
+      } else if (this.num3 === 2) {
+        for (var vv2 = 0; vv2 < this.markers2.length; vv2++) {
+          var marknum2 = this.markers.findIndex(
+            (e) => e.id == this.markers2[vv2].id
+          );
+          this.markers.splice(marknum2, 1);
+        }
+        for (var num2 = 0; num2 < this.markers2.length; num2++) {
+          this.markers.push(this.markers2[num2]);
+        }
+      } else if (this.num3 === 3) {
+        for (var vv3 = 0; vv3 < this.markers2.length; vv3++) {
+          var marknum3 = this.markers.findIndex(
+            (e) => e.id == this.markers3[vv3].id
+          );
+
+          this.markers.splice(marknum3, 1);
+        }
+        for (var num3 = 0; num3 < this.markers3.length; num3++) {
+          this.markers.push(this.markers3[num3]);
+        }
+      } else if (this.num3 === 4) {
+        for (var vv4 = 0; vv4 < this.markers4.length; vv4++) {
+          var marknum4 = this.markers.findIndex(
+            (e) => e.id == this.markers4[vv4].id
+          );
+
+          this.markers.splice(marknum4, 1);
+        }
+        for (var num4 = 0; num4 < this.markers4.length; num4++) {
+          this.markers.push(this.markers4[num4]);
+        }
+      } else if (this.num3 === 5) {
+        for (var vv5 = 0; vv5 < this.markers5.length; vv5++) {
+          var marknum5 = this.markers.findIndex(
+            (e) => e.id == this.markers5[vv5].id
+          );
+
+          this.markers.splice(marknum5, 1);
+        }
+        for (var num5 = 0; num5 < this.markers5.length; num5++) {
+          this.markers.push(this.markers5[num5]);
+        }
+      } else if (this.num3 === 6) {
+        for (var vv6 = 0; vv6 < this.markers6.length; vv6++) {
+          var marknum6 = this.markers.findIndex(
+            (e) => e.id == this.markers6[vv6].id
+          );
+
+          this.markers.splice(marknum6, 1);
+        }
+        for (var num6 = 0; num4 < this.markers6.length; num6++) {
+          this.markers.push(this.markers6[num6]);
+        }
+      } else if (this.num3 === 7) {
+        for (var vv7 = 0; vv7 < this.markers7.length; vv7++) {
+          var marknum7 = this.markers.findIndex(
+            (e) => e.id == this.markers7[vv7].id
+          );
+
+          this.markers.splice(marknum7, 1);
+        }
+        for (var num7 = 0; num7 < this.markers7.length; num7++) {
+          this.markers.push(this.markers7[num7]);
+        }
+      } else if (this.num3 === 8) {
+        for (var vv8 = 0; vv8 < this.markers8.length; vv8++) {
+          var marknum8 = this.markers.findIndex(
+            (e) => e.id == this.markers8[vv8].id
+          );
+
+          this.markers.splice(marknum8, 1);
+        }
+        for (var num8 = 0; num8 < this.markers8.length; num8++) {
+          this.markers.push(this.markers8[num8]);
+        }
+      } else if (this.num3 === 9) {
+        for (var vv9 = 0; vv9 < this.markers9.length; vv9++) {
+          var marknum9 = this.markers.findIndex(
+            (e) => e.id == this.markers9[vv9].id
+          );
+
+          this.markers.splice(marknum9, 1);
+        }
+        for (var num9 = 0; num9 < this.markers9.length; num9++) {
+          this.markers.push(this.markers9[num9]);
+        }
+      } else if (this.num3 === 10) {
+        for (var vv10 = 0; vv10 < this.markers10.length; vv10++) {
+          var marknum10 = this.markers.findIndex(
+            (e) => e.id == this.markers10[vv10].id
+          );
+
+          this.markers.splice(marknum10, 1);
+        }
+        for (var num10 = 0; num10 < this.markers10.length; num10++) {
+          this.markers.push(this.markers10[num10]);
+        }
+      }
+    },
+    async handleright2() {
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.contenttypeid = "32";
       this.right = 2;
       this.btncolor2 = "active";
       this.btncolor = "noneactive";
       this.btncolor3 = "noneactive";
+      this.busanlist10 = [];
+      this.busanlist = [];
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=6`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+
+      const url2 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=6`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url2, { headers });
+      console.log(response);
+
+      this.busanlist = response.data.list;
+      console.log(this.markersTOURIST);
+      console.log(this.markers);
+      this.markers = [];
+      console.log(this.markers1);
+      console.log(this.markers);
+      for (var i = 0; i < this.busanlist10.length; i++) {
+        this.markers.push({
+          id: this.busanlist10[i].title,
+          position: {
+            lat: Number(this.busanlist10[i].ylocation),
+            lng: Number(this.busanlist10[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/3qp9x6.png",
+        });
+      }
+      await this.savemarker2();
     },
-    handleright3() {
+    async handleright3() {
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.contenttypeid = "39";
       this.right = 3;
       this.btncolor2 = "noneactive";
       this.btncolor = "noneactive";
       this.btncolor3 = "active";
+      this.busanlist10 = [];
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=39&areaCode=6`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+      this.markers = [];
+      console.log(this.markers);
+      for (var i = 0; i < this.busanlist10.length; i++) {
+        this.markers.push({
+          id: this.busanlist10[i].title,
+          position: {
+            lat: Number(this.busanlist10[i].ylocation),
+            lng: Number(this.busanlist10[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/3qp9x6.png",
+        });
+      }
+      await this.savemarker2();
     },
   },
 };

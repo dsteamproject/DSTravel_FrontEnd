@@ -206,12 +206,17 @@
 
 <script>
 import { Search } from "@element-plus/icons";
-
+import axios from "axios";
 export default {
   components: {
     Search,
   },
-  created() {
+  async created() {
+    const url = "https://api.ipify.org?format=json";
+    const headers = { "Content-type": "application/json" };
+
+    const response = await axios.get(url, { headers });
+    console.log(response);
     if (this.token !== null) {
       this.logined = true;
     }
@@ -325,7 +330,6 @@ export default {
     async range1() {
       console.log(this.range);
       await this.handlestep3();
-      
     },
     datechange() {
       console.log(this.date);
@@ -368,7 +372,6 @@ export default {
       this.betsec = this.endDate.getTime() - this.startDate.getTime();
       this.betday = this.betsec / 1000 / 60 / 60 / 24;
       console.log(this.betday);
-     
     },
     handlestep1(value) {
       this.step1value = value;
@@ -404,13 +407,14 @@ export default {
       this.step1valuekor = this.kora[0];
       this.step1valueeng = this.kora[1];
       this.dialogVisible = false;
-     
-      if(this.betday > 10){
-        alert("여행일정은 10일을 넘길수 없습니다")
-        return
+
+      if (this.betday > 10) {
+        alert("여행일정은 10일을 넘길수 없습니다");
+        return;
       }
+
       this.$router.push({
-        name: "search",
+        name: "searchbusan",
         query: {
           locationkor: this.step1valuekor,
           locationeng: this.step1valueeng,

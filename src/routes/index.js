@@ -3,7 +3,8 @@ import { createWebHistory, createRouter } from "vue-router";
 import Menu1 from '@/components/Menu1'
 import login from '@/components/login'
 import join from '@/components/join'
-import search from '@/components/search'
+import searchbusan from '@/components/searchbusan'
+import searchseoul from '@/components/searchseoul'
 import airline from '@/components/airline'
 import car from '@/components/car'
 import hotel from '@/components/hotel'
@@ -37,24 +38,26 @@ import sample from '@/components/sample'
 
 const routes = [
     {
-        path: '/', name: "Menu1", component: Menu1 },
-    { path: '/login', name: "login", component: login ,meta :{auth:true} },
+        path: '/', name: "Menu1", component: Menu1
+    },
+    { path: '/login', name: "login", component: login, meta: { auth: true } },
     { path: '/sample', name: "sample", component: sample },
     { path: '/join', name: "join", component: join },
-    { path: '/search', name: "search", component: search },
+    { path: '/searchbusan', name: "searchbusan", component: searchbusan },
+    { path: '/searchseoul', name: "searchseoul", component: searchseoul },
     { path: '/airline', name: "airline", component: airline },
 
     { path: '/car', name: "car", component: car },
-    { path: '/freewrite', name: "freewrite", component: freewrite , meta :{auth2:true}, },
+    { path: '/freewrite', name: "freewrite", component: freewrite, meta: { auth2: true }, },
     { path: '/freecontent', name: "freecontent", component: freecontent },
-    { path: '/freechange', name: "freechange", component: freechange ,meta :{auth2:true} },
+    { path: '/freechange', name: "freechange", component: freechange, meta: { auth2: true } },
 
     { path: '/vs', name: "vs", component: vs },
     { path: '/vsseoul', name: "vsseoul", component: vsseoul },
     { path: '/hotel', name: "hotel", component: hotel },
     { path: '/hotelcontent', name: "hotelcontent", component: hotelcontent },
     {
-        path: '/find', name: "find", component: find, meta :{auth:true},
+        path: '/find', name: "find", component: find, meta: { auth: true },
         children: [
             { path: '/find/id', component: findid },
             { path: '/find/pw', component: findpw }
@@ -70,26 +73,26 @@ const routes = [
         ]
     },
     {
-        path: '/mypage', name: "mypage", component: mypage, meta :{auth2:true},
+        path: '/mypage', name: "mypage", component: mypage, meta: { auth2: true },
         children: [
-            {path:'/mypage/mypw', component:mypagemypw},
-            {path:'/mypage/myinfo',name:"mypagemyinfo", component:mypagemyinfo} ,
+            { path: '/mypage/mypw', component: mypagemypw },
+            { path: '/mypage/myinfo', name: "mypagemyinfo", component: mypagemyinfo },
             {
                 path: '/mypage/myboard', component: mypagemyboard,
                 children: [
-                    {path:'/mypage/myboard/mbwrite', component:mbwrite},
-                    {path:'/mypage/myboard/mblike', component:mblike},
+                    { path: '/mypage/myboard/mbwrite', component: mbwrite },
+                    { path: '/mypage/myboard/mblike', component: mblike },
                 ]
             },
             {
                 path: '/mypage/mylike', component: mypagemylike,
                 children: [
-                    {path:'/mypage/mylike/mmtr', component:mytr},
-                    {path:'/mypage/mylike/mmho', component:myho},
+                    { path: '/mypage/mylike/mmtr', component: mytr },
+                    { path: '/mypage/mylike/mmho', component: myho },
                 ]
             },
-            {path:'/mypage/mymap', component:mypagemymap},
-            {path:'/mypage/mydel', component:mypagemydel},
+            { path: '/mypage/mymap', component: mypagemymap },
+            { path: '/mypage/mydel', component: mypagemydel },
         ]
     },
 ];

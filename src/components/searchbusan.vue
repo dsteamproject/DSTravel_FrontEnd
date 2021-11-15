@@ -1,0 +1,3615 @@
+<template>
+  <div class="wrap" style="position: fixed">
+    <div class="newleft" v-if="newleft === 'on'">
+      <p class="nltext1">일정</p>
+      <button class="nltext2" @click="allview">전체일정</button>
+      <button
+        v-for="item in traveldate"
+        :key="item"
+        class="lastleft_bth"
+        @click="handledatego(item)"
+      >
+        DAY{{ item + 1 }}
+      </button>
+    </div>
+    <div class="left1">
+      <div v-if="newleft === 'off'">
+        <h3 @change="locationchange">
+          {{ this.$route.query.locationkor }}
+        </h3>
+        <span class="sub_area">{{ this.$route.query.locationeng }}</span
+        ><br />
+        <span class="day">{{ this.$route.query.betday }}day</span><br />
+
+        <a href="#" class="full_day"
+          >{{ this.$route.query.start }} - {{ this.$route.query.end }}</a
+        >
+
+        <div class="demo-collapse">
+          <div>
+            <h5>여행일정</h5>
+            <button @click="numnegative" class="prev">&lt;</button>
+            <el-input-number
+              v-model="num3"
+              :controls="false"
+              :min="1"
+              :max="Number(this.$route.query.betday)"
+              controls-position="right"
+              @change="handleChange"
+            /><span>일차</span>
+            <button @click="numplus" class="next">&gt;</button>
+          </div>
+
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 1"
+            v-on:after-enter="fadeNext"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice1"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice1.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in" v-if="index === this.loadnumb">
+                    <p v-for="(item, i) in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span
+                          v-if="i !== this.loadtext.length - 1"
+                          style="font-size: 8px"
+                          >▼</span
+                        >
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 2"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice2"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice2.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 3"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice3"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice3.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 4"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice4"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice4.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 5"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice5"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice5.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 6"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice6"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice6.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 7"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice7"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice7.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 8"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice8"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice8.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 9"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice9"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice9.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+          <ul
+            style="overflow: auto; height: 530px"
+            class="rightscroll"
+            v-if="this.num3 === 10"
+          >
+            <transition-group name="list" tag="p">
+              <li
+                v-for="(list, index) in choice10"
+                :key="index"
+                class="mytravel_list"
+              >
+                <div class="mytimg">
+                  <img
+                    :src="list.firstimage"
+                    style="height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="myt2">
+                  <span class="mylist_text">{{ list.title }}</span>
+                  <br />
+                  <button class="loadinfo" @click="loadinfo(list, index)">
+                    상세경로
+                  </button>
+                  <img
+                    :src="`/REST/travel/image${index + 1}`"
+                    class="ml_img"
+                    style="width: 19px; height: 20px; vertical-align: bottom"
+                  />
+                </div>
+                <div class="myt3">
+                  <button
+                    class="l_btn btn11"
+                    v-if="index !== 0"
+                    @click="listup(list, index)"
+                  >
+                    <img src="../assets/upi.png" /></button
+                  ><button
+                    class="l_btn btn12"
+                    v-if="index !== this.choice10.length - 1"
+                    @click="listdown(list, index)"
+                  >
+                    <img src="../assets/doi.png" /></button
+                  ><button class="l_btn btn13" @click="listdelete(list)">
+                    <img
+                      src="../assets/x2.png"
+                      style="width: 10px; height: 10px"
+                    />
+                  </button>
+                </div>
+
+                <div class="myt4" v-if="loadtexton === true">
+                  <div class="myt4_in">
+                    <p v-for="item in loadtext" :key="item">
+                      <span class="loadcss" v-if="index === this.loadnumb"
+                        >{{ item }}
+                        <br />
+                        <span style="font-size: 8px">▼</span></span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+        </div>
+      </div>
+      <div v-if="newleft0 === 'on'">
+        <ul class="alldate">
+          <li class="alldatetitle" v-if="this.choice1.length > 0">Day 1</li>
+          <li class="alldatecontent" v-for="item in choice1" :key="item">
+            <div class="ads" style="width: 10%; float: left">
+              <img :src="item.firstimage" style="width: 50px; height: 50px" />
+            </div>
+            <div class="ads2" style="width: 90%; float: left">
+              <span class="choice_title"> {{ item.title }}</span>
+            </div>
+          </li>
+
+          <li class="alldatetitle" v-if="this.choice2.length > 0">Day 2</li>
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice2"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+          <li class="alldatetitle" v-if="this.choice3.length > 0">Day 3</li>
+          <li class="alldatecontent" v-for="item in choice3" :key="item">
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+          <li class="alldatetitle" v-if="this.choice4.length > 0">Day 4</li>
+          <li class="alldatecontent" v-for="item in choice4" :key="item">
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+          <li class="alldatetitle" v-if="this.choice5.length > 0">Day 5</li>
+          <li class="alldatecontent" v-for="item in choice5" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice6.length > 0">Day 6</li>
+          <li class="alldatecontent" v-for="item in choice6" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice7.length > 0">Day 7</li>
+          <li class="alldatecontent" v-for="item in choice7" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice8.length > 0">Day 8</li>
+          <li class="alldatecontent" v-for="item in choice8" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice9.length > 0">Day 9</li>
+          <li class="alldatecontent" v-for="item in choice9" :key="item">
+            {{ item.title }}
+          </li>
+          <li class="alldatetitle" v-if="this.choice10.length > 0">Day 10</li>
+          <li class="alldatecontent" v-for="item in choice10" :key="item">
+            {{ item.title }}
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 0">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice1"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 1">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice2"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 2">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice3"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 3">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice4"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 4">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice5"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 5">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice6"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 6">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice7"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 7">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice8"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 8">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice9"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div v-if="newleft1 === 9">
+        <ul class="alldate">
+          <li
+            class="alldatecontent"
+            v-for="(item, index) in choice10"
+            :key="item"
+          >
+            <span class="choice_title">
+              <span class="choice_no">NO.{{ index + 1 }}</span>
+              {{ item.title }}</span
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div :class="centercss">
+      <GMapMap
+        ref="myMapRef"
+        :key="key"
+        :center="center"
+        :zoom="zoom"
+        map-type-id="roadmap"
+        style="width: 100vw; height: 20rem"
+        @click="mark"
+        class="gmap"
+        :options="{
+          zoomControl: false,
+          mapTypeControl: false,
+          scaleControl: false,
+          streetViewControl: false,
+          rotateControl: false,
+          fullscreenControl: false,
+        }"
+      >
+        <GMapCluster
+          :minimumClusterSize="5"
+          :zoomOnClick="true"
+          :style="clusterIcon"
+          imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m"
+        >
+          <GMapMarker
+            :key="(index, componentKey)"
+            v-for="(m, index) in markers"
+            :icon="m.icon"
+            :position="m.position"
+            :clickable="true"
+            :draggable="false"
+            @click="openMarker(m.id)"
+            v-on:click="center = m.position"
+            @closeclick="openMarker(null)"
+          >
+            <GMapPolyline
+              v-if="this.num3 === 1"
+              :options="options"
+              :path="path1"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 2"
+              :options="options"
+              :path="path2"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 3"
+              :options="options"
+              :path="path3"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 4"
+              :options="options"
+              :path="path4"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 5"
+              :options="options"
+              :path="path5"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 6"
+              :options="options"
+              :path="path6"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 7"
+              :options="options"
+              :path="path7"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 8"
+              :options="options"
+              :path="path8"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 9"
+              :options="options"
+              :path="path9"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+            <GMapPolyline
+              v-if="this.num3 === 10"
+              :options="options"
+              :path="path10"
+              :key="componentKey"
+              :editable="false"
+              ref="polyline"
+            />
+
+            <GMapInfoWindow
+              :closeclick="true"
+              @closeclick="openMarker(null)"
+              :opened="openedMarkerID === m.id"
+            >
+              <div>{{ m.id }}</div>
+            </GMapInfoWindow>
+          </GMapMarker>
+        </GMapCluster>
+      </GMapMap>
+      <button class="addmarker" @click="mapput">장소등록</button>
+      <button class="addmarker2" @click="lastaction">일정생성</button>
+      <div class="lo"></div>
+    </div>
+    <div :class="rightcss">
+      <div class="rightfull_btn" v-if="rightc === 'off'" @click="handlefull">
+        <span>◀</span>
+      </div>
+      <div class="rightfull_btn" v-if="rightc === 'on'" @click="handlefull2">
+        <span>▶</span>
+      </div>
+      <div
+        style="float: left; padding: 10px; box-sizing: border-box; width: 95%"
+      >
+        <button id="right_btn" @click="handleright" v-bind:class="btncolor">
+          관광지
+        </button>
+        <button id="right_btn" @click="handleright2" v-bind:class="btncolor2">
+          숙소
+        </button>
+        <button id="right_btn" @click="handleright3" v-bind:class="btncolor3">
+          음식점
+        </button>
+        <div class="right_content" v-if="right === 1">
+          <input
+            type="text"
+            class="searchinput"
+            v-model="rightsearch"
+            placeholder="검색어를 입력하세요"
+            v-on:keyup.enter="submit"
+          />
+          <ul class="travel_list">
+            <li v-for="list in busanlist10" :key="list" :class="listmapcss">
+              <div
+                class="imgdiv"
+                @mouseout="outMarker1(list)"
+                @mouseover="openMarker1(list)"
+              >
+                <img :src="list.firstimage" style="height: 100px" />
+              </div>
+              <div class="textdiv">
+                <span class="td_title">{{ list.title }}</span>
+              </div>
+              <button class="info_btn" @click="openinfo(list)">i</button>
+              <button class="plus_btn" @click="listpush(list)">+</button>
+            </li>
+          </ul>
+        </div>
+        <div class="right_content" v-if="right === 2">
+          <input
+            type="text"
+            class="searchinput"
+            v-model="rightsearch2"
+            placeholder="검색어를 입력하세요"
+            v-on:keyup.enter="submit2"
+          />
+          <ul class="travel_list">
+            <li v-for="list in busanlist10" :key="list" :class="listmapcss">
+              <div
+                class="imgdiv"
+                @mouseout="outMarker1(list)"
+                @mouseover="openMarker1(list)"
+              >
+                <img :src="list.firstimage" style="height: 100px" />
+              </div>
+              <div class="textdiv">
+                <span class="td_title">{{ list.title }}</span>
+              </div>
+              <button class="info_btn" @click="openinfo(list)">i</button>
+              <button class="plus_btn" @click="listpush(list)">+</button>
+            </li>
+          </ul>
+        </div>
+        <div class="right_content" v-if="right === 3">
+          <input
+            type="text"
+            class="searchinput"
+            v-model="rightsearch3"
+            placeholder="검색어를 입력하세요"
+            v-on:keyup.enter="submit3"
+          />
+          <ul class="travel_list">
+            <li v-for="list in busanlist10" :key="list" :class="listmapcss">
+              <div
+                class="imgdiv"
+                @mouseout="outMarker1(list)"
+                @mouseover="openMarker1(list)"
+              >
+                <img :src="list.firstimage" style="height: 100px" />
+              </div>
+              <div class="textdiv">
+                <span class="td_title">{{ list.title }}</span>
+              </div>
+              <button class="info_btn" @click="openinfo(list)">i</button>
+              <button class="plus_btn" @click="listpush(list)">+</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <el-dialog
+    v-model="dialogVisible"
+    title="위치 추가"
+    width="30%"
+    :before-close="handleClose"
+    class="sasa"
+  >
+    <span class="ind"
+      >위도,경도가 뜨지않을경우 지도에서 추가할려는 장소를 클릭해주세요</span
+    ><br /><br />
+    위도: {{ this.sublat }} , 경도: {{ this.sublng }}<br /><br />
+    위치 이름:<input type="text" />
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">취소</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >완료</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
+
+  <el-dialog
+    v-model="dialogVisible1"
+    :title="this.dialoglist.title"
+    top="30vh"
+    width="50%"
+    :before-close="handleClose"
+    append-to-body
+    class="sasa"
+  >
+    <div>
+      <div class="dialogimg">
+        <img :src="this.dialoglist.firstimage" style="height: 310px" />
+      </div>
+      <div class="dialogtext">
+        <span>{{ this.dialoglist.title }}</span>
+      </div>
+      <div style="clear: both"></div>
+    </div>
+  </el-dialog>
+</template>
+
+<script>
+import { ElMessage } from "element-plus";
+import axios from "axios";
+export default {
+  name: "searchbusan",
+
+  async created() {
+    await this.replacerefresh();
+
+    this.contenttypeid = "12";
+    console.log(this.$route.query.betday);
+    for (var o = 0; o < this.$route.query.betday; o++) {
+      this.traveldate.push(o);
+    }
+    console.log(this.traveldate);
+    // 오른쪽 상세창
+    await this.rightrefresh();
+
+    // ========
+    await this.googlemapopen();
+  },
+  data() {
+    return {
+      listmapcss: "listmap",
+      areacode: "",
+      markersTOURIST: [],
+      markershotel: [],
+      markersfood: [],
+      contenttypeid: "",
+      rightsearch: "",
+      rightsearch2: "",
+      rightsearch3: "",
+      newleft0: "off",
+      newleft: "off",
+      newleft1: "",
+      key: 1,
+      num3: 1,
+      startdate: 1,
+      traveldate: [],
+      abc: "dialog <br> <br/> adsdd",
+      startnum: 0,
+      startnum2: 0,
+      startnum3: 0,
+      startnum4: 0,
+      startnum5: 0,
+      startnum6: 0,
+      startnum7: 0,
+      startnum8: 0,
+      startnum9: 0,
+      startnum10: 0,
+      endnum: 1,
+      endnum2: 1,
+      endnum3: 1,
+      endnum4: 1,
+      endnum5: 1,
+      endnum6: 1,
+      endnum7: 1,
+      endnum8: 1,
+      endnum9: 1,
+      endnum10: 1,
+      middleload1: [], // 경로
+      middleload: [], // 경로
+      componentKey: 0,
+      path1: [],
+      path2: [],
+      path3: [],
+      path4: [],
+      path5: [],
+      path6: [],
+      path7: [],
+      path8: [],
+      path9: [],
+      path10: [],
+      rightc: "off",
+      centercss: "center1",
+      rightcss: "right1",
+      dialoglist: [],
+      dialogcontent: "",
+      choice1: [],
+      choice2: [],
+      choice3: [],
+      choice4: [],
+      choice5: [],
+      choice6: [],
+      choice7: [],
+      choice8: [],
+      choice9: [],
+      choice10: [],
+
+      busan10ll: [],
+      busanlist10: [],
+      busanlist: [],
+      lockor: this.$route.query.locationkor,
+      zoom: 14,
+      dialogVisible: false,
+      dialogVisible1: false,
+      sublat: "",
+      sublng: "",
+      chclass: "chcss",
+      btncolor: "active",
+      btncolor2: "noneactive",
+      btncolor3: "noneactive",
+      right: 1,
+      check: 1,
+      num: 0,
+      num2: 0,
+      num1: 0,
+      openedMarkerID: null,
+      center: { lat: 0, lng: 0 },
+      markers: [],
+      markers1: [],
+      markers2: [],
+      markers3: [],
+      markers4: [],
+      markers5: [],
+      markers6: [],
+      markers7: [],
+      markers8: [],
+      markers9: [],
+      markers10: [],
+      numberp: [],
+      loadtexton: false,
+      options: {
+        strokeColor: "#FF0000",
+        strokeWeight: "3",
+      },
+      loadtext: [],
+      loadfirst: [],
+      snum1: 0,
+      lnum1: 1,
+      loadnumb: "",
+    };
+  },
+  async mounted() {
+    console.log(this.$refs.myMapRef);
+
+    this.$refs.myMapRef.$mapPromise.then((map) => {
+      map.addListener("click", (mapsMouseEvent) => {
+        console.log(mapsMouseEvent.latLng.lat());
+        console.log(mapsMouseEvent.latLng.lng());
+      });
+    });
+  },
+  watch: {
+    async $route(to, from) {
+      console.log(to);
+      console.log(from);
+      await this.replacerefresh();
+      await this.rightrefresh();
+      await this.googlemapopen();
+    },
+  },
+
+  methods: {
+    async googlemapopen() {
+      // 구글맵 화면용
+      //const url = `/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
+      const url = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=${this.areacode}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+
+      this.busanlist = response.data.list;
+      this.markersTOURIST = response.data.list;
+      for (var i = 0; i < this.busanlist.length; i++) {
+        this.markers.push({
+          id: this.busanlist[i].title,
+          position: {
+            lat: Number(this.busanlist[i].ylocation),
+            lng: Number(this.busanlist[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/3qp9x6.png",
+        });
+      }
+    },
+    mapput() {
+      ElMessage({
+        message: "등록하실려는 장소를 지도에서 클릭해주세요",
+
+        type: "success",
+      });
+
+      //this.dialogVisible = true;
+    },
+    async loadinfo(i, index) {
+      if (this.num3 === 1) {
+        if (this.choice1.length === index + 1) {
+          alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+          return;
+        }
+      } else if (this.choice2.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice3.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice4.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice5.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice6.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice7.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice8.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice9.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      } else if (this.choice10.length === index + 1) {
+        alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
+        return;
+      }
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+      }
+
+      this.path1 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      let chonum;
+      if (this.num3 === 1) {
+        chonum = this.choice1.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 2) {
+        chonum = this.choice2.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 3) {
+        chonum = this.choice3.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 4) {
+        chonum = this.choice4.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 5) {
+        chonum = this.choice5.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 6) {
+        chonum = this.choice6.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 7) {
+        chonum = this.choice7.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 8) {
+        chonum = this.choice8.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 9) {
+        chonum = this.choice9.findIndex((e) => e.title == i.title);
+      } else if (this.num3 === 10) {
+        chonum = this.choice10.findIndex((e) => e.title == i.title);
+      }
+      this.loadnumb = chonum;
+      console.log(this.choice1);
+      this.loadtext = [];
+      this.loadtexton = true;
+      console.log(i);
+      console.log(index);
+      let url;
+      if (this.num3 === 1) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice1[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice1[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice1[Number(index)].xlocaion
+        }&startY=${this.choice1[Number(index)].ylocation}`;
+      } else if (this.num3 === 2) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice2[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice2[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice2[Number(index)].xlocaion
+        }&startY=${this.choice2[Number(index)].ylocation}`;
+      } else if (this.num3 === 3) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice3[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice3[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice3[Number(index)].xlocaion
+        }&startY=${this.choice3[Number(index)].ylocation}`;
+      } else if (this.num3 === 4) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice4[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice4[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice4[Number(index)].xlocaion
+        }&startY=${this.choice4[Number(index)].ylocation}`;
+      } else if (this.num3 === 5) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice5[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice5[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice5[Number(index)].xlocaion
+        }&startY=${this.choice5[Number(index)].ylocation}`;
+      } else if (this.num3 === 6) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice6[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice6[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice6[Number(index)].xlocaion
+        }&startY=${this.choice6[Number(index)].ylocation}`;
+      } else if (this.num3 === 7) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice7[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice7[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice7[Number(index)].xlocaion
+        }&startY=${this.choice7[Number(index)].ylocation}`;
+      } else if (this.num3 === 8) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice8[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice8[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice8[Number(index)].xlocaion
+        }&startY=${this.choice8[Number(index)].ylocation}`;
+      } else if (this.num3 === 9) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice9[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice9[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice9[Number(index)].xlocaion
+        }&startY=${this.choice9[Number(index)].ylocation}`;
+      } else if (this.num3 === 10) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice10[Number(index + 1)].xlocaion
+        }&endY=${
+          this.choice10[Number(index + 1)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice10[Number(index)].xlocaion
+        }&startY=${this.choice10[Number(index)].ylocation}`;
+      }
+      const headers = {};
+      const response = await axios.get(url, { headers });
+      console.log(response.data);
+      for (var aa = 1; aa < response.data.features.length; aa++) {
+        console.log(response.data.features[aa].properties.description);
+        this.loadtext.push(response.data.features[aa].properties.description);
+      }
+      for (var bb = 0; bb < response.data.features.length; bb++) {
+        console.log(typeof response.data.features[bb].geometry.coordinates[0]);
+        if (
+          typeof response.data.features[bb].geometry.coordinates[0] === "number"
+        ) {
+          this.loadfirst.push(response.data.features[bb].geometry.coordinates);
+        } else {
+          this.loadfirst.push(
+            response.data.features[bb].geometry.coordinates[0]
+          );
+        }
+      }
+
+      this.loadfirst.splice(0, 1);
+      this.loadfirst.splice(this.loadfirst.length - 1, 1);
+      console.log(this.loadfirst);
+      console.log(this.loadtext);
+      for (var cc = 0; cc < this.loadfirst.length; cc++) {
+        this.markers.push({
+          id: this.loadtext[cc],
+          position: {
+            lat: Number(this.loadfirst[cc][1]),
+            lng: Number(this.loadfirst[cc][0]),
+          },
+          icon: "https://ifh.cc/g/u6WanN.png",
+        });
+      }
+      console.log(this.loadfirst);
+      console.log(this.loadtext);
+      for (var e = 1; e < response.data.features.length; e++) {
+        if (response.data.features[e].geometry.coordinates.length === 2) {
+          if (response.data.features[e].geometry.coordinates[0].length === 2) {
+            console.log("123");
+          } else {
+            this.middleload.push(
+              response.data.features[e].geometry.coordinates
+            );
+          }
+        } else {
+          for (
+            var q = 0;
+            q < response.data.features[e].geometry.coordinates.length;
+            q++
+          ) {
+            this.middleload.push(
+              response.data.features[e].geometry.coordinates[q]
+            );
+          }
+        }
+      }
+      for (var a = 0; a < this.middleload.length; a++) {
+        if (this.num3 === 1) {
+          this.path1.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 2) {
+          this.path2.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 3) {
+          this.path3.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 4) {
+          this.path4.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 5) {
+          this.path5.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 6) {
+          this.path6.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 7) {
+          this.path7.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 8) {
+          this.path8.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 9) {
+          this.path9.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 10) {
+          this.path10.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        }
+      }
+      this.componentKey += 1;
+    },
+    async submit() {
+      // 작업중
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.busanlist10 = response.data.list;
+    },
+    async submit2() {
+      // 작업중
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch2}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.busanlist10 = response.data.list;
+    },
+    async submit3() {
+      // 작업중
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch3}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.busanlist10 = response.data.list;
+    },
+    async listdelete(i) {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum2 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum2, 1);
+      }
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.loadtexton = false;
+      console.log(i);
+      var chonum = this.choice1.findIndex((e) => e.title == i.title);
+      console.log(chonum);
+      this.choice1.splice(chonum, 1);
+      var marknum = this.markers.findIndex((e) => e.id == i.title);
+      console.log(marknum);
+
+      this.markers[marknum].icon = "https://ifh.cc/g/3qp9x6.png";
+
+      for (var cc = 0; cc < this.choice1.length; cc++) {
+        console.log(this.choice1[cc].title);
+        var marknum1 = this.markers.findIndex(
+          (e) => e.id == this.choice1[cc].title
+        );
+        console.log(marknum1);
+        this.markers[marknum1].icon = `http://127.0.0.1:8080/REST/travel/image${
+          cc + 1
+        }`;
+      }
+
+      //"https://ifh.cc/g/3qp9x6.png"
+    },
+    async listdown(i) {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+      }
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path4 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.loadtexton = false;
+      console.log(i);
+      console.log(this.choice1);
+
+      let chonum;
+      let list;
+      if (this.num3 === 1) {
+        chonum = this.choice1.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+        list = this.choice1.splice(chonum, 1);
+        console.log(list);
+        this.choice1.splice(chonum + 1, 0, list[0]);
+
+        for (var cc = 0; cc < this.choice1.length; cc++) {
+          console.log(this.choice1[cc].title);
+          var marknum = this.markers.findIndex(
+            (e) => e.id == this.choice1[cc].title
+          );
+          console.log(marknum);
+          this.markers[
+            marknum
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc + 1}`;
+        }
+      } else if (this.num3 === 2) {
+        chonum = this.choice2.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice2.splice(chonum, 1);
+        console.log(list);
+        this.choice2.splice(chonum + 1, 0, list[0]);
+
+        for (var cc2 = 0; cc2 < this.choice2.length; cc2++) {
+          console.log(this.choice2[cc2].title);
+          var marknum2 = this.markers.findIndex(
+            (e) => e.id == this.choice2[cc2].title
+          );
+
+          this.markers[
+            marknum2
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc2 + 1}`;
+        }
+      } else if (this.num3 === 3) {
+        chonum = this.choice3.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice3.splice(chonum, 1);
+        console.log(list);
+        this.choice3.splice(chonum + 1, 0, list[0]);
+
+        for (var cc3 = 0; cc3 < this.choice3.length; cc3++) {
+          console.log(this.choice3[cc3].title);
+          var marknum3 = this.markers.findIndex(
+            (e) => e.id == this.choice3[cc3].title
+          );
+
+          this.markers[
+            marknum3
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc3 + 1}`;
+        }
+      } else if (this.num3 === 4) {
+        chonum = this.choice4.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice4.splice(chonum, 1);
+        console.log(list);
+        this.choice4.splice(chonum + 1, 0, list[0]);
+
+        for (var cc4 = 0; cc4 < this.choice4.length; cc4++) {
+          console.log(this.choice4[cc4].title);
+          var marknum4 = this.markers.findIndex(
+            (e) => e.id == this.choice4[cc4].title
+          );
+
+          this.markers[
+            marknum4
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc4 + 1}`;
+        }
+      } else if (this.num3 === 5) {
+        chonum = this.choice5.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice5.splice(chonum, 1);
+        console.log(list);
+        this.choice5.splice(chonum + 1, 0, list[0]);
+        for (var cc5 = 0; cc5 < this.choice2.length; cc5++) {
+          console.log(this.choice5[cc5].title);
+          var marknum5 = this.markers.findIndex(
+            (e) => e.id == this.choice5[cc5].title
+          );
+
+          this.markers[
+            marknum5
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc5 + 1}`;
+        }
+      } else if (this.num3 === 6) {
+        chonum = this.choice6.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice6.splice(chonum, 1);
+        console.log(list);
+        this.choice6.splice(chonum + 1, 0, list[0]);
+        for (var cc6 = 0; cc6 < this.choice6.length; cc6++) {
+          console.log(this.choice6[cc6].title);
+          var marknum6 = this.markers.findIndex(
+            (e) => e.id == this.choice2[cc6].title
+          );
+
+          this.markers[
+            marknum6
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc6 + 1}`;
+        }
+      } else if (this.num3 === 7) {
+        chonum = this.choice7.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice7.splice(chonum, 1);
+        console.log(list);
+        this.choice7.splice(chonum + 1, 0, list[0]);
+        for (var cc7 = 0; cc7 < this.choice7.length; cc7++) {
+          console.log(this.choice7[cc7].title);
+          var marknum7 = this.markers.findIndex(
+            (e) => e.id == this.choice7[cc7].title
+          );
+
+          this.markers[
+            marknum7
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc7 + 1}`;
+        }
+      } else if (this.num3 === 8) {
+        chonum = this.choice8.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice8.splice(chonum, 1);
+        console.log(list);
+        this.choice8.splice(chonum + 1, 0, list[0]);
+        for (var cc8 = 0; cc8 < this.choice8.length; cc8++) {
+          console.log(this.choice2[cc8].title);
+          var marknum8 = this.markers.findIndex(
+            (e) => e.id == this.choice8[cc8].title
+          );
+
+          this.markers[
+            marknum8
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc8 + 1}`;
+        }
+      } else if (this.num3 === 9) {
+        chonum = this.choice9.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice9.splice(chonum, 1);
+        console.log(list);
+        this.choice9.splice(chonum + 1, 0, list[0]);
+        for (var cc9 = 0; cc9 < this.choice9.length; cc9++) {
+          console.log(this.choice2[cc9].title);
+          var marknum9 = this.markers.findIndex(
+            (e) => e.id == this.choice9[cc9].title
+          );
+
+          this.markers[
+            marknum9
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc9 + 1}`;
+        }
+      } else if (this.num3 === 10) {
+        chonum = this.choice10.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice10.splice(chonum, 1);
+        console.log(list);
+        this.choice10.splice(chonum + 1, 0, list[0]);
+        for (var cc10 = 0; cc10 < this.choice10.length; cc10++) {
+          console.log(this.choice10[cc10].title);
+          var marknum10 = this.markers.findIndex(
+            (e) => e.id == this.choice10[cc10].title
+          );
+
+          this.markers[
+            marknum10
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc10 + 1}`;
+        }
+      }
+    },
+    async listup(i, index) {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+      }
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path4 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.loadtexton = false;
+      console.log(this.choice1.length);
+      console.log(i);
+      console.log(index + 1);
+      console.log(this.choice1);
+      let chonum;
+      let list;
+      if (this.num3 === 1) {
+        chonum = this.choice1.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+        list = this.choice1.splice(chonum, 1);
+        console.log(list);
+        this.choice1.splice(chonum - 1, 0, list[0]);
+
+        for (var cc = 0; cc < this.choice1.length; cc++) {
+          console.log(this.choice1[cc].title);
+          var marknum = this.markers.findIndex(
+            (e) => e.id == this.choice1[cc].title
+          );
+          console.log(marknum);
+          this.markers[
+            marknum
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc + 1}`;
+        }
+      } else if (this.num3 === 2) {
+        chonum = this.choice2.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice2.splice(chonum, 1);
+        console.log(list);
+        this.choice2.splice(chonum - 1, 0, list[0]);
+
+        for (var cc2 = 0; cc2 < this.choice2.length; cc2++) {
+          console.log(this.choice2[cc2].title);
+          var marknum2 = this.markers.findIndex(
+            (e) => e.id == this.choice2[cc2].title
+          );
+
+          this.markers[
+            marknum2
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc2 + 1}`;
+        }
+      } else if (this.num3 === 3) {
+        chonum = this.choice3.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice3.splice(chonum, 1);
+        console.log(list);
+        this.choice3.splice(chonum - 1, 0, list[0]);
+
+        for (var cc3 = 0; cc3 < this.choice3.length; cc3++) {
+          console.log(this.choice3[cc3].title);
+          var marknum3 = this.markers.findIndex(
+            (e) => e.id == this.choice3[cc3].title
+          );
+
+          this.markers[
+            marknum3
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc3 + 1}`;
+        }
+      } else if (this.num3 === 4) {
+        chonum = this.choice4.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice4.splice(chonum, 1);
+        console.log(list);
+        this.choice4.splice(chonum - 1, 0, list[0]);
+
+        for (var cc4 = 0; cc4 < this.choice4.length; cc4++) {
+          console.log(this.choice4[cc4].title);
+          var marknum4 = this.markers.findIndex(
+            (e) => e.id == this.choice4[cc4].title
+          );
+
+          this.markers[
+            marknum4
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc4 + 1}`;
+        }
+      } else if (this.num3 === 5) {
+        chonum = this.choice5.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice5.splice(chonum, 1);
+        console.log(list);
+        this.choice5.splice(chonum - 1, 0, list[0]);
+        for (var cc5 = 0; cc5 < this.choice2.length; cc5++) {
+          console.log(this.choice5[cc5].title);
+          var marknum5 = this.markers.findIndex(
+            (e) => e.id == this.choice5[cc5].title
+          );
+
+          this.markers[
+            marknum5
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc5 + 1}`;
+        }
+      } else if (this.num3 === 6) {
+        chonum = this.choice6.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice6.splice(chonum, 1);
+        console.log(list);
+        this.choice6.splice(chonum - 1, 0, list[0]);
+        for (var cc6 = 0; cc6 < this.choice6.length; cc6++) {
+          console.log(this.choice6[cc6].title);
+          var marknum6 = this.markers.findIndex(
+            (e) => e.id == this.choice2[cc6].title
+          );
+
+          this.markers[
+            marknum6
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc6 + 1}`;
+        }
+      } else if (this.num3 === 7) {
+        chonum = this.choice7.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice7.splice(chonum, 1);
+        console.log(list);
+        this.choice7.splice(chonum - 1, 0, list[0]);
+        for (var cc7 = 0; cc7 < this.choice7.length; cc7++) {
+          console.log(this.choice7[cc7].title);
+          var marknum7 = this.markers.findIndex(
+            (e) => e.id == this.choice7[cc7].title
+          );
+
+          this.markers[
+            marknum7
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc7 + 1}`;
+        }
+      } else if (this.num3 === 8) {
+        chonum = this.choice8.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice8.splice(chonum, 1);
+        console.log(list);
+        this.choice8.splice(chonum - 1, 0, list[0]);
+        for (var cc8 = 0; cc8 < this.choice8.length; cc8++) {
+          console.log(this.choice2[cc8].title);
+          var marknum8 = this.markers.findIndex(
+            (e) => e.id == this.choice8[cc8].title
+          );
+
+          this.markers[
+            marknum8
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc8 + 1}`;
+        }
+      } else if (this.num3 === 9) {
+        chonum = this.choice9.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice9.splice(chonum, 1);
+        console.log(list);
+        this.choice9.splice(chonum - 1, 0, list[0]);
+        for (var cc9 = 0; cc9 < this.choice9.length; cc9++) {
+          console.log(this.choice2[cc9].title);
+          var marknum9 = this.markers.findIndex(
+            (e) => e.id == this.choice9[cc9].title
+          );
+
+          this.markers[
+            marknum9
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc9 + 1}`;
+        }
+      } else if (this.num3 === 10) {
+        chonum = this.choice10.findIndex((e) => e.title == i.title);
+        console.log(chonum);
+
+        list = this.choice10.splice(chonum, 1);
+        console.log(list);
+        this.choice10.splice(chonum - 1, 0, list[0]);
+        for (var cc10 = 0; cc10 < this.choice10.length; cc10++) {
+          console.log(this.choice10[cc10].title);
+          var marknum10 = this.markers.findIndex(
+            (e) => e.id == this.choice10[cc10].title
+          );
+
+          this.markers[
+            marknum10
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${cc10 + 1}`;
+        }
+      }
+    },
+    allview() {
+      this.newleft0 = "on";
+      this.newleft1 = "off";
+    },
+    handledatego(i) {
+      console.log(i);
+      this.newleft1 = i;
+      this.newleft0 = "off";
+    },
+    lastaction() {
+      this.rightcss = "right3";
+      this.centercss = "center3";
+      this.newleft = "on";
+      this.newleft0 = "on";
+      console.log(this.choice1);
+    },
+    // 여행일차 변경시 선택된 마커 변경
+    numchagnelist() {
+      if (this.num3 === 1) {
+        for (var ii = 0; ii < this.markers1.length; ii++) {
+          var marknum5 = this.markers.findIndex(
+            (e) => e.id == this.markers1[ii].id
+          );
+          this.markers[marknum5].icon = this.markers1[ii].icon;
+        }
+      } else if (this.num3 === 2) {
+        for (var ii2 = 0; ii2 < this.markers2.length; ii2++) {
+          var marknum6 = this.markers.findIndex(
+            (e) => e.id == this.markers2[ii2].id
+          );
+          this.markers[marknum6].icon = this.markers2[ii2].icon;
+        }
+      } else if (this.num3 === 3) {
+        for (var ii3 = 0; ii3 < this.markers3.length; ii3++) {
+          var marknum7 = this.markers.findIndex(
+            (e) => e.id == this.markers3[ii3].id
+          );
+          this.markers[marknum7].icon = this.markers3[ii3].icon;
+        }
+      } else if (this.num3 === 4) {
+        for (var ii4 = 0; ii4 < this.markers4.length; ii4++) {
+          var marknum8 = this.markers.findIndex(
+            (e) => e.id == this.markers4[ii4].id
+          );
+          this.markers[marknum8].icon = this.markers4[ii4].icon;
+        }
+      } else if (this.num3 === 5) {
+        for (var ii5 = 0; ii5 < this.markers5.length; ii5++) {
+          var marknum9 = this.markers.findIndex(
+            (e) => e.id == this.markers5[ii5].id
+          );
+          this.markers[marknum9].icon = this.markers5[ii5].icon;
+        }
+      } else if (this.num3 === 6) {
+        for (var ii6 = 0; ii6 < this.markers6.length; ii6++) {
+          var marknum10 = this.markers.findIndex(
+            (e) => e.id == this.markers6[ii6].id
+          );
+          this.markers[marknum10].icon = this.markers6[ii6].icon;
+        }
+      } else if (this.num3 === 7) {
+        for (var ii7 = 0; ii7 < this.markers7.length; ii7++) {
+          var marknum11 = this.markers.findIndex(
+            (e) => e.id == this.markers7[ii7].id
+          );
+          this.markers[marknum11].icon = this.markers7[ii7].icon;
+        }
+      } else if (this.num3 === 6) {
+        for (var ii8 = 0; ii8 < this.markers8.length; ii8++) {
+          var marknum12 = this.markers.findIndex(
+            (e) => e.id == this.markers6[ii8].id
+          );
+          this.markers[marknum12].icon = this.markers8[ii8].icon;
+        }
+      } else if (this.num3 === 6) {
+        for (var ii9 = 0; ii9 < this.markers9.length; ii9++) {
+          var marknum13 = this.markers.findIndex(
+            (e) => e.id == this.markers9[ii9].id
+          );
+          this.markers[marknum13].icon = this.markers9[ii9].icon;
+        }
+      } else if (this.num3 === 10) {
+        for (var ii10 = 0; ii10 < this.markers10.length; ii10++) {
+          var marknum14 = this.markers.findIndex(
+            (e) => e.id == this.markers10[ii10].id
+          );
+          this.markers[marknum14].icon = this.markers10[ii10].icon;
+        }
+      }
+    },
+    async numnegative() {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+      }
+      console.log(this.markers);
+      console.log(this.markers1.length);
+      this.num3 -= 1;
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.loadtexton = false;
+      for (var vv2 = 0; vv2 < this.markers.length; vv2++) {
+        this.markers[vv2].icon = "https://ifh.cc/g/3qp9x6.png";
+      }
+      await this.numchagnelist();
+    },
+    async numplus() {
+      for (var vv1 = 0; vv1 < this.loadfirst.length; vv1++) {
+        var marknum1 = this.markers.findIndex(
+          (e) => e.id == this.loadtext[vv1]
+        );
+        this.markers.splice(marknum1, 1);
+      }
+      this.num3 += 1;
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      console.log(this.markers);
+      for (var vv = 0; vv < this.markers.length; vv++) {
+        this.markers[vv].icon = "https://ifh.cc/g/3qp9x6.png";
+      }
+      await this.numchagnelist();
+    },
+    async rightrefresh() {
+      // 오른쪽 상세창
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+    },
+    handlefull() {
+      this.rightcss = "right2";
+      this.centercss = "center2";
+      this.rightc = "on";
+      this.listmapcss = "listmap1";
+    },
+    handlefull2() {
+      this.rightcss = "right1";
+      this.centercss = "center1";
+      this.rightc = "off";
+    },
+
+    async locationchange() {
+      await this.replacerefresh();
+    },
+    replacerefresh() {
+      if (this.$route.query.locationkor === "서울") {
+        this.center.lat = 37.549824070293155;
+        this.center.lng = 126.9852119711522;
+        this.zoom = 14;
+        this.key += 1;
+        this.areacode = 1;
+      }
+      if (this.$route.query.locationkor === "부산") {
+        this.center.lat = 35.1563960364172;
+        this.center.lng = 129.05290996776543;
+        this.zoom = 13;
+        this.areacode = 6;
+      }
+      if (this.$route.query.locationkor === "대구") {
+        this.center.lat = 35.828005238339074;
+        this.center.lng = 128.56567195613573;
+        this.zoom = 12;
+        this.areacode = 4;
+      }
+      if (this.$route.query.locationkor === "인천") {
+        this.center.lat = 37.460431911450016;
+        this.center.lng = 126.63023780388498;
+        this.zoom = 12;
+        this.areacode = 2;
+      }
+      if (this.$route.query.locationkor === "광주") {
+        this.center.lat = 35.15523093137521;
+        this.center.lng = 126.83460715205861;
+        this.zoom = 14;
+        this.areacode = 5;
+      }
+      if (this.$route.query.locationkor === "대전") {
+        this.center.lat = 36.33921817956586;
+        this.center.lng = 127.39410278706835;
+        this.zoom = 13;
+        this.areacode = 3;
+      }
+      if (this.$route.query.locationkor === "울산") {
+        this.center.lat = 35.5457310316843;
+        this.center.lng = 129.2560979752397;
+        this.zoom = 14;
+        this.areacode = 7;
+      }
+      if (this.$route.query.locationkor === "제주도") {
+        this.center.lat = 33.37627377623203;
+        this.center.lng = 126.56056736909964;
+        this.zoom = 11.1;
+        this.areacode = 39;
+      }
+    },
+
+    async listpush(i) {
+      if (this.choice1.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice2.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice3.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice4.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice5.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice6.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice7.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice8.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice9.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      } else if (this.choice10.length > 11) {
+        alert("일일 여행지 선택은 12개를 초과할수 없습니다");
+        return;
+      }
+      // ==========================================================
+      if (this.num3 === 1) {
+        this.markers1.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice1.length + 1
+          }`,
+        });
+      } else if (this.num3 === 2) {
+        this.markers2.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice2.length + 1
+          }`,
+        });
+      } else if (this.num3 === 3) {
+        this.markers3.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice3.length + 1
+          }`,
+        });
+      } else if (this.num3 === 4) {
+        this.markers4.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice4.length + 1
+          }`,
+        });
+      } else if (this.num3 === 5) {
+        this.markers5.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice5.length + 1
+          }`,
+        });
+      } else if (this.num3 === 6) {
+        this.markers6.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice6.length + 1
+          }`,
+        });
+      } else if (this.num3 === 7) {
+        this.markers7.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice7.length + 1
+          }`,
+        });
+      } else if (this.num3 === 8) {
+        this.markers8.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice8.length + 1
+          }`,
+        });
+      } else if (this.num3 === 9) {
+        this.markers9.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice9.length + 1
+          }`,
+        });
+      } else if (this.num3 === 10) {
+        this.markers10.push({
+          id: i.title,
+          position: {
+            lat: Number(i.ylocation), //위도   36
+            lng: Number(i.xlocaion), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice10.length + 1
+          }`,
+        });
+      }
+
+      // ==========================================================
+
+      console.log(this.choice1.length);
+      var marknum = this.markers.findIndex((e) => e.id == i.title);
+      if (this.num3 === 1) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice1.length + 1
+        }`;
+      } else if (this.num3 === 2) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice2.length + 1
+        }`;
+      } else if (this.num3 === 3) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice3.length + 1
+        }`;
+      } else if (this.num3 === 4) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice4.length + 1
+        }`;
+      } else if (this.num3 === 5) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice5.length + 1
+        }`;
+      } else if (this.num10 === 6) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice6.length + 1
+        }`;
+      } else if (this.num3 === 7) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice7.length + 1
+        }`;
+      } else if (this.num3 === 8) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice8.length + 1
+        }`;
+      } else if (this.num3 === 9) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice9.length + 1
+        }`;
+      } else if (this.num3 === 10) {
+        this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
+          this.choice10.length + 1
+        }`;
+      }
+      //https://ifh.cc/g/q7v7ZO.png
+
+      this.busanlist10 = [];
+
+      if (this.num3 === 1) {
+        this.choice1.push(i);
+      } else if (this.num3 === 2) {
+        this.choice2.push(i);
+      } else if (this.num3 === 3) {
+        this.choice3.push(i);
+      } else if (this.num3 === 4) {
+        this.choice4.push(i);
+      } else if (this.num3 === 5) {
+        this.choice5.push(i);
+      } else if (this.num3 === 6) {
+        this.choice6.push(i);
+      } else if (this.num3 === 7) {
+        this.choice7.push(i);
+      } else if (this.num3 === 8) {
+        this.choice8.push(i);
+      } else if (this.num3 === 9) {
+        this.choice9.push(i);
+      } else if (this.num3 === 10) {
+        this.choice10.push(i);
+      }
+
+      // =====================================
+      //한개 선택후 오른쪽 list 변경
+
+      //const url1 = `/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=1&xmap=${i.mapx}&ymap=${i.mapy}`;
+      const url1 = `/REST/travel/distance?areaCode=${this.areacode}&size=100&contentTypeId=${this.contenttypeid}&kilometer=5&page=1&xmap=${i.xlocaion}&ymap=${i.ylocation}`;
+      const headers1 = {};
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.distanceList;
+
+      // =====================================
+
+      // 자동차 경로 REST api
+      //await this.loadcar();
+    },
+
+    async loadcar() {
+      this.path1 = [];
+      console.log(this.startnum);
+      console.log(this.endnum);
+
+      let url;
+      if (this.num3 === 1) {
+        console.log(this.choice1);
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice1[Number(this.endnum)].xlocaion
+        }&endY=${
+          this.choice1[Number(this.endnum)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice1[Number(this.startnum)].xlocaion
+        }&startY=${this.choice1[Number(this.startnum)].ylocation}`;
+      } else if (this.num3 === 2) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice2[Number(this.endnum2)].xlocaion
+        }&endY=${
+          this.choice2[Number(this.endnum2)].ylocaion
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice2[Number(this.startnum2)].xlocaion
+        }&startY=${this.choice2[Number(this.startnum2)].ylocaion}`;
+        console.log(url);
+      } else if (this.num3 === 3) {
+        console.log(this.choice3);
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice3[Number(this.endnum3)].xlocaion
+        }&endY=${
+          this.choice3[Number(this.endnum3)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice3[Number(this.startnum3)].xlocaion
+        }&startY=${this.choice3[Number(this.startnum3)].ylocaion}`;
+      } else if (this.num3 === 4) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice4[Number(this.endnum4)].xlocation
+        }&endY=${
+          this.choice4[Number(this.endnum4)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice4[Number(this.startnum4)].xlocaion
+        }&startY=${this.choice4[Number(this.startnum4)].ylocation}`;
+      } else if (this.num3 === 5) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice5[Number(this.endnum5)].xlocation
+        }&endY=${
+          this.choice5[Number(this.endnum5)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice5[Number(this.startnum5)].xlocaion
+        }&startY=${this.choice5[Number(this.startnum5)].ylocation}`;
+      } else if (this.num3 === 6) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice6[Number(this.endnum6)].xlocation
+        }&endY=${
+          this.choice6[Number(this.endnum6)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice6[Number(this.startnum6)].xlocation
+        }&startY=${this.choice6[Number(this.startnum6)].ylocation}`;
+      } else if (this.num3 === 7) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice7[Number(this.endnum7)].xlocation
+        }&endY=${
+          this.choice7[Number(this.endnum7)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice7[Number(this.startnum7)].xlocation
+        }&startY=${this.choice7[Number(this.startnum7)].ylocation}`;
+      } else if (this.num3 === 8) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice8[Number(this.endnum8)].xlocation
+        }&endY=${
+          this.choice8[Number(this.endnum8)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice8[Number(this.startnum8)].xlocaion
+        }&startY=${this.choice8[Number(this.startnum8)].ylocation}`;
+      } else if (this.num3 === 9) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice9[Number(this.endnum9)].xlocation
+        }&endY=${
+          this.choice9[Number(this.endnum9)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice9[Number(this.startnum9)].xlocaion
+        }&startY=${this.choice9[Number(this.startnum9)].ylocation}`;
+      } else if (this.num3 === 10) {
+        url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+          this.choice10[Number(this.endnum10)].xlocation
+        }&endY=${
+          this.choice10[Number(this.endnum10)].ylocation
+        }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+          this.choice10[Number(this.startnum10)].xlocaion
+        }&startY=${this.choice10[Number(this.startnum10)].ylocation}`;
+      }
+      const headers = {};
+      const response = await axios.get(url, { headers });
+      console.log(response.data);
+      for (var e = 1; e < response.data.features.length; e++) {
+        if (response.data.features[e].geometry.coordinates.length === 2) {
+          if (response.data.features[e].geometry.coordinates[0].length === 2) {
+            console.log("123");
+          } else {
+            this.middleload.push(
+              response.data.features[e].geometry.coordinates
+            );
+          }
+        } else {
+          for (
+            var q = 0;
+            q < response.data.features[e].geometry.coordinates.length;
+            q++
+          ) {
+            this.middleload.push(
+              response.data.features[e].geometry.coordinates[q]
+            );
+          }
+        }
+      }
+      console.log(this.middleload1);
+
+      for (var a = 0; a < this.middleload.length; a++) {
+        if (this.num3 === 1) {
+          this.path1.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 2) {
+          this.path2.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 3) {
+          this.path3.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 4) {
+          this.path4.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 5) {
+          this.path5.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 6) {
+          this.path6.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 7) {
+          this.path7.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 8) {
+          this.path8.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 9) {
+          this.path9.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        } else if (this.num3 === 10) {
+          this.path10.push({
+            lat: Number(this.middleload[a][1]),
+            lng: Number(this.middleload[a][0]),
+          });
+        }
+      }
+      if (this.num3 === 1) {
+        this.startnum += 1;
+        this.endnum += 1;
+        this.middleload = [];
+      } else if (this.num3 === 2) {
+        this.startnum2 += 1;
+        this.endnum2 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 3) {
+        this.startnum3 += 1;
+        this.endnum3 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 4) {
+        this.startnum4 += 1;
+        this.endnum4 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 5) {
+        this.startnum5 += 1;
+        this.endnum5 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 6) {
+        this.startnum6 += 1;
+        this.endnum6 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 7) {
+        this.startnum7 += 1;
+        this.endnum7 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 8) {
+        this.startnum8 += 1;
+        this.endnum8 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 9) {
+        this.startnum9 += 1;
+        this.endnum9 += 1;
+        this.middleload = [];
+      } else if (this.num3 === 10) {
+        this.startnum10 += 1;
+        this.endnum10 += 1;
+        this.middleload = [];
+      }
+
+      // 강제  렌더링
+      console.log(this.path);
+      this.componentKey += 1;
+    },
+    async openinfo(i) {
+      console.log(i);
+      const url = `/REST/travel/selectone?contentId=${i.code}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.dialoglist = response.data.TD;
+      // this.dialogcontent = this.dialoglist.overview.replace(
+      //   /(<br>|<br\/>|<br \/>)/g,
+      //   "\r\n"
+      // );
+
+      this.dialogVisible1 = true;
+    },
+    async outMarker1() {
+      this.openedMarkerID = null;
+    },
+    async openMarker1(i) {
+      console.log(i);
+      this.openedMarkerID = null;
+
+      this.openedMarkerID = i.title;
+      this.center = { lat: Number(i.ylocation), lng: Number(i.xlocaion) };
+      this.zoom = 18;
+    },
+    openMarker(id) {
+      this.openedMarkerID = id;
+    },
+    showPosition(event, two) {
+      console.log(event.latLng);
+      console.log(two);
+    },
+    async handleright() {
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.contenttypeid = "12";
+      this.right = 1;
+      this.btncolor3 = "noneactive";
+      this.btncolor2 = "noneactive";
+      this.btncolor = "active";
+      this.busanlist10 = [];
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=${this.areacode}`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+      this.markers = [];
+      console.log(this.busanlist10);
+      console.log(this.markers);
+      for (var i = 0; i < this.busanlist10.length; i++) {
+        this.markers.push({
+          id: this.busanlist10[i].title,
+          position: {
+            lat: Number(this.busanlist10[i].ylocation),
+            lng: Number(this.busanlist10[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/3qp9x6.png",
+        });
+      }
+      await this.savemarker2();
+    },
+    savemarker2() {
+      if (this.num3 === 1) {
+        console.log(this.markers1);
+        // 기존 마커 제거
+        for (var vv1 = 0; vv1 < this.markers1.length; vv1++) {
+          var marknum1 = this.markers.findIndex(
+            (e) => e.id == this.markers1[vv1].id
+          );
+          console.log(marknum1);
+          this.markers.splice(marknum1, 1);
+        }
+        // 새 마커 추가
+        for (var num1 = 0; num1 < this.markers1.length; num1++) {
+          this.markers.push(this.markers1[num1]);
+        }
+        console.log(this.markers);
+      } else if (this.num3 === 2) {
+        for (var vv2 = 0; vv2 < this.markers2.length; vv2++) {
+          var marknum2 = this.markers.findIndex(
+            (e) => e.id == this.markers2[vv2].id
+          );
+          this.markers.splice(marknum2, 1);
+        }
+        for (var num2 = 0; num2 < this.markers2.length; num2++) {
+          this.markers.push(this.markers2[num2]);
+        }
+      } else if (this.num3 === 3) {
+        for (var vv3 = 0; vv3 < this.markers2.length; vv3++) {
+          var marknum3 = this.markers.findIndex(
+            (e) => e.id == this.markers3[vv3].id
+          );
+
+          this.markers.splice(marknum3, 1);
+        }
+        for (var num3 = 0; num3 < this.markers3.length; num3++) {
+          this.markers.push(this.markers3[num3]);
+        }
+      } else if (this.num3 === 4) {
+        for (var vv4 = 0; vv4 < this.markers4.length; vv4++) {
+          var marknum4 = this.markers.findIndex(
+            (e) => e.id == this.markers4[vv4].id
+          );
+
+          this.markers.splice(marknum4, 1);
+        }
+        for (var num4 = 0; num4 < this.markers4.length; num4++) {
+          this.markers.push(this.markers4[num4]);
+        }
+      } else if (this.num3 === 5) {
+        for (var vv5 = 0; vv5 < this.markers5.length; vv5++) {
+          var marknum5 = this.markers.findIndex(
+            (e) => e.id == this.markers5[vv5].id
+          );
+
+          this.markers.splice(marknum5, 1);
+        }
+        for (var num5 = 0; num5 < this.markers5.length; num5++) {
+          this.markers.push(this.markers5[num5]);
+        }
+      } else if (this.num3 === 6) {
+        for (var vv6 = 0; vv6 < this.markers6.length; vv6++) {
+          var marknum6 = this.markers.findIndex(
+            (e) => e.id == this.markers6[vv6].id
+          );
+
+          this.markers.splice(marknum6, 1);
+        }
+        for (var num6 = 0; num4 < this.markers6.length; num6++) {
+          this.markers.push(this.markers6[num6]);
+        }
+      } else if (this.num3 === 7) {
+        for (var vv7 = 0; vv7 < this.markers7.length; vv7++) {
+          var marknum7 = this.markers.findIndex(
+            (e) => e.id == this.markers7[vv7].id
+          );
+
+          this.markers.splice(marknum7, 1);
+        }
+        for (var num7 = 0; num7 < this.markers7.length; num7++) {
+          this.markers.push(this.markers7[num7]);
+        }
+      } else if (this.num3 === 8) {
+        for (var vv8 = 0; vv8 < this.markers8.length; vv8++) {
+          var marknum8 = this.markers.findIndex(
+            (e) => e.id == this.markers8[vv8].id
+          );
+
+          this.markers.splice(marknum8, 1);
+        }
+        for (var num8 = 0; num8 < this.markers8.length; num8++) {
+          this.markers.push(this.markers8[num8]);
+        }
+      } else if (this.num3 === 9) {
+        for (var vv9 = 0; vv9 < this.markers9.length; vv9++) {
+          var marknum9 = this.markers.findIndex(
+            (e) => e.id == this.markers9[vv9].id
+          );
+
+          this.markers.splice(marknum9, 1);
+        }
+        for (var num9 = 0; num9 < this.markers9.length; num9++) {
+          this.markers.push(this.markers9[num9]);
+        }
+      } else if (this.num3 === 10) {
+        for (var vv10 = 0; vv10 < this.markers10.length; vv10++) {
+          var marknum10 = this.markers.findIndex(
+            (e) => e.id == this.markers10[vv10].id
+          );
+
+          this.markers.splice(marknum10, 1);
+        }
+        for (var num10 = 0; num10 < this.markers10.length; num10++) {
+          this.markers.push(this.markers10[num10]);
+        }
+      }
+    },
+    async handleright2() {
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.contenttypeid = "32";
+      this.right = 2;
+      this.btncolor2 = "active";
+      this.btncolor = "noneactive";
+      this.btncolor3 = "noneactive";
+      this.busanlist10 = [];
+      this.busanlist = [];
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=${this.areacode}`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+
+      const url2 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=${this.areacode}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url2, { headers });
+      console.log(response);
+
+      this.busanlist = response.data.list;
+      console.log(this.markersTOURIST);
+      console.log(this.markers);
+      this.markers = [];
+      console.log(this.markers1);
+      console.log(this.markers);
+      for (var i = 0; i < this.busanlist10.length; i++) {
+        this.markers.push({
+          id: this.busanlist10[i].title,
+          position: {
+            lat: Number(this.busanlist10[i].ylocation),
+            lng: Number(this.busanlist10[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/3qp9x6.png",
+        });
+      }
+      await this.savemarker2();
+    },
+    async handleright3() {
+      this.loadtexton = false;
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+      this.middleload = [];
+      this.loadfirst = [];
+      this.loadtext = [];
+      this.contenttypeid = "39";
+      this.right = 3;
+      this.btncolor2 = "noneactive";
+      this.btncolor = "noneactive";
+      this.btncolor3 = "active";
+      this.busanlist10 = [];
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=39&areaCode=${this.areacode}`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+      this.markers = [];
+      console.log(this.markers);
+      for (var i = 0; i < this.busanlist10.length; i++) {
+        this.markers.push({
+          id: this.busanlist10[i].title,
+          position: {
+            lat: Number(this.busanlist10[i].ylocation),
+            lng: Number(this.busanlist10[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/3qp9x6.png",
+        });
+      }
+      await this.savemarker2();
+    },
+  },
+};
+</script>
+<style>
+.el-input-number {
+  width: 23px;
+}
+.el-input__inner {
+  border: none;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.el-dialog__header {
+  display: none;
+}
+.el-dialog__body {
+  padding: unset;
+}
+.el-collapse-item__header {
+  text-align: center;
+  display: block;
+  background: #98dde3;
+  color: white;
+}
+</style>
+<style scoped>
+.l_btn {
+  width: 20px;
+  height: 20px;
+  padding: 1px;
+  border: none;
+  background: unset;
+  cursor: pointer;
+}
+.l_btn img {
+  width: 19px;
+  height: 19px;
+}
+.mylist_text {
+  font-size: 14px;
+  margin-left: 10px;
+  margin-top: 10px;
+  float: inherit;
+}
+.listmap {
+  position: relative;
+  border-radius: 10px;
+  width: 16.7vw;
+  height: 88px;
+  box-shadow: rgb(31 38 135 / 15%) 0px 8px 16px 0px;
+  margin-top: 20px;
+  background: #ffffff;
+  list-style: none;
+}
+.info_btn {
+  border: none;
+  padding: 4px 10px;
+  color: white;
+  background: #ccc;
+  position: absolute;
+  border-radius: 50%;
+  bottom: 6.5px;
+  right: 50px;
+}
+.plus_btn {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  border: none;
+  background: none;
+  font-weight: 500;
+  font-size: 30px;
+  cursor: pointer;
+}
+.td_title {
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 10px;
+  margin-top: 10px;
+  vertical-align: -11px;
+}
+.textdiv {
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nltext1 {
+  display: inline-block;
+  padding: 5px 10px;
+  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
+  background-color: #fff;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.nltext2 {
+  display: inline-block;
+  padding: 20px 10px;
+  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
+  background-color: #fff;
+  font-size: 13px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  border: none;
+}
+.lastleft_bth {
+  border: none;
+  padding: 0px 15px;
+  margin: 6px;
+  border-radius: 0px;
+  backdrop-filter: blur(4px);
+  /* color: rgb(255, 255, 255); */
+  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
+  cursor: pointer;
+  height: 50px;
+
+  justify-content: center;
+  align-items: center;
+  font-family: "Montserrat";
+  background-color: #fff;
+  font-size: 13px;
+}
+.fade-enter-active {
+  transition: opacity 0.5s;
+}
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.newleft {
+  width: 5%;
+  float: left;
+  height: 850px;
+  text-align: center;
+  background: #fafafa;
+  transition: all 1s;
+}
+.myt3 {
+  padding-top: 10px;
+  position: relative;
+  width: 10%;
+  float: left;
+}
+.myt4 {
+  display: inherit;
+}
+.myt4_in {
+  border-top: 1px solid #ddd;
+  padding: 0px 50px;
+}
+.loadcss {
+  font-size: 11px;
+}
+.loadinfo {
+  padding: 5px 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  background: rgb(51, 51, 51);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 11px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: block;
+}
+.btn11 {
+}
+.btn12 {
+}
+.btn13 {
+}
+.myt2 {
+  width: 70%;
+  text-align: left;
+  float: left;
+}
+.mytimg {
+  float: left;
+  height: 70px;
+  width: 20%;
+}
+.mytimg img {
+  padding: 9px;
+  box-sizing: border-box;
+}
+.travel_list {
+  overflow: auto;
+  height: 72vh;
+  margin-top: 5px;
+}
+.mytravel_list {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  height: auto;
+  box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+  background: #ffffff;
+  list-style: none;
+  display: inline-block;
+  width: 90%;
+  position: relative;
+  transition: all 2s;
+}
+.ml_img {
+  position: absolute;
+  top: -5px;
+  left: -10px;
+}
+.rightfull_btn {
+  height: 100%;
+  width: 5%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  float: left;
+  line-height: 50;
+  color: darkslateblue;
+  cursor: pointer;
+  transition: all 1s;
+}
+.rightfull_btn span {
+  display: inline-block;
+}
+.rightfull_btn:hover {
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+}
+.ind {
+  color: red;
+  font-size: 12px;
+}
+.chcss {
+  text-align: center;
+  display: block;
+}
+.imgdiv {
+  overflow: hidden;
+  height: 88px;
+  width: 100px;
+  float: left;
+  cursor: pointer;
+  border-radius: 10px 0px 0px 10px;
+}
+
+.listmap1 {
+  position: relative;
+  border-radius: 10px;
+  width: 16.7vw;
+  height: 88px;
+  box-shadow: rgb(31 38 135 / 15%) 0px 8px 16px 0px;
+  margin-top: 20px;
+  background: #ffffff;
+  list-style: none;
+  display: inline-flex;
+  margin-right: 3%;
+}
+
+.noneactive {
+  background: #ffffff;
+  color: black;
+}
+.active {
+  background: #98dde3;
+  color: white;
+}
+.check {
+  margin: 0px !important;
+}
+.vue-map-container {
+  height: 86.5vh !important;
+}
+.text1 {
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+.text2 {
+  font-weight: bold;
+}
+.text3 {
+  font-size: 13px;
+}
+h5 {
+  display: block;
+  background: #98dde3;
+  margin: 10px;
+  padding: 10px;
+  color: white;
+}
+.full_day {
+  font-size: 1.1rem;
+  color: #696969;
+  text-decoration: none;
+  margin-bottom: 20px;
+  display: block;
+}
+.day {
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: block;
+  margin-top: 10px;
+}
+.sub_area {
+  font-size: 0.8rem;
+
+  color: #999;
+}
+h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 0px;
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
+p {
+  font-size: 20px;
+}
+.wrap {
+  width: 100%;
+}
+.left1 {
+  width: 20%;
+  height: 850px;
+  background: #ffffff;
+  text-align: center;
+  float: left;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.center1 {
+  width: 60%;
+  height: 850px;
+  position: relative;
+  float: left;
+  transition: all 1.5s;
+}
+.center2 {
+  width: 40%;
+  height: 850px;
+  position: relative;
+  float: left;
+  transition: all 1.5s;
+}
+.center3 {
+  width: 75%;
+  height: 850px;
+  position: relative;
+  float: left;
+  transition: all 1.5s;
+}
+.addmarker {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  border: none;
+  cursor: pointer;
+  width: 120px;
+  height: 56px;
+  padding: 0;
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #000 !important;
+  box-shadow: unset;
+  /* background: rgba(255, 255, 255, 0.25); */
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px !important;
+  text-decoration: unset !important;
+}
+.addmarker2 {
+  position: absolute;
+  top: 100px;
+  left: 10px;
+  border: none;
+  cursor: pointer;
+  width: 120px;
+  height: 56px;
+  padding: 0;
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #000 !important;
+  box-shadow: unset;
+  /* background: rgba(255, 255, 255, 0.25); */
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px !important;
+  text-decoration: unset !important;
+}
+.right1 {
+  width: 20%;
+  height: 900px;
+  background: #f7f7f7;
+  float: left;
+  box-sizing: border-box;
+  transition: all 1.5s;
+}
+.right2 {
+  width: 40%;
+  height: 900px;
+  background: rgb(238, 237, 237);
+  float: left;
+  box-sizing: border-box;
+  transition: all 1.5s;
+}
+.right3 {
+  display: none;
+}
+.btn_last {
+  width: 100%;
+  height: 30px;
+  outline: none;
+  border: none;
+  background: #ff1744;
+  color: white;
+  cursor: pointer;
+}
+body {
+  margin: 0;
+}
+#right_btn {
+  width: 33%;
+  height: 35px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#right_btn:nth-child(3) {
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+}
+.right_content {
+  margin-top: 10px;
+
+  height: 800px;
+  padding: 10px 0px 10px 10px;
+}
+.right_content h4 {
+  font-weight: 900;
+  font-size: 20px;
+}
+.dialogimg {
+  overflow: hidden;
+  height: 286px;
+  width: 35%;
+  float: left;
+}
+.dialogtext {
+  float: left;
+  width: 65%;
+  padding: 20px 10px 20px 10px;
+  box-sizing: border-box;
+}
+.diatextarea {
+  border: none;
+  height: 200px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  resize: none;
+  outline: none;
+  -ms-overflow-style: none;
+}
+.diatextarea::-webkit-scrollbar {
+  display: none;
+}
+.searchinput {
+  width: 95%;
+  padding: 10px 0px;
+  border: 1px solid #ddd;
+  margin: 0 auto;
+}
+.rightscroll::-webkit-scrollbar {
+  width: 1px;
+  background-color: rgba(145, 210, 229, 0);
+}
+.travel_list::-webkit-scrollbar {
+  width: 3px;
+  background-color: rgba(145, 210, 229, 0);
+}
+.prev {
+  float: left;
+  font-size: 30px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+  line-height: 38px;
+}
+.next {
+  float: right;
+  font-size: 30px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  margin-right: 15px;
+  cursor: pointer;
+  line-height: 38px;
+}
+
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-enter-active,
+.list-leave-active {
+  opacity: 0;
+  transition: all 1s;
+  transform: translateY(30px);
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+/* 결과창 css */
+.alldate li {
+  list-style: none;
+}
+
+.alldate {
+  text-align: center;
+  height: 732px;
+  overflow: auto;
+}
+.alldatetitle {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.alldatecontent {
+  font-size: 13px;
+  text-align: center;
+  width: 80%;
+  height: 6vh;
+
+  margin-top: 10px;
+  display: inline-table;
+  box-shadow: rgb(31 38 135 / 8%) 0px 8px 16px 0px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 4px !important;
+  border-width: initial !important;
+  border-style: none !important;
+  border-color: initial !important;
+  border-image: initial !important;
+  margin: 8px;
+  background-color: transparent !important;
+
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  padding: 8px;
+  position: relative;
+}
+
+.choice_title {
+  vertical-align: -100%;
+}
+.choice_no {
+  margin-right: 50px;
+  color: #ffba3b;
+}
+</style>
