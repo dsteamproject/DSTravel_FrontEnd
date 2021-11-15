@@ -414,7 +414,7 @@ export default {
       }
 
       this.$router.push({
-        name: "searchbusan",
+        name: "search",
         query: {
           locationkor: this.step1valuekor,
           locationeng: this.step1valueeng,

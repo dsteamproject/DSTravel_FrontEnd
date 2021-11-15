@@ -41,7 +41,7 @@
           </div>
 
           <ul
-            style="overflow: auto; height: 530px"
+            style="overflow: auto; height: 62vh"
             class="rightscroll"
             v-if="this.num3 === 1"
             v-on:after-enter="fadeNext"
@@ -92,13 +92,17 @@
                 </div>
 
                 <div class="myt4" v-if="loadtexton === true">
-                  <div class="myt4_in">
-                    <p v-for="item in loadtext" :key="item">
+                  <div class="myt4_in" v-if="index === this.loadnumb">
+                    <p v-for="(item, i) in loadtext" :key="item">
                       <span class="loadcss" v-if="index === this.loadnumb"
                         >{{ item }}
                         <br />
-                        <span style="font-size: 8px">▼</span></span
-                      >
+                        <span
+                          v-if="i !== this.loadtext.length - 1"
+                          style="font-size: 8px"
+                          >▼</span
+                        >
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -908,7 +912,7 @@
         }"
       >
         <GMapCluster
-          :minimumClusterSize="5"
+          :minimumClusterSize="10"
           :zoomOnClick="true"
           :style="clusterIcon"
           imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclusterer/images/m"
@@ -1015,8 +1019,15 @@
           </GMapMarker>
         </GMapCluster>
       </GMapMap>
-      <button class="addmarker" @click="dialogVisible = true">장소등록</button>
+      <button class="addmarker" @click="mapput">장소등록</button>
       <button class="addmarker2" @click="lastaction">일정생성</button>
+      <button class="addmarker3" @click="deletemarker" v-if="dtm === true">
+        마커제거
+      </button>
+      <button class="addmarker3" @click="showmarker" v-if="dtm === false">
+        마커생성
+      </button>
+      <button class="addmarker4" @click="alllist">전체목록</button>
       <div class="lo"></div>
     </div>
     <div :class="rightcss">
@@ -1047,7 +1058,7 @@
             v-on:keyup.enter="submit"
           />
           <ul class="travel_list">
-            <li v-for="list in busanlist10" :key="list" class="listmap">
+            <li v-for="list in busanlist10" :key="list" :class="listmapcss">
               <div
                 class="imgdiv"
                 @mouseout="outMarker1(list)"
@@ -1072,7 +1083,7 @@
             v-on:keyup.enter="submit2"
           />
           <ul class="travel_list">
-            <li v-for="list in busanlist10" :key="list" class="listmap">
+            <li v-for="list in busanlist10" :key="list" :class="listmapcss">
               <div
                 class="imgdiv"
                 @mouseout="outMarker1(list)"
@@ -1097,7 +1108,7 @@
             v-on:keyup.enter="submit3"
           />
           <ul class="travel_list">
-            <li v-for="list in busanlist10" :key="list" class="listmap">
+            <li v-for="list in busanlist10" :key="list" :class="listmapcss">
               <div
                 class="imgdiv"
                 @mouseout="outMarker1(list)"
@@ -1160,11 +1171,14 @@
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
 import axios from "axios";
 export default {
-  name: "search",
+  name: "searchbusan",
 
   async created() {
+    await this.replacerefresh();
+
     this.contenttypeid = "12";
     console.log(this.$route.query.betday);
     for (var o = 0; o < this.$route.query.betday; o++) {
@@ -1175,33 +1189,12 @@ export default {
     await this.rightrefresh();
 
     // ========
-    // 구글맵 화면용
-    //const url = `/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
-    const url = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=6`;
-    const headers = { "Content-type": "application/json" };
-
-    const response = await axios.get(url, { headers });
-    console.log(response);
-
-    this.busanlist = response.data.list;
-    this.markersTOURIST = response.data.list;
-    for (var i = 0; i < this.busanlist.length; i++) {
-      this.markers.push({
-        id: this.busanlist[i].title,
-        position: {
-          lat: Number(this.busanlist[i].ylocation),
-          lng: Number(this.busanlist[i].xlocaion),
-        },
-        icon: "https://ifh.cc/g/3qp9x6.png",
-      });
-    }
-
-    console.log(this.markersTOURIST);
-
-    // await this.replacerefresh();
+    await this.googlemapopen();
   },
   data() {
     return {
+      listmapcss: "listmap",
+      areacode: "",
       markersTOURIST: [],
       markershotel: [],
       markersfood: [],
@@ -1285,8 +1278,8 @@ export default {
       num2: 0,
       num1: 0,
       openedMarkerID: null,
-
-      center: { lat: 37.549824070293155, lng: 126.9852119711522 },
+      center: { lat: 0, lng: 0 },
+      dtm: true,
       markers: [],
       markers1: [],
       markers2: [],
@@ -1326,10 +1319,63 @@ export default {
       console.log(to);
       console.log(from);
       await this.replacerefresh();
+      await this.rightrefresh();
+      await this.googlemapopen();
     },
   },
 
   methods: {
+    async alllist() {
+      await this.rightrefresh();
+    },
+    async showmarker() {
+      this.dtm = true;
+      if (this.right === 1) {
+        await this.right1();
+      } else if (this.right === 2) {
+        await this.right2();
+      } else if (this.right === 3) {
+        await this.right3();
+      }
+    },
+
+    // 선택마커 제외 마케 제거
+    async deletemarker() {
+      this.dtm = false;
+      this.markers = [];
+      await this.savemarker2();
+    },
+    async googlemapopen() {
+      // 구글맵 화면용
+      //const url = `/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
+      const url = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=${this.areacode}`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+
+      this.busanlist = response.data.list;
+      this.markersTOURIST = response.data.list;
+      for (var i = 0; i < this.busanlist.length; i++) {
+        this.markers.push({
+          id: this.busanlist[i].title,
+          position: {
+            lat: Number(this.busanlist[i].ylocation),
+            lng: Number(this.busanlist[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/ugSmCT.png",
+        });
+      }
+    },
+    mapput() {
+      ElMessage({
+        message: "등록하실려는 장소를 지도에서 클릭해주세요",
+
+        type: "success",
+      });
+
+      //this.dialogVisible = true;
+    },
     async loadinfo(i, index) {
       if (this.num3 === 1) {
         if (this.choice1.length === index + 1) {
@@ -1597,30 +1643,33 @@ export default {
     },
     async submit() {
       // 작업중
-      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch}&contentTypeId=${this.contenttypeid}&areaCode=6`;
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
       console.log(response);
       this.busanlist10 = response.data.list;
+      await this.selectdeletelist();
     },
     async submit2() {
       // 작업중
-      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch2}&contentTypeId=${this.contenttypeid}&areaCode=6`;
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch2}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
       console.log(response);
       this.busanlist10 = response.data.list;
+      await this.selectdeletelist();
     },
     async submit3() {
       // 작업중
-      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch3}&contentTypeId=${this.contenttypeid}&areaCode=6`;
+      const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch3}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
       console.log(response);
       this.busanlist10 = response.data.list;
+      await this.selectdeletelist();
     },
     async listdelete(i) {
       for (var vv = 0; vv < this.loadfirst.length; vv++) {
@@ -2210,44 +2259,27 @@ export default {
     },
     async rightrefresh() {
       // 오른쪽 상세창
-      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=6`;
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
       const headers1 = { "Content-type": "application/json" };
 
       const response1 = await axios.get(url1, { headers1 });
       console.log(response1);
       this.busanlist10 = response1.data.list;
+      await this.selectdeletelist();
     },
     handlefull() {
       this.rightcss = "right2";
       this.centercss = "center2";
       this.rightc = "on";
+      this.listmapcss = "listmap1";
     },
     handlefull2() {
       this.rightcss = "right1";
       this.centercss = "center1";
       this.rightc = "off";
+      this.listmapcss = "listmap";
     },
-    // 위도 경도로 직선거리 구하는 REST.API
-    async locationdistance() {
-      //
-      //https://www.data.go.kr/data/15088773/openapi.do
-      // 도로명 주소 api 검색
-      // https://www.juso.go.kr/addrlink/addrLinkApiJsonp.do?confmKey=devU01TX0FVVEgyMDIxMTEwODEwMDgzNzExMTg1NDU=&currentPage=1&countPerPage=10&keyword=망미배산로&=
-      // 위치검색
-      // https://apis.openapi.sk.com/tmap/geo/convertAddress?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&version=1&searchTypCd=NtoO&reqAdd=부산 서면&reqMulti=M&resCoordType=WGS84GEO
-      // 위치검색
-      //https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&format=json&fullAddr=부산시 수영구 망미배산로56 3001&callback=json&page=1&count=20&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55
-      // 경로 json 출력
-      //https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=129.10239277274485&endY=35.17444316729922&reqCoordType=WGS84GEO&endRpFlag=G&startX=129.09522188698028&startY=35.17354426079996&sort=index
-      // 경로 화면출력
-      // https://apis.openapi.sk.com/tmap/routeStaticMap?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&endX=129.10239277274485&endY=35.17444316729922&startX=129.09522188698028&startY=35.17354426079996&reqCoordType=WGS84GEO&endPoiId=1000560149&passList=129.10239277274485,35.17444316729922,1000560149,G,0_129.09522188698028,35.17354426079996,160886,G,0&lineColor=red&width=500&height=500
-      // 자동차 경로안내// http://tmapapi.sktelecom.com/main.html#webservice/docs/tmapRouteDoc
-      // https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=129.07579349764512&endY=35.17883196265564&reqCoordType=WGS84GEO&endRpFlag=G&startX=126.98217734415019&startY=37.56468648536046
-      //const url = `https://apis.openapi.sk.com/tmap/routes/distance?appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&version=1&startX=126.926139&startY=37.557495&endX=126.82613&endY=37.657495&reqCoordType=WGS84GEO&callback=function`;
-      //const headers = {};
-      //const response = await axios.get(url, { headers });
-      //console.log(response.data.distanceInfo.distance);
-    },
+
     async locationchange() {
       await this.replacerefresh();
     },
@@ -2256,52 +2288,53 @@ export default {
         this.center.lat = 37.549824070293155;
         this.center.lng = 126.9852119711522;
         this.zoom = 14;
+        this.key += 1;
+        this.areacode = 1;
       }
       if (this.$route.query.locationkor === "부산") {
         this.center.lat = 35.1563960364172;
         this.center.lng = 129.05290996776543;
         this.zoom = 13;
+        this.areacode = 6;
       }
       if (this.$route.query.locationkor === "대구") {
         this.center.lat = 35.828005238339074;
         this.center.lng = 128.56567195613573;
         this.zoom = 12;
+        this.areacode = 4;
       }
       if (this.$route.query.locationkor === "인천") {
         this.center.lat = 37.460431911450016;
         this.center.lng = 126.63023780388498;
         this.zoom = 12;
+        this.areacode = 2;
       }
       if (this.$route.query.locationkor === "광주") {
         this.center.lat = 35.15523093137521;
         this.center.lng = 126.83460715205861;
         this.zoom = 14;
+        this.areacode = 5;
       }
       if (this.$route.query.locationkor === "대전") {
         this.center.lat = 36.33921817956586;
         this.center.lng = 127.39410278706835;
         this.zoom = 13;
+        this.areacode = 3;
       }
       if (this.$route.query.locationkor === "울산") {
         this.center.lat = 35.5457310316843;
         this.center.lng = 129.2560979752397;
         this.zoom = 14;
+        this.areacode = 7;
       }
       if (this.$route.query.locationkor === "제주도") {
         this.center.lat = 33.37627377623203;
         this.center.lng = 126.56056736909964;
         this.zoom = 11.1;
+        this.areacode = 39;
       }
     },
-
-    // mark(event) {
-    //   console.log(event.latLng.lat());
-    //   this.markers[2].position.lat = event.latLng.lat();
-    //   this.sublat = event.latLng.lat();
-    //   console.log(event.latLng.lng());
-    //   this.markers[2].position.lng = event.latLng.lng();
-    //   this.sublng = event.latLng.lng();
-    // },
+    async delalllist() {},
     async listpush(i) {
       if (this.choice1.length > 11) {
         alert("일일 여행지 선택은 12개를 초과할수 없습니다");
@@ -2335,6 +2368,9 @@ export default {
         return;
       }
       // ==========================================================
+      if (this.dtm === false) {
+        await this.showmarker();
+      }
       if (this.num3 === 1) {
         this.markers1.push({
           id: i.title,
@@ -2522,12 +2558,12 @@ export default {
       //한개 선택후 오른쪽 list 변경
 
       //const url1 = `/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=1&xmap=${i.mapx}&ymap=${i.mapy}`;
-      const url1 = `/REST/travel/distance?areaCode=6&size=100&contentTypeId=${this.contenttypeid}&kilometer=5&page=1&xmap=${i.xlocaion}&ymap=${i.ylocation}`;
+      const url1 = `/REST/travel/distance?areaCode=${this.areacode}&size=100&contentTypeId=${this.contenttypeid}&kilometer=5&page=1&xmap=${i.xlocaion}&ymap=${i.ylocation}`;
       const headers1 = {};
       const response1 = await axios.get(url1, { headers1 });
       console.log(response1);
       this.busanlist10 = response1.data.distanceList;
-
+      await this.selectdeletelist();
       // =====================================
 
       // 자동차 경로 REST api
@@ -2803,12 +2839,19 @@ export default {
       this.btncolor2 = "noneactive";
       this.btncolor = "active";
       this.busanlist10 = [];
-      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=6`;
+      await this.right1();
+    },
+    async right1() {
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=${this.areacode}`;
       const headers1 = { "Content-type": "application/json" };
 
       const response1 = await axios.get(url1, { headers1 });
       console.log(response1);
+      console.log(this.choice1);
       this.busanlist10 = response1.data.list;
+      // 선택된리스트 제거
+      await this.selectdeletelist();
+      //====================
       this.markers = [];
       console.log(this.busanlist10);
       console.log(this.markers);
@@ -2819,7 +2862,62 @@ export default {
             lat: Number(this.busanlist10[i].ylocation),
             lng: Number(this.busanlist10[i].xlocaion),
           },
-          icon: "https://ifh.cc/g/3qp9x6.png",
+          icon: "https://ifh.cc/g/ugSmCT.png",
+        });
+      }
+      await this.savemarker2();
+    },
+    async right2() {
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=${this.areacode}`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+      await this.selectdeletelist();
+      this.busanlist = response1.data.list;
+      // const url2 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=${this.areacode}`;
+      // const headers = { "Content-type": "application/json" };
+
+      // const response = await axios.get(url2, { headers });
+      // console.log(response);
+
+      // this.busanlist = response.data.list;
+      console.log(this.markersTOURIST);
+      console.log(this.markers);
+      this.markers = [];
+      console.log(this.markers1);
+      console.log(this.markers);
+      for (var i = 0; i < this.busanlist10.length; i++) {
+        this.markers.push({
+          id: this.busanlist10[i].title,
+          position: {
+            lat: Number(this.busanlist10[i].ylocation),
+            lng: Number(this.busanlist10[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/Xg70rK.png",
+        });
+      }
+      await this.savemarker2();
+    },
+    async right3() {
+      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=39&areaCode=${this.areacode}`;
+      const headers1 = { "Content-type": "application/json" };
+
+      const response1 = await axios.get(url1, { headers1 });
+      console.log(response1);
+      this.busanlist10 = response1.data.list;
+      await this.selectdeletelist();
+      this.markers = [];
+      console.log(this.markers);
+      for (var i = 0; i < this.busanlist10.length; i++) {
+        this.markers.push({
+          id: this.busanlist10[i].title,
+          position: {
+            lat: Number(this.busanlist10[i].ylocation),
+            lng: Number(this.busanlist10[i].xlocaion),
+          },
+          icon: "https://ifh.cc/g/PSvrrN.png",
         });
       }
       await this.savemarker2();
@@ -2940,6 +3038,79 @@ export default {
         }
       }
     },
+    async selectdeletelist() {
+      // 선택된리스트 제거
+      for (var vv1 = 0; vv1 < this.choice1.length; vv1++) {
+        var marknum1 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice1[vv1].title
+        );
+        console.log(marknum1);
+        this.busanlist10.splice(marknum1, 1);
+      }
+      for (var vv2 = 0; vv2 < this.choice2.length; vv2++) {
+        var marknum2 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice2[vv2].title
+        );
+        console.log(marknum2);
+        this.busanlist10.splice(marknum2, 1);
+      }
+      for (var vv3 = 0; vv2 < this.choice3.length; vv3++) {
+        var marknum3 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice3[vv3].title
+        );
+        console.log(marknum3);
+        this.busanlist10.splice(marknum3, 1);
+      }
+      for (var vv4 = 0; vv4 < this.choice4.length; vv4++) {
+        var marknum4 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice4[vv4].title
+        );
+        console.log(marknum4);
+        this.busanlist10.splice(marknum4, 1);
+      }
+      for (var vv5 = 0; vv5 < this.choice5.length; vv5++) {
+        var marknum5 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice5[vv5].title
+        );
+        console.log(marknum5);
+        this.busanlist10.splice(marknum5, 1);
+      }
+      for (var vv6 = 0; vv6 < this.choice6.length; vv6++) {
+        var marknum6 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice6[vv6].title
+        );
+        console.log(marknum6);
+        this.busanlist10.splice(marknum6, 1);
+      }
+      for (var vv7 = 0; vv7 < this.choice7.length; vv7++) {
+        var marknum7 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice7[vv7].title
+        );
+        console.log(marknum7);
+        this.busanlist10.splice(marknum7, 1);
+      }
+      for (var vv8 = 0; vv8 < this.choice8.length; vv8++) {
+        var marknum8 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice8[vv8].title
+        );
+        console.log(marknum8);
+        this.busanlist10.splice(marknum8, 1);
+      }
+      for (var vv9 = 0; vv9 < this.choice9.length; vv9++) {
+        var marknum9 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice9[vv9].title
+        );
+        console.log(marknum9);
+        this.busanlist10.splice(marknum9, 1);
+      }
+      for (var vv10 = 0; vv10 < this.choice10.length; vv10++) {
+        var marknum10 = this.busanlist10.findIndex(
+          (e) => e.title == this.choice10[vv10].title
+        );
+        console.log(marknum10);
+        this.busanlist10.splice(marknum10, 1);
+      }
+    },
     async handleright2() {
       this.loadtexton = false;
       this.path1 = [];
@@ -2962,36 +3133,7 @@ export default {
       this.btncolor3 = "noneactive";
       this.busanlist10 = [];
       this.busanlist = [];
-      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=6`;
-      const headers1 = { "Content-type": "application/json" };
-
-      const response1 = await axios.get(url1, { headers1 });
-      console.log(response1);
-      this.busanlist10 = response1.data.list;
-
-      const url2 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=6`;
-      const headers = { "Content-type": "application/json" };
-
-      const response = await axios.get(url2, { headers });
-      console.log(response);
-
-      this.busanlist = response.data.list;
-      console.log(this.markersTOURIST);
-      console.log(this.markers);
-      this.markers = [];
-      console.log(this.markers1);
-      console.log(this.markers);
-      for (var i = 0; i < this.busanlist10.length; i++) {
-        this.markers.push({
-          id: this.busanlist10[i].title,
-          position: {
-            lat: Number(this.busanlist10[i].ylocation),
-            lng: Number(this.busanlist10[i].xlocaion),
-          },
-          icon: "https://ifh.cc/g/3qp9x6.png",
-        });
-      }
-      await this.savemarker2();
+      await this.right2();
     },
     async handleright3() {
       this.loadtexton = false;
@@ -3014,25 +3156,7 @@ export default {
       this.btncolor = "noneactive";
       this.btncolor3 = "active";
       this.busanlist10 = [];
-      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=39&areaCode=6`;
-      const headers1 = { "Content-type": "application/json" };
-
-      const response1 = await axios.get(url1, { headers1 });
-      console.log(response1);
-      this.busanlist10 = response1.data.list;
-      this.markers = [];
-      console.log(this.markers);
-      for (var i = 0; i < this.busanlist10.length; i++) {
-        this.markers.push({
-          id: this.busanlist10[i].title,
-          position: {
-            lat: Number(this.busanlist10[i].ylocation),
-            lng: Number(this.busanlist10[i].xlocaion),
-          },
-          icon: "https://ifh.cc/g/3qp9x6.png",
-        });
-      }
-      await this.savemarker2();
+      await this.right3();
     },
   },
 };
@@ -3076,9 +3200,17 @@ export default {
   font-size: 14px;
   margin-left: 10px;
   margin-top: 10px;
+  float: inherit;
 }
 .listmap {
   position: relative;
+  border-radius: 10px;
+  width: 16.7vw;
+  height: 88px;
+  box-shadow: rgb(31 38 135 / 15%) 0px 8px 16px 0px;
+  margin-top: 20px;
+  background: #ffffff;
+  list-style: none;
 }
 .info_btn {
   border: none;
@@ -3109,6 +3241,10 @@ export default {
 }
 .textdiv {
   text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .nltext1 {
   display: inline-block;
@@ -3171,6 +3307,7 @@ export default {
   position: relative;
   width: 10%;
   float: left;
+  display: grid;
 }
 .myt4 {
   display: inherit;
@@ -3192,6 +3329,8 @@ export default {
   border-radius: 10px;
   font-size: 11px;
   cursor: pointer;
+  margin-bottom: 10px;
+  display: block;
 }
 .btn11 {
 }
@@ -3246,6 +3385,7 @@ export default {
   color: darkslateblue;
   cursor: pointer;
   transition: all 1s;
+  max-width: 20px;
 }
 .rightfull_btn span {
   display: inline-block;
@@ -3271,7 +3411,8 @@ export default {
   border-radius: 10px 0px 0px 10px;
 }
 
-.travel_list li {
+.listmap1 {
+  position: relative;
   border-radius: 10px;
   width: 16.7vw;
   height: 88px;
@@ -3279,7 +3420,10 @@ export default {
   margin-top: 20px;
   background: #ffffff;
   list-style: none;
+  display: inline-flex;
+  margin-right: 3%;
 }
+
 .noneactive {
   background: #ffffff;
   color: black;
@@ -3292,7 +3436,7 @@ export default {
   margin: 0px !important;
 }
 .vue-map-container {
-  height: 86.5vh !important;
+  height: 100vh !important;
 }
 .text1 {
   font-size: 19px;
@@ -3341,6 +3485,7 @@ p {
 }
 .wrap {
   width: 100%;
+  height: 100vh;
 }
 .left1 {
   width: 20%;
@@ -3420,9 +3565,57 @@ p {
   margin: 8px !important;
   text-decoration: unset !important;
 }
+.addmarker3 {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  border: none;
+  cursor: pointer;
+  width: 120px;
+  height: 56px;
+  padding: 0;
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #000 !important;
+  box-shadow: unset;
+  /* background: rgba(255, 255, 255, 0.25); */
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px !important;
+  text-decoration: unset !important;
+}
+.addmarker4 {
+  position: absolute;
+  top: 100px;
+  right: 10px;
+  border: none;
+  cursor: pointer;
+  width: 120px;
+  height: 56px;
+  padding: 0;
+  border-radius: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #000 !important;
+  box-shadow: unset;
+  /* background: rgba(255, 255, 255, 0.25); */
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px !important;
+  text-decoration: unset !important;
+}
 .right1 {
   width: 20%;
-  height: 900px;
+  height: 100vh;
   background: #f7f7f7;
   float: left;
   box-sizing: border-box;
@@ -3504,6 +3697,9 @@ body {
   border: 1px solid #ddd;
   margin: 0 auto;
 }
+::-webkit-input-placeholder {
+  text-align: center;
+}
 .rightscroll::-webkit-scrollbar {
   width: 1px;
   background-color: rgba(145, 210, 229, 0);
@@ -3514,23 +3710,25 @@ body {
 }
 .prev {
   float: left;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
   background: none;
   border: none;
   margin-left: 10px;
   cursor: pointer;
   line-height: 38px;
+  color: cornflowerblue;
 }
 .next {
   float: right;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
   background: none;
   border: none;
   margin-right: 15px;
   cursor: pointer;
   line-height: 38px;
+  color: cornflowerblue;
 }
 
 .list-item {

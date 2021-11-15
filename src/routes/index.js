@@ -3,8 +3,8 @@ import { createWebHistory, createRouter } from "vue-router";
 import Menu1 from '@/components/Menu1'
 import login from '@/components/login'
 import join from '@/components/join'
-import searchbusan from '@/components/searchbusan'
-import searchseoul from '@/components/searchseoul'
+import search from '@/components/search'
+
 import airline from '@/components/airline'
 import car from '@/components/car'
 import hotel from '@/components/hotel'
@@ -43,8 +43,8 @@ const routes = [
     { path: '/login', name: "login", component: login, meta: { auth: true } },
     { path: '/sample', name: "sample", component: sample },
     { path: '/join', name: "join", component: join },
-    { path: '/searchbusan', name: "searchbusan", component: searchbusan },
-    { path: '/searchseoul', name: "searchseoul", component: searchseoul },
+    { path: '/search', name: "search", component: search },
+
     { path: '/airline', name: "airline", component: airline },
 
     { path: '/car', name: "car", component: car },
