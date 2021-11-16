@@ -484,7 +484,7 @@ export default {
   cursor: pointer;
 }
 .range_box {
-  width: 70%;
+  width: 79%;
   margin: 10px auto;
 }
 .blo {

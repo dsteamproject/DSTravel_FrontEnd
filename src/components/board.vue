@@ -40,7 +40,7 @@
           ><br />
         </div>
       </div>
-      <div class="right1">
+      <div class="right10">
         <router-view></router-view>
       </div>
     </div>
@@ -177,7 +177,7 @@ export default {
   float: left;
   text-align: center;
 }
-.right1 {
+.right10 {
   width: 90%;
 
   float: left;

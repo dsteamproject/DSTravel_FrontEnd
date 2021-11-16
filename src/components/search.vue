@@ -1,18 +1,35 @@
 <template>
-  <div class="wrap" style="position: fixed">
+  <div class="wrap1_1" style="position: fixed">
     <div class="newleft" v-if="newleft === 'on'">
       <p class="nltext1">일정</p>
-      <button class="nltext2" @click="allview">전체일정</button>
+      <button :class="nltext2css" @click="allview">전체일정</button>
       <button
-        v-for="item in traveldate"
+        style="
+          border: none;
+          padding: 0px 15px;
+          margin: 6px;
+          border-radius: 10px;
+          backdrop-filter: blur(4px);
+
+          box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
+          cursor: pointer;
+          height: 50px;
+
+          justify-content: center;
+          align-items: center;
+
+          background-color: white;
+          font-size: 13px;
+        "
+        v-for="(item, index) in traveldate"
         :key="item"
-        class="lastleft_bth"
-        @click="handledatego(item)"
+        :class="lastleft_bthcss + index"
+        @click="handledatego(item, index)"
       >
         DAY{{ item + 1 }}
       </button>
     </div>
-    <div class="left1">
+    <div class="left2">
       <div v-if="newleft === 'off'">
         <h3 @change="locationchange">
           {{ this.$route.query.locationkor }}
@@ -28,7 +45,18 @@
         <div class="demo-collapse">
           <div>
             <h5>여행일정</h5>
-            <button @click="numnegative" class="prev">&lt;</button>
+            <button v-if="this.num3 !== 1" @click="numnegative" class="prev">
+              &lt;
+            </button>
+            <button
+              v-if="this.num3 === 1"
+              @click="numnegative"
+              class="prev"
+              :disabled="this.num3 === 1"
+              style="color: #a1a1a1; pointer-events: none"
+            >
+              &lt;
+            </button>
             <el-input-number
               v-model="num3"
               :controls="false"
@@ -64,6 +92,7 @@
                   <button class="loadinfo" @click="loadinfo(list, index)">
                     상세경로
                   </button>
+
                   <img
                     :src="`/REST/travel/image${index + 1}`"
                     class="ml_img"
@@ -92,6 +121,13 @@
                 </div>
 
                 <div class="myt4" v-if="loadtexton === true">
+                  <button
+                    class="loadinfo2"
+                    @click="loadinfo2(list, index)"
+                    v-if="loadinfon === true"
+                  >
+                    닫기
+                  </button>
                   <div class="myt4_in" v-if="index === this.loadnumb">
                     <p v-for="(item, i) in loadtext" :key="item">
                       <span class="loadcss" v-if="index === this.loadnumb"
@@ -690,65 +726,144 @@
       </div>
       <div v-if="newleft0 === 'on'">
         <ul class="alldate">
-          <li class="alldatetitle" v-if="this.choice1.length > 0">Day 1</li>
-          <li class="alldatecontent" v-for="item in choice1" :key="item">
-            <div class="ads" style="width: 10%; float: left">
-              <img :src="item.firstimage" style="width: 50px; height: 50px" />
-            </div>
-            <div class="ads2" style="width: 90%; float: left">
-              <span class="choice_title"> {{ item.title }}</span>
-            </div>
-          </li>
+          <p>
+            대한민국 <span class="ad_location">{{ this.lockor }}</span
+            >: <span class="ad_betday">{{ this.$route.query.betday }}</span
+            >일 여행
+          </p>
+          <br />
+          <div class="date_bg" v-if="this.choice1.length > 0">
+            <li class="alldatetitle" v-if="this.choice1.length > 0">
+              Day 1 - {{ this.betdatelist[0] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice1" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
+          <div class="date_bg" v-if="this.choice2.length > 0">
+            <li class="alldatetitle" v-if="this.choice2.length > 0">
+              Day 2 - {{ this.betdatelist[1] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice2" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
 
-          <li class="alldatetitle" v-if="this.choice2.length > 0">Day 2</li>
-          <li
-            class="alldatecontent"
-            v-for="(item, index) in choice2"
-            :key="item"
-          >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
-          </li>
-          <li class="alldatetitle" v-if="this.choice3.length > 0">Day 3</li>
-          <li class="alldatecontent" v-for="item in choice3" :key="item">
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
-          </li>
-          <li class="alldatetitle" v-if="this.choice4.length > 0">Day 4</li>
-          <li class="alldatecontent" v-for="item in choice4" :key="item">
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
-          </li>
-          <li class="alldatetitle" v-if="this.choice5.length > 0">Day 5</li>
-          <li class="alldatecontent" v-for="item in choice5" :key="item">
-            {{ item.title }}
-          </li>
-          <li class="alldatetitle" v-if="this.choice6.length > 0">Day 6</li>
-          <li class="alldatecontent" v-for="item in choice6" :key="item">
-            {{ item.title }}
-          </li>
-          <li class="alldatetitle" v-if="this.choice7.length > 0">Day 7</li>
-          <li class="alldatecontent" v-for="item in choice7" :key="item">
-            {{ item.title }}
-          </li>
-          <li class="alldatetitle" v-if="this.choice8.length > 0">Day 8</li>
-          <li class="alldatecontent" v-for="item in choice8" :key="item">
-            {{ item.title }}
-          </li>
-          <li class="alldatetitle" v-if="this.choice9.length > 0">Day 9</li>
-          <li class="alldatecontent" v-for="item in choice9" :key="item">
-            {{ item.title }}
-          </li>
-          <li class="alldatetitle" v-if="this.choice10.length > 0">Day 10</li>
-          <li class="alldatecontent" v-for="item in choice10" :key="item">
-            {{ item.title }}
-          </li>
+          <div class="date_bg" v-if="this.choice3.length > 0">
+            <li class="alldatetitle" v-if="this.choice3.length > 0">
+              Day 3 - {{ this.betdatelist[2] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice3" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
+
+          <div class="date_bg" v-if="this.choice4.length > 0">
+            <li class="alldatetitle" v-if="this.choice4.length > 0">
+              Day 4 - {{ this.betdatelist[3] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice4" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
+          <div class="date_bg" v-if="this.choice5.length > 0">
+            <li class="alldatetitle" v-if="this.choice5.length > 0">
+              Day 5 - {{ this.betdatelist[4] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice5" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
+          <div class="date_bg" v-if="this.choice6.length > 0">
+            <li class="alldatetitle" v-if="this.choice6.length > 0">
+              Day 6 - {{ this.betdatelist[5] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice6" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
+          <div class="date_bg" v-if="this.choice7.length > 0">
+            <li class="alldatetitle" v-if="this.choice7.length > 0">
+              Day 7 - {{ this.betdatelist[6] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice7" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
+          <div class="date_bg" v-if="this.choice8.length > 0">
+            <li class="alldatetitle" v-if="this.choice8.length > 0">
+              Day 8 - {{ this.betdatelist[7] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice8" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
+          <div class="date_bg" v-if="this.choice9.length > 0">
+            <li class="alldatetitle" v-if="this.choice9.length > 0">
+              Day 9 - {{ this.betdatelist[8] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice9" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
+          <div class="date_bg" v-if="this.choice10.length > 0">
+            <li class="alldatetitle" v-if="this.choice10.length > 0">
+              Day 10 - {{ this.betdatelist[9] }}
+            </li>
+            <li class="alldatecontent" v-for="item in choice10" :key="item">
+              <div class="ads" style="width: 20%; float: left">
+                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+              </div>
+              <div class="ads2" style="width: 80%; float: left">
+                <span class="choice_title2"> {{ item.title }}</span>
+              </div>
+            </li>
+          </div>
         </ul>
       </div>
       <div v-if="newleft1 === 0">
@@ -758,10 +873,18 @@
             v-for="(item, index) in choice1"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -772,10 +895,16 @@
             v-for="(item, index) in choice2"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_text2">{{ item.title }}</div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -786,10 +915,14 @@
             v-for="(item, index) in choice3"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">
+                <div class="choice_no_in">NO.{{ index + 1 }}</div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">{{ item.title }}</div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -800,10 +933,10 @@
             v-for="(item, index) in choice4"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">NO.{{ index + 1 }}</div>
+              <div class="choice_title1">{{ item.title }}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -814,10 +947,10 @@
             v-for="(item, index) in choice5"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">NO.{{ index + 1 }}</div>
+              <div class="choice_title1">{{ item.title }}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -828,10 +961,10 @@
             v-for="(item, index) in choice6"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">NO.{{ index + 1 }}</div>
+              <div class="choice_title1">{{ item.title }}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -842,10 +975,10 @@
             v-for="(item, index) in choice7"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">NO.{{ index + 1 }}</div>
+              <div class="choice_title1">{{ item.title }}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -856,10 +989,10 @@
             v-for="(item, index) in choice8"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">NO.{{ index + 1 }}</div>
+              <div class="choice_title1">{{ item.title }}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -870,10 +1003,10 @@
             v-for="(item, index) in choice9"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">NO.{{ index + 1 }}</div>
+              <div class="choice_title1">{{ item.title }}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -884,10 +1017,10 @@
             v-for="(item, index) in choice10"
             :key="item"
           >
-            <span class="choice_title">
-              <span class="choice_no">NO.{{ index + 1 }}</span>
-              {{ item.title }}</span
-            >
+            <div class="choice_title">
+              <div class="choice_no">NO.{{ index + 1 }}</div>
+              <div class="choice_title1">{{ item.title }}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -1019,15 +1152,21 @@
           </GMapMarker>
         </GMapCluster>
       </GMapMap>
-      <button class="addmarker" @click="mapput">장소등록</button>
-      <button class="addmarker2" @click="lastaction">일정생성</button>
-      <button class="addmarker3" @click="deletemarker" v-if="dtm === true">
-        마커제거
-      </button>
-      <button class="addmarker3" @click="showmarker" v-if="dtm === false">
-        마커생성
-      </button>
-      <button class="addmarker4" @click="alllist">전체목록</button>
+      <div v-if="lastac === false">
+        <button class="addmarker" @click="mapput">장소등록</button>
+        <button class="addmarker2" @click="lastaction">일정생성</button>
+        <button class="addmarker3" @click="deletemarker" v-if="dtm === true">
+          마커제거
+        </button>
+        <button class="addmarker3" @click="showmarker" v-if="dtm === false">
+          마커생성
+        </button>
+        <button class="addmarker4" @click="alllist">전체목록</button>
+      </div>
+      <div v-if="lastac === true">
+        <button class="addmarker" @click="mapput">일정저장</button>
+        <button class="addmarker3" @click="showmarker">뒤로가기</button>
+      </div>
       <div class="lo"></div>
     </div>
     <div :class="rightcss">
@@ -1064,7 +1203,7 @@
                 @mouseout="outMarker1(list)"
                 @mouseover="openMarker1(list)"
               >
-                <img :src="list.firstimage" style="height: 100px" />
+                <img :src="list.firstimage" style="height: 100%; width: 100%" />
               </div>
               <div class="textdiv">
                 <span class="td_title">{{ list.title }}</span>
@@ -1089,7 +1228,7 @@
                 @mouseout="outMarker1(list)"
                 @mouseover="openMarker1(list)"
               >
-                <img :src="list.firstimage" style="height: 100px" />
+                <img :src="list.firstimage" style="height: 100%; width: 100%" />
               </div>
               <div class="textdiv">
                 <span class="td_title">{{ list.title }}</span>
@@ -1114,7 +1253,7 @@
                 @mouseout="outMarker1(list)"
                 @mouseover="openMarker1(list)"
               >
-                <img :src="list.firstimage" style="height: 100px" />
+                <img :src="list.firstimage" style="height: 100%; width: 100%" />
               </div>
               <div class="textdiv">
                 <span class="td_title">{{ list.title }}</span>
@@ -1173,6 +1312,7 @@
 <script>
 import { ElMessage } from "element-plus";
 import axios from "axios";
+
 export default {
   name: "searchbusan",
 
@@ -1193,6 +1333,12 @@ export default {
   },
   data() {
     return {
+      lastleft_bth20: "asd",
+      lastleft_bthcss: "lastleft_bth",
+      nltext2css: "nltext2",
+      lastac: false,
+      betdatelist: [],
+      loadinfon: false,
       listmapcss: "listmap",
       areacode: "",
       markersTOURIST: [],
@@ -1325,6 +1471,23 @@ export default {
   },
 
   methods: {
+    betweendate() {
+      var startDate = new Date(this.$route.query.start);
+      var endDate = new Date(this.$route.query.end);
+      var res_day = [];
+      var ss_day = new Date(startDate);
+      var ee_day = new Date(endDate);
+      while (ss_day.getTime() <= ee_day.getTime()) {
+        var _mon_ = ss_day.getMonth() + 1;
+        _mon_ = _mon_ < 10 ? "0" + _mon_ : _mon_;
+        var _day_ = ss_day.getDate();
+        _day_ = _day_ < 10 ? "0" + _day_ : _day_;
+        res_day.push(ss_day.getFullYear() + "-" + _mon_ + "-" + _day_);
+        ss_day.setDate(ss_day.getDate() + 1);
+      }
+      console.log(res_day);
+      this.betdatelist = res_day;
+    },
     async alllist() {
       await this.rightrefresh();
     },
@@ -1376,7 +1539,30 @@ export default {
 
       //this.dialogVisible = true;
     },
+    loadinfo2() {
+      for (var vv = 0; vv < this.loadfirst.length; vv++) {
+        var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        this.markers.splice(marknum1, 1);
+        this.loadinfon = false;
+      }
+
+      this.loadtext = [];
+      this.loadtexton = true;
+      this.loadnumb = false;
+      this.middleload = [];
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
+    },
     async loadinfo(i, index) {
+      this.loadinfon = true;
       if (this.num3 === 1) {
         if (this.choice1.length === index + 1) {
           alert("다음 여행지를 추가하신후 이용가능한 서비스입니다.");
@@ -1676,16 +1862,7 @@ export default {
         var marknum2 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
         this.markers.splice(marknum2, 1);
       }
-      this.path1 = [];
-      this.path2 = [];
-      this.path3 = [];
-      this.path4 = [];
-      this.path5 = [];
-      this.path6 = [];
-      this.path7 = [];
-      this.path8 = [];
-      this.path9 = [];
-      this.path10 = [];
+      await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
@@ -1717,16 +1894,7 @@ export default {
         var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
         this.markers.splice(marknum1, 1);
       }
-      this.path1 = [];
-      this.path2 = [];
-      this.path3 = [];
-      this.path4 = [];
-      this.path4 = [];
-      this.path6 = [];
-      this.path7 = [];
-      this.path8 = [];
-      this.path9 = [];
-      this.path10 = [];
+      await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
@@ -1916,16 +2084,7 @@ export default {
         var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
         this.markers.splice(marknum1, 1);
       }
-      this.path1 = [];
-      this.path2 = [];
-      this.path3 = [];
-      this.path4 = [];
-      this.path4 = [];
-      this.path6 = [];
-      this.path7 = [];
-      this.path8 = [];
-      this.path9 = [];
-      this.path10 = [];
+      await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
@@ -2112,15 +2271,65 @@ export default {
       }
     },
     allview() {
+      this.nltext2css = "nltext3";
+      this.lastleft_bthcss = "lastleft_bth";
       this.newleft0 = "on";
       this.newleft1 = "off";
     },
-    handledatego(i) {
+    handledatego(i, index) {
       console.log(i);
+      console.log(index);
+      if (i === 0) {
+        this.nltext2css = "nltext2";
+        this.lastleft_bthcss = "lastleft_bth1";
+      } else if (i === 1) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth2";
+      } else if (i === 2) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth3";
+      } else if (i === 3) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth4";
+      } else if (i === 4) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth5";
+      } else if (i === 5) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth6";
+      } else if (i === 6) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth7";
+      } else if (i === 7) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth8";
+      } else if (i === 8) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth9";
+      } else if (i === 9) {
+        this.nltext2css = "nltext2";
+
+        this.lastleft_bthcss = "lastleft_bth10";
+      }
+
       this.newleft1 = i;
       this.newleft0 = "off";
     },
-    lastaction() {
+    async lastaction() {
+      this.nltext2css = "nltext3";
+      this.markers = [];
+      await this.savemarker3();
+
+      await this.betweendate();
+      this.lastac = true;
       this.rightcss = "right3";
       this.centercss = "center3";
       this.newleft = "on";
@@ -2210,22 +2419,19 @@ export default {
       console.log(this.markers1.length);
       this.num3 -= 1;
       this.loadtexton = false;
-      this.path1 = [];
-      this.path2 = [];
-      this.path3 = [];
-      this.path4 = [];
-      this.path5 = [];
-      this.path6 = [];
-      this.path7 = [];
-      this.path8 = [];
-      this.path9 = [];
-      this.path10 = [];
+      await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
       this.loadtexton = false;
-      for (var vv2 = 0; vv2 < this.markers.length; vv2++) {
-        this.markers[vv2].icon = "https://ifh.cc/g/3qp9x6.png";
+      for (var vv1 = 0; vv1 < this.markers.length; vv1++) {
+        if (this.right === 1) {
+          this.markers[vv1].icon = "https://ifh.cc/g/ugSmCT.png";
+        } else if (this.right === 2) {
+          this.markers[vv1].icon = "https://ifh.cc/g/Xg70rK.png";
+        } else if (this.right === 3) {
+          this.markers[vv1].icon = "https://ifh.cc/g/PSvrrN.png";
+        }
       }
       await this.numchagnelist();
     },
@@ -2238,22 +2444,19 @@ export default {
       }
       this.num3 += 1;
       this.loadtexton = false;
-      this.path1 = [];
-      this.path2 = [];
-      this.path3 = [];
-      this.path4 = [];
-      this.path5 = [];
-      this.path6 = [];
-      this.path7 = [];
-      this.path8 = [];
-      this.path9 = [];
-      this.path10 = [];
+      await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
       console.log(this.markers);
       for (var vv = 0; vv < this.markers.length; vv++) {
-        this.markers[vv].icon = "https://ifh.cc/g/3qp9x6.png";
+        if (this.right === 1) {
+          this.markers[vv].icon = "https://ifh.cc/g/ugSmCT.png";
+        } else if (this.right === 2) {
+          this.markers[vv].icon = "https://ifh.cc/g/Xg70rK.png";
+        } else if (this.right === 3) {
+          this.markers[vv].icon = "https://ifh.cc/g/PSvrrN.png";
+        }
       }
       await this.numchagnelist();
     },
@@ -2820,16 +3023,7 @@ export default {
     },
     async handleright() {
       this.loadtexton = false;
-      this.path1 = [];
-      this.path2 = [];
-      this.path3 = [];
-      this.path4 = [];
-      this.path5 = [];
-      this.path6 = [];
-      this.path7 = [];
-      this.path8 = [];
-      this.path9 = [];
-      this.path10 = [];
+      await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
@@ -3038,6 +3232,59 @@ export default {
         }
       }
     },
+    savemarker3() {
+      // 새 마커 추가
+      for (var num1 = 0; num1 < this.markers1.length; num1++) {
+        this.markers1[num1].icon = `http://127.0.0.1:8080/REST/travel/image1`;
+        this.markers.push(this.markers1[num1]);
+      }
+      for (var num2 = 0; num2 < this.markers2.length; num2++) {
+        this.markers2[num2].icon = `http://127.0.0.1:8080/REST/travel/image2`;
+        this.markers.push(this.markers2[num2]);
+      }
+
+      for (var num3 = 0; num3 < this.markers3.length; num3++) {
+        this.markers3[num3].icon = `http://127.0.0.1:8080/REST/travel/image3`;
+        this.markers.push(this.markers3[num3]);
+      }
+
+      for (var num4 = 0; num4 < this.markers4.length; num4++) {
+        this.markers4[num4].icon = `http://127.0.0.1:8080/REST/travel/image4`;
+        this.markers.push(this.markers4[num4]);
+      }
+
+      for (var num5 = 0; num5 < this.markers5.length; num5++) {
+        this.markers5[num5].icon = `http://127.0.0.1:8080/REST/travel/image5`;
+        this.markers.push(this.markers5[num5]);
+      }
+
+      for (var num6 = 0; num6 < this.markers6.length; num6++) {
+        this.markers6[num6].icon = `http://127.0.0.1:8080/REST/travel/image6`;
+        this.markers.push(this.markers6[num6]);
+      }
+
+      for (var num7 = 0; num7 < this.markers7.length; num7++) {
+        this.markers7[num7].icon = `http://127.0.0.1:8080/REST/travel/image7`;
+        this.markers.push(this.markers7[num7]);
+      }
+
+      for (var num8 = 0; num8 < this.markers8.length; num8++) {
+        this.markers8[num8].icon = `http://127.0.0.1:8080/REST/travel/image8`;
+        this.markers.push(this.markers8[num8]);
+      }
+
+      for (var num9 = 0; num9 < this.markers9.length; num9++) {
+        this.markers9[num9].icon = `http://127.0.0.1:8080/REST/travel/image9`;
+        this.markers.push(this.markers9[num9]);
+      }
+
+      for (var num10 = 0; num10 < this.markers10.length; num10++) {
+        this.markers10[
+          num10
+        ].icon = `http://127.0.0.1:8080/REST/travel/image10`;
+        this.markers.push(this.markers10[num10]);
+      }
+    },
     async selectdeletelist() {
       // 선택된리스트 제거
       for (var vv1 = 0; vv1 < this.choice1.length; vv1++) {
@@ -3113,16 +3360,7 @@ export default {
     },
     async handleright2() {
       this.loadtexton = false;
-      this.path1 = [];
-      this.path2 = [];
-      this.path3 = [];
-      this.path4 = [];
-      this.path5 = [];
-      this.path6 = [];
-      this.path7 = [];
-      this.path8 = [];
-      this.path9 = [];
-      this.path10 = [];
+      await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
@@ -3137,16 +3375,7 @@ export default {
     },
     async handleright3() {
       this.loadtexton = false;
-      this.path1 = [];
-      this.path2 = [];
-      this.path3 = [];
-      this.path4 = [];
-      this.path5 = [];
-      this.path6 = [];
-      this.path7 = [];
-      this.path8 = [];
-      this.path9 = [];
-      this.path10 = [];
+      await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
@@ -3157,6 +3386,18 @@ export default {
       this.btncolor3 = "active";
       this.busanlist10 = [];
       await this.right3();
+    },
+    pathnone() {
+      this.path1 = [];
+      this.path2 = [];
+      this.path3 = [];
+      this.path4 = [];
+      this.path5 = [];
+      this.path6 = [];
+      this.path7 = [];
+      this.path8 = [];
+      this.path9 = [];
+      this.path10 = [];
     },
   },
 };
@@ -3183,613 +3424,6 @@ export default {
   color: white;
 }
 </style>
-<style scoped>
-.l_btn {
-  width: 20px;
-  height: 20px;
-  padding: 1px;
-  border: none;
-  background: unset;
-  cursor: pointer;
-}
-.l_btn img {
-  width: 19px;
-  height: 19px;
-}
-.mylist_text {
-  font-size: 14px;
-  margin-left: 10px;
-  margin-top: 10px;
-  float: inherit;
-}
-.listmap {
-  position: relative;
-  border-radius: 10px;
-  width: 16.7vw;
-  height: 88px;
-  box-shadow: rgb(31 38 135 / 15%) 0px 8px 16px 0px;
-  margin-top: 20px;
-  background: #ffffff;
-  list-style: none;
-}
-.info_btn {
-  border: none;
-  padding: 4px 10px;
-  color: white;
-  background: #ccc;
-  position: absolute;
-  border-radius: 50%;
-  bottom: 6.5px;
-  right: 50px;
-}
-.plus_btn {
-  position: absolute;
-  bottom: 0;
-  right: 20px;
-  border: none;
-  background: none;
-  font-weight: 500;
-  font-size: 30px;
-  cursor: pointer;
-}
-.td_title {
-  font-size: 13px;
-  font-weight: 500;
-  margin-left: 10px;
-  margin-top: 10px;
-  vertical-align: -11px;
-}
-.textdiv {
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.nltext1 {
-  display: inline-block;
-  padding: 5px 10px;
-  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
-  background-color: #fff;
-  margin-top: 10px;
-  font-size: 13px;
-}
-.nltext2 {
-  display: inline-block;
-  padding: 20px 10px;
-  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
-  background-color: #fff;
-  font-size: 13px;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  border: none;
-}
-.lastleft_bth {
-  border: none;
-  padding: 0px 15px;
-  margin: 6px;
-  border-radius: 0px;
-  backdrop-filter: blur(4px);
-  /* color: rgb(255, 255, 255); */
-  box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
-  cursor: pointer;
-  height: 50px;
-
-  justify-content: center;
-  align-items: center;
-  font-family: "Montserrat";
-  background-color: #fff;
-  font-size: 13px;
-}
-.fade-enter-active {
-  transition: opacity 0.5s;
-}
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter {
-  opacity: 0;
-}
-.fade-leave-to {
-  opacity: 0;
-}
-.newleft {
-  width: 5%;
-  float: left;
-  height: 850px;
-  text-align: center;
-  background: #fafafa;
-  transition: all 1s;
-}
-.myt3 {
-  padding-top: 10px;
-  position: relative;
-  width: 10%;
-  float: left;
-  display: grid;
-}
-.myt4 {
-  display: inherit;
-}
-.myt4_in {
-  border-top: 1px solid #ddd;
-  padding: 0px 50px;
-}
-.loadcss {
-  font-size: 11px;
-}
-.loadinfo {
-  padding: 5px 10px;
-  margin-left: 10px;
-  margin-top: 10px;
-  background: rgb(51, 51, 51);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 11px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  display: block;
-}
-.btn11 {
-}
-.btn12 {
-}
-.btn13 {
-}
-.myt2 {
-  width: 70%;
-  text-align: left;
-  float: left;
-}
-.mytimg {
-  float: left;
-  height: 70px;
-  width: 20%;
-}
-.mytimg img {
-  padding: 9px;
-  box-sizing: border-box;
-}
-.travel_list {
-  overflow: auto;
-  height: 72vh;
-  margin-top: 5px;
-}
-.mytravel_list {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  height: auto;
-  box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.2);
-  margin-top: 20px;
-  background: #ffffff;
-  list-style: none;
-  display: inline-block;
-  width: 90%;
-  position: relative;
-  transition: all 2s;
-}
-.ml_img {
-  position: absolute;
-  top: -5px;
-  left: -10px;
-}
-.rightfull_btn {
-  height: 100%;
-  width: 5%;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.1);
-  float: left;
-  line-height: 50;
-  color: darkslateblue;
-  cursor: pointer;
-  transition: all 1s;
-  max-width: 20px;
-}
-.rightfull_btn span {
-  display: inline-block;
-}
-.rightfull_btn:hover {
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
-}
-.ind {
-  color: red;
-  font-size: 12px;
-}
-.chcss {
-  text-align: center;
-  display: block;
-}
-.imgdiv {
-  overflow: hidden;
-  height: 88px;
-  width: 100px;
-  float: left;
-  cursor: pointer;
-  border-radius: 10px 0px 0px 10px;
-}
-
-.listmap1 {
-  position: relative;
-  border-radius: 10px;
-  width: 16.7vw;
-  height: 88px;
-  box-shadow: rgb(31 38 135 / 15%) 0px 8px 16px 0px;
-  margin-top: 20px;
-  background: #ffffff;
-  list-style: none;
-  display: inline-flex;
-  margin-right: 3%;
-}
-
-.noneactive {
-  background: #ffffff;
-  color: black;
-}
-.active {
-  background: #98dde3;
-  color: white;
-}
-.check {
-  margin: 0px !important;
-}
-.vue-map-container {
-  height: 100vh !important;
-}
-.text1 {
-  font-size: 19px;
-  margin-bottom: 10px;
-}
-.text2 {
-  font-weight: bold;
-}
-.text3 {
-  font-size: 13px;
-}
-h5 {
-  display: block;
-  background: #98dde3;
-  margin: 10px;
-  padding: 10px;
-  color: white;
-}
-.full_day {
-  font-size: 1.1rem;
-  color: #696969;
-  text-decoration: none;
-  margin-bottom: 20px;
-  display: block;
-}
-.day {
-  font-size: 1.2rem;
-  font-weight: 700;
-  display: block;
-  margin-top: 10px;
-}
-.sub_area {
-  font-size: 0.8rem;
-
-  color: #999;
-}
-h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  padding: 0px;
-  margin-top: 10px;
-  margin-bottom: 3px;
-}
-p {
-  font-size: 20px;
-}
-.wrap {
-  width: 100%;
-  height: 100vh;
-}
-.left1 {
-  width: 20%;
-  height: 850px;
-  background: #ffffff;
-  text-align: center;
-  float: left;
-  box-sizing: border-box;
-  padding: 10px;
-}
-.center1 {
-  width: 60%;
-  height: 850px;
-  position: relative;
-  float: left;
-  transition: all 1.5s;
-}
-.center2 {
-  width: 40%;
-  height: 850px;
-  position: relative;
-  float: left;
-  transition: all 1.5s;
-}
-.center3 {
-  width: 75%;
-  height: 850px;
-  position: relative;
-  float: left;
-  transition: all 1.5s;
-}
-.addmarker {
-  position: absolute;
-  top: 20px;
-  left: 10px;
-  border: none;
-  cursor: pointer;
-  width: 120px;
-  height: 56px;
-  padding: 0;
-  border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  color: #000 !important;
-  box-shadow: unset;
-  /* background: rgba(255, 255, 255, 0.25); */
-  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px) !important;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 8px !important;
-  text-decoration: unset !important;
-}
-.addmarker2 {
-  position: absolute;
-  top: 100px;
-  left: 10px;
-  border: none;
-  cursor: pointer;
-  width: 120px;
-  height: 56px;
-  padding: 0;
-  border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  color: #000 !important;
-  box-shadow: unset;
-  /* background: rgba(255, 255, 255, 0.25); */
-  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px) !important;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 8px !important;
-  text-decoration: unset !important;
-}
-.addmarker3 {
-  position: absolute;
-  top: 20px;
-  right: 10px;
-  border: none;
-  cursor: pointer;
-  width: 120px;
-  height: 56px;
-  padding: 0;
-  border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  color: #000 !important;
-  box-shadow: unset;
-  /* background: rgba(255, 255, 255, 0.25); */
-  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px) !important;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 8px !important;
-  text-decoration: unset !important;
-}
-.addmarker4 {
-  position: absolute;
-  top: 100px;
-  right: 10px;
-  border: none;
-  cursor: pointer;
-  width: 120px;
-  height: 56px;
-  padding: 0;
-  border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  color: #000 !important;
-  box-shadow: unset;
-  /* background: rgba(255, 255, 255, 0.25); */
-  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px) !important;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 8px !important;
-  text-decoration: unset !important;
-}
-.right1 {
-  width: 20%;
-  height: 100vh;
-  background: #f7f7f7;
-  float: left;
-  box-sizing: border-box;
-  transition: all 1.5s;
-}
-.right2 {
-  width: 40%;
-  height: 900px;
-  background: rgb(238, 237, 237);
-  float: left;
-  box-sizing: border-box;
-  transition: all 1.5s;
-}
-.right3 {
-  display: none;
-}
-.btn_last {
-  width: 100%;
-  height: 30px;
-  outline: none;
-  border: none;
-  background: #ff1744;
-  color: white;
-  cursor: pointer;
-}
-body {
-  margin: 0;
-}
-#right_btn {
-  width: 33%;
-  height: 35px;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-#right_btn:nth-child(3) {
-  border-right: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-}
-.right_content {
-  margin-top: 10px;
-
-  height: 800px;
-  padding: 10px 0px 10px 10px;
-}
-.right_content h4 {
-  font-weight: 900;
-  font-size: 20px;
-}
-.dialogimg {
-  overflow: hidden;
-  height: 286px;
-  width: 35%;
-  float: left;
-}
-.dialogtext {
-  float: left;
-  width: 65%;
-  padding: 20px 10px 20px 10px;
-  box-sizing: border-box;
-}
-.diatextarea {
-  border: none;
-  height: 200px;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  resize: none;
-  outline: none;
-  -ms-overflow-style: none;
-}
-.diatextarea::-webkit-scrollbar {
-  display: none;
-}
-.searchinput {
-  width: 95%;
-  padding: 10px 0px;
-  border: 1px solid #ddd;
-  margin: 0 auto;
-}
-::-webkit-input-placeholder {
-  text-align: center;
-}
-.rightscroll::-webkit-scrollbar {
-  width: 1px;
-  background-color: rgba(145, 210, 229, 0);
-}
-.travel_list::-webkit-scrollbar {
-  width: 3px;
-  background-color: rgba(145, 210, 229, 0);
-}
-.prev {
-  float: left;
-  font-size: 25px;
-  font-weight: bold;
-  background: none;
-  border: none;
-  margin-left: 10px;
-  cursor: pointer;
-  line-height: 38px;
-  color: cornflowerblue;
-}
-.next {
-  float: right;
-  font-size: 25px;
-  font-weight: bold;
-  background: none;
-  border: none;
-  margin-right: 15px;
-  cursor: pointer;
-  line-height: 38px;
-  color: cornflowerblue;
-}
-
-.list-item {
-  display: inline-block;
-  margin-right: 10px;
-}
-.list-enter-active,
-.list-leave-active {
-  opacity: 0;
-  transition: all 1s;
-  transform: translateY(30px);
-}
-.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  transform: translateY(30px);
-}
-/* 결과창 css */
-.alldate li {
-  list-style: none;
-}
-
-.alldate {
-  text-align: center;
-  height: 732px;
-  overflow: auto;
-}
-.alldatetitle {
-  font-weight: bold;
-  font-size: 17px;
-}
-
-.alldatecontent {
-  font-size: 13px;
-  text-align: center;
-  width: 80%;
-  height: 6vh;
-
-  margin-top: 10px;
-  display: inline-table;
-  box-shadow: rgb(31 38 135 / 8%) 0px 8px 16px 0px !important;
-  background: rgba(255, 255, 255, 0.8) !important;
-  border-radius: 4px !important;
-  border-width: initial !important;
-  border-style: none !important;
-  border-color: initial !important;
-  border-image: initial !important;
-  margin: 8px;
-  background-color: transparent !important;
-
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  padding: 8px;
-  position: relative;
-}
-
-.choice_title {
-  vertical-align: -100%;
-}
-.choice_no {
-  margin-right: 50px;
-  color: #ffba3b;
-}
+<style scope>
+@import "../assets/css/search_scope.css";
 </style>
