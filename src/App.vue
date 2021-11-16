@@ -408,7 +408,7 @@ export default {
       this.step1valueeng = this.kora[1];
       this.dialogVisible = false;
 
-      if (this.betday > 10) {
+      if (this.betday > 9) {
         alert("여행일정은 10일을 넘길수 없습니다");
         return;
       }

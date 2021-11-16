@@ -88,6 +88,7 @@ export default {
         redirectUri: "http://127.0.0.1:9090/login",
       };
       window.Kakao.Auth.authorize(params);
+      console.log(params);
     },
     async handlelogin() {
       const url = `/REST/member/login`;
@@ -113,12 +114,21 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
     const cookieget = this.$cookies.get("cookieid");
     if (this.$cookies.isKey("cookieid") === true) {
       this.saved = true;
       this.userid = cookieget;
     }
+    console.log(this.$route.query.code);
+
+
+    // 카카오로그인 
+    const url = `/REST/kakaologin?code=${this.$route.query.code}`;
+    const headers = { "Content-type": "application/json" };
+    const data = {};
+    const response = await axios.post(url, data, { headers });
+    console.log(response);
   },
 };
 </script>

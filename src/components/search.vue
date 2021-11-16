@@ -10,14 +10,11 @@
           margin: 6px;
           border-radius: 10px;
           backdrop-filter: blur(4px);
-
           box-shadow: rgb(31 38 135 / 10%) 0px 8px 32px 0px !important;
           cursor: pointer;
           height: 50px;
-
           justify-content: center;
           align-items: center;
-
           background-color: white;
           font-size: 13px;
         "
@@ -65,7 +62,22 @@
               controls-position="right"
               @change="handleChange"
             /><span>일차</span>
-            <button @click="numplus" class="next">&gt;</button>
+            <button
+              @click="numplus"
+              class="next"
+              v-if="this.num3 !== Number(this.$route.query.betday)"
+            >
+              &gt;
+            </button>
+            <button
+              @click="numplus"
+              class="next"
+              v-if="this.num3 === Number(this.$route.query.betday)"
+              :disabled="this.num3 === Number(this.$route.query.betday)"
+              style="color: #a1a1a1; pointer-events: none"
+            >
+              &gt;
+            </button>
           </div>
 
           <ul
@@ -1165,7 +1177,7 @@
       </div>
       <div v-if="lastac === true">
         <button class="addmarker" @click="mapput">일정저장</button>
-        <button class="addmarker3" @click="showmarker">뒤로가기</button>
+        <button class="addmarker3" @click="goback">뒤로가기</button>
       </div>
       <div class="lo"></div>
     </div>
@@ -1471,6 +1483,16 @@ export default {
   },
 
   methods: {
+    async goback() {
+      this.lastac = false;
+      this.rightcss = "right1";
+      this.centercss = "center1";
+      this.newleft = "off";
+      this.newleft0 = "off";
+      this.markers = [];
+      await this.showmarker();
+      await this.onetwomarker();
+    },
     betweendate() {
       var startDate = new Date(this.$route.query.start);
       var endDate = new Date(this.$route.query.end);
@@ -2270,54 +2292,232 @@ export default {
         }
       }
     },
-    allview() {
+    async allview() {
       this.nltext2css = "nltext3";
       this.lastleft_bthcss = "lastleft_bth";
       this.newleft0 = "on";
       this.newleft1 = "off";
+      this.markers = [];
+      await this.savemarker3();
+    },
+    async onetwomarker() {
+      if (this.num3 === 1) {
+        for (var nm = 0; nm < this.markers1.length; nm++) {
+          this.markers1[nm].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nm + 1
+          }`;
+        }
+        for (var nm1 = 0; nm1 < this.markers1.length; nm1++) {
+          this.markers.push(this.markers1[nm1]);
+        }
+        console.log(this.markers);
+      } else if (this.num3 === 2) {
+        for (var aaa = 0; aaa < this.markers2.length; aaa++) {
+          this.markers2[aaa].icon = `http://127.0.0.1:8080/REST/travel/image${
+            aaa + 1
+          }`;
+        }
+        for (var nw1 = 0; nw1 < this.markers2.length; nw1++) {
+          this.markers.push(this.markers2[nw1]);
+        }
+        console.log(this.markers);
+      } else if (this.num3 === 3) {
+        for (var bbb = 0; bbb < this.markers3.length; bbb++) {
+          this.markers3[bbb].icon = `http://127.0.0.1:8080/REST/travel/image${
+            bbb + 1
+          }`;
+        }
+        for (var bbb1 = 0; bbb1 < this.markers3.length; bbb1++) {
+          this.markers.push(this.markers3[bbb1]);
+        }
+      } else if (this.num3 === 4) {
+        for (var ccc = 0; ccc < this.markers4.length; ccc++) {
+          this.markers4[ccc].icon = `http://127.0.0.1:8080/REST/travel/image${
+            ccc + 1
+          }`;
+        }
+        for (var ccc1 = 0; ccc1 < this.markers4.length; ccc1++) {
+          this.markers.push(this.markers4[ccc1]);
+        }
+      } else if (this.num3 === 5) {
+        for (var ddd = 0; ddd < this.markers5.length; ddd++) {
+          this.markers5[ddd].icon = `http://127.0.0.1:8080/REST/travel/image${
+            ddd + 1
+          }`;
+        }
+        for (var ddd1 = 0; ddd1 < this.markers5.length; ddd1++) {
+          this.markers.push(this.markers5[ddd1]);
+        }
+      } else if (this.num3 === 6) {
+        for (var fff = 0; fff < this.markers6.length; fff++) {
+          this.markers6[fff].icon = `http://127.0.0.1:8080/REST/travel/image${
+            fff + 1
+          }`;
+        }
+        for (var fff1 = 0; fff1 < this.markers6.length; fff1++) {
+          this.markers.push(this.markers6[fff1]);
+        }
+      } else if (this.num3 === 7) {
+        for (var ggg = 0; ggg < this.markers7.length; ggg++) {
+          this.markers7[ggg].icon = `http://127.0.0.1:8080/REST/travel/image${
+            ggg + 1
+          }`;
+        }
+        for (var ggg1 = 0; ggg1 < this.markers7.length; ggg1++) {
+          this.markers.push(this.markers7[ggg1]);
+        }
+      } else if (this.num3 === 8) {
+        for (var hhh = 0; hhh < this.markers8.length; hhh++) {
+          this.markers8[hhh].icon = `http://127.0.0.1:8080/REST/travel/image${
+            hhh + 1
+          }`;
+        }
+        for (var hhh1 = 0; hhh1 < this.markers8.length; hhh1++) {
+          this.markers.push(this.markers8[hhh1]);
+        }
+      } else if (this.num3 === 9) {
+        for (var jjj = 0; jjj < this.markers9.length; jjj++) {
+          this.markers9[jjj].icon = `http://127.0.0.1:8080/REST/travel/image${
+            jjj + 1
+          }`;
+        }
+        for (var jjj1 = 0; jjj1 < this.markers9.length; jjj1++) {
+          this.markers.push(this.markers9[jjj1]);
+        }
+      } else if (this.num3 === 10) {
+        for (var kkk = 0; kkk < this.markers10.length; kkk++) {
+          this.markers10[kkk].icon = `http://127.0.0.1:8080/REST/travel/image${
+            kkk + 1
+          }`;
+        }
+        for (var kkk1 = 0; kkk1 < this.markers10.length; kkk1++) {
+          this.markers.push(this.markers10[kkk1]);
+        }
+      }
     },
     handledatego(i, index) {
+      console.log(this.markers1);
       console.log(i);
       console.log(index);
       if (i === 0) {
+        // 버튼 색상
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth1";
+        // ==
+        // marker 표시
+        this.markers = [];
+        for (var nm = 0; nm < this.markers1.length; nm++) {
+          this.markers1[nm].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nm + 1
+          }`;
+        }
+        for (var nm1 = 0; nm1 < this.markers1.length; nm1++) {
+          this.markers.push(this.markers1[nm1]);
+        }
+        console.log(this.markers);
       } else if (i === 1) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth2";
+        this.markers = [];
+        for (var aaa = 0; aaa < this.markers2.length; aaa++) {
+          this.markers2[aaa].icon = `http://127.0.0.1:8080/REST/travel/image${
+            aaa + 1
+          }`;
+        }
+        for (var nw1 = 0; nw1 < this.markers2.length; nw1++) {
+          this.markers.push(this.markers2[nw1]);
+        }
+        console.log(this.markers);
       } else if (i === 2) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth3";
+        this.markers = [];
+        for (var bbb = 0; bbb < this.markers3.length; bbb++) {
+          this.markers3[bbb].icon = `http://127.0.0.1:8080/REST/travel/image${
+            bbb + 1
+          }`;
+        }
+        for (var bbb1 = 0; bbb1 < this.markers3.length; bbb1++) {
+          this.markers.push(this.markers3[bbb1]);
+        }
       } else if (i === 3) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth4";
+        this.markers = [];
+        for (var ccc = 0; ccc < this.markers4.length; ccc++) {
+          this.markers4[ccc].icon = `http://127.0.0.1:8080/REST/travel/image${
+            ccc + 1
+          }`;
+        }
+        for (var ccc1 = 0; ccc1 < this.markers4.length; ccc1++) {
+          this.markers.push(this.markers4[ccc1]);
+        }
       } else if (i === 4) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth5";
+        for (var ddd = 0; ddd < this.markers5.length; ddd++) {
+          this.markers5[ddd].icon = `http://127.0.0.1:8080/REST/travel/image${
+            ddd + 1
+          }`;
+        }
+        for (var ddd1 = 0; ddd1 < this.markers5.length; ddd1++) {
+          this.markers.push(this.markers5[ddd1]);
+        }
       } else if (i === 5) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth6";
+        for (var fff = 0; fff < this.markers6.length; fff++) {
+          this.markers6[fff].icon = `http://127.0.0.1:8080/REST/travel/image${
+            fff + 1
+          }`;
+        }
+        for (var fff1 = 0; fff1 < this.markers6.length; fff1++) {
+          this.markers.push(this.markers6[fff1]);
+        }
       } else if (i === 6) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth7";
+        for (var ggg = 0; ggg < this.markers7.length; ggg++) {
+          this.markers7[ggg].icon = `http://127.0.0.1:8080/REST/travel/image${
+            ggg + 1
+          }`;
+        }
+        for (var ggg1 = 0; ggg1 < this.markers7.length; ggg1++) {
+          this.markers.push(this.markers7[ggg1]);
+        }
       } else if (i === 7) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth8";
+        for (var hhh = 0; hhh < this.markers8.length; hhh++) {
+          this.markers8[hhh].icon = `http://127.0.0.1:8080/REST/travel/image${
+            hhh + 1
+          }`;
+        }
+        for (var hhh1 = 0; hhh1 < this.markers8.length; hhh1++) {
+          this.markers.push(this.markers8[hhh1]);
+        }
       } else if (i === 8) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth9";
+        for (var jjj = 0; jjj < this.markers9.length; jjj++) {
+          this.markers9[jjj].icon = `http://127.0.0.1:8080/REST/travel/image${
+            jjj + 1
+          }`;
+        }
+        for (var jjj1 = 0; jjj1 < this.markers9.length; jjj1++) {
+          this.markers.push(this.markers9[jjj1]);
+        }
       } else if (i === 9) {
         this.nltext2css = "nltext2";
-
         this.lastleft_bthcss = "lastleft_bth10";
+        for (var kkk = 0; kkk < this.markers10.length; kkk++) {
+          this.markers10[kkk].icon = `http://127.0.0.1:8080/REST/travel/image${
+            kkk + 1
+          }`;
+        }
+        for (var kkk1 = 0; kkk1 < this.markers10.length; kkk1++) {
+          this.markers.push(this.markers10[kkk1]);
+        }
       }
 
       this.newleft1 = i;
