@@ -3,7 +3,8 @@
     <div class="wrap">
       <h2 class="tti">글 수정</h2>
       <div class="hr"></div>
-      <label>작성자</label> <span>{{list.writer}}</span><br />
+      <label>작성자</label> <span>{{ list.member.nicname }}</span
+      ><br />
       <label>말머리</label>
       <select class="keyword" v-model="keyword">
         <option value="free">잡담</option>
@@ -35,7 +36,6 @@ export default {
     ckeditor: CKEditor.component,
   },
   async created() {
-    
     await this.refresh();
   },
   data() {
@@ -46,7 +46,7 @@ export default {
       editor: ClassicEditor,
       editorData: "",
       no: this.$route.query.no,
-            token: sessionStorage.getItem("TOKEN"),
+      token: sessionStorage.getItem("TOKEN"),
       editorConfig: {
         language: "ko",
       },
@@ -55,18 +55,18 @@ export default {
   methods: {
     async handleconfirm() {
       const url = `/REST/board/update`;
-      const headers = { "Content-type": "application/json" ,  token : this.token };
+      const headers = { "Content-type": "application/json", token: this.token };
       const body = {
         no: this.no,
         title: this.title,
         content: this.editorData,
-        keyword: this.keyword,
+        category: this.keyword,
       };
-      const response = await axios.post(url, body, { headers });  // put으로 교체예정 
+      const response = await axios.put(url, body, { headers }); // put으로 교체예정
       console.log(response);
-      if(response.data.status === 200){
+      if (response.data.status === 200) {
         alert("수정 완료되었습니다");
-        this.$router.push(`/freecontent?no=${this.no}`)
+        this.$router.push(`/freecontent?no=${this.no}`);
       }
     },
     async refresh() {
@@ -79,7 +79,7 @@ export default {
         this.list = response.data.board;
         this.editorData = this.list.content;
         this.title = this.list.title;
-        this.keyword = this.list.keyword;
+        this.keyword = this.list.category;
       }
     },
   },

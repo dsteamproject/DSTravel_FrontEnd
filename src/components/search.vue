@@ -28,7 +28,7 @@
     </div>
     <div class="left2">
       <div v-if="newleft === 'off'">
-        <h3 @change="locationchange">
+        <h3 class="h31" @change="locationchange">
           {{ this.$route.query.locationkor }}
         </h3>
         <span class="sub_area">{{ this.$route.query.locationeng }}</span
@@ -133,13 +133,15 @@
                 </div>
 
                 <div class="myt4" v-if="loadtexton === true">
-                  <button
-                    class="loadinfo2"
-                    @click="loadinfo2(list, index)"
-                    v-if="loadinfon === true"
-                  >
-                    닫기
-                  </button>
+                  <div v-if="loadinfon === true">
+                    <button
+                      v-if="index === this.loadnumb"
+                      class="loadinfo2"
+                      @click="loadinfo2(list, index)"
+                    >
+                      닫기
+                    </button>
+                  </div>
                   <div class="myt4_in" v-if="index === this.loadnumb">
                     <p v-for="(item, i) in loadtext" :key="item">
                       <span class="loadcss" v-if="index === this.loadnumb"

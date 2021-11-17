@@ -38,6 +38,13 @@
             @click="changeMenu(3)"
             >질문</router-link
           ><br />
+          <router-link
+            :to="que"
+            id="btn1"
+            v-bind:class="oncolor4"
+            @click="changeMenu(4)"
+            >여행일정</router-link
+          >
         </div>
       </div>
       <div class="right10">
@@ -72,6 +79,12 @@ export default {
       this.oncolor4 = "btnoff";
     }
     if (currentPath === "/board/que") {
+      this.oncolor1 = "btnoff";
+      this.oncolor2 = "btnoff";
+      this.oncolor3 = "btnoff";
+      this.oncolor4 = "btnon";
+    }
+       if (currentPath === "/board/que") {
       this.oncolor1 = "btnoff";
       this.oncolor2 = "btnoff";
       this.oncolor3 = "btnoff";

@@ -177,7 +177,7 @@
             </li>
             <li>
               <router-link to="" class="router2" @click="dialogVisible = true"
-                >서치</router-link
+                >여행추천</router-link
               >
             </li>
             <li>

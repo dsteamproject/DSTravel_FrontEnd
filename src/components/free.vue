@@ -69,7 +69,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="member.id"
+          prop="member.nicname"
           label="작성자명"
           width="180"
           align="center"

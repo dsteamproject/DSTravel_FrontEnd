@@ -1,0 +1,256 @@
+.fixedbtn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgb(205, 242, 248);
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    bottom: 5%;
+    right: 2%;
+    cursor: pointer;
+    background: url(../queicon.png) no-repeat;
+    background-size: 70%;
+    background-position: center;
+    cursor: pointer;
+    transition: all 0.5s;
+  }
+  .fixedbtn:hover {
+    opacity: 0.7;
+  }
+  .traveltitle {
+    color: #000;
+    font-size: 25px;
+    padding-top: 70px;
+    font-weight: 500;
+  }
+  .travellog {
+    color: #999999;
+    font-size: 18px;
+    padding-bottom: 20px;
+  }
+  .carousel__next {
+    background-color: red !important;
+  }
+  .carousel__item {
+    width: 300px;
+    height: 300px;
+    background: #ccc;
+  }
+  .box2 {
+    width: 1320px;
+    margin: 0 auto;
+  }
+  .carousel__slide > .carousel__item {
+    transform: scale(1);
+    opacity: 0.5;
+    transition: 0.5s;
+  }
+  .carousel__slide--visible > .carousel__item {
+    opacity: 1;
+    transform: rotateY(0);
+  }
+  .carousel__slide--next > .carousel__item {
+    transform: scale(0.9) translate(-10px);
+  }
+  .carousel__slide--prev > .carousel__item {
+    transform: scale(0.9) translate(10px);
+  }
+  .carousel__slide--active > .carousel__item {
+    transform: scale(1.1);
+  }
+  .last_btn {
+    padding: 10px 40px;
+    border: none;
+    margin-top: 50px;
+    background: #98dde3;
+    color: white;
+    cursor: pointer;
+  }
+  .item {
+    width: 270px;
+    height: 350px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin: 20px;
+  }
+  .item2 {
+    width: 270px;
+    height: 100px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin: 20px;
+  }
+  .item3 {
+    width: 270px;
+    height: 100px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin: 20px;
+  }
+
+  .step1 {
+    width: 900px;
+    margin: 0 auto;
+  }
+  .sbg {
+    background: #98dde3;
+    color: white;
+  }
+  .nonesbg {
+    background: white;
+    color: black;
+  }
+  .sub_step {
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .step_travel li {
+    display: inline-block;
+    margin: 20px;
+    padding: 8px 30px;
+    border: 1px solid #ccc;
+  }
+  
+  .area_eng {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    padding-top: 350px;
+    display: inline-block;
+  }
+  .area_kor {
+    font-weight: bold;
+    color: white;
+  }
+  
+  .text_btn1_1 {
+    background: rgba(246, 155, 48, 0.8);
+  
+    padding: 15px 30px;
+    line-height: 140px;
+    color: white;
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: bold;
+  }
+  .text_btn2 {
+    border: 1px solid white;
+    padding: 4px 15px;
+    border-radius: 10px;
+    margin-left: 30px;
+  }
+  .wrap_in {
+    position: relative;
+  }
+  .text_box {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    text-align: center;
+    transform: translateX(-50%);
+  }
+  .text_box h5 {
+    font-size: 50px;
+    color: white;
+  }
+  .text_box p {
+    font-size: 20px;
+    color: white;
+  }
+  .el-carousel__item:nth-child(5) {
+    background-image: url(../t1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .el-carousel__item:nth-child(4) {
+    background-image: url(../t2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .el-carousel__item:nth-child(3) {
+    background-image: url(../t3.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .wrap {
+    width: 100%;
+    height: auto;
+  }
+  .main_img {
+    height: 80vh;
+    width: 100%;
+    background-image: url(../main.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .input {
+    text-align: center;
+  }
+
+
+  .search:nth-child(2) {
+    border-right: 1px solid #ccc;
+    border-radius: 10px 0px 0px 10px;
+  }
+  .search:nth-child(3) {
+    border-right: 1px solid #ccc;
+  }
+  .search_btn {
+    padding: 14.5px 30px;
+    padding-bottom: 17.5px;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    background: rgb(86, 233, 66);
+    border-radius: 0px 10px 10px 0px;
+    color: white;
+    cursor: pointer;
+  }
+  .content1_1 {
+    text-align: center;
+    padding-top: 50px;
+    margin-bottom: 150px;
+  }
+  h3 {
+    font-size: 28px;
+  }
+  .sub {
+    font-size: 15px;
+  }
+  .travel li {
+    width: 409px;
+    height: 440px;
+  
+    background: #ccc;
+    margin: 20px;
+    margin-top: 40px;
+    display: inline-block;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .travel li:nth-child(1) {
+    background-image: url(../seoul.png);
+  }
+  .travel li:nth-child(2) {
+    background-image: url(../busan.jpg);
+    background-size: cover;
+  }
+  .travel li:nth-child(3) {
+    background-image: url(../jeju.jpg);
+    background-size: cover;
+  }
+  .popovercontent {
+    height: 500px;
+  }
+  .box1{
+      background-color: #F6F6F6;
+      width:100%;
+      height: 500px;
+  }
+  .box1_in{
+      width:1320px;
+      margin:0 auto;
+  }

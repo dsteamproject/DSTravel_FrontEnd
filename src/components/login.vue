@@ -44,11 +44,23 @@
         <img src="../assets/naver.png" />
         <div class="right">
           <h3 class="login2 h31">간편 로그인</h3>
-          <button class="easylogin">네이버로 로그인</button><br />
-          <button class="easylogin">구글로 로그인</button><br />
-          <button class="easylogin" @click="loginWithKakao">
-            카카오톡 로그인
-          </button>
+          <a
+            href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=WCxe47guG90KEPP6lIWu&redirect_uri=http://localhost:9090/login"
+          >
+            <button class="easylogin">네이버로 로그인</button>
+          </a>
+
+          <br />
+          <a
+            href="https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=74537161972-j2r3otdejq6fs24eeo09tlpsm5lho3u0.apps.googleusercontent.com&redirect_uri=http://localhost:9090/login&scope=email%20profile%20openid"
+          >
+            <button class="easylogin1">구글로 로그인</button>
+          </a>
+          <br />
+          <a
+            href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=ce61cbedf2c1d5758c73ec734dc1af08&redirect_uri=http://localhost:9090/login&id=kakao"
+            ><button class="easylogin2">카카오톡 로그인</button></a
+          >
         </div>
       </div>
       <div class="bottom">
@@ -120,15 +132,43 @@ export default {
       this.saved = true;
       this.userid = cookieget;
     }
-    console.log(this.$route.query.code);
+    console.log(this.$route.query.scope);
 
-
-    // 카카오로그인 
-    const url = `/REST/kakaologin?code=${this.$route.query.code}`;
-    const headers = { "Content-type": "application/json" };
-    const data = {};
-    const response = await axios.post(url, data, { headers });
-    console.log(response);
+    // 카카오로그인  // 네이버 state // 카카오 x // 구글 scope]
+    if (this.$route.query.scope !== undefined) {
+      const url = `/REST/googlelogin?code=${this.$route.query.code}`;
+      const headers = { "Content-type": "application/json" };
+      const data = {};
+      const response = await axios.post(url, data, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        sessionStorage.setItem("TOKEN", response.data.token);
+        this.$router.push({ path: "/" });
+        this.$emit("changeLogged", true);
+      }
+    } else if (this.$route.query.state === "") {
+      const url = `/REST/naverlogin?code=${this.$route.query.code}`;
+      const headers = { "Content-type": "application/json" };
+      const data = {};
+      const response = await axios.post(url, data, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        sessionStorage.setItem("TOKEN", response.data.token);
+        this.$router.push({ path: "/" });
+        this.$emit("changeLogged", true);
+      }
+    } else {
+      const url = `/REST/kakaologin?code=${this.$route.query.code}`;
+      const headers = { "Content-type": "application/json" };
+      const data = {};
+      const response = await axios.post(url, data, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        sessionStorage.setItem("TOKEN", response.data.token);
+        this.$router.push({ path: "/" });
+        this.$emit("changeLogged", true);
+      }
+    }
   },
 };
 </script>

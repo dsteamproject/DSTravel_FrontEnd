@@ -13,15 +13,20 @@
       ><br />
       <label>제목</label
       ><input type="text" class="title" v-model="title" /><br />
-      <label>대표이미지</label><input type="file"><br>
+      <label>대표이미지</label
+      ><input
+        ref="file"
+        type="file"
+        name="file"
+        @change="imagechange()"
+      /><br />
       <label>내용</label>
-      
+
       <div class="ckeditor">
         <ckeditor :editor="editor" v-model="editorData" :config="editorConfig">
         </ckeditor>
-        
+
         <div class="btn2">
-     
           <button class="confirm" @click="handleconfirm">완료</button>
         </div>
       </div>
@@ -39,12 +44,13 @@ export default {
     ckeditor: CKEditor.component,
   },
   created() {
-    console.log(this.$route.query.category)
-    this.keyword = this.$route.query.category
+    console.log(this.$route.query.category);
+    this.keyword = this.$route.query.category;
   },
   data() {
     return {
-      category:"",
+      imagefile: "",
+      category: "",
       title: "",
       keyword: "",
       firstimg: "",
@@ -57,19 +63,31 @@ export default {
     };
   },
   methods: {
+    async imagechange() {
+      this.imagefile = this.$refs.file.files[0];
+      console.log(this.imagefile);
+    },
     // 글작성 POST
     async handleconfirm() {
-          const url = `/REST/board/insert`;
-      const headers = { "Content-type": "application/json" ,
-      token : this.token };
-    
-      const body = {
-        title: this.title,
-        category:this.keyword,
-        content:this.editorData
-        
+      const url = `/REST/board/insert`;
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        token: this.token,
       };
-      console.log(headers)
+      const body = new FormData();
+
+      body.append("title", this.title);
+      body.append("category", this.keyword);
+      body.append("content", this.editorData);
+      body.append("file", this.imagefile);
+      console.log(body);
+      // const body = {
+      //   title: this.title,
+      //   category: this.keyword,
+      //   content: this.editorData,
+      // };
+
+      console.log(headers);
       const response = await axios.post(url, body, { headers });
       console.log(response);
       if (response.data.status === 200) {

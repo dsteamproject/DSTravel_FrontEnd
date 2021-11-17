@@ -146,6 +146,39 @@
     font-weight: bold;
     font-size: 14px;
     box-shadow:0px 3px 3px rgba(0, 0, 0, 0.2);
+    background: #01c73c;
+    margin-top: 25px;
+    transition: all 0.5s;
+  }
+  .easylogin1 {
+    background: #ffdf00;
+    text-align: center;
+    position: relative;
+    padding: 20px 0;
+    color: #fff;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow:0px 3px 3px rgba(0, 0, 0, 0.2);
+    background: #4982ee;
+    margin: 10px 0px;
+    transition: all 0.5s;
+  }
+  .easylogin2 {
+    background: #ffdf00;
+    text-align: center;
+    position: relative;
+    padding: 20px 0;
+    color: #fff;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow:0px 3px 3px rgba(0, 0, 0, 0.2);
+    
   }
   .easylogin:nth-child(2) {
     background: #01c73c;
