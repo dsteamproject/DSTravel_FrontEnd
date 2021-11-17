@@ -1334,11 +1334,11 @@ export default {
     await this.replacerefresh();
 
     this.contenttypeid = "12";
-    console.log(this.$route.query.betday);
+
     for (var o = 0; o < this.$route.query.betday; o++) {
       this.traveldate.push(o);
     }
-    console.log(this.traveldate);
+
     // 오른쪽 상세창
     await this.rightrefresh();
 
@@ -1465,8 +1465,6 @@ export default {
     };
   },
   async mounted() {
-    console.log(this.$refs.myMapRef);
-
     this.$refs.myMapRef.$mapPromise.then((map) => {
       map.addListener("click", (mapsMouseEvent) => {
         console.log(mapsMouseEvent.latLng.lat());
@@ -1495,7 +1493,6 @@ export default {
       this.markers = [];
       await this.showmarker();
       await this.onetwomarker();
-      
     },
     betweendate() {
       var startDate = new Date(this.$route.query.start);
@@ -1511,7 +1508,7 @@ export default {
         res_day.push(ss_day.getFullYear() + "-" + _mon_ + "-" + _day_);
         ss_day.setDate(ss_day.getDate() + 1);
       }
-      console.log(res_day);
+
       this.betdatelist = res_day;
     },
     async alllist() {
@@ -1541,7 +1538,6 @@ export default {
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
-      console.log(response);
 
       this.busanlist = response.data.list;
       this.markersTOURIST = response.data.list;
@@ -1654,11 +1650,10 @@ export default {
         chonum = this.choice10.findIndex((e) => e.title == i.title);
       }
       this.loadnumb = chonum;
-      console.log(this.choice1);
+
       this.loadtext = [];
       this.loadtexton = true;
-      console.log(i);
-      console.log(index);
+
       let url;
       if (this.num3 === 1) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
@@ -1743,13 +1738,11 @@ export default {
       }
       const headers = {};
       const response = await axios.get(url, { headers });
-      console.log(response.data);
+
       for (var aa = 1; aa < response.data.features.length; aa++) {
-        console.log(response.data.features[aa].properties.description);
         this.loadtext.push(response.data.features[aa].properties.description);
       }
       for (var bb = 0; bb < response.data.features.length; bb++) {
-        console.log(typeof response.data.features[bb].geometry.coordinates[0]);
         if (
           typeof response.data.features[bb].geometry.coordinates[0] === "number"
         ) {
@@ -1763,8 +1756,7 @@ export default {
 
       this.loadfirst.splice(0, 1);
       this.loadfirst.splice(this.loadfirst.length - 1, 1);
-      console.log(this.loadfirst);
-      console.log(this.loadtext);
+
       for (var cc = 0; cc < this.loadfirst.length; cc++) {
         this.markers.push({
           id: this.loadtext[cc],
@@ -1775,12 +1767,11 @@ export default {
           icon: "https://ifh.cc/g/u6WanN.png",
         });
       }
-      console.log(this.loadfirst);
-      console.log(this.loadtext);
+
       for (var e = 1; e < response.data.features.length; e++) {
         if (response.data.features[e].geometry.coordinates.length === 2) {
           if (response.data.features[e].geometry.coordinates[0].length === 2) {
-            console.log("123");
+            console.log("asd");
           } else {
             this.middleload.push(
               response.data.features[e].geometry.coordinates
@@ -1859,7 +1850,7 @@ export default {
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
-      console.log(response);
+
       this.busanlist10 = response.data.list;
       await this.selectdeletelist();
     },
@@ -1869,7 +1860,7 @@ export default {
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
-      console.log(response);
+
       this.busanlist10 = response.data.list;
       await this.selectdeletelist();
     },
@@ -1879,7 +1870,7 @@ export default {
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
-      console.log(response);
+
       this.busanlist10 = response.data.list;
       await this.selectdeletelist();
     },
@@ -1893,21 +1884,19 @@ export default {
       this.loadfirst = [];
       this.loadtext = [];
       this.loadtexton = false;
-      console.log(i);
+
       var chonum = this.choice1.findIndex((e) => e.title == i.title);
-      console.log(chonum);
+
       this.choice1.splice(chonum, 1);
       var marknum = this.markers.findIndex((e) => e.id == i.title);
-      console.log(marknum);
-
+      // right 1,2,3 별로 변경 해야함
       this.markers[marknum].icon = "https://ifh.cc/g/3qp9x6.png";
 
       for (var cc = 0; cc < this.choice1.length; cc++) {
-        console.log(this.choice1[cc].title);
         var marknum1 = this.markers.findIndex(
           (e) => e.id == this.choice1[cc].title
         );
-        console.log(marknum1);
+
         this.markers[marknum1].icon = `http://127.0.0.1:8080/REST/travel/image${
           cc + 1
         }`;
@@ -1925,38 +1914,33 @@ export default {
       this.loadfirst = [];
       this.loadtext = [];
       this.loadtexton = false;
-      console.log(i);
-      console.log(this.choice1);
 
       let chonum;
       let list;
       if (this.num3 === 1) {
         chonum = this.choice1.findIndex((e) => e.title == i.title);
-        console.log(chonum);
+
         list = this.choice1.splice(chonum, 1);
-        console.log(list);
+
         this.choice1.splice(chonum + 1, 0, list[0]);
 
         for (var cc = 0; cc < this.choice1.length; cc++) {
-          console.log(this.choice1[cc].title);
           var marknum = this.markers.findIndex(
             (e) => e.id == this.choice1[cc].title
           );
-          console.log(marknum);
+
           this.markers[
             marknum
           ].icon = `http://127.0.0.1:8080/REST/travel/image${cc + 1}`;
         }
       } else if (this.num3 === 2) {
         chonum = this.choice2.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice2.splice(chonum, 1);
-        console.log(list);
+
         this.choice2.splice(chonum + 1, 0, list[0]);
 
         for (var cc2 = 0; cc2 < this.choice2.length; cc2++) {
-          console.log(this.choice2[cc2].title);
           var marknum2 = this.markers.findIndex(
             (e) => e.id == this.choice2[cc2].title
           );
@@ -1967,14 +1951,12 @@ export default {
         }
       } else if (this.num3 === 3) {
         chonum = this.choice3.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice3.splice(chonum, 1);
-        console.log(list);
+
         this.choice3.splice(chonum + 1, 0, list[0]);
 
         for (var cc3 = 0; cc3 < this.choice3.length; cc3++) {
-          console.log(this.choice3[cc3].title);
           var marknum3 = this.markers.findIndex(
             (e) => e.id == this.choice3[cc3].title
           );
@@ -1985,14 +1967,12 @@ export default {
         }
       } else if (this.num3 === 4) {
         chonum = this.choice4.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice4.splice(chonum, 1);
-        console.log(list);
+
         this.choice4.splice(chonum + 1, 0, list[0]);
 
         for (var cc4 = 0; cc4 < this.choice4.length; cc4++) {
-          console.log(this.choice4[cc4].title);
           var marknum4 = this.markers.findIndex(
             (e) => e.id == this.choice4[cc4].title
           );
@@ -2003,13 +1983,11 @@ export default {
         }
       } else if (this.num3 === 5) {
         chonum = this.choice5.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice5.splice(chonum, 1);
-        console.log(list);
+
         this.choice5.splice(chonum + 1, 0, list[0]);
         for (var cc5 = 0; cc5 < this.choice2.length; cc5++) {
-          console.log(this.choice5[cc5].title);
           var marknum5 = this.markers.findIndex(
             (e) => e.id == this.choice5[cc5].title
           );
@@ -2020,13 +1998,11 @@ export default {
         }
       } else if (this.num3 === 6) {
         chonum = this.choice6.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice6.splice(chonum, 1);
-        console.log(list);
+
         this.choice6.splice(chonum + 1, 0, list[0]);
         for (var cc6 = 0; cc6 < this.choice6.length; cc6++) {
-          console.log(this.choice6[cc6].title);
           var marknum6 = this.markers.findIndex(
             (e) => e.id == this.choice2[cc6].title
           );
@@ -2037,13 +2013,11 @@ export default {
         }
       } else if (this.num3 === 7) {
         chonum = this.choice7.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice7.splice(chonum, 1);
-        console.log(list);
+
         this.choice7.splice(chonum + 1, 0, list[0]);
         for (var cc7 = 0; cc7 < this.choice7.length; cc7++) {
-          console.log(this.choice7[cc7].title);
           var marknum7 = this.markers.findIndex(
             (e) => e.id == this.choice7[cc7].title
           );
@@ -2054,13 +2028,11 @@ export default {
         }
       } else if (this.num3 === 8) {
         chonum = this.choice8.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice8.splice(chonum, 1);
-        console.log(list);
+
         this.choice8.splice(chonum + 1, 0, list[0]);
         for (var cc8 = 0; cc8 < this.choice8.length; cc8++) {
-          console.log(this.choice2[cc8].title);
           var marknum8 = this.markers.findIndex(
             (e) => e.id == this.choice8[cc8].title
           );
@@ -2071,13 +2043,11 @@ export default {
         }
       } else if (this.num3 === 9) {
         chonum = this.choice9.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice9.splice(chonum, 1);
-        console.log(list);
+
         this.choice9.splice(chonum + 1, 0, list[0]);
         for (var cc9 = 0; cc9 < this.choice9.length; cc9++) {
-          console.log(this.choice2[cc9].title);
           var marknum9 = this.markers.findIndex(
             (e) => e.id == this.choice9[cc9].title
           );
@@ -2088,13 +2058,11 @@ export default {
         }
       } else if (this.num3 === 10) {
         chonum = this.choice10.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice10.splice(chonum, 1);
-        console.log(list);
+
         this.choice10.splice(chonum + 1, 0, list[0]);
         for (var cc10 = 0; cc10 < this.choice10.length; cc10++) {
-          console.log(this.choice10[cc10].title);
           var marknum10 = this.markers.findIndex(
             (e) => e.id == this.choice10[cc10].title
           );
@@ -2104,46 +2072,45 @@ export default {
           ].icon = `http://127.0.0.1:8080/REST/travel/image${cc10 + 1}`;
         }
       }
+      this.componentKey += 1;
     },
-    async listup(i, index) {
+    async listup(i) {
       for (var vv = 0; vv < this.loadfirst.length; vv++) {
         var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
         this.markers.splice(marknum1, 1);
       }
       await this.pathnone();
+
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
       this.loadtexton = false;
-      console.log(this.choice1.length);
-      console.log(i);
-      console.log(index + 1);
-      console.log(this.choice1);
+
       let chonum;
       let list;
       if (this.num3 === 1) {
         chonum = this.choice1.findIndex((e) => e.title == i.title);
-        console.log(chonum);
+
         list = this.choice1.splice(chonum, 1);
-        console.log(list);
+
         this.choice1.splice(chonum - 1, 0, list[0]);
 
         for (var cc = 0; cc < this.choice1.length; cc++) {
-          console.log(this.choice1[cc].title);
           var marknum = this.markers.findIndex(
             (e) => e.id == this.choice1[cc].title
           );
-          console.log(marknum);
+
           this.markers[
             marknum
           ].icon = `http://127.0.0.1:8080/REST/travel/image${cc + 1}`;
         }
+
+        console.log(this.markers);
       } else if (this.num3 === 2) {
         chonum = this.choice2.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice2.splice(chonum, 1);
-        console.log(list);
+
         this.choice2.splice(chonum - 1, 0, list[0]);
 
         for (var cc2 = 0; cc2 < this.choice2.length; cc2++) {
@@ -2158,14 +2125,12 @@ export default {
         }
       } else if (this.num3 === 3) {
         chonum = this.choice3.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice3.splice(chonum, 1);
-        console.log(list);
+
         this.choice3.splice(chonum - 1, 0, list[0]);
 
         for (var cc3 = 0; cc3 < this.choice3.length; cc3++) {
-          console.log(this.choice3[cc3].title);
           var marknum3 = this.markers.findIndex(
             (e) => e.id == this.choice3[cc3].title
           );
@@ -2176,14 +2141,12 @@ export default {
         }
       } else if (this.num3 === 4) {
         chonum = this.choice4.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice4.splice(chonum, 1);
-        console.log(list);
+
         this.choice4.splice(chonum - 1, 0, list[0]);
 
         for (var cc4 = 0; cc4 < this.choice4.length; cc4++) {
-          console.log(this.choice4[cc4].title);
           var marknum4 = this.markers.findIndex(
             (e) => e.id == this.choice4[cc4].title
           );
@@ -2194,13 +2157,11 @@ export default {
         }
       } else if (this.num3 === 5) {
         chonum = this.choice5.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice5.splice(chonum, 1);
-        console.log(list);
+
         this.choice5.splice(chonum - 1, 0, list[0]);
         for (var cc5 = 0; cc5 < this.choice2.length; cc5++) {
-          console.log(this.choice5[cc5].title);
           var marknum5 = this.markers.findIndex(
             (e) => e.id == this.choice5[cc5].title
           );
@@ -2211,13 +2172,11 @@ export default {
         }
       } else if (this.num3 === 6) {
         chonum = this.choice6.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice6.splice(chonum, 1);
-        console.log(list);
+
         this.choice6.splice(chonum - 1, 0, list[0]);
         for (var cc6 = 0; cc6 < this.choice6.length; cc6++) {
-          console.log(this.choice6[cc6].title);
           var marknum6 = this.markers.findIndex(
             (e) => e.id == this.choice2[cc6].title
           );
@@ -2228,13 +2187,11 @@ export default {
         }
       } else if (this.num3 === 7) {
         chonum = this.choice7.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice7.splice(chonum, 1);
-        console.log(list);
+
         this.choice7.splice(chonum - 1, 0, list[0]);
         for (var cc7 = 0; cc7 < this.choice7.length; cc7++) {
-          console.log(this.choice7[cc7].title);
           var marknum7 = this.markers.findIndex(
             (e) => e.id == this.choice7[cc7].title
           );
@@ -2245,13 +2202,11 @@ export default {
         }
       } else if (this.num3 === 8) {
         chonum = this.choice8.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice8.splice(chonum, 1);
-        console.log(list);
+
         this.choice8.splice(chonum - 1, 0, list[0]);
         for (var cc8 = 0; cc8 < this.choice8.length; cc8++) {
-          console.log(this.choice2[cc8].title);
           var marknum8 = this.markers.findIndex(
             (e) => e.id == this.choice8[cc8].title
           );
@@ -2262,13 +2217,11 @@ export default {
         }
       } else if (this.num3 === 9) {
         chonum = this.choice9.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice9.splice(chonum, 1);
-        console.log(list);
+
         this.choice9.splice(chonum - 1, 0, list[0]);
         for (var cc9 = 0; cc9 < this.choice9.length; cc9++) {
-          console.log(this.choice2[cc9].title);
           var marknum9 = this.markers.findIndex(
             (e) => e.id == this.choice9[cc9].title
           );
@@ -2279,13 +2232,11 @@ export default {
         }
       } else if (this.num3 === 10) {
         chonum = this.choice10.findIndex((e) => e.title == i.title);
-        console.log(chonum);
 
         list = this.choice10.splice(chonum, 1);
-        console.log(list);
+
         this.choice10.splice(chonum - 1, 0, list[0]);
         for (var cc10 = 0; cc10 < this.choice10.length; cc10++) {
-          console.log(this.choice10[cc10].title);
           var marknum10 = this.markers.findIndex(
             (e) => e.id == this.choice10[cc10].title
           );
@@ -2295,6 +2246,7 @@ export default {
           ].icon = `http://127.0.0.1:8080/REST/travel/image${cc10 + 1}`;
         }
       }
+      this.componentKey += 1;
     },
     async allview() {
       this.nltext2css = "nltext3";
@@ -2314,7 +2266,6 @@ export default {
         for (var nm1 = 0; nm1 < this.markers1.length; nm1++) {
           this.markers.push(this.markers1[nm1]);
         }
-        console.log(this.markers);
       } else if (this.num3 === 2) {
         for (var aaa = 0; aaa < this.markers2.length; aaa++) {
           this.markers2[aaa].icon = `http://127.0.0.1:8080/REST/travel/image${
@@ -2324,7 +2275,6 @@ export default {
         for (var nw1 = 0; nw1 < this.markers2.length; nw1++) {
           this.markers.push(this.markers2[nw1]);
         }
-        console.log(this.markers);
       } else if (this.num3 === 3) {
         for (var bbb = 0; bbb < this.markers3.length; bbb++) {
           this.markers3[bbb].icon = `http://127.0.0.1:8080/REST/travel/image${
@@ -2399,10 +2349,7 @@ export default {
         }
       }
     },
-    handledatego(i, index) {
-      console.log(this.markers1);
-      console.log(i);
-      console.log(index);
+    handledatego(i) {
       if (i === 0) {
         // 버튼 색상
         this.nltext2css = "nltext2";
@@ -2418,7 +2365,6 @@ export default {
         for (var nm1 = 0; nm1 < this.markers1.length; nm1++) {
           this.markers.push(this.markers1[nm1]);
         }
-        console.log(this.markers);
       } else if (i === 1) {
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth2";
@@ -2431,7 +2377,6 @@ export default {
         for (var nw1 = 0; nw1 < this.markers2.length; nw1++) {
           this.markers.push(this.markers2[nw1]);
         }
-        console.log(this.markers);
       } else if (i === 2) {
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth3";
@@ -2538,7 +2483,6 @@ export default {
       this.centercss = "center3";
       this.newleft = "on";
       this.newleft0 = "on";
-      console.log(this.choice1);
     },
     // 여행일차 변경시 선택된 마커 변경
     numchagnelist() {
@@ -2619,8 +2563,7 @@ export default {
         var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
         this.markers.splice(marknum1, 1);
       }
-      console.log(this.markers);
-      console.log(this.markers1.length);
+
       this.num3 -= 1;
       this.loadtexton = false;
       await this.pathnone();
@@ -2637,8 +2580,9 @@ export default {
           this.markers[vv1].icon = "https://ifh.cc/g/PSvrrN.png";
         }
       }
-      await this.onetwomarker();
+         await this.onetwomarker();
       await this.numchagnelist();
+   
     },
     async numplus() {
       for (var vv1 = 0; vv1 < this.loadfirst.length; vv1++) {
@@ -2653,7 +2597,7 @@ export default {
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
-      console.log(this.markers);
+
       for (var vv = 0; vv < this.markers.length; vv++) {
         if (this.right === 1) {
           this.markers[vv].icon = "https://ifh.cc/g/ugSmCT.png";
@@ -2665,6 +2609,7 @@ export default {
       }
       await this.onetwomarker();
       await this.numchagnelist();
+      
     },
     async rightrefresh() {
       // 오른쪽 상세창
@@ -2672,7 +2617,7 @@ export default {
       const headers1 = { "Content-type": "application/json" };
 
       const response1 = await axios.get(url1, { headers1 });
-      console.log(response1);
+
       this.busanlist10 = response1.data.list;
       await this.selectdeletelist();
     },
@@ -2894,7 +2839,6 @@ export default {
 
       // ==========================================================
 
-      console.log(this.choice1.length);
       var marknum = this.markers.findIndex((e) => e.id == i.title);
       if (this.num3 === 1) {
         this.markers[marknum].icon = `http://127.0.0.1:8080/REST/travel/image${
@@ -2970,7 +2914,7 @@ export default {
       const url1 = `/REST/travel/distance?areaCode=${this.areacode}&size=100&contentTypeId=${this.contenttypeid}&kilometer=5&page=1&xmap=${i.xlocaion}&ymap=${i.ylocation}`;
       const headers1 = {};
       const response1 = await axios.get(url1, { headers1 });
-      console.log(response1);
+
       this.busanlist10 = response1.data.distanceList;
       await this.selectdeletelist();
       // =====================================
@@ -2981,12 +2925,9 @@ export default {
 
     async loadcar() {
       this.path1 = [];
-      console.log(this.startnum);
-      console.log(this.endnum);
 
       let url;
       if (this.num3 === 1) {
-        console.log(this.choice1);
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
           this.choice1[Number(this.endnum)].xlocaion
         }&endY=${
@@ -3002,9 +2943,7 @@ export default {
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
           this.choice2[Number(this.startnum2)].xlocaion
         }&startY=${this.choice2[Number(this.startnum2)].ylocaion}`;
-        console.log(url);
       } else if (this.num3 === 3) {
-        console.log(this.choice3);
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
           this.choice3[Number(this.endnum3)].xlocaion
         }&endY=${
@@ -3071,11 +3010,11 @@ export default {
       }
       const headers = {};
       const response = await axios.get(url, { headers });
-      console.log(response.data);
+
       for (var e = 1; e < response.data.features.length; e++) {
         if (response.data.features[e].geometry.coordinates.length === 2) {
           if (response.data.features[e].geometry.coordinates[0].length === 2) {
-            console.log("123");
+            console.log("asd");
           } else {
             this.middleload.push(
               response.data.features[e].geometry.coordinates
@@ -3093,7 +3032,6 @@ export default {
           }
         }
       }
-      console.log(this.middleload1);
 
       for (var a = 0; a < this.middleload.length; a++) {
         if (this.num3 === 1) {
@@ -3191,16 +3129,15 @@ export default {
       }
 
       // 강제  렌더링
-      console.log(this.path);
+
       this.componentKey += 1;
     },
     async openinfo(i) {
-      console.log(i);
       const url = `/REST/travel/selectone?contentId=${i.code}`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
-      console.log(response);
+
       this.dialoglist = response.data.TD;
       // this.dialogcontent = this.dialoglist.overview.replace(
       //   /(<br>|<br\/>|<br \/>)/g,
@@ -3213,7 +3150,6 @@ export default {
       this.openedMarkerID = null;
     },
     async openMarker1(i) {
-      console.log(i);
       this.openedMarkerID = null;
 
       this.openedMarkerID = i.title;
@@ -3223,10 +3159,7 @@ export default {
     openMarker(id) {
       this.openedMarkerID = id;
     },
-    showPosition(event, two) {
-      console.log(event.latLng);
-      console.log(two);
-    },
+
     async handleright() {
       this.loadtexton = false;
       await this.pathnone();
@@ -3247,15 +3180,13 @@ export default {
       const headers1 = { "Content-type": "application/json" };
 
       const response1 = await axios.get(url1, { headers1 });
-      console.log(response1);
-      console.log(this.choice1);
+
       this.busanlist10 = response1.data.list;
       // 선택된리스트 제거
       await this.selectdeletelist();
       //====================
       this.markers = [];
-      console.log(this.busanlist10);
-      console.log(this.markers);
+
       for (var i = 0; i < this.busanlist10.length; i++) {
         this.markers.push({
           id: this.busanlist10[i].title,
@@ -3273,7 +3204,7 @@ export default {
       const headers1 = { "Content-type": "application/json" };
 
       const response1 = await axios.get(url1, { headers1 });
-      console.log(response1);
+
       this.busanlist10 = response1.data.list;
       await this.selectdeletelist();
       this.busanlist = response1.data.list;
@@ -3284,11 +3215,9 @@ export default {
       // console.log(response);
 
       // this.busanlist = response.data.list;
-      console.log(this.markersTOURIST);
-      console.log(this.markers);
+
       this.markers = [];
-      console.log(this.markers1);
-      console.log(this.markers);
+
       for (var i = 0; i < this.busanlist10.length; i++) {
         this.markers.push({
           id: this.busanlist10[i].title,
@@ -3306,11 +3235,11 @@ export default {
       const headers1 = { "Content-type": "application/json" };
 
       const response1 = await axios.get(url1, { headers1 });
-      console.log(response1);
+
       this.busanlist10 = response1.data.list;
       await this.selectdeletelist();
       this.markers = [];
-      console.log(this.markers);
+
       for (var i = 0; i < this.busanlist10.length; i++) {
         this.markers.push({
           id: this.busanlist10[i].title,
@@ -3325,20 +3254,18 @@ export default {
     },
     savemarker2() {
       if (this.num3 === 1) {
-        console.log(this.markers1);
         // 기존 마커 제거
         for (var vv1 = 0; vv1 < this.markers1.length; vv1++) {
           var marknum1 = this.markers.findIndex(
             (e) => e.id == this.markers1[vv1].id
           );
-          console.log(marknum1);
+
           this.markers.splice(marknum1, 1);
         }
         // 새 마커 추가
         for (var num1 = 0; num1 < this.markers1.length; num1++) {
           this.markers.push(this.markers1[num1]);
         }
-        console.log(this.markers);
       } else if (this.num3 === 2) {
         for (var vv2 = 0; vv2 < this.markers2.length; vv2++) {
           var marknum2 = this.markers.findIndex(
@@ -3498,70 +3425,70 @@ export default {
         var marknum1 = this.busanlist10.findIndex(
           (e) => e.title == this.choice1[vv1].title
         );
-        console.log(marknum1);
+
         this.busanlist10.splice(marknum1, 1);
       }
       for (var vv2 = 0; vv2 < this.choice2.length; vv2++) {
         var marknum2 = this.busanlist10.findIndex(
           (e) => e.title == this.choice2[vv2].title
         );
-        console.log(marknum2);
+
         this.busanlist10.splice(marknum2, 1);
       }
       for (var vv3 = 0; vv2 < this.choice3.length; vv3++) {
         var marknum3 = this.busanlist10.findIndex(
           (e) => e.title == this.choice3[vv3].title
         );
-        console.log(marknum3);
+
         this.busanlist10.splice(marknum3, 1);
       }
       for (var vv4 = 0; vv4 < this.choice4.length; vv4++) {
         var marknum4 = this.busanlist10.findIndex(
           (e) => e.title == this.choice4[vv4].title
         );
-        console.log(marknum4);
+
         this.busanlist10.splice(marknum4, 1);
       }
       for (var vv5 = 0; vv5 < this.choice5.length; vv5++) {
         var marknum5 = this.busanlist10.findIndex(
           (e) => e.title == this.choice5[vv5].title
         );
-        console.log(marknum5);
+
         this.busanlist10.splice(marknum5, 1);
       }
       for (var vv6 = 0; vv6 < this.choice6.length; vv6++) {
         var marknum6 = this.busanlist10.findIndex(
           (e) => e.title == this.choice6[vv6].title
         );
-        console.log(marknum6);
+
         this.busanlist10.splice(marknum6, 1);
       }
       for (var vv7 = 0; vv7 < this.choice7.length; vv7++) {
         var marknum7 = this.busanlist10.findIndex(
           (e) => e.title == this.choice7[vv7].title
         );
-        console.log(marknum7);
+
         this.busanlist10.splice(marknum7, 1);
       }
       for (var vv8 = 0; vv8 < this.choice8.length; vv8++) {
         var marknum8 = this.busanlist10.findIndex(
           (e) => e.title == this.choice8[vv8].title
         );
-        console.log(marknum8);
+
         this.busanlist10.splice(marknum8, 1);
       }
       for (var vv9 = 0; vv9 < this.choice9.length; vv9++) {
         var marknum9 = this.busanlist10.findIndex(
           (e) => e.title == this.choice9[vv9].title
         );
-        console.log(marknum9);
+
         this.busanlist10.splice(marknum9, 1);
       }
       for (var vv10 = 0; vv10 < this.choice10.length; vv10++) {
         var marknum10 = this.busanlist10.findIndex(
           (e) => e.title == this.choice10[vv10].title
         );
-        console.log(marknum10);
+
         this.busanlist10.splice(marknum10, 1);
       }
     },

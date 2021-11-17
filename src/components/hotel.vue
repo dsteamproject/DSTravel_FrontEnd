@@ -7,36 +7,53 @@
         <div class="hr"></div>
         <h4>가격</h4>
         <div class="slider-demo-block">
-          <el-slider v-model="value" range show-stops :min="0" :max="100" step="1">
+          <el-slider
+            v-model="value"
+            range
+            show-stops
+            :min="0"
+            :max="100"
+            step="1"
+          >
           </el-slider>
         </div>
-        {{ this.value[0] }}원 ~ {{ this.value[1]}}만원<span v-if="this.value[1] === 100">이상</span>
+        {{ this.value[0] }}원 ~ {{ this.value[1] }}만원<span
+          v-if="this.value[1] === 100"
+          >이상</span
+        >
         <div class="hr"></div>
         <h4>스타일</h4>
         <input type="radio" name="style" /> <label>가성비</label><br />
-        <input type="radio" name="style"  /> <label>중간급</label><br />
+        <input type="radio" name="style" /> <label>중간급</label><br />
         <input type="radio" name="style" /> <label>럭셔리</label><br />
         <input type="radio" name="style" /> <label>가족친화형</label>
         <div class="hr"></div>
         <h4>호텔등급</h4>
-        <input type="radio" name="grade"/> <label>5성급</label><br />
-        <input type="radio" name="grade"/> <label>4성급</label><br />
-        <input type="radio" name="grade"/> <label>3성급</label><br />
-        <input type="radio" name="grade"/> <label>2성급</label><br />
+        <input type="radio" name="grade" /> <label>5성급</label><br />
+        <input type="radio" name="grade" /> <label>4성급</label><br />
+        <input type="radio" name="grade" /> <label>3성급</label><br />
+        <input type="radio" name="grade" /> <label>2성급</label><br />
         <div class="hr"></div>
       </div>
       <div class="right1">
         <tabel>
-          <tr v-for="item in 4" :key="item">
+          <tr v-for="item in list" :key="item">
             <th class="th_list">
-              <div class="img">사진</div>
+              <div class="img">
+                <img :src="item.firstimage" class="img_in" />
+              </div>
               <div class="text">
                 <div class="text_top">
-                  <h4>호텔 말트 - 아스토텔</h4>
+                  <h4>{{ item.title }}</h4>
                 </div>
                 <div class="text_left">
-                  <h3>₩356,031</h3>
-                  <button class="text_btn" @click="$router.push('/hotelcontent')">상세 보기</button>
+                  <h3>{{ item.price }}0000원</h3>
+                  <button
+                    class="text_btn"
+                    @click="$router.push('/hotelcontent')"
+                  >
+                    상세 보기
+                  </button>
                 </div>
                 <div class="text_right">
                   <span>무료 와이파이</span><br />
@@ -47,16 +64,25 @@
             </th>
           </tr>
         </tabel>
+        <div class="block">
+          <el-pagination layout="prev, pager, next" :total="60"></el-pagination>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import { ref, defineComponent } from "vue";
 export default defineComponent({
-  created(){
-    console.log(this.value)
+  async created() {
+    const url1 = `/REST/travel/select?size=6&page=1&title=&contentTypeId=32&areaCode=1`;
+    const headers1 = { "Content-type": "application/json" };
+
+    const response1 = await axios.get(url1, { headers1 });
+    console.log(response1);
+    this.list = response1.data.list;
   },
   setup() {
     const value = ref([0, 1000000]);
@@ -67,7 +93,9 @@ export default defineComponent({
     };
   },
   data() {
-    return {};
+    return {
+      list: [],
+    };
   },
 });
 </script>
@@ -113,13 +141,17 @@ export default defineComponent({
   box-sizing: border-box;
 }
 .wrap {
- 
 }
 .img {
   width: 30%;
   float: left;
   background: rgb(219, 211, 211);
   height: 300px;
+  overflow: hidden;
+}
+.img_in {
+  width: 100%;
+  height: 100%;
 }
 .th_list {
   border: 1px solid #ccc;

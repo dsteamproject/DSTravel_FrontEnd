@@ -503,9 +503,12 @@ export default {
 }
 .footer {
   text-align: center;
-  height: 300px;
-  background: #1d1616;
+  height: 200px;
+  background: #e2b3b3;
+
   clear: both;
+  z-index: 99;
+  width: 100%;
 }
 .logo {
   text-decoration: none;
