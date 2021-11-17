@@ -673,7 +673,7 @@ export default {
   cursor: pointer;
 }
 .step1 {
-  width: 900px;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
 }

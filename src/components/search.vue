@@ -1486,6 +1486,7 @@ export default {
 
   methods: {
     async goback() {
+      this.lastleft_bthcss = "";
       this.lastac = false;
       this.rightcss = "right1";
       this.centercss = "center1";
@@ -1494,6 +1495,7 @@ export default {
       this.markers = [];
       await this.showmarker();
       await this.onetwomarker();
+      
     },
     betweendate() {
       var startDate = new Date(this.$route.query.start);
@@ -2635,6 +2637,7 @@ export default {
           this.markers[vv1].icon = "https://ifh.cc/g/PSvrrN.png";
         }
       }
+      await this.onetwomarker();
       await this.numchagnelist();
     },
     async numplus() {
@@ -2660,6 +2663,7 @@ export default {
           this.markers[vv].icon = "https://ifh.cc/g/PSvrrN.png";
         }
       }
+      await this.onetwomarker();
       await this.numchagnelist();
     },
     async rightrefresh() {
@@ -3235,6 +3239,7 @@ export default {
       this.btncolor2 = "noneactive";
       this.btncolor = "active";
       this.busanlist10 = [];
+      await this.onetwomarker();
       await this.right1();
     },
     async right1() {
