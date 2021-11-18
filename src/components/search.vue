@@ -1879,6 +1879,37 @@ export default {
         var marknum2 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
         this.markers.splice(marknum2, 1);
       }
+      if (this.num3 === 1) {
+        var checknum1 = this.markers1.findIndex((e) => e.id == i.title);
+        this.markers1.splice(checknum1, 1);
+      } else if (this.num3 === 2) {
+        var checknum2 = this.markers2.findIndex((e) => e.id == i.title);
+        this.markers2.splice(checknum2, 1);
+      } else if (this.num3 === 3) {
+        var checknum3 = this.markers3.findIndex((e) => e.id == i.title);
+        this.markers3.splice(checknum3, 1);
+      } else if (this.num3 === 4) {
+        var checknum4 = this.markers2.findIndex((e) => e.id == i.title);
+        this.markers4.splice(checknum4, 1);
+      } else if (this.num3 === 5) {
+        var checknum5 = this.markers5.findIndex((e) => e.id == i.title);
+        this.markers5.splice(checknum5, 1);
+      } else if (this.num3 === 6) {
+        var checknum6 = this.markers6.findIndex((e) => e.id == i.title);
+        this.markers6.splice(checknum6, 1);
+      } else if (this.num3 === 7) {
+        var checknum7 = this.markers7.findIndex((e) => e.id == i.title);
+        this.markers7.splice(checknum7, 1);
+      } else if (this.num3 === 8) {
+        var checknum8 = this.markers8.findIndex((e) => e.id == i.title);
+        this.markers8.splice(checknum8, 1);
+      } else if (this.num3 === 9) {
+        var checknum9 = this.markers9.findIndex((e) => e.id == i.title);
+        this.markers9.splice(checknum9, 1);
+      } else if (this.num3 === 10) {
+        var checknum10 = this.markers10.findIndex((e) => e.id == i.title);
+        this.markers10.splice(checknum10, 1);
+      }
       await this.pathnone();
       this.middleload = [];
       this.loadfirst = [];
@@ -1890,7 +1921,13 @@ export default {
       this.choice1.splice(chonum, 1);
       var marknum = this.markers.findIndex((e) => e.id == i.title);
       // right 1,2,3 별로 변경 해야함
-      this.markers[marknum].icon = "https://ifh.cc/g/3qp9x6.png";
+      if (this.right === 1) {
+        this.markers[marknum].icon = "https://ifh.cc/g/ugSmCT.png";
+      } else if (this.right === 2) {
+        this.markers[marknum].icon = "https://ifh.cc/g/Xg70rK.png";
+      } else if (this.right === 3) {
+        this.markers[marknum].icon = "https://ifh.cc/g/PSvrrN.png";
+      }
 
       for (var cc = 0; cc < this.choice1.length; cc++) {
         var marknum1 = this.markers.findIndex(
@@ -2580,9 +2617,8 @@ export default {
           this.markers[vv1].icon = "https://ifh.cc/g/PSvrrN.png";
         }
       }
-         await this.onetwomarker();
+      await this.onetwomarker();
       await this.numchagnelist();
-   
     },
     async numplus() {
       for (var vv1 = 0; vv1 < this.loadfirst.length; vv1++) {
@@ -2609,7 +2645,6 @@ export default {
       }
       await this.onetwomarker();
       await this.numchagnelist();
-      
     },
     async rightrefresh() {
       // 오른쪽 상세창
@@ -3200,6 +3235,8 @@ export default {
       await this.savemarker2();
     },
     async right2() {
+      console.log(this.choice1);
+      console.log(this.markers1);
       const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=${this.areacode}`;
       const headers1 = { "Content-type": "application/json" };
 
@@ -3262,6 +3299,7 @@ export default {
 
           this.markers.splice(marknum1, 1);
         }
+
         // 새 마커 추가
         for (var num1 = 0; num1 < this.markers1.length; num1++) {
           this.markers.push(this.markers1[num1]);
@@ -3550,12 +3588,6 @@ export default {
 }
 .el-dialog__body {
   padding: unset;
-}
-.el-collapse-item__header {
-  text-align: center;
-  display: block;
-  background: #98dde3;
-  color: white;
 }
 </style>
 <style scope>

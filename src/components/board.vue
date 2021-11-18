@@ -41,7 +41,7 @@
           <router-link
             :to="que"
             id="btn1"
-            v-bind:class="oncolor4"
+            v-bind:class="oncolor5"
             @click="changeMenu(4)"
             >여행일정</router-link
           >
@@ -65,36 +65,54 @@ export default {
       this.oncolor2 = "btnoff";
       this.oncolor3 = "btnoff";
       this.oncolor4 = "btnoff";
+      this.oncolor5 = "btnoff";
     }
     if (currentPath === "/board/review") {
       this.oncolor1 = "btnoff";
       this.oncolor2 = "btnon";
       this.oncolor3 = "btnoff";
       this.oncolor4 = "btnoff";
+      this.oncolor5 = "btnoff";
     }
     if (currentPath === "/board/info") {
       this.oncolor1 = "btnoff";
       this.oncolor2 = "btnoff";
       this.oncolor3 = "btnon";
       this.oncolor4 = "btnoff";
+      this.oncolor5 = "btnoff";
     }
     if (currentPath === "/board/que") {
       this.oncolor1 = "btnoff";
       this.oncolor2 = "btnoff";
       this.oncolor3 = "btnoff";
       this.oncolor4 = "btnon";
+      this.oncolor5 = "btnoff";
     }
-       if (currentPath === "/board/que") {
+    if (currentPath === "/board/que") {
       this.oncolor1 = "btnoff";
       this.oncolor2 = "btnoff";
       this.oncolor3 = "btnoff";
       this.oncolor4 = "btnon";
+      this.oncolor5 = "btnoff";
+    }
+    if (currentPath === "/board/travel") {
+      this.oncolor1 = "btnoff";
+      this.oncolor2 = "btnoff";
+      this.oncolor3 = "btnoff";
+      this.oncolor4 = "btnoff";
+      this.oncolor5 = "btnon";
     }
   },
   data() {
     return {
       currentView: "free", // 처음 시작시 메뉴
-      menus: ["/board/free", "/board/review", "/board/info", "/board/que"],
+      menus: [
+        "/board/free",
+        "/board/review",
+        "/board/info",
+        "/board/que",
+        "/board/travel",
+      ],
       free: "",
       review: "",
       info: "",
@@ -103,6 +121,7 @@ export default {
       oncolor2: "",
       oncolor3: "",
       oncolor4: "",
+      oncolor5: "",
     };
   },
   methods: {
@@ -113,6 +132,7 @@ export default {
         this.oncolor2 = "btnoff";
         this.oncolor3 = "btnoff";
         this.oncolor4 = "btnoff";
+        this.oncolor45 = "btnoff";
         this.$router.push({ path: "/board/free" });
       }
       if (val === 1) {
@@ -120,6 +140,7 @@ export default {
         this.oncolor2 = "btnon";
         this.oncolor3 = "btnoff";
         this.oncolor4 = "btnoff";
+        this.oncolor5 = "btnoff";
         this.$router.push({ path: "/board/review" });
       }
       if (val === 2) {
@@ -127,6 +148,7 @@ export default {
         this.oncolor2 = "btnoff";
         this.oncolor3 = "btnon";
         this.oncolor4 = "btnoff";
+        this.oncolor5 = "btnoff";
         this.$router.push({ path: "/board/info" });
       }
       if (val === 3) {
@@ -134,7 +156,16 @@ export default {
         this.oncolor2 = "btnoff";
         this.oncolor3 = "btnoff";
         this.oncolor4 = "btnon";
+        this.oncolor5 = "btnoff";
         this.$router.push({ path: "/board/que" });
+      }
+      if (val === 4) {
+        this.oncolor1 = "btnoff";
+        this.oncolor2 = "btnoff";
+        this.oncolor3 = "btnoff";
+        this.oncolor4 = "btnoff";
+        this.oncolor5 = "btnon";
+        this.$router.push({ path: "/board/travel" });
       }
     },
   },

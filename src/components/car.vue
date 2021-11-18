@@ -7,36 +7,53 @@
         <div class="hr"></div>
         <h4>가격</h4>
         <div class="slider-demo-block">
-          <el-slider v-model="value" range show-stops :min="100" :max="400">
+          <el-slider
+            v-model="value"
+            range
+            show-stops
+            :min="0"
+            :max="100"
+            step="1"
+          >
           </el-slider>
         </div>
-        {{ this.value }}
+        {{ this.value[0] }}원 ~ {{ this.value[1] }}만원<span
+          v-if="this.value[1] === 100"
+          >이상</span
+        >
         <div class="hr"></div>
         <h4>스타일</h4>
-        <input type="checkbox" /> <label>가성비</label><br />
-        <input type="checkbox" /> <label>중간급</label><br />
-        <input type="checkbox" /> <label>럭셔리</label><br />
-        <input type="checkbox" /> <label>가족친화형</label>
+        <input type="radio" name="style" /> <label>가성비</label><br />
+        <input type="radio" name="style" /> <label>중간급</label><br />
+        <input type="radio" name="style" /> <label>럭셔리</label><br />
+        <input type="radio" name="style" /> <label>가족친화형</label>
         <div class="hr"></div>
         <h4>호텔등급</h4>
-        <input type="checkbox" /> <label>5성급</label><br />
-        <input type="checkbox" /> <label>4성급</label><br />
-        <input type="checkbox" /> <label>3성급</label><br />
-        <input type="checkbox" /> <label>2성급</label><br />
+        <input type="radio" name="grade" /> <label>5성급</label><br />
+        <input type="radio" name="grade" /> <label>4성급</label><br />
+        <input type="radio" name="grade" /> <label>3성급</label><br />
+        <input type="radio" name="grade" /> <label>2성급</label><br />
         <div class="hr"></div>
       </div>
       <div class="right1">
         <tabel>
-          <tr v-for="item in 4" :key="item">
+          <tr v-for="item in list" :key="item">
             <th class="th_list">
-              <div class="img">사진</div>
+              <div class="img">
+                <img :src="item.firstimage" class="img_in" />
+              </div>
               <div class="text">
                 <div class="text_top">
-                  <h4>렌트</h4>
+                  <h4>{{ item.title }}</h4>
                 </div>
                 <div class="text_left">
-                  <h3>₩356,031</h3>
-                  <button class="text_btn">상세 보기</button>
+                  <h3 style="font-size: 13px">상세페이지 참조</h3>
+                  <button
+                    class="text_btn"
+                    @click="$router.push('/hotelcontent')"
+                  >
+                    상세 보기
+                  </button>
                 </div>
                 <div class="text_right">
                   <span>무료 와이파이</span><br />
@@ -47,16 +64,28 @@
             </th>
           </tr>
         </tabel>
+        <div class="block">
+          <el-pagination layout="prev, pager, next" :total="60"></el-pagination>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import { ref, defineComponent } from "vue";
 export default defineComponent({
+  async created() {
+    const url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?serviceKey=FPCnbDX7v%2Fdl0UkUw9p5jW%2Bt4AgPdbPVS7y9uC29%2F7E3S4FZTJtiKORsRbMZPhjR6IhNNeHvdchVtbxY6rfUMg%3D%3D&numOfRows=10&pageNo=${this.page}&MobileOS=ETC&MobileApp=AppTest&arrange=A&listYN=Y&eventStartDate=20211118`;
+    const headers1 = { "Content-type": "application/json" };
+
+    const response1 = await axios.get(url1, { headers1 });
+    console.log(response1.data.response.body.items.item);
+    this.list = response1.data.response.body.items.item;
+  },
   setup() {
-    const value = ref([1, 2]);
+    const value = ref([0, 100]);
     console.log(value);
 
     return {
@@ -64,7 +93,10 @@ export default defineComponent({
     };
   },
   data() {
-    return {};
+    return {
+      list: [],
+      page: 1,
+    };
   },
 });
 </script>
@@ -110,13 +142,17 @@ export default defineComponent({
   box-sizing: border-box;
 }
 .wrap {
- 
 }
 .img {
   width: 30%;
   float: left;
   background: rgb(219, 211, 211);
   height: 300px;
+  overflow: hidden;
+}
+.img_in {
+  width: 100%;
+  height: 100%;
 }
 .th_list {
   border: 1px solid #ccc;
@@ -129,6 +165,7 @@ export default defineComponent({
 .hr {
   border-bottom: 1px solid #ccc;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 .wrap {
   width: 1320px;

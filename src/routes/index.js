@@ -15,6 +15,7 @@ import boardinfo from '@/components/info'
 import boardfree from '@/components/free'
 import boardreview from '@/components/review'
 import boardque from '@/components/que'
+import boardtravel from '@/components/travel'
 
 import vs from '@/components/vs'
 import vsseoul from '@/components/vsseoul'
@@ -69,7 +70,8 @@ const routes = [
             { path: '/board/info', component: boardinfo },
             { path: '/board/free', component: boardfree },
             { path: '/board/review', component: boardreview },
-            { path: '/board/que', component: boardque }
+            { path: '/board/que', component: boardque },
+            { path: '/board/travel', component: boardtravel },
         ]
     },
     {

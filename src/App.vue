@@ -155,12 +155,6 @@
         <div class="nav2">
           <ul>
             <li>
-              <router-link to="/airline" class="router2" @click="scrollToTop()"
-                ><img src="../src/assets/air.png" style="width: 30px" />
-                항공권</router-link
-              >
-            </li>
-            <li>
               <router-link to="/hotel" class="router2" @click="scrollToTop()"
                 ><img
                   src="../src/assets/hotel.png"
@@ -172,7 +166,7 @@
             <li>
               <router-link to="/car" class="router2" @click="scrollToTop()"
                 ><img src="../src/assets/car.png" style="width: 20px" />
-                렌터카</router-link
+                행사·티켓</router-link
               >
             </li>
             <li>
@@ -600,16 +594,17 @@ export default {
 }
 
 .last_btn {
-  padding: 10px 40px;
+  padding: 20px 45px;
   border: none;
   margin-top: 50px;
   background: #98dde3;
   color: white;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 .item {
-  width: 181px;
-  height: 252px;
+  width: 9vw;
+  height: 22vh;
   border: 1px solid #ccc;
   display: inline-block;
   margin: 20px;
@@ -658,8 +653,8 @@ export default {
 }
 .item2 {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 8vw;
+  height: 15vh;
   border: 1px solid #ccc;
   display: inline-block;
   margin: 20px;
@@ -695,7 +690,7 @@ export default {
 .step_travel li {
   display: inline-block;
   margin: 20px;
-  padding: 12px 81px;
+  width: 6vw;
   border: 1px solid #ccc;
 }
 
@@ -784,5 +779,6 @@ h3 {
 }
 #box1 {
   text-align: center;
+  padding-top: 20px;
 }
 </style>
