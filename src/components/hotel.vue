@@ -467,7 +467,7 @@ export default defineComponent({
   margin: 0 auto;
 }
 .left1 {
-  width: 25%;
+  width: 24%;
   height: 900px;
   box-sizing: border-box;
   float: left;
@@ -476,7 +476,7 @@ export default defineComponent({
   padding: 20px;
   box-sizing: border-box;
   margin-top: 20px;
-  margin-right: 2%;
+  margin-right: 3%;
 }
 .left1 h4 {
   margin-bottom: 10px;

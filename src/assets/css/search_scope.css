@@ -750,13 +750,112 @@ body {
 
  
 }
+.mapputdialog{
+  text-align: center;
+  padding-top:50px;
+  padding:50px 20px 20px 20px;
+}
+.mapputtitle{
+  font-weight: 500;
+  font-size:20px;
+ 
+}
+.mapputsub{
+  font-size:13px;
+  color:rgb(156, 155, 155);
+  line-height: 30px;
+}
+.mapput1{
+  border:none;
+  background: none;
+  width:33.3%;
 
-@keyframes bog {
-  from {
-    
-  }
+  height: 2vw;
+  cursor: pointer;
+}
+.mapput2{
+  border:none;
+ 
+  background: rgb(14, 189, 189);
+  width:33.3%;
+  color:white;
+  height: 2vw;
+  cursor: pointer;
+}
+.doro{
+  float:left;
+  font-size:12px;
+  padding:0px 5px;
+  background-color: #9fb8ee;
+  color:white
+}
+.zip{
+  float:left;
+  font-size:11px;
+  padding:0px 12px;
+  background-color: #acc2c4;
+  color:white
+}
+.loadwrap{
+  margin-top:30px;
+  position: relative;
+}
+#lwput1{
+  width:100%;
+  height: 40px;
+  border:none;
+  outline: none;
+  font-size:20px;
+  border-bottom: 1px solid #ddd;
+  padding:0px 100px 0px 20px;
+  box-sizing: border-box;
+}
+#lwput{
+  width:100%;
+  height: 40px;
+  border:none;
+  outline: none;
+  font-size:20px;
+  border-bottom: 1px solid #ddd;
+  padding:0px 20px;
+  box-sizing: border-box;
+}
 
-  to {
-   
-  }
+.loadwrap label{
+  position: absolute;
+  left:20px;
+  transition: all 1s;
+}
+.loadsh label{
+  position: absolute;
+  
+  left:20px;
+  transition: all 1s;
+}
+
+.loadsh{
+  margin-top:20px;
+  position: relative;
+  margin-bottom: 15px;
+}
+.addrbtn{
+  position: absolute;
+  top:0;
+  right:5px;
+  padding:4px 15px;
+  border:none;
+  background-color: rgb(14, 189, 189);
+  color:white;
+  cursor: pointer;
+}
+.focus{
+  transform: translateY(-15px);
+  transition: all 1s;
+  color: rgb(14, 189, 189);
+  font-size:12px;
+}
+.focusover{
+  transform: translateY(10px);
+  transition: all 1s;
+  color:#000
 }

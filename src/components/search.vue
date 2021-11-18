@@ -1287,11 +1287,63 @@
     :before-close="handleClose"
     class="sasa"
   >
-    <span class="ind"
-      >위도,경도가 뜨지않을경우 지도에서 추가할려는 장소를 클릭해주세요</span
-    ><br /><br />
-    위도: {{ this.sublat }} , 경도: {{ this.sublng }}<br /><br />
-    위치 이름:<input type="text" />
+    <div class="mapputdialog">
+      <h4 class="mapputtitle">장소등록</h4>
+      <p class="mapputsub">
+        검색해도 나오지 않는 장소를 이곳에서 등록 후 다시 검색해보세요.<br />
+
+        추가하실 장소의 유형을 선택해주세요.
+      </p>
+      <button :class="mapputcss" @click="mapdialog(1)">관광지</button>
+      <button :class="mapputcss1" @click="mapdialog(2)">숙소</button>
+      <button :class="mapputcss2" @click="mapdialog(3)">음식점</button>
+      <div v-if="this.mapputnum === 1">
+        <div class="loadwrap">
+          <label :class="focus">장소이름(최대50자)</label
+          ><input
+            v-model="pluslocation"
+            type="text"
+            id="lwput"
+            @focus="focusevent"
+            @blur="focusover"
+          />
+        </div>
+        <div class="loadsh">
+          <label :class="focus2">위치(입력후 검색 클릭)</label
+          ><input
+            type="text"
+            v-model="addr"
+            id="lwput1"
+            @focus="focusevent2"
+            @blur="focusover2"
+          /><button class="addrbtn" @click="handlemapput">검색</button>
+        </div>
+        <div style="text-align: center">
+          <table border="1" style="width: 100%">
+            <tr>
+              <th>주소</th>
+              <th>우편번호</th>
+            </tr>
+            <tr v-for="(item, index) in coordinate" :key="index">
+              <td>
+                <div>
+                  <span class="doro">도로명</span>{{ item.city_do }}
+                  {{ item.gu_gun }}{{ item.newBuildingIndex
+                  }}{{ item.legalDong }}
+                </div>
+                <div>
+                  <span class="zip">지번</span>{{ item.city_do }}
+                  {{ item.gu_gun }} {{ item.legalDong }}{{ item.bunji }}
+                </div>
+              </td>
+              <td>{{ item.zipcode }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div v-if="this.mapputnum === 2">2</div>
+      <div v-if="this.mapputnum === 3">3</div>
+    </div>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">취소</el-button>
@@ -1324,7 +1376,6 @@
 </template>
 
 <script>
-import { ElMessage } from "element-plus";
 import axios from "axios";
 
 export default {
@@ -1347,6 +1398,12 @@ export default {
   },
   data() {
     return {
+      focus: "",
+      focus2: "",
+      mapputnum: 1,
+      mapputcss: "mapput2",
+      mapputcss1: "mapput1",
+      mapputcss2: "mapput1",
       lastleft_bth20: "asd",
       lastleft_bthcss: "lastleft_bth",
       nltext2css: "nltext2",
@@ -1440,6 +1497,7 @@ export default {
       openedMarkerID: null,
       center: { lat: 0, lng: 0 },
       dtm: true,
+      pluslocation: "",
       markers: [],
       markers1: [],
       markers2: [],
@@ -1452,6 +1510,8 @@ export default {
       markers9: [],
       markers10: [],
       numberp: [],
+      coordinate: [],
+      addr: "",
       loadtexton: false,
       options: {
         strokeColor: "#FF0000",
@@ -1483,6 +1543,49 @@ export default {
   },
 
   methods: {
+    focusover2() {
+      if (this.addr === "") {
+        this.focus2 = "focusover";
+      }
+    },
+    focusevent2() {
+      this.focus2 = "focus";
+    },
+    focusover() {
+      if (this.pluslocation === "") {
+        this.focus = "focusover";
+      }
+    },
+    focusevent() {
+      this.focus = "focus";
+    },
+    async handlemapput() {
+      const url = `https://apis.openapi.sk.com/tmap/geo/postcode?version=1&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&addr=${this.addr}&coordType=WGS84GEO&addressFlag=F00&format=json&page=1&count=5`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response.data.coordinateInfo.coordinate);
+      this.coordinate = response.data.coordinateInfo.coordinate;
+    },
+    mapdialog(num) {
+      console.log(num);
+      if (num === 1) {
+        this.mapputnum = num;
+        this.mapputcss = "mapput2";
+        this.mapputcss1 = "mapput1";
+        this.mapputcss2 = "mapput1";
+      } else if (num === 2) {
+        this.mapputnum = num;
+        this.mapputcss = "mapput1";
+        this.mapputcss1 = "mapput2";
+        this.mapputcss2 = "mapput1";
+      } else if (num === 3) {
+        this.mapputnum = num;
+        this.mapputcss = "mapput1";
+        this.mapputcss1 = "mapput1";
+        this.mapputcss2 = "mapput2";
+      }
+    },
     async goback() {
       this.lastleft_bthcss = "";
       this.lastac = false;
@@ -1553,13 +1656,7 @@ export default {
       }
     },
     mapput() {
-      ElMessage({
-        message: "등록하실려는 장소를 지도에서 클릭해주세요",
-
-        type: "success",
-      });
-
-      //this.dialogVisible = true;
+      this.dialogVisible = true;
     },
     loadinfo2() {
       for (var vv = 0; vv < this.loadfirst.length; vv++) {
