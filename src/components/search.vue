@@ -1303,10 +1303,10 @@
 
         추가하실 장소의 유형을 선택해주세요.
       </p>
-      <button :class="mapputcss" @click="mapdialog(1)">관광지</button>
-      <button :class="mapputcss1" @click="mapdialog(2)">숙소</button>
-      <button :class="mapputcss2" @click="mapdialog(3)">음식점</button>
-      <div v-if="this.mapputnum === 1">
+      <button :class="mapputcss" @click="mapdialog(12)">관광지</button>
+      <button :class="mapputcss1" @click="mapdialog(32)">숙소</button>
+      <button :class="mapputcss2" @click="mapdialog(39)">음식점</button>
+      <div>
         <div class="loadwrap">
           <label :class="focus">장소이름(최대50자)</label
           ><input
@@ -1318,7 +1318,7 @@
           />
         </div>
         <div class="loadsh">
-          <label :class="focus2">위치(입력후 검색 클릭)</label
+          <label :class="focus2">위치(도로명 주소)</label
           ><input
             type="text"
             v-model="addr"
@@ -1327,7 +1327,7 @@
             @blur="focusover2"
           /><button class="addrbtn" @click="handlemapput">검색</button>
         </div>
-        <div style="text-align: center">
+        <div style="text-align: center" v-if="searchopen === true">
           <table border="1" style="width: 100%">
             <tr>
               <th>주소</th>
@@ -1353,8 +1353,6 @@
           </table>
         </div>
       </div>
-      <div v-if="this.mapputnum === 2">2</div>
-      <div v-if="this.mapputnum === 3">3</div>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -1402,12 +1400,15 @@ export default {
 
     // 오른쪽 상세창
     await this.rightrefresh();
+    console.log(this.busanlist);
 
     // ========
     await this.googlemapopen();
   },
   data() {
     return {
+      mapnum: 12,
+      searchopen: false,
       focus: "",
       focus2: "",
       mapputnum: 1,
@@ -1509,6 +1510,7 @@ export default {
       center: { lat: 0, lng: 0 },
       dtm: true,
       pluslocation: "",
+      token: sessionStorage.getItem("TOKEN"),
       markers: [],
       markers1: [],
       markers2: [],
@@ -1558,9 +1560,9 @@ export default {
     //lat 35 lon 123  x 123 y 35
     async mapfinish() {
       const url = `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F00&coordType=WGS84GEO&version=1&format=json&fullAddr=${this.addr}&page=1&count=20&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55`;
-      const headers = { "Content-type": "application/json" };
+      const headers1 = { "Content-type": "application/json" };
       const body = {};
-      const response = await axios.get(url, body, { headers });
+      const response = await axios.get(url, body, { headers1 });
       console.log(response.data.coordinateInfo.coordinate[0].lat);
       console.log(response.data.coordinateInfo.coordinate[0].lon);
       this.plusmarker.push({
@@ -1585,13 +1587,18 @@ export default {
         }`;
         this.markers.push(this.markers1[nam]);
       }
-
-      console.log(this.busanlist10);
-      console.log(this.plusmarker);
-      console.log(this.choice1);
-      console.log(this.markers1);
-
+      const url1 = `/REST/travel/TDtem/insert?type=${this.mapnum}`;
+      const headers = { "Content-type": "application/json", token: this.token };
+      const body1 = {
+        title: this.pluslocation,
+        addr: this.addr,
+        xlocation: response.data.coordinateInfo.coordinate[0].lon,
+        ylocation: response.data.coordinateInfo.coordinate[0].lat,
+      };
+      const response1 = await axios.post(url1, body1, { headers });
+      console.log(response1);
       this.dialogVisible = false;
+      await this.rightrefresh();
     },
     dorofull(event) {
       var doro = event.currentTarget.textContent;
@@ -1616,27 +1623,29 @@ export default {
       this.focus = "focus";
     },
     async handlemapput() {
+      this.searchopen = true;
       const url = `https://apis.openapi.sk.com/tmap/geo/postcode?version=1&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&addr=${this.addr}&coordType=WGS84GEO&addressFlag=F00&format=json&page=1&count=5`;
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
+
       console.log(response.data.coordinateInfo.coordinate);
       this.coordinate = response.data.coordinateInfo.coordinate;
     },
     mapdialog(num) {
       console.log(num);
       if (num === 1) {
-        this.mapputnum = num;
+        this.mapnum = num;
         this.mapputcss = "mapput2";
         this.mapputcss1 = "mapput1";
         this.mapputcss2 = "mapput1";
       } else if (num === 2) {
-        this.mapputnum = num;
+        this.mapnum = num;
         this.mapputcss = "mapput1";
         this.mapputcss1 = "mapput2";
         this.mapputcss2 = "mapput1";
       } else if (num === 3) {
-        this.mapputnum = num;
+        this.mapnum = num;
         this.mapputcss = "mapput1";
         this.mapputcss1 = "mapput1";
         this.mapputcss2 = "mapput2";
@@ -2864,7 +2873,7 @@ export default {
     },
     async rightrefresh() {
       // 오른쪽 상세창
-      const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
+      const url1 = `/REST/travel/select?size=200&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
       const headers1 = { "Content-type": "application/json" };
 
       const response1 = await axios.get(url1, { headers1 });
@@ -3807,6 +3816,5 @@ export default {
   padding: unset;
 }
 </style>
-<style scope>
-@import "../assets/css/search_scope.css";
+<style scope src="../assets/css/search_scope.css">
 </style>

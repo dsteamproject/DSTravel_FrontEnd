@@ -123,6 +123,5 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-@import "../assets/css/car.css";
+<style scoped src="../assets/css/car.css">
 </style>

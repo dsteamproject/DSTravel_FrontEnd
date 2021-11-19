@@ -1,20 +1,21 @@
 <template>
-    <div>
-        <div class="wrap1">
-        
-            <p class="title">회원정보 수정</p>
-            <div class="hr"></div>
-          <label>아이디</label
-        >
-        <span> {{this.list.id}} </span>
-       
+  <div>
+    <div class="wrap1">
+      <p class="title">회원정보 수정</p>
+      <div class="hr"></div>
+      <div class="wrap_in">
+        <label>아이디</label>
+        <span> {{ this.list.id }} </span>
+
         <span v-bind:class="idchk">{{ idcheck }}</span
         ><br />
         <label>비밀번호</label
-        ><router-link to="/mypage/mypw" @click="handlepw" class="gopw">비밀번호 재설정</router-link>
+        ><router-link to="/mypage/mypw" @click="handlepw" class="gopw"
+          >비밀번호 재설정</router-link
+        >
 
         <br />
-     
+
         <label>이름</label
         ><input
           type="text"
@@ -65,75 +66,75 @@
           class="radio"
           v-model="gender"
         />여성
-      
-        </div>
-        <div class="btn_box">
-          <button class="chbtn" @click="handlechange">변경</button>
-          </div>
+      </div>
+      <div class="btn_box">
+        <button class="chbtn" @click="handlechange">변경</button>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
-    export default {
-   
-      async created(){
-      await this.refresh();
-      },
- 
-          data() {
+export default {
+  async created() {
+    await this.refresh();
+  },
+
+  data() {
     return {
-      list:"",
-      username:"",
-      usernickname:"",
-      usermail:"",
-      gender:"",
+      list: "",
+      username: "",
+      usernickname: "",
+      usermail: "",
+      gender: "",
       email: "선택항목",
-           token: sessionStorage.getItem("TOKEN"),
+      token: sessionStorage.getItem("TOKEN"),
     };
   },
-  methods:{
-    async refresh(){
-        const url = `/REST/mypage/home`
-        const headers = { "Content-type": "application/json",  token : this.token };
-        const response = await axios.get(url, { headers });
-        console.log(response);
-        this.list = response.data.member
-        this.username = response.data.member.name
-        const mail = response.data.member.email.split("@");
-        console.log(mail)
-        this.usermail = mail[0];
-        this.email = mail[1];
-        this.usernickname = response.data.member.nicname;
-        this.gender =response.data.member.gender;
-      
-    },
-      handlepw(){
-        this.$emit("chmenu", 1);
-      },
-    async handlechange(){
-      const url = `/REST/mypage/memberchange`;
-      const headers = { "Content-type": "application/json" , token : this.token };
-      const body = {
-          name: this.username,
-          nicname: this.usernickname,
-          email: this.usermail + "@" + this.email,
-          gender: this.gender,
-      };
-      const response = await axios.put(url, body, {headers});
+  methods: {
+    async refresh() {
+      const url = `/REST/mypage/home`;
+      const headers = { "Content-type": "application/json", token: this.token };
+      const response = await axios.get(url, { headers });
       console.log(response);
-      if(response.data.status === 200){
-        alert("회원정보 수정이 완료되었습니다")
+      this.list = response.data.member;
+      this.username = response.data.member.name;
+      const mail = response.data.member.email.split("@");
+      console.log(mail);
+      this.usermail = mail[0];
+      this.email = mail[1];
+      this.usernickname = response.data.member.nicname;
+      this.gender = response.data.member.gender;
+    },
+    handlepw() {
+      this.$emit("chmenu", 1);
+    },
+    async handlechange() {
+      const url = `/REST/mypage/memberchange`;
+      const headers = { "Content-type": "application/json", token: this.token };
+      const body = {
+        name: this.username,
+        nicname: this.usernickname,
+        email: this.usermail + "@" + this.email,
+        gender: this.gender,
+      };
+      const response = await axios.put(url, body, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        alert("회원정보 수정이 완료되었습니다");
       }
-    }
-  }
-        
-    }
+    },
+  },
+};
 </script>
 
 <style scoped>
-.chbtn{
-      padding: 20px 0;
+.wrap_in {
+  padding: 0px 50px;
+}
+.chbtn {
+  padding: 20px 0;
   width: 280px;
   margin: 0 5px;
   font-size: 15px;
@@ -143,20 +144,25 @@ import axios from "axios";
   color: white;
   font-weight: bold;
   margin-bottom: 100px;
+  margin-top: 35px;
 }
-.btn_box{
-    text-align: center;
+.btn_box {
+  text-align: center;
 }
-.title{
-    font-size:27px;
+.title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-left: 50px;
+
+  text-align: left;
 }
-.gopw{
-    padding:8px 12px;
-    background:#2752be;
-    cursor: pointer;
-    color:white;
-    font-size:13px;
-    text-decoration: none;
+.gopw {
+  padding: 8px 12px;
+  background: #2752be;
+  cursor: pointer;
+  color: white;
+  font-size: 13px;
+  text-decoration: none;
 }
 .radio {
   width: 24px;
@@ -212,28 +218,26 @@ import axios from "axios";
   padding: 0px 10px 0px 20px;
 }
 label {
-  width: 150px;
+  width: 110px;
   display: inline-block;
   padding: 15px 0px;
+  font-size: 13px;
 }
 .userpw {
   width: 187px;
   height: 38px;
   padding: 0px 10px 0px 20px;
 }
-.wrap1{
-    padding:60px 100px;
-   
- 
+.wrap1 {
+  padding: 10px;
 }
-.hr{
-    border-bottom: 1px solid #ddd;
-    margin:20px 0px;
+.hr {
+  border-bottom: 1px solid #ddd;
+  margin: 20px 0px;
 }
 
 /* 아이디
         이름
         닉네임
         이메일 */
-
 </style>

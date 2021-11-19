@@ -88,6 +88,5 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "../assets/css/menu1.css";
+<style scoped src="../assets/css/menu1.css">
 </style>

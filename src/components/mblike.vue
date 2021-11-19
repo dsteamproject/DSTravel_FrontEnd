@@ -1,9 +1,6 @@
 <template>
   <div>
     <div class="wrap1">
-      <p class="title1">내가 좋아요한 게시물</p>
-      <div class="hr"></div>
-
       <!-- ㅇㅁㄴㅇ    -->
       <div style="margin-top: 20px">
         <!-- <el-button @click="toggleSelection([tableData[i]])"
@@ -249,6 +246,6 @@ export default {
   margin: 20px 0px;
 }
 .wrap1 {
-  padding: 60px 100px;
+  padding: 10px;
 }
 </style>

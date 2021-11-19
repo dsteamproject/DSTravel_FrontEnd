@@ -475,12 +475,12 @@ export default defineComponent({
 }
 .left1 {
   width: 24%;
-  height: 900px;
+  height: auto;
   box-sizing: border-box;
   float: left;
   border: 1px solid #eee;
 
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   box-sizing: border-box;
   margin-top: 20px;
   margin-right: 3%;

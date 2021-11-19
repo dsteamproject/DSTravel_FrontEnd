@@ -265,6 +265,5 @@ export default {
   },
 };
 </script>
-<style >
-@import "../assets/css/free.css";
+<style scope src= "../assets/css/free.css" >
 </style>
