@@ -588,6 +588,29 @@ body {
   font-size: 17px;
 }
 
+.alldatecontent1 {
+  font-size: 13px;
+  text-align: center;
+  width: 80%;
+  height: 6vh;
+  padding-top:10px;
+  margin-top: 10px;
+  display: inline-table;
+  box-shadow: rgb(31 38 135 / 8%) 0px 8px 16px 0px !important;
+  background: white;
+  border-radius: 4px !important;
+  border-width: initial !important;
+  border-style: none !important;
+  border-color: initial !important;
+  border-image: initial !important;
+  margin: 8px;
+  margin-bottom: 6vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  padding: 8px;
+  position: relative;
+}
 .alldatecontent {
   font-size: 13px;
   text-align: center;
@@ -604,13 +627,40 @@ body {
   border-color: initial !important;
   border-image: initial !important;
   margin: 8px;
- 
 
   justify-content: center;
   align-items: center;
   flex-direction: row;
   padding: 8px;
   position: relative;
+}
+.totalDT{
+  position: absolute;
+  left:43%;
+  bottom:-60%;
+
+}
+.totaldt1{
+  animation: downicon 1.5s infinite;
+  float:left;
+  font-size:25px;
+  font-weight: bold;
+  color:#98dde3;
+  position: absolute;
+  top:30px;
+  
+}
+.totaldt2{
+  margin-top: 10px;
+  margin-left:40px;
+  text-align: left;
+  float:left;
+}
+
+@keyframes downicon{
+  0%{top:5px;}
+  50%{top:14px;}
+  100%{top:5px;}
 }
 
 .choice_title1 {

@@ -883,7 +883,7 @@
       <div v-if="newleft1 === 0">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice1"
             :key="item"
           >
@@ -899,13 +899,22 @@
                 </div>
               </div>
             </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
+              </div>
+            </div>
           </li>
         </ul>
       </div>
       <div v-if="newleft1 === 1">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice2"
             :key="item"
           >
@@ -925,7 +934,7 @@
       <div v-if="newleft1 === 2">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice3"
             :key="item"
           >
@@ -943,7 +952,7 @@
       <div v-if="newleft1 === 3">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice4"
             :key="item"
           >
@@ -957,7 +966,7 @@
       <div v-if="newleft1 === 4">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice5"
             :key="item"
           >
@@ -971,7 +980,7 @@
       <div v-if="newleft1 === 5">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice6"
             :key="item"
           >
@@ -985,7 +994,7 @@
       <div v-if="newleft1 === 6">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice7"
             :key="item"
           >
@@ -999,7 +1008,7 @@
       <div v-if="newleft1 === 7">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice8"
             :key="item"
           >
@@ -1013,7 +1022,7 @@
       <div v-if="newleft1 === 8">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice9"
             :key="item"
           >
@@ -1027,7 +1036,7 @@
       <div v-if="newleft1 === 9">
         <ul class="alldate">
           <li
-            class="alldatecontent"
+            class="alldatecontent1"
             v-for="(item, index) in choice10"
             :key="item"
           >
@@ -1326,15 +1335,18 @@
             </tr>
             <tr v-for="(item, index) in coordinate" :key="index">
               <td>
-                <div>
-                  <span class="doro">도로명</span>{{ item.city_do }}
-                  {{ item.gu_gun }}{{ item.newBuildingIndex
-                  }}{{ item.legalDong }}
-                </div>
-                <div>
-                  <span class="zip">지번</span>{{ item.city_do }}
-                  {{ item.gu_gun }} {{ item.legalDong }}{{ item.bunji }}
-                </div>
+                <a href="#" @click="dorofull($event)">
+                  <div>
+                    <span class="doro">도로명</span>{{ item.city_do }}
+                    {{ item.gu_gun }}{{ item.newBuildingIndex
+                    }}{{ item.legalDong }}
+                  </div>
+                  <div>
+                    <span class="zip">지번</span
+                    ><span style="display: none">.</span>{{ item.city_do }}
+                    {{ item.gu_gun }} {{ item.legalDong }}{{ item.bunji }}
+                  </div>
+                </a>
               </td>
               <td>{{ item.zipcode }}</td>
             </tr>
@@ -1347,9 +1359,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">취소</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >완료</el-button
-        >
+        <el-button type="primary" @click="mapfinish">완료</el-button>
       </span>
     </template>
   </el-dialog>
@@ -1404,6 +1414,7 @@ export default {
       mapputcss: "mapput2",
       mapputcss1: "mapput1",
       mapputcss2: "mapput1",
+
       lastleft_bth20: "asd",
       lastleft_bthcss: "lastleft_bth",
       nltext2css: "nltext2",
@@ -1519,6 +1530,7 @@ export default {
       },
       loadtext: [],
       loadfirst: [],
+      plusmarker: [],
       snum1: 0,
       lnum1: 1,
       loadnumb: "",
@@ -1543,6 +1555,50 @@ export default {
   },
 
   methods: {
+    //lat 35 lon 123  x 123 y 35
+    async mapfinish() {
+      const url = `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F00&coordType=WGS84GEO&version=1&format=json&fullAddr=${this.addr}&page=1&count=20&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55`;
+      const headers = { "Content-type": "application/json" };
+      const body = {};
+      const response = await axios.get(url, body, { headers });
+      console.log(response.data.coordinateInfo.coordinate[0].lat);
+      console.log(response.data.coordinateInfo.coordinate[0].lon);
+      this.plusmarker.push({
+        title: this.pluslocation,
+        xlocation: Number(response.data.coordinateInfo.coordinate[0].lon),
+        ylocation: Number(response.data.coordinateInfo.coordinate[0].lat),
+      });
+      this.choice1.push(this.plusmarker[0]);
+      this.markers1.push({
+        id: this.pluslocation,
+        position: {
+          lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+          lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+        },
+        icon: `http://127.0.0.1:8080/REST/travel/image${
+          this.choice1.length + 1
+        }`,
+      });
+      for (var nam = 0; nam < this.markers1.length; nam++) {
+        this.markers1[nam].icon = `http://127.0.0.1:8080/REST/travel/image${
+          nam + 1
+        }`;
+        this.markers.push(this.markers1[nam]);
+      }
+
+      console.log(this.busanlist10);
+      console.log(this.plusmarker);
+      console.log(this.choice1);
+      console.log(this.markers1);
+
+      this.dialogVisible = false;
+    },
+    dorofull(event) {
+      var doro = event.currentTarget.textContent;
+      var doro1 = doro.split(".");
+      console.log(doro1[1]);
+      this.addr = doro1[1];
+    },
     focusover2() {
       if (this.addr === "") {
         this.focus2 = "focusover";
@@ -1649,7 +1705,7 @@ export default {
           id: this.busanlist[i].title,
           position: {
             lat: Number(this.busanlist[i].ylocation),
-            lng: Number(this.busanlist[i].xlocaion),
+            lng: Number(this.busanlist[i].xlocation),
           },
           icon: "https://ifh.cc/g/ugSmCT.png",
         });
@@ -1754,83 +1810,83 @@ export default {
       let url;
       if (this.num3 === 1) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice1[Number(index + 1)].xlocaion
+          this.choice1[Number(index + 1)].xlocation
         }&endY=${
           this.choice1[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice1[Number(index)].xlocaion
+          this.choice1[Number(index)].xlocation
         }&startY=${this.choice1[Number(index)].ylocation}`;
       } else if (this.num3 === 2) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice2[Number(index + 1)].xlocaion
+          this.choice2[Number(index + 1)].xlocation
         }&endY=${
           this.choice2[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice2[Number(index)].xlocaion
+          this.choice2[Number(index)].xlocation
         }&startY=${this.choice2[Number(index)].ylocation}`;
       } else if (this.num3 === 3) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice3[Number(index + 1)].xlocaion
+          this.choice3[Number(index + 1)].xlocation
         }&endY=${
           this.choice3[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice3[Number(index)].xlocaion
+          this.choice3[Number(index)].xlocation
         }&startY=${this.choice3[Number(index)].ylocation}`;
       } else if (this.num3 === 4) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice4[Number(index + 1)].xlocaion
+          this.choice4[Number(index + 1)].xlocation
         }&endY=${
           this.choice4[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice4[Number(index)].xlocaion
+          this.choice4[Number(index)].xlocation
         }&startY=${this.choice4[Number(index)].ylocation}`;
       } else if (this.num3 === 5) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice5[Number(index + 1)].xlocaion
+          this.choice5[Number(index + 1)].xlocation
         }&endY=${
           this.choice5[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice5[Number(index)].xlocaion
+          this.choice5[Number(index)].xlocation
         }&startY=${this.choice5[Number(index)].ylocation}`;
       } else if (this.num3 === 6) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice6[Number(index + 1)].xlocaion
+          this.choice6[Number(index + 1)].xlocation
         }&endY=${
           this.choice6[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice6[Number(index)].xlocaion
+          this.choice6[Number(index)].xlocation
         }&startY=${this.choice6[Number(index)].ylocation}`;
       } else if (this.num3 === 7) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice7[Number(index + 1)].xlocaion
+          this.choice7[Number(index + 1)].xlocation
         }&endY=${
           this.choice7[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice7[Number(index)].xlocaion
+          this.choice7[Number(index)].xlocation
         }&startY=${this.choice7[Number(index)].ylocation}`;
       } else if (this.num3 === 8) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice8[Number(index + 1)].xlocaion
+          this.choice8[Number(index + 1)].xlocation
         }&endY=${
           this.choice8[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice8[Number(index)].xlocaion
+          this.choice8[Number(index)].xlocation
         }&startY=${this.choice8[Number(index)].ylocation}`;
       } else if (this.num3 === 9) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice9[Number(index + 1)].xlocaion
+          this.choice9[Number(index + 1)].xlocation
         }&endY=${
           this.choice9[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice9[Number(index)].xlocaion
+          this.choice9[Number(index)].xlocation
         }&startY=${this.choice9[Number(index)].ylocation}`;
       } else if (this.num3 === 10) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice10[Number(index + 1)].xlocaion
+          this.choice10[Number(index + 1)].xlocation
         }&endY=${
           this.choice10[Number(index + 1)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice10[Number(index)].xlocaion
+          this.choice10[Number(index)].xlocation
         }&startY=${this.choice10[Number(index)].ylocation}`;
       }
       const headers = {};
@@ -2050,13 +2106,19 @@ export default {
       this.loadtexton = false;
 
       let chonum;
+      let chonum2;
       let list;
+      let list2;
       if (this.num3 === 1) {
         chonum = this.choice1.findIndex((e) => e.title == i.title);
+        chonum2 = this.markers1.findIndex((e) => e.id == i.title);
 
         list = this.choice1.splice(chonum, 1);
 
         this.choice1.splice(chonum + 1, 0, list[0]);
+
+        list2 = this.markers1.splice(chonum2, 1);
+        this.markers1.splice(chonum2 + 1, 0, list2[0]);
 
         for (var cc = 0; cc < this.choice1.length; cc++) {
           var marknum = this.markers.findIndex(
@@ -2069,10 +2131,12 @@ export default {
         }
       } else if (this.num3 === 2) {
         chonum = this.choice2.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers2.findIndex((e) => e.id == i.title);
         list = this.choice2.splice(chonum, 1);
 
         this.choice2.splice(chonum + 1, 0, list[0]);
+        list2 = this.markers2.splice(chonum2, 1);
+        this.markers2.splice(chonum2 + 1, 0, list2[0]);
 
         for (var cc2 = 0; cc2 < this.choice2.length; cc2++) {
           var marknum2 = this.markers.findIndex(
@@ -2085,10 +2149,13 @@ export default {
         }
       } else if (this.num3 === 3) {
         chonum = this.choice3.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers3.findIndex((e) => e.id == i.title);
         list = this.choice3.splice(chonum, 1);
 
         this.choice3.splice(chonum + 1, 0, list[0]);
+
+        list2 = this.markers3.splice(chonum2, 1);
+        this.markers3.splice(chonum2 + 1, 0, list2[0]);
 
         for (var cc3 = 0; cc3 < this.choice3.length; cc3++) {
           var marknum3 = this.markers.findIndex(
@@ -2101,10 +2168,13 @@ export default {
         }
       } else if (this.num3 === 4) {
         chonum = this.choice4.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers4.findIndex((e) => e.id == i.title);
         list = this.choice4.splice(chonum, 1);
 
         this.choice4.splice(chonum + 1, 0, list[0]);
+
+        list2 = this.markers4.splice(chonum2, 1);
+        this.markers4.splice(chonum2 + 1, 0, list2[0]);
 
         for (var cc4 = 0; cc4 < this.choice4.length; cc4++) {
           var marknum4 = this.markers.findIndex(
@@ -2117,10 +2187,14 @@ export default {
         }
       } else if (this.num3 === 5) {
         chonum = this.choice5.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers5.findIndex((e) => e.id == i.title);
         list = this.choice5.splice(chonum, 1);
 
         this.choice5.splice(chonum + 1, 0, list[0]);
+
+        list2 = this.markers5.splice(chonum2, 1);
+        this.markers5.splice(chonum2 - 1, 0, list2[0]);
+
         for (var cc5 = 0; cc5 < this.choice2.length; cc5++) {
           var marknum5 = this.markers.findIndex(
             (e) => e.id == this.choice5[cc5].title
@@ -2132,10 +2206,13 @@ export default {
         }
       } else if (this.num3 === 6) {
         chonum = this.choice6.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers6.findIndex((e) => e.id == i.title);
         list = this.choice6.splice(chonum, 1);
 
         this.choice6.splice(chonum + 1, 0, list[0]);
+
+        list2 = this.markers6.splice(chonum2, 1);
+        this.markers6.splice(chonum2 + 1, 0, list2[0]);
         for (var cc6 = 0; cc6 < this.choice6.length; cc6++) {
           var marknum6 = this.markers.findIndex(
             (e) => e.id == this.choice2[cc6].title
@@ -2147,10 +2224,13 @@ export default {
         }
       } else if (this.num3 === 7) {
         chonum = this.choice7.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers7.findIndex((e) => e.id == i.title);
         list = this.choice7.splice(chonum, 1);
 
         this.choice7.splice(chonum + 1, 0, list[0]);
+
+        list2 = this.markers7.splice(chonum2, 1);
+        this.markers7.splice(chonum2 + 1, 0, list2[0]);
         for (var cc7 = 0; cc7 < this.choice7.length; cc7++) {
           var marknum7 = this.markers.findIndex(
             (e) => e.id == this.choice7[cc7].title
@@ -2162,10 +2242,13 @@ export default {
         }
       } else if (this.num3 === 8) {
         chonum = this.choice8.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers8.findIndex((e) => e.id == i.title);
         list = this.choice8.splice(chonum, 1);
 
         this.choice8.splice(chonum + 1, 0, list[0]);
+
+        list2 = this.markers8.splice(chonum2, 1);
+        this.markers8.splice(chonum2 + 1, 0, list2[0]);
         for (var cc8 = 0; cc8 < this.choice8.length; cc8++) {
           var marknum8 = this.markers.findIndex(
             (e) => e.id == this.choice8[cc8].title
@@ -2177,10 +2260,12 @@ export default {
         }
       } else if (this.num3 === 9) {
         chonum = this.choice9.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers9.findIndex((e) => e.id == i.title);
         list = this.choice9.splice(chonum, 1);
 
         this.choice9.splice(chonum + 1, 0, list[0]);
+        list2 = this.markers9.splice(chonum2, 1);
+        this.markers9.splice(chonum2 + 1, 0, list2[0]);
         for (var cc9 = 0; cc9 < this.choice9.length; cc9++) {
           var marknum9 = this.markers.findIndex(
             (e) => e.id == this.choice9[cc9].title
@@ -2192,10 +2277,13 @@ export default {
         }
       } else if (this.num3 === 10) {
         chonum = this.choice10.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers10.findIndex((e) => e.id == i.title);
         list = this.choice10.splice(chonum, 1);
 
         this.choice10.splice(chonum + 1, 0, list[0]);
+
+        list2 = this.markers10.splice(chonum2, 1);
+        this.markers10.splice(chonum2 + 1, 0, list2[0]);
         for (var cc10 = 0; cc10 < this.choice10.length; cc10++) {
           var marknum10 = this.markers.findIndex(
             (e) => e.id == this.choice10[cc10].title
@@ -2211,8 +2299,10 @@ export default {
     async listup(i) {
       for (var vv = 0; vv < this.loadfirst.length; vv++) {
         var marknum1 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
+        console.log(marknum1);
         this.markers.splice(marknum1, 1);
       }
+      console.log(this.markers);
       await this.pathnone();
 
       this.middleload = [];
@@ -2221,13 +2311,19 @@ export default {
       this.loadtexton = false;
 
       let chonum;
+      let chonum2;
       let list;
+      let list2;
       if (this.num3 === 1) {
         chonum = this.choice1.findIndex((e) => e.title == i.title);
+        chonum2 = this.markers1.findIndex((e) => e.id == i.title);
 
         list = this.choice1.splice(chonum, 1);
 
         this.choice1.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers1.splice(chonum2, 1);
+        this.markers1.splice(chonum2 - 1, 0, list2[0]);
 
         for (var cc = 0; cc < this.choice1.length; cc++) {
           var marknum = this.markers.findIndex(
@@ -2240,12 +2336,16 @@ export default {
         }
 
         console.log(this.markers);
+        console.log(this.markers1);
       } else if (this.num3 === 2) {
         chonum = this.choice2.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers2.findIndex((e) => e.id == i.title);
         list = this.choice2.splice(chonum, 1);
 
         this.choice2.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers2.splice(chonum2, 1);
+        this.markers2.splice(chonum2 - 1, 0, list2[0]);
 
         for (var cc2 = 0; cc2 < this.choice2.length; cc2++) {
           console.log(this.choice2[cc2].title);
@@ -2259,10 +2359,13 @@ export default {
         }
       } else if (this.num3 === 3) {
         chonum = this.choice3.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers3.findIndex((e) => e.id == i.title);
         list = this.choice3.splice(chonum, 1);
 
         this.choice3.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers3.splice(chonum2, 1);
+        this.markers3.splice(chonum2 - 1, 0, list2[0]);
 
         for (var cc3 = 0; cc3 < this.choice3.length; cc3++) {
           var marknum3 = this.markers.findIndex(
@@ -2275,10 +2378,13 @@ export default {
         }
       } else if (this.num3 === 4) {
         chonum = this.choice4.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers4.findIndex((e) => e.id == i.title);
         list = this.choice4.splice(chonum, 1);
 
         this.choice4.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers4.splice(chonum2, 1);
+        this.markers4.splice(chonum2 - 1, 0, list2[0]);
 
         for (var cc4 = 0; cc4 < this.choice4.length; cc4++) {
           var marknum4 = this.markers.findIndex(
@@ -2291,10 +2397,13 @@ export default {
         }
       } else if (this.num3 === 5) {
         chonum = this.choice5.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers5.findIndex((e) => e.id == i.title);
         list = this.choice5.splice(chonum, 1);
 
         this.choice5.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers5.splice(chonum2, 1);
+        this.markers5.splice(chonum2 - 1, 0, list2[0]);
         for (var cc5 = 0; cc5 < this.choice2.length; cc5++) {
           var marknum5 = this.markers.findIndex(
             (e) => e.id == this.choice5[cc5].title
@@ -2306,10 +2415,13 @@ export default {
         }
       } else if (this.num3 === 6) {
         chonum = this.choice6.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers6.findIndex((e) => e.id == i.title);
         list = this.choice6.splice(chonum, 1);
 
         this.choice6.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers6.splice(chonum2, 1);
+        this.markers6.splice(chonum2 - 1, 0, list2[0]);
         for (var cc6 = 0; cc6 < this.choice6.length; cc6++) {
           var marknum6 = this.markers.findIndex(
             (e) => e.id == this.choice2[cc6].title
@@ -2321,10 +2433,13 @@ export default {
         }
       } else if (this.num3 === 7) {
         chonum = this.choice7.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers7.findIndex((e) => e.id == i.title);
         list = this.choice7.splice(chonum, 1);
 
         this.choice7.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers7.splice(chonum2, 1);
+        this.markers7.splice(chonum2 - 1, 0, list2[0]);
         for (var cc7 = 0; cc7 < this.choice7.length; cc7++) {
           var marknum7 = this.markers.findIndex(
             (e) => e.id == this.choice7[cc7].title
@@ -2336,10 +2451,13 @@ export default {
         }
       } else if (this.num3 === 8) {
         chonum = this.choice8.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers8.findIndex((e) => e.id == i.title);
         list = this.choice8.splice(chonum, 1);
 
         this.choice8.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers8.splice(chonum2, 1);
+        this.markers8.splice(chonum2 - 1, 0, list2[0]);
         for (var cc8 = 0; cc8 < this.choice8.length; cc8++) {
           var marknum8 = this.markers.findIndex(
             (e) => e.id == this.choice8[cc8].title
@@ -2351,10 +2469,13 @@ export default {
         }
       } else if (this.num3 === 9) {
         chonum = this.choice9.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers9.findIndex((e) => e.id == i.title);
         list = this.choice9.splice(chonum, 1);
 
         this.choice9.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers9.splice(chonum2, 1);
+        this.markers9.splice(chonum2 - 1, 0, list2[0]);
         for (var cc9 = 0; cc9 < this.choice9.length; cc9++) {
           var marknum9 = this.markers.findIndex(
             (e) => e.id == this.choice9[cc9].title
@@ -2366,10 +2487,13 @@ export default {
         }
       } else if (this.num3 === 10) {
         chonum = this.choice10.findIndex((e) => e.title == i.title);
-
+        chonum2 = this.markers10.findIndex((e) => e.id == i.title);
         list = this.choice10.splice(chonum, 1);
 
         this.choice10.splice(chonum - 1, 0, list[0]);
+
+        list2 = this.markers10.splice(chonum2, 1);
+        this.markers10.splice(chonum2 - 1, 0, list2[0]);
         for (var cc10 = 0; cc10 < this.choice10.length; cc10++) {
           var marknum10 = this.markers.findIndex(
             (e) => e.id == this.choice10[cc10].title
@@ -2397,17 +2521,11 @@ export default {
             nm + 1
           }`;
         }
-        for (var nm1 = 0; nm1 < this.markers1.length; nm1++) {
-          this.markers.push(this.markers1[nm1]);
-        }
       } else if (this.num3 === 2) {
         for (var aaa = 0; aaa < this.markers2.length; aaa++) {
           this.markers2[aaa].icon = `http://127.0.0.1:8080/REST/travel/image${
             aaa + 1
           }`;
-        }
-        for (var nw1 = 0; nw1 < this.markers2.length; nw1++) {
-          this.markers.push(this.markers2[nw1]);
         }
       } else if (this.num3 === 3) {
         for (var bbb = 0; bbb < this.markers3.length; bbb++) {
@@ -2415,17 +2533,11 @@ export default {
             bbb + 1
           }`;
         }
-        for (var bbb1 = 0; bbb1 < this.markers3.length; bbb1++) {
-          this.markers.push(this.markers3[bbb1]);
-        }
       } else if (this.num3 === 4) {
         for (var ccc = 0; ccc < this.markers4.length; ccc++) {
           this.markers4[ccc].icon = `http://127.0.0.1:8080/REST/travel/image${
             ccc + 1
           }`;
-        }
-        for (var ccc1 = 0; ccc1 < this.markers4.length; ccc1++) {
-          this.markers.push(this.markers4[ccc1]);
         }
       } else if (this.num3 === 5) {
         for (var ddd = 0; ddd < this.markers5.length; ddd++) {
@@ -2433,17 +2545,11 @@ export default {
             ddd + 1
           }`;
         }
-        for (var ddd1 = 0; ddd1 < this.markers5.length; ddd1++) {
-          this.markers.push(this.markers5[ddd1]);
-        }
       } else if (this.num3 === 6) {
         for (var fff = 0; fff < this.markers6.length; fff++) {
           this.markers6[fff].icon = `http://127.0.0.1:8080/REST/travel/image${
             fff + 1
           }`;
-        }
-        for (var fff1 = 0; fff1 < this.markers6.length; fff1++) {
-          this.markers.push(this.markers6[fff1]);
         }
       } else if (this.num3 === 7) {
         for (var ggg = 0; ggg < this.markers7.length; ggg++) {
@@ -2451,17 +2557,11 @@ export default {
             ggg + 1
           }`;
         }
-        for (var ggg1 = 0; ggg1 < this.markers7.length; ggg1++) {
-          this.markers.push(this.markers7[ggg1]);
-        }
       } else if (this.num3 === 8) {
         for (var hhh = 0; hhh < this.markers8.length; hhh++) {
           this.markers8[hhh].icon = `http://127.0.0.1:8080/REST/travel/image${
             hhh + 1
           }`;
-        }
-        for (var hhh1 = 0; hhh1 < this.markers8.length; hhh1++) {
-          this.markers.push(this.markers8[hhh1]);
         }
       } else if (this.num3 === 9) {
         for (var jjj = 0; jjj < this.markers9.length; jjj++) {
@@ -2469,27 +2569,45 @@ export default {
             jjj + 1
           }`;
         }
-        for (var jjj1 = 0; jjj1 < this.markers9.length; jjj1++) {
-          this.markers.push(this.markers9[jjj1]);
-        }
       } else if (this.num3 === 10) {
         for (var kkk = 0; kkk < this.markers10.length; kkk++) {
           this.markers10[kkk].icon = `http://127.0.0.1:8080/REST/travel/image${
             kkk + 1
           }`;
         }
-        for (var kkk1 = 0; kkk1 < this.markers10.length; kkk1++) {
-          this.markers.push(this.markers10[kkk1]);
-        }
       }
     },
-    handledatego(i) {
+    async handledatego(i) {
       if (i === 0) {
+        console.log(this.choice1);
+        for (var date1 = 0; date1 < this.choice1.length - 1; date1++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice1[date1 + 1].xlocation
+          }&endY=${
+            this.choice1[date1 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice1[date1].xlocation
+          }&startY=${this.choice1[date1].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice1[date1].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice1[date1].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
+        console.log(this.choice1);
+
         // 버튼 색상
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth1";
         // ==
         // marker 표시
+
         this.markers = [];
         for (var nm = 0; nm < this.markers1.length; nm++) {
           this.markers1[nm].icon = `http://127.0.0.1:8080/REST/travel/image${
@@ -2500,6 +2618,7 @@ export default {
           this.markers.push(this.markers1[nm1]);
         }
       } else if (i === 1) {
+        console.log(this.choice2);
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth2";
         this.markers = [];
@@ -2751,6 +2870,7 @@ export default {
       const response1 = await axios.get(url1, { headers1 });
 
       this.busanlist10 = response1.data.list;
+      console.log(this.busanlist10);
       await this.selectdeletelist();
     },
     handlefull() {
@@ -2862,7 +2982,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice1.length + 1
@@ -2873,7 +2993,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice2.length + 1
@@ -2884,7 +3004,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice3.length + 1
@@ -2895,7 +3015,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice4.length + 1
@@ -2906,7 +3026,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice5.length + 1
@@ -2917,7 +3037,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice6.length + 1
@@ -2928,7 +3048,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice7.length + 1
@@ -2939,7 +3059,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice8.length + 1
@@ -2950,7 +3070,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice9.length + 1
@@ -2961,7 +3081,7 @@ export default {
           id: i.title,
           position: {
             lat: Number(i.ylocation), //위도   36
-            lng: Number(i.xlocaion), // 경도   129
+            lng: Number(i.xlocation), // 경도   129
           },
           icon: `http://127.0.0.1:8080/REST/travel/image${
             this.choice10.length + 1
@@ -3043,7 +3163,7 @@ export default {
       //한개 선택후 오른쪽 list 변경
 
       //const url1 = `/REST/travel/distance?areaCode=6&Cnt=100&contentTypeId=12&kilometer=5&pageNo=1&xmap=${i.mapx}&ymap=${i.mapy}`;
-      const url1 = `/REST/travel/distance?areaCode=${this.areacode}&size=100&contentTypeId=${this.contenttypeid}&kilometer=5&page=1&xmap=${i.xlocaion}&ymap=${i.ylocation}`;
+      const url1 = `/REST/travel/distance?areaCode=${this.areacode}&size=100&contentTypeId=${this.contenttypeid}&kilometer=5&page=1&xmap=${i.xlocation}&ymap=${i.ylocation}`;
       const headers1 = {};
       const response1 = await axios.get(url1, { headers1 });
 
@@ -3061,27 +3181,27 @@ export default {
       let url;
       if (this.num3 === 1) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice1[Number(this.endnum)].xlocaion
+          this.choice1[Number(this.endnum)].xlocation
         }&endY=${
           this.choice1[Number(this.endnum)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice1[Number(this.startnum)].xlocaion
+          this.choice1[Number(this.startnum)].xlocation
         }&startY=${this.choice1[Number(this.startnum)].ylocation}`;
       } else if (this.num3 === 2) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice2[Number(this.endnum2)].xlocaion
+          this.choice2[Number(this.endnum2)].xlocation
         }&endY=${
           this.choice2[Number(this.endnum2)].ylocaion
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice2[Number(this.startnum2)].xlocaion
+          this.choice2[Number(this.startnum2)].xlocation
         }&startY=${this.choice2[Number(this.startnum2)].ylocaion}`;
       } else if (this.num3 === 3) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
-          this.choice3[Number(this.endnum3)].xlocaion
+          this.choice3[Number(this.endnum3)].xlocation
         }&endY=${
           this.choice3[Number(this.endnum3)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice3[Number(this.startnum3)].xlocaion
+          this.choice3[Number(this.startnum3)].xlocation
         }&startY=${this.choice3[Number(this.startnum3)].ylocaion}`;
       } else if (this.num3 === 4) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
@@ -3089,7 +3209,7 @@ export default {
         }&endY=${
           this.choice4[Number(this.endnum4)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice4[Number(this.startnum4)].xlocaion
+          this.choice4[Number(this.startnum4)].xlocation
         }&startY=${this.choice4[Number(this.startnum4)].ylocation}`;
       } else if (this.num3 === 5) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
@@ -3097,7 +3217,7 @@ export default {
         }&endY=${
           this.choice5[Number(this.endnum5)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice5[Number(this.startnum5)].xlocaion
+          this.choice5[Number(this.startnum5)].xlocation
         }&startY=${this.choice5[Number(this.startnum5)].ylocation}`;
       } else if (this.num3 === 6) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
@@ -3121,7 +3241,7 @@ export default {
         }&endY=${
           this.choice8[Number(this.endnum8)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice8[Number(this.startnum8)].xlocaion
+          this.choice8[Number(this.startnum8)].xlocation
         }&startY=${this.choice8[Number(this.startnum8)].ylocation}`;
       } else if (this.num3 === 9) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
@@ -3129,7 +3249,7 @@ export default {
         }&endY=${
           this.choice9[Number(this.endnum9)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice9[Number(this.startnum9)].xlocaion
+          this.choice9[Number(this.startnum9)].xlocation
         }&startY=${this.choice9[Number(this.startnum9)].ylocation}`;
       } else if (this.num3 === 10) {
         url = `https://apis.openapi.sk.com/tmap/routes?version=1&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
@@ -3137,7 +3257,7 @@ export default {
         }&endY=${
           this.choice10[Number(this.endnum10)].ylocation
         }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
-          this.choice10[Number(this.startnum10)].xlocaion
+          this.choice10[Number(this.startnum10)].xlocation
         }&startY=${this.choice10[Number(this.startnum10)].ylocation}`;
       }
       const headers = {};
@@ -3285,7 +3405,7 @@ export default {
       this.openedMarkerID = null;
 
       this.openedMarkerID = i.title;
-      this.center = { lat: Number(i.ylocation), lng: Number(i.xlocaion) };
+      this.center = { lat: Number(i.ylocation), lng: Number(i.xlocation) };
       this.zoom = 18;
     },
     openMarker(id) {
@@ -3324,7 +3444,7 @@ export default {
           id: this.busanlist10[i].title,
           position: {
             lat: Number(this.busanlist10[i].ylocation),
-            lng: Number(this.busanlist10[i].xlocaion),
+            lng: Number(this.busanlist10[i].xlocation),
           },
           icon: "https://ifh.cc/g/ugSmCT.png",
         });
@@ -3357,7 +3477,7 @@ export default {
           id: this.busanlist10[i].title,
           position: {
             lat: Number(this.busanlist10[i].ylocation),
-            lng: Number(this.busanlist10[i].xlocaion),
+            lng: Number(this.busanlist10[i].xlocation),
           },
           icon: "https://ifh.cc/g/Xg70rK.png",
         });
@@ -3379,7 +3499,7 @@ export default {
           id: this.busanlist10[i].title,
           position: {
             lat: Number(this.busanlist10[i].ylocation),
-            lng: Number(this.busanlist10[i].xlocaion),
+            lng: Number(this.busanlist10[i].xlocation),
           },
           icon: "https://ifh.cc/g/PSvrrN.png",
         });

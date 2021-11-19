@@ -83,7 +83,7 @@
             v-for="item in list"
             :key="item"
             class="list1_3"
-            @click="$router.push('/hotelcontent')"
+            @click="detailcontentgo(item)"
           >
             <div class="img">
               <img :src="item.firstimage" class="img_in" />
@@ -157,6 +157,13 @@ export default defineComponent({
     };
   },
   methods: {
+    detailcontentgo(item) {
+      console.log(item.code);
+      this.$router.push({
+        path: "/hotelcontent",
+        query: { code: item.code },
+      });
+    },
     async valuechange() {
       console.log(this.value);
       await this.listrefresh();
