@@ -201,13 +201,13 @@ export default {
   text-align: center;
 }
 .cellmeiddle {
-  width: 56%;
-  display: table-cell;
+  display: inline-block;
 }
 .cell2 {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: right;
+  display: inline-block;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 .btn1 {
@@ -223,9 +223,8 @@ export default {
   padding: 2px 5px;
 }
 .cell {
-  height: 48px;
-  display: table-cell;
-  vertical-align: middle;
+  display: inline-block;
+  margin-top: 10px;
 }
 .tableheader {
   background: #62656a;

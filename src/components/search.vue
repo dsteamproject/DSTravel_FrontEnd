@@ -1187,7 +1187,7 @@
         <button class="addmarker4" @click="alllist">전체목록</button>
       </div>
       <div v-if="lastac === true">
-        <button class="addmarker" @click="mapput">일정저장</button>
+        <button class="addmarker" @click="mapput2">일정저장</button>
         <button class="addmarker3" @click="goback">뒤로가기</button>
       </div>
       <div class="lo"></div>

@@ -1,8 +1,6 @@
 <template>
   <div class="app">
     <div class="wrap">
-      <div class="topbg"></div>
-
       <div class="content">
         <div class="topcontent">
           <router-link to="/mypage/mypw" @click="changeMenu(0)" :class="btn1"

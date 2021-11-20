@@ -69,7 +69,12 @@
         <div class="demo-rate-block">
           <span class="demonstration">{{ this.value1 }}성급 호텔</span>
           <span class="allv" @click="allv">전체보기</span>
-          <el-rate v-model="value1" @change="value1get(value1)"></el-rate>
+          <el-rate
+            class="abc"
+            v-model="value1"
+            @change="value1get(value1)"
+            :size="'30px'"
+          ></el-rate>
         </div>
         <!--<input type="radio" name="grade" /> <label>5성급</label><br />
         <input type="radio" name="grade" /> <label>4성급</label><br />
@@ -78,6 +83,11 @@
         <div class="hr"></div>
       </div>
       <div class="right1_1">
+        <div class="right-top">
+          <span class="right_top_text"
+            >검색된 숙소 :{{ this.pages * 5 }}개</span
+          >
+        </div>
         <ul>
           <li
             v-for="item in list"
@@ -113,7 +123,7 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="this.pages * 5"
+          :total="this.pages * 10"
         >
         </el-pagination>
       </div>
@@ -325,6 +335,9 @@ export default defineComponent({
 });
 </script>
 <style>
+.abc .el-rate__item .el-rate__icon {
+  font-size: 30px;
+}
 .location1 {
   background: none;
   display: inline-block;
@@ -349,10 +362,6 @@ export default defineComponent({
 }
 .location {
   text-align: center;
-}
-
-.el-rate__icon {
-  font-size: 30px;
 }
 </style>
 <style scoped>
@@ -527,5 +536,18 @@ export default defineComponent({
   float: right;
   font-size: 12px;
   cursor: pointer;
+}
+.right-top {
+  width: 100%;
+  background: #409eff;
+  height: 50px;
+  margin-bottom: 20px;
+}
+.right_top_text {
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  vertical-align: -13px;
+  margin-left: 30px;
 }
 </style>

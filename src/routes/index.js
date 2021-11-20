@@ -7,6 +7,8 @@ import search from '@/components/search'
 
 import airline from '@/components/airline'
 import car from '@/components/car'
+import car1 from '@/components/car1'
+import carcontent from '@/components/carcontent'
 import hotel from '@/components/hotel'
 import hotelcontent from '@/components/hotelcontent'
 import find from '@/components/find'
@@ -31,6 +33,8 @@ import mypagemyboard from '@/components/myboard'
 import mypagemylike from '@/components/mylike'
 import mypagemymap from '@/components/mymap'
 import mypagemydel from '@/components/mydel'
+
+import myfo from '@/components/mmfo'
 import myho from '@/components/mmho'
 import mytr from '@/components/mmtr'
 import mbwrite from '@/components/mbwrite'
@@ -49,6 +53,8 @@ const routes = [
     { path: '/airline', name: "airline", component: airline },
 
     { path: '/car', name: "car", component: car },
+    { path: '/car1', name: "car1", component: car1 },
+    { path: '/carcontent', name: "carcontent", component: carcontent },
     { path: '/freewrite', name: "freewrite", component: freewrite, meta: { auth2: true }, },
     { path: '/freecontent', name: "freecontent", component: freecontent },
     { path: '/freechange', name: "freechange", component: freechange, meta: { auth2: true } },
@@ -91,6 +97,7 @@ const routes = [
                 children: [
                     { path: '/mypage/mylike/mmtr', component: mytr },
                     { path: '/mypage/mylike/mmho', component: myho },
+                    { path: '/mypage/mylike/mmfo', component: myfo },
                 ]
             },
             { path: '/mypage/mymap', component: mypagemymap },
