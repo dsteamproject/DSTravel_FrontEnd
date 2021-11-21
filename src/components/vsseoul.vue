@@ -31,305 +31,306 @@
       <span v-if="rank === 2">{{ this.step4 }}/1</span>
       <div v-if="step === 1">
         <div class="left">
-        <img
-          ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick($event)"
-        /><br>
-        <span>{{ this.selectedtitle }}</span>
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick($event)"
+          /><br />
+          <span>{{ this.selectedtitle }}</span>
         </div>
         <div class="right">
-        <img
-          ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick($event)"
+            v-bind:id="this.selectedvalue2"
+          /><br />{{ this.selectedtitle2 }}
         </div>
       </div>
       <div v-if="step === 2">
-         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick2($event)"
-        />
-        <br>  <span>{{ this.selectedtitle }}</span>
-         </div>
-         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick2($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+        <div class="left">
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick2($event)"
+          />
+          <br />
+          <span>{{ this.selectedtitle }}</span>
+        </div>
+        <div class="right">
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick2($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
       <div v-if="step === 3">
-          <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick3($event)"
-        />{{ this.selectedtitle }}
+        <div class="left">
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick3($event)"
+          />{{ this.selectedtitle }}
         </div>
-         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick3($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+        <div class="right">
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick3($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
       <div v-if="step === 4">
-          <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick4($event)"
-        />{{ this.selectedtitle }}
-       </div>
-              <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick4($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+        <div class="left">
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick4($event)"
+          />{{ this.selectedtitle }}
+        </div>
+        <div class="right">
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick4($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
       <div v-if="step === 5">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick5($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick5($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick5($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick5($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
       <div v-if="step === 6">
-              <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick6($event)"
-        />{{ this.selectedtitle }}
-              </div>
-              <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick6($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+        <div class="left">
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick6($event)"
+          />{{ this.selectedtitle }}
+        </div>
+        <div class="right">
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick6($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
       <div v-if="step === 7">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick7($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick7($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick7($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick7($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
 
       <div v-if="step === 8">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick8($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick8($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick8($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick8($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
         </div>
       </div>
       <div v-if="step2 === 1">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick9($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick9($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick9($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }} 1/4
-      </div>
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick9($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }} 1/4
+        </div>
       </div>
       <div v-if="step2 === 2">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick10($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick10($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick10($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick10($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
       <div v-if="step2 === 3">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick11($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick11($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick11($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick11($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
       <div v-if="step2 === 4">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick12($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick12($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick12($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
-      </div>
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick12($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
+        </div>
       </div>
       <div v-if="step3 === 1">
         <div class="left">
-        <img
-          ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick13($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick13($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick13($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick13($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
         </div>
       </div>
       <div v-if="step3 === 2">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick14($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick14($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick14($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick14($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
         </div>
       </div>
       <div v-if="step4 === 1">
         <div class="left">
-        <img
-        ref="img1"
-          :src="selectedImage"
-          class="img1"
-          v-bind:id="this.selectedvalue"
-          @click="handleleftclick15($event)"
-        />{{ this.selectedtitle }}
+          <img
+            ref="img1"
+            :src="selectedImage"
+            class="img1"
+            v-bind:id="this.selectedvalue"
+            @click="handleleftclick15($event)"
+          />{{ this.selectedtitle }}
         </div>
         <div class="right">
-        <img
-        ref="img2"
-          :src="selectedImage2"
-          class="img2"
-          @click="handlerightclick15($event)"
-          v-bind:id="this.selectedvalue2"
-        />{{ this.selectedtitle2 }}
+          <img
+            ref="img2"
+            :src="selectedImage2"
+            class="img2"
+            @click="handlerightclick15($event)"
+            v-bind:id="this.selectedvalue2"
+          />{{ this.selectedtitle2 }}
         </div>
       </div>
       <div v-if="step5 === 1">
@@ -337,7 +338,7 @@
           :src="selectedImage"
           class="img1"
           v-bind:id="this.selectedvalue"
-        /><br>{{ this.selectedtitle }}
+        /><br />{{ this.selectedtitle }}
       </div>
     </div>
   </div>
@@ -507,14 +508,14 @@ export default {
           this.images4.push(this.images[event.currentTarget.id]);
         }
       }
-       var img1 = this.$refs.img1;
+      var img1 = this.$refs.img1;
       img1.style.transform = "scale(2)";
       console.log(this.images3);
       console.log(this.images4);
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
 
-            const wait = (timeToDelay) =>
+      const wait = (timeToDelay) =>
         new Promise((resolve) => setTimeout(resolve, timeToDelay));
       await wait(2000);
       this.step = this.step + 1;
@@ -540,13 +541,13 @@ export default {
           this.images4.push(this.images[event.currentTarget.id]);
         }
       }
-           var img1 = this.$refs.img1;
+      var img1 = this.$refs.img1;
       img1.style.transform = "scale(2)";
 
       delete this.images2[event.currentTarget.id];
       delete this.images[event.currentTarget.id];
 
-                 const wait = (timeToDelay) =>
+      const wait = (timeToDelay) =>
         new Promise((resolve) => setTimeout(resolve, timeToDelay));
       await wait(2000);
       this.step = this.step + 1;
@@ -579,7 +580,7 @@ export default {
       delete this.images[event.currentTarget.id];
       console.log(this.images3);
       console.log(this.images4);
-              const wait = (timeToDelay) =>
+      const wait = (timeToDelay) =>
         new Promise((resolve) => setTimeout(resolve, timeToDelay));
       await wait(2000);
       this.step = this.step + 1;
@@ -613,7 +614,7 @@ export default {
       delete this.images[event.currentTarget.id];
 
       const wait = (timeToDelay) =>
-      new Promise((resolve) => setTimeout(resolve, timeToDelay));
+        new Promise((resolve) => setTimeout(resolve, timeToDelay));
       await wait(2000);
       this.step = this.step + 1;
       this.randomimg5();
@@ -647,7 +648,7 @@ export default {
       delete this.images[event.currentTarget.id];
 
       const wait = (timeToDelay) =>
-      new Promise((resolve) => setTimeout(resolve, timeToDelay));
+        new Promise((resolve) => setTimeout(resolve, timeToDelay));
       await wait(2000);
       this.step = this.step + 1;
       this.randomimg6();
@@ -1362,10 +1363,9 @@ export default {
 
 <style scoped>
 .wrap {
-  width:1440px;
+  width: 1440px;
   margin: 80px auto;
   text-align: center;
- 
 }
 .img1 {
   width: 500px;
@@ -1379,5 +1379,15 @@ export default {
   height: 400px;
   cursor: pointer;
   transition: all 2s;
+}
+.left {
+  width: 49.9%;
+  float: left;
+  border-right: 1px solid #ddd;
+}
+.right {
+  width: 49.9%;
+  float: right;
+  text-align: center;
 }
 </style>

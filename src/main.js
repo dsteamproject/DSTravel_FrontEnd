@@ -17,6 +17,8 @@ import 'vue-glide-js/dist/vue-glide.css'
 window.Kakao.init('ce61cbedf2c1d5758c73ec734dc1af08');
 
 
+
+
 const app = createApp(App);
 app.use(VCalendar);
 app.use(VueGlide)

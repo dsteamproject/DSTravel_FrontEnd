@@ -106,7 +106,7 @@ export default {
 
   height: 40%;
   background-size: cover;
-  
+
   box-sizing: border-box;
 }
 .tl_text {
