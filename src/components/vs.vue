@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     push(val) {
-      this.$router.push({ path: "/vscontent", query: { cnt: val } });
+      this.$router.push({ path: "/vscontent", query: { cnt: val, city: 1 } });
     },
   },
 };
