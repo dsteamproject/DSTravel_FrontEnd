@@ -1,88 +1,210 @@
 <template>
   <div>
     <div class="wrap1">
-      <p class="title">마이 여행지 등록</p>
+      <!-- ㅇㅁㄴㅇ    -->
+      <p class="text1">내 여행지등록</p>
       <div class="hr"></div>
+      <div style="margin-top: 20px">
+        <!-- <el-button @click="toggleSelection([tableData[i]])"
+      >Toggle selection status of second and third rows</el-button
+    >
+    <el-button @click="toggleSelection()">Clear selection</el-button>
+   -->
+        <div class="tableheader">
+          <div class="cell">
+            <button class="btn1" @click="toggleAllSelection([tableData])">
+              전체선택
+            </button>
+            <button class="btn2">삭제</button>
+          </div>
+          <div class="cellmeiddle"></div>
+          <div class="cell2">
+            <select class="searchselect">
+              <option>제목</option>
+              <option>카테고리</option>
+            </select>
+            <input type="text" class="textinput" />
+          </div>
+        </div>
 
-      <el-table
-        :data="tableData"
-        style="width: 100%"
-        header-cell-style="border-top:2px solid #E2E2E2; background:#FAFAFA;"
-      >
-        <el-table-column prop="no" label="번호" width="100" />
-        <el-table-column prop="title" label="제목">
-          <template #default="scope">
-            <router-link
-              class="idlink"
-              @click="handleHit(scope.row._id)"
-              to="/freecontent"
-              >{{ scope.row.title }}
-            </router-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="writer" label="위도/경도" width="200" />
-        <el-table-column prop="regdate" label="작성일" width="120" />
-        <el-table-column prop="cno" label="처리결과" width="120" />
-        <el-table-column prop="gno" label="따봉" width="120"
-          ><button>삭제</button></el-table-column
+        <el-table
+          ref="multipleTable"
+          :data="list"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+          header-cell-style="background:#FAFAFA;"
+          header-cell-class-name="hcellclass"
         >
-      </el-table>
+          <el-table-column type="selection" width="55" />
+
+          <el-table-column prop="title" label="제목" width="120" sortable />
+          <el-table-column prop="addr" label="주소" width="270" sortable />
+          <el-table-column prop="state" label="처리결과" width="100" sortable>
+            <template #default="scope">
+              <span v-if="scope.row.state === 0">처리중</span>
+              <span v-if="scope.row.state === 1">승인</span>
+              <span v-if="scope.row.state === 2">반려</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="right">
+            <template #default="scope">
+              <button
+                class="chbtn"
+                @click="handleDelete(scope.$index, scope.row)"
+              >
+                수정
+              </button>
+              <button
+                class="delbtn"
+                @click="handleDelete(scope.$index, scope.row)"
+              >
+                삭제
+              </button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="block">
+          <el-pagination layout="prev, pager, next" :total="50"></el-pagination>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          no: "1",
-          title: "제목1",
-          writer: "12.1323123 / 12.12312323",
-          regdate: "2021-10-27",
-          cno: "대기중",
-          gno: 2,
-        },
-        {
-          no: "2",
-          title: "제목1",
-          writer: "12.1323123 / 12.12312323",
-          regdate: "2021-10-27",
-          cno: "대기중",
-          gno: 2,
-        },
-        {
-          no: "3",
-          title: "제목1",
-          writer: "12.1323123 / 12.12312323",
-          regdate: "2021-10-27",
-          cno: "완료",
-          gno: 2,
-        },
-        {
-          no: "4",
-          title: "제목1",
-          writer: "12.1323123 / 12.12312323",
-          regdate: "2021-10-27",
-          cno: "완료",
-          gno: 2,
-        },
-      ],
+      multipleSelection: [],
+      token: sessionStorage.getItem("TOKEN"),
+      list: [],
     };
+  },
+  async created() {
+    const url = `/REST/mypage/mytdtem`;
+    const headers = { "Content-type": "application/json", token: this.token };
+
+    const response = await axios.get(url, { headers });
+    console.log(response);
+    this.list = response.data.mytdtem;
+  },
+  methods: {
+    toggleAllSelection(rows) {
+      if (rows) {
+        rows.forEach((row) => {
+          this.$refs.multipleTable.toggleAllSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
   },
 };
 </script>
+<style>
+.hcellclass:nth-child(1) {
+  border-left: 1px solid rgb(218, 216, 216);
+  border-bottom: 1px solid rgb(218, 216, 216);
+}
+.hcellclass:nth-child(6) {
+  border-right: 1px solid rgb(218, 216, 216);
+}
+.el-checkbox__inner {
+  border: 1px solid #ddd;
+  outline: 1px solid #ddd;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: #8e9093;
+  border: none;
+}
 
+.el-table {
+  overflow: unset;
+}
+</style>
 <style scoped>
-.title {
+.headercell {
+  border-left: 1px solid #62656a;
+}
+.textinput {
+  height: 25.76px;
+  border: none;
+}
+.searchselect {
+  height: 25.76px;
+  border: none;
+  margin-right: 5px;
+}
+.text1 {
   font-weight: bold;
   font-size: 18px;
   margin-left: 50px;
   text-align: left;
 }
+.chbtn {
+  border: none;
+  background: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.delbtn {
+  border: none;
+  background: rgb(245, 63, 63);
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.block {
+  text-align: center;
+}
+.cellmeiddle {
+  display: inline-block;
+}
+.cell2 {
+  display: inline-block;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.btn1 {
+  background: #8e9093;
+  color: white;
+  padding: 2px 5px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.btn2 {
+  background: #8e9093;
+  color: white;
+  padding: 2px 5px;
+}
+.cell {
+  display: inline-block;
+  margin-top: 10px;
+}
+.tableheader {
+  background: #62656a;
+  color: #8e9093;
+  height: 48px;
+  width: 100%;
+}
+
+.title {
+  font-size: 23px;
+}
 .title1 {
-  font-size: 27px;
+  font-size: 23px;
   margin-top: 30px;
 }
 .hr {

@@ -81,7 +81,7 @@
           </div>
         </div>
       </div>
-      <div class="both">sad</div>
+      <div class="both"></div>
     </div>
   </div>
 </template>

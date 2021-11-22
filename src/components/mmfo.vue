@@ -15,11 +15,27 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       imgsrc: "`../assets/seoul${item}.jpg`",
+      token: sessionStorage.getItem("TOKEN"),
     };
+  },
+  async created() {
+    await this.refresh();
+  },
+  methods: {
+    async refresh() {
+      const url = `/REST/mypage/mygoodtd?type=39`;
+      const headers = { "Content-type": "application/json", token: this.token };
+
+      const response = await axios.get(url, { headers: headers });
+      console.log(response);
+      this.list = response.data.td;
+      console.log(this.list);
+    },
   },
 };
 </script>

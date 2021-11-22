@@ -1587,7 +1587,8 @@ export default {
         }`;
         this.markers.push(this.markers1[nam]);
       }
-      const url1 = `/REST/travel/TDtem/insert?type=${this.mapnum}`;
+      console.log(this.token);
+      const url1 = `/REST/travel/TDtem/insert?type=${this.mapnum}&city=${this.areacode}`;
       const headers = { "Content-type": "application/json", token: this.token };
       const body1 = {
         title: this.pluslocation,
@@ -1703,7 +1704,12 @@ export default {
       // 구글맵 화면용
       //const url = `/REST/travel/tourapi/select?page=1&cnt=100&arrange=P&contentTypeId=12&areaCode=6`;
       const url = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=${this.areacode}`;
-      const headers = { "Content-type": "application/json" };
+      let headers;
+      if (sessionStorage.getItem("TOKEN") === null) {
+        headers = { "Content-type": "application/json" };
+      } else {
+        headers = { "Content-type": "application/json", token: this.token };
+      }
 
       const response = await axios.get(url, { headers });
 
@@ -2009,7 +2015,12 @@ export default {
     async submit() {
       // 작업중
       const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
-      const headers = { "Content-type": "application/json" };
+      let headers;
+      if (sessionStorage.getItem("TOKEN") === null) {
+        headers = { "Content-type": "application/json" };
+      } else {
+        headers = { "Content-type": "application/json", token: this.token };
+      }
 
       const response = await axios.get(url, { headers });
 
@@ -2019,7 +2030,12 @@ export default {
     async submit2() {
       // 작업중
       const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch2}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
-      const headers = { "Content-type": "application/json" };
+      let headers;
+      if (sessionStorage.getItem("TOKEN") === null) {
+        headers = { "Content-type": "application/json" };
+      } else {
+        headers = { "Content-type": "application/json", token: this.token };
+      }
 
       const response = await axios.get(url, { headers });
 
@@ -2029,7 +2045,12 @@ export default {
     async submit3() {
       // 작업중
       const url = `/REST/travel/select?size=100&page=1&title=${this.rightsearch3}&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
-      const headers = { "Content-type": "application/json" };
+      let headers;
+      if (sessionStorage.getItem("TOKEN") === null) {
+        headers = { "Content-type": "application/json" };
+      } else {
+        headers = { "Content-type": "application/json", token: this.token };
+      }
 
       const response = await axios.get(url, { headers });
 
@@ -2872,12 +2893,18 @@ export default {
       await this.numchagnelist();
     },
     async rightrefresh() {
+      console.log(sessionStorage.getItem("TOKEN"));
       // 오른쪽 상세창
       const url1 = `/REST/travel/select?size=200&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
-      const headers1 = { "Content-type": "application/json" };
-
-      const response1 = await axios.get(url1, { headers1 });
-
+      let headers;
+      if (sessionStorage.getItem("TOKEN") === null) {
+        headers = { "Content-type": "application/json" };
+      } else {
+        headers = { "Content-type": "application/json", token: this.token };
+      }
+      console.log(headers);
+      const response1 = await axios.get(url1, { headers });
+      console.log(response1.data.list);
       this.busanlist10 = response1.data.list;
       console.log(this.busanlist10);
       await this.selectdeletelist();
@@ -3438,9 +3465,14 @@ export default {
     },
     async right1() {
       const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=12&areaCode=${this.areacode}`;
-      const headers1 = { "Content-type": "application/json" };
+      let headers;
+      if (sessionStorage.getItem("TOKEN") === null) {
+        headers = { "Content-type": "application/json" };
+      } else {
+        headers = { "Content-type": "application/json", token: this.token };
+      }
 
-      const response1 = await axios.get(url1, { headers1 });
+      const response1 = await axios.get(url1, { headers });
 
       this.busanlist10 = response1.data.list;
       // 선택된리스트 제거
@@ -3464,9 +3496,14 @@ export default {
       console.log(this.choice1);
       console.log(this.markers1);
       const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=32&areaCode=${this.areacode}`;
-      const headers1 = { "Content-type": "application/json" };
+      let headers;
+      if (sessionStorage.getItem("TOKEN") === null) {
+        headers = { "Content-type": "application/json" };
+      } else {
+        headers = { "Content-type": "application/json", token: this.token };
+      }
 
-      const response1 = await axios.get(url1, { headers1 });
+      const response1 = await axios.get(url1, { headers });
 
       this.busanlist10 = response1.data.list;
       await this.selectdeletelist();
@@ -3495,9 +3532,14 @@ export default {
     },
     async right3() {
       const url1 = `/REST/travel/select?size=100&page=1&title=&contentTypeId=39&areaCode=${this.areacode}`;
-      const headers1 = { "Content-type": "application/json" };
+      let headers;
+      if (sessionStorage.getItem("TOKEN") === null) {
+        headers = { "Content-type": "application/json" };
+      } else {
+        headers = { "Content-type": "application/json", token: this.token };
+      }
 
-      const response1 = await axios.get(url1, { headers1 });
+      const response1 = await axios.get(url1, { headers });
 
       this.busanlist10 = response1.data.list;
       await this.selectdeletelist();

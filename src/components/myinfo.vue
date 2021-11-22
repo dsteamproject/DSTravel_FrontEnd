@@ -30,7 +30,7 @@
           v-model="usernickname"
           ref="usernickname"
         /><br />
-        <label>이메일</label
+        <label class="maillabel">이메일</label
         ><input
           type="text"
           class="usermail"
@@ -48,6 +48,7 @@
           <option disabled selected>선택항목</option>
           <option>naver.com</option>
           <option>google.com</option>
+          <option>gmail.com</option>
           <option>daum.net</option></select
         ><br />
         <label>성별</label
@@ -130,6 +131,9 @@ export default {
 </script>
 
 <style scoped>
+.maillabel {
+  height: 50px;
+}
 .wrap_in {
   padding: 0px 50px;
 }
@@ -172,7 +176,7 @@ export default {
 }
 .usermail {
   margin-right: 5px;
-  width: 250px;
+  width: 28%;
   border-top: 1px solid #ccc;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
@@ -195,7 +199,7 @@ export default {
   outline: none;
 }
 .sele {
-  width: 200px;
+  width: 28%;
   height: 38px;
   margin-left: 3px;
   background: #eee;
@@ -227,6 +231,29 @@ label {
   width: 187px;
   height: 38px;
   padding: 0px 10px 0px 20px;
+
+  margin-right: 5px;
+  width: 28%;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background: #fff;
+  height: 38px;
+  padding: 0px 10px 0px 20px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  line-height: 36px\9;
+  font-family: inherit;
+  font-size: 16px;
+  margin-top: 5px;
+  outline: none;
 }
 .wrap1 {
   padding: 10px;

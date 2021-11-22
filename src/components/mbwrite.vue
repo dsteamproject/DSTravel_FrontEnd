@@ -59,12 +59,7 @@
             width="240"
             sortable
           />
-          <el-table-column
-            property="writer"
-            label="작성자"
-            show-overflow-tooltip
-            sortable
-          />
+
           <el-table-column align="right">
             <template #default="scope">
               <button

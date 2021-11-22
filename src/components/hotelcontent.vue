@@ -66,7 +66,7 @@
           ><span class="heart">♡</span><span class="heart">♥</span>
 
           <br />
-          <button class="ribtn" @click="requestPay">예약하기</button>
+          <button class="ribtn" @click="ordergo">예약하기</button>
           <button class="ribtn2" @click="goodup">위시리스트에 담기</button>
           <span class="ritext"
             >{{ this.list.good }}명이 이 상품을 위시리스트에 담았습니다.</span
@@ -117,39 +117,11 @@ export default {
     await this.refresh();
   },
   methods: {
-    requestPay: async function () {
-      //1. 객체 초기화 (가맹점 식별코드 삽입)
-      var IMP = window.IMP;
-      IMP.init(this.impCode);
-      //3. 결제창 호출
-      IMP.request_pay(
-        {
-          pg: "html5_inicis",
-          pay_method: "card",
-          merchant_uid: "merchant_" + new Date().getTime(),
-          name: this.order.name,
-          amount: this.order.amount,
-          buyer_tel: this.order.buyer_tel,
-        },
-        function (rsp) {
-          if (rsp.success) {
-            //4. 결제 요청 결과 서버(자사)에 적용하기
-            //ajax 서버 통신 구현 -> 5. 서버사이드에서 validation check
-
-            //6. 최종 서버 응답 클라이언트에서 단계 4.에서 보낸 서버사이드 응답 에따라 결제 성공 실패 출력
-            var msg = "결제가 완료되었습니다.";
-            msg += "고유ID : " + rsp.imp_uid;
-            msg += "상점 거래ID : " + rsp.merchant_uid;
-            msg += "결제 금액 : " + rsp.paid_amount;
-            msg += "카드 승인번호 : " + rsp.apply_num;
-          } else {
-            var msg1 = "결제에 실패하였습니다.";
-            msg1 += "에러내용 : " + rsp.error_msg;
-          }
-          console.log(msg);
-          console.loh(msg1);
-        }
-      );
+    ordergo() {
+      this.$router.push({
+        path: "/order",
+        query: { code: this.$route.query.code },
+      });
     },
     async refresh() {
       const url1 = `/REST/travel/selectone?contentId=${this.$route.query.code}`;

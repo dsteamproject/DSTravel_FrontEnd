@@ -61,24 +61,82 @@
         </div>
         <input type="checkbox" /> 개인정보처리방침에 동의합니다
         <div class="btn_box">
-          <button class="chbtn">탈퇴하기</button>
+          <button class="chbtn" @click="handleout">탈퇴하기</button>
         </div>
       </div>
     </div>
+
+    <el-dialog
+      v-model="dialogVisible"
+      title="Tips"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <div class="dialog">
+        <span class="outdia"
+          >회원탈퇴시 보유중인 포인트와 마일리지<br />
+          회원정보,거래정보는 즉시 삭제처리되며,재가입시 복원되지 않습니다.<br />
+          정말 탈퇴하시겠습니까?
+        </span>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">취소</el-button>
+          <el-button type="danger" @click="dialogVisible1">탈퇴하기</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       email: "선택항목",
+      token: sessionStorage.getItem("TOKEN"),
+      dialogVisible: false,
+      yes: false,
     };
+  },
+  methods: {
+    dialogVisible1() {
+      (this.yes = true), (this.dialogVisible = false);
+    },
+    async handleout() {
+      this.dialogVisible = true;
+      if (this.yes === true) {
+        const url = `/REST/mypage/memberdelete`;
+        const headers = {
+          "Content-type": "application/json",
+          token: this.token,
+        };
+        const data = {};
+        const response = await axios.put(url, data, { headers });
+        console.log(response);
+
+        if (response.data.status === 200) {
+          sessionStorage.removeItem("TOKEN");
+
+          this.$router.push({ path: "/" });
+
+          this.$emit("changeLogged", false);
+        }
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
+.dialog {
+  padding: 30px;
+}
+.outdia {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
 .bold {
   font-weight: bold;
   display: block;
