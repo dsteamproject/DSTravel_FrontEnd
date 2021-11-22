@@ -22,6 +22,7 @@ import order from '@/components/order'
 
 import vs from '@/components/vs'
 import vsseoul from '@/components/vsseoul'
+import vscontent from '@/components/vscontent'
 import findid from '@/components/id'
 import findpw from '@/components/pw'
 import freewrite from '@/components/freewrite'
@@ -63,6 +64,7 @@ const routes = [
 
     { path: '/vs', name: "vs", component: vs },
     { path: '/vsseoul', name: "vsseoul", component: vsseoul },
+    { path: '/vscontent', name: "vscontent", component: vscontent },
     { path: '/hotel', name: "hotel", component: hotel },
     { path: '/hotelcontent', name: "hotelcontent", component: hotelcontent },
     {

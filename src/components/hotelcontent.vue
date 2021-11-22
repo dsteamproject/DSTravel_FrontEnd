@@ -10,7 +10,7 @@
 
           <div class="br"></div>
           <span>{{ this.list.addr }}</span>
-          <span>체크인 15:00 ~ 체크아웃 11:00</span>
+          <span class="checkin">체크인 15:00 ~ 체크아웃 11:00</span>
           <div class="br"></div>
         </div>
         <div class="staycontent">
@@ -63,7 +63,8 @@
       <div class="right1_99">
         <div class="right_in1">
           <span>1박</span><span>{{ this.list.price }}0,000원</span
-          ><span class="heart">♡</span><span class="heart">♥</span>
+          ><span class="heart" v-if="this.heart === false">♡</span
+          ><span class="heart" v-if="this.heart === true">♥</span>
 
           <br />
           <button class="ribtn" @click="ordergo">예약하기</button>
@@ -99,13 +100,15 @@ export default {
   },
   data() {
     return {
+      heart: false,
+      token: sessionStorage.getItem("TOKEN"),
       impCode: "imp00284079",
       order: {
         name: "DSTRAVEL",
         amount: 1000,
         buyer_tel: "010-5195-1648",
       },
-      token: sessionStorage.getItem("TOKEN"),
+
       list: [],
       imgs: "", // Img Url , string or Array of string
       visible: false,
@@ -115,6 +118,7 @@ export default {
 
   async created() {
     await this.refresh();
+    await this.goodinfo();
   },
   methods: {
     ordergo() {
@@ -123,6 +127,18 @@ export default {
         query: { code: this.$route.query.code },
       });
     },
+    async goodinfo() {
+      const url1 = `/REST/travel/good/state?contentid=${this.$route.query.code}`;
+      const headers1 = {
+        "Content-type": "application/json",
+        token: this.token,
+      };
+      const data = {};
+
+      const response1 = await axios.post(url1, data, { headers: headers1 });
+      console.log(response1);
+      this.heart = response1.data.goodresult;
+    },
     async refresh() {
       const url1 = `/REST/travel/selectone?contentId=${this.$route.query.code}`;
       const headers1 = { "Content-type": "application/json" };
@@ -130,6 +146,7 @@ export default {
       const response1 = await axios.get(url1, { headers1 });
       console.log(response1);
       this.list = response1.data.TD;
+      await this.goodinfo();
     },
     async goodup() {
       const url1 = `/REST/travel/good?contentid=${this.$route.query.code}`;
@@ -198,6 +215,10 @@ export default {
 </script>
 
 <style scoped>
+.checkin {
+  float: right;
+  font-size: 14px;
+}
 .heart {
   float: right;
   color: red;

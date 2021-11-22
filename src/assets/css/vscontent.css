@@ -1,0 +1,17 @@
+.wrap{
+    width:100%;
+    height: 700px;
+}
+.right{
+    width:50%;
+    box-sizing: border-box;
+    float:right
+}
+.left{
+    width:50%;
+    box-sizing: border-box;
+    float:left;
+    border-right: 1px solid #ddd;
+    height: 100%;
+    
+}
