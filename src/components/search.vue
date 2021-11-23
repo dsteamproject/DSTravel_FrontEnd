@@ -1376,7 +1376,26 @@
         <img :src="this.dialoglist.firstimage" style="height: 310px" />
       </div>
       <div class="dialogtext">
-        <span>{{ this.dialoglist.title }}</span>
+        <div class="dltitle_wrap">
+          <span class="dltitle">{{ this.dialoglist.title }}</span
+          ><span class="heart" v-if="this.heart === false">♡</span
+          ><span v-if="this.heart === true" class="heart2">♥</span>
+        </div>
+        <div><label>영업시간 </label><span>-</span></div>
+        <div><label>홈페이지 </label><span>-</span></div>
+        <div>
+          <label>주소 </label><span>{{ this.dialoglist.addr }}</span>
+        </div>
+        <div><label>전화 </label><span>-</span></div>
+        <div><label>입장료 </label><span>-</span></div>
+
+        <div><label>팁 </label><span></span>-</div>
+        <div class="tlright">
+          <button>리뷰보기</button
+          ><button @click="likepush(this.dialoglist.code)">
+            위시리스트 추가
+          </button>
+        </div>
       </div>
       <div style="clear: both"></div>
     </div>
@@ -1407,6 +1426,7 @@ export default {
   },
   data() {
     return {
+      heart: false,
       mapnum: 12,
       searchopen: false,
       focus: "",
@@ -1557,6 +1577,28 @@ export default {
   },
 
   methods: {
+    async likepush(item) {
+      console.log(item);
+      const url1 = `/REST/travel/good?contentid=${item}`;
+      const headers = {
+        "Content-type": "application/json",
+        token: this.token,
+      };
+      const body = {};
+      const response1 = await axios.post(url1, body, { headers });
+      console.log(response1);
+
+      const url2 = `/REST/travel/good/state?contentid=${item}`;
+      const headers2 = {
+        "Content-type": "application/json",
+        token: this.token,
+      };
+      const data = {};
+
+      const response2 = await axios.post(url2, data, { headers: headers2 });
+      console.log(response2);
+      this.heart = response2.data.goodresult;
+    },
     //lat 35 lon 123  x 123 y 35
     async mapfinish() {
       const url = `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F00&coordType=WGS84GEO&version=1&format=json&fullAddr=${this.addr}&page=1&count=20&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55`;
@@ -1635,17 +1677,17 @@ export default {
     },
     mapdialog(num) {
       console.log(num);
-      if (num === 1) {
+      if (num === 12) {
         this.mapnum = num;
         this.mapputcss = "mapput2";
         this.mapputcss1 = "mapput1";
         this.mapputcss2 = "mapput1";
-      } else if (num === 2) {
+      } else if (num === 32) {
         this.mapnum = num;
         this.mapputcss = "mapput1";
         this.mapputcss1 = "mapput2";
         this.mapputcss2 = "mapput1";
-      } else if (num === 3) {
+      } else if (num === 39) {
         this.mapnum = num;
         this.mapputcss = "mapput1";
         this.mapputcss1 = "mapput1";
@@ -3425,12 +3467,18 @@ export default {
       const headers = { "Content-type": "application/json" };
 
       const response = await axios.get(url, { headers });
-
       this.dialoglist = response.data.TD;
-      // this.dialogcontent = this.dialoglist.overview.replace(
-      //   /(<br>|<br\/>|<br \/>)/g,
-      //   "\r\n"
-      // );
+
+      const url1 = `/REST/travel/good/state?contentid=${i.code}`;
+      const headers1 = {
+        "Content-type": "application/json",
+        token: this.token,
+      };
+      const data = {};
+
+      const response1 = await axios.post(url1, data, { headers: headers1 });
+      console.log(response1);
+      this.heart = response1.data.goodresult;
 
       this.dialogVisible1 = true;
     },

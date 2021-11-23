@@ -23,6 +23,8 @@ import order from '@/components/order'
 import vs from '@/components/vs'
 import vsseoul from '@/components/vsseoul'
 import vscontent from '@/components/vscontent'
+import vsplay from '@/components/vsplay'
+import vsrank from '@/components/vsrank'
 import findid from '@/components/id'
 import findpw from '@/components/pw'
 import freewrite from '@/components/freewrite'
@@ -62,7 +64,13 @@ const routes = [
     { path: '/freecontent', name: "freecontent", component: freecontent },
     { path: '/freechange', name: "freechange", component: freechange, meta: { auth2: true } },
 
-    { path: '/vs', name: "vs", component: vs },
+    {
+        path: '/vs', name: "vs", component: vs, children: [
+            { path: '/vs/vsrank', component: vsrank },
+            { path: '/vs/vsplay', component: vsplay },
+        ]
+    },
+
     { path: '/vsseoul', name: "vsseoul", component: vsseoul },
     { path: '/vscontent', name: "vscontent", component: vscontent },
     { path: '/hotel', name: "hotel", component: hotel },

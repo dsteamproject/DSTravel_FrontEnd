@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="wrap4_1">
+    <div class="wrap4_1" v-loading="loading">
       <div class="ecsel">
         <el-carousel indicator-position="outside">
           <el-carousel-item v-for="item in 3" :key="item"> </el-carousel-item>
@@ -11,221 +11,223 @@
           <span class="locationtitle">문화관광,일반축제</span>
           <span class="plus" @click="$router.push('/car1')">더보기></span>
         </div>
-        <Carousel :settings="settings" :breakpoints="breakpoints">
-          <Slide v-for="slide in list" :key="slide">
-            <div class="carousel__item1" @click="contentgo(slide)">
-              <div class="carousel_img">
-                <img
-                  v-if="slide.firstimage !== undefined"
-                  :src="slide.firstimage"
-                  class="cimg"
-                />
-                <img
-                  v-if="slide.firstimage === undefined"
-                  src="../assets/noimage.jpg"
-                  class="cimg"
-                />
-              </div>
-              <div class="carousel_content">
-                <div class="addrtitle">
-                  <span class="addr">{{ slide.addr1 }}</span
-                  ><br />
-                  <span class="cacotitle">{{ slide.title }}</span>
+        <div>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="slide in list" :key="slide">
+              <div class="carousel__item1" @click="contentgo(slide)">
+                <div class="carousel_img">
+                  <img
+                    v-if="slide.firstimage !== undefined"
+                    :src="slide.firstimage"
+                    class="cimg"
+                  />
+                  <img
+                    v-if="slide.firstimage === undefined"
+                    src="../assets/noimage.jpg"
+                    class="cimg"
+                  />
                 </div>
-                <div class="demo-rate-block">
-                  <el-rate
-                    v-model="value1"
-                    disabled
-                    class="abc1"
-                    text-color="#ff9900"
-                  ></el-rate>
-                  <span class="noneprice">상세페이지 참조 /1인</span>
+                <div class="carousel_content">
+                  <div class="addrtitle">
+                    <span class="addr">{{ slide.addr1 }}</span
+                    ><br />
+                    <span class="cacotitle">{{ slide.title }}</span>
+                  </div>
+                  <div class="demo-rate-block">
+                    <el-rate
+                      v-model="value1"
+                      disabled
+                      class="abc1"
+                      text-color="#ff9900"
+                    ></el-rate>
+                    <span class="noneprice">상세페이지 참조 /1인</span>
+                  </div>
                 </div>
               </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+
+        <div class="seolu_box">
+          <div class="loti">
+            <span class="locationtitle">전통공연</span>
+            <span class="plus">더보기></span>
+          </div>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="slide in list1" :key="slide">
+              <div class="carousel__item1" @click="contentgo(slide)">
+                <div class="carousel_img">
+                  <img
+                    v-if="slide.firstimage !== undefined"
+                    :src="slide.firstimage"
+                    class="cimg"
+                  />
+                  <img
+                    v-if="slide.firstimage === undefined"
+                    src="../assets/noimage.jpg"
+                    class="cimg"
+                  />
+                </div>
+                <div class="carousel_content">
+                  <div class="addrtitle">
+                    <span class="addr">{{ slide.addr1 }}</span
+                    ><br />
+                    <span class="cacotitle">{{ slide.title }}</span>
+                  </div>
+                  <div class="demo-rate-block">
+                    <el-rate
+                      v-model="value1"
+                      disabled
+                      class="abc1"
+                      text-color="#ff9900"
+                    ></el-rate>
+                    <span class="noneprice">상세페이지 참조 /1인</span>
+                  </div>
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+          <div class="seolu_box">
+            <div class="loti">
+              <span class="locationtitle">박람회</span>
+              <span class="plus">더보기></span>
             </div>
-          </Slide>
-
-          <template #addons>
-            <Navigation />
-          </template>
-        </Carousel>
-      </div>
-
-      <div class="seolu_box">
-        <div class="loti">
-          <span class="locationtitle">전통공연</span>
-          <span class="plus">더보기></span>
-        </div>
-        <Carousel :settings="settings" :breakpoints="breakpoints">
-          <Slide v-for="slide in list1" :key="slide">
-            <div class="carousel__item1" @click="contentgo(slide)">
-              <div class="carousel_img">
-                <img
-                  v-if="slide.firstimage !== undefined"
-                  :src="slide.firstimage"
-                  class="cimg"
-                />
-                <img
-                  v-if="slide.firstimage === undefined"
-                  src="../assets/noimage.jpg"
-                  class="cimg"
-                />
-              </div>
-              <div class="carousel_content">
-                <div class="addrtitle">
-                  <span class="addr">{{ slide.addr1 }}</span
-                  ><br />
-                  <span class="cacotitle">{{ slide.title }}</span>
+            <Carousel :settings="settings" :breakpoints="breakpoints">
+              <Slide v-for="slide in list2" :key="slide">
+                <div class="carousel__item1" @click="contentgo(slide)">
+                  <div class="carousel_img">
+                    <img
+                      v-if="slide.firstimage !== undefined"
+                      :src="slide.firstimage"
+                      class="cimg"
+                    />
+                    <img
+                      v-if="slide.firstimage === undefined"
+                      src="../assets/noimage.jpg"
+                      class="cimg"
+                    />
+                  </div>
+                  <div class="carousel_content">
+                    <div class="addrtitle">
+                      <span class="addr">{{ slide.addr1 }}</span
+                      ><br />
+                      <span class="cacotitle">{{ slide.title }}</span>
+                    </div>
+                    <div class="demo-rate-block">
+                      <el-rate
+                        v-model="value1"
+                        disabled
+                        class="abc1"
+                        text-color="#ff9900"
+                      ></el-rate>
+                      <span class="noneprice">상세페이지 참조 /1인</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="demo-rate-block">
-                  <el-rate
-                    v-model="value1"
-                    disabled
-                    class="abc1"
-                    text-color="#ff9900"
-                  ></el-rate>
-                  <span class="noneprice">상세페이지 참조 /1인</span>
-                </div>
-              </div>
+              </Slide>
+
+              <template #addons>
+                <Navigation />
+              </template>
+            </Carousel>
+          </div>
+          <div class="seolu_box">
+            <div class="loti">
+              <span class="locationtitle">전시회</span>
+              <span class="plus">더보기></span>
             </div>
-          </Slide>
 
-          <template #addons>
-            <Navigation />
-          </template>
-        </Carousel>
-        <div class="seolu_box">
-          <div class="loti">
-            <span class="locationtitle">박람회</span>
-            <span class="plus">더보기></span>
+            <Carousel :settings="settings" :breakpoints="breakpoints">
+              <Slide v-for="slide in list3" :key="slide">
+                <div class="carousel__item1" @click="contentgo(slide)">
+                  <div class="carousel_img">
+                    <img
+                      v-if="slide.firstimage !== undefined"
+                      :src="slide.firstimage"
+                      class="cimg"
+                    />
+                    <img
+                      v-if="slide.firstimage === undefined"
+                      src="../assets/noimage.jpg"
+                      class="cimg"
+                    />
+                  </div>
+                  <div class="carousel_content">
+                    <div class="addrtitle">
+                      <span class="addr">{{ slide.addr1 }}</span
+                      ><br />
+                      <span class="cacotitle">{{ slide.title }}</span>
+                    </div>
+                    <div class="demo-rate-block">
+                      <el-rate
+                        v-model="value1"
+                        disabled
+                        class="abc1"
+                        text-color="#ff9900"
+                      ></el-rate>
+                      <span class="noneprice">상세페이지 참조 /1인</span>
+                    </div>
+                  </div>
+                </div>
+              </Slide>
+
+              <template #addons>
+                <Navigation />
+              </template>
+            </Carousel>
           </div>
-          <Carousel :settings="settings" :breakpoints="breakpoints">
-            <Slide v-for="slide in list2" :key="slide">
-              <div class="carousel__item1" @click="contentgo(slide)">
-                <div class="carousel_img">
-                  <img
-                    v-if="slide.firstimage !== undefined"
-                    :src="slide.firstimage"
-                    class="cimg"
-                  />
-                  <img
-                    v-if="slide.firstimage === undefined"
-                    src="../assets/noimage.jpg"
-                    class="cimg"
-                  />
-                </div>
-                <div class="carousel_content">
-                  <div class="addrtitle">
-                    <span class="addr">{{ slide.addr1 }}</span
-                    ><br />
-                    <span class="cacotitle">{{ slide.title }}</span>
+          <div class="seolu_box">
+            <div class="loti">
+              <span class="locationtitle">연극</span>
+              <span class="plus">더보기></span>
+            </div>
+            <Carousel :settings="settings" :breakpoints="breakpoints">
+              <Slide v-for="slide in list4" :key="slide">
+                <div class="carousel__item1" @click="contentgo(slide)">
+                  <div class="carousel_img">
+                    <img
+                      v-if="slide.firstimage !== undefined"
+                      :src="slide.firstimage"
+                      class="cimg"
+                    />
+                    <img
+                      v-if="slide.firstimage === undefined"
+                      src="../assets/noimage.jpg"
+                      class="cimg"
+                    />
                   </div>
-                  <div class="demo-rate-block">
-                    <el-rate
-                      v-model="value1"
-                      disabled
-                      class="abc1"
-                      text-color="#ff9900"
-                    ></el-rate>
-                    <span class="noneprice">상세페이지 참조 /1인</span>
+                  <div class="carousel_content">
+                    <div class="addrtitle">
+                      <span class="addr">{{ slide.addr1 }}</span
+                      ><br />
+                      <span class="cacotitle">{{ slide.title }}</span>
+                    </div>
+                    <div class="demo-rate-block">
+                      <el-rate
+                        v-model="value1"
+                        disabled
+                        class="abc1"
+                        text-color="#ff9900"
+                      ></el-rate>
+                      <span class="noneprice">상세페이지 참조 /1인</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Slide>
+              </Slide>
 
-            <template #addons>
-              <Navigation />
-            </template>
-          </Carousel>
-        </div>
-        <div class="seolu_box">
-          <div class="loti">
-            <span class="locationtitle">전시회</span>
-            <span class="plus">더보기></span>
+              <template #addons>
+                <Navigation />
+              </template>
+            </Carousel>
           </div>
-
-          <Carousel :settings="settings" :breakpoints="breakpoints">
-            <Slide v-for="slide in list3" :key="slide">
-              <div class="carousel__item1" @click="contentgo(slide)">
-                <div class="carousel_img">
-                  <img
-                    v-if="slide.firstimage !== undefined"
-                    :src="slide.firstimage"
-                    class="cimg"
-                  />
-                  <img
-                    v-if="slide.firstimage === undefined"
-                    src="../assets/noimage.jpg"
-                    class="cimg"
-                  />
-                </div>
-                <div class="carousel_content">
-                  <div class="addrtitle">
-                    <span class="addr">{{ slide.addr1 }}</span
-                    ><br />
-                    <span class="cacotitle">{{ slide.title }}</span>
-                  </div>
-                  <div class="demo-rate-block">
-                    <el-rate
-                      v-model="value1"
-                      disabled
-                      class="abc1"
-                      text-color="#ff9900"
-                    ></el-rate>
-                    <span class="noneprice">상세페이지 참조 /1인</span>
-                  </div>
-                </div>
-              </div>
-            </Slide>
-
-            <template #addons>
-              <Navigation />
-            </template>
-          </Carousel>
-        </div>
-        <div class="seolu_box">
-          <div class="loti">
-            <span class="locationtitle">연극</span>
-            <span class="plus">더보기></span>
-          </div>
-          <Carousel :settings="settings" :breakpoints="breakpoints">
-            <Slide v-for="slide in list4" :key="slide">
-              <div class="carousel__item1" @click="contentgo(slide)">
-                <div class="carousel_img">
-                  <img
-                    v-if="slide.firstimage !== undefined"
-                    :src="slide.firstimage"
-                    class="cimg"
-                  />
-                  <img
-                    v-if="slide.firstimage === undefined"
-                    src="../assets/noimage.jpg"
-                    class="cimg"
-                  />
-                </div>
-                <div class="carousel_content">
-                  <div class="addrtitle">
-                    <span class="addr">{{ slide.addr1 }}</span
-                    ><br />
-                    <span class="cacotitle">{{ slide.title }}</span>
-                  </div>
-                  <div class="demo-rate-block">
-                    <el-rate
-                      v-model="value1"
-                      disabled
-                      class="abc1"
-                      text-color="#ff9900"
-                    ></el-rate>
-                    <span class="noneprice">상세페이지 참조 /1인</span>
-                  </div>
-                </div>
-              </div>
-            </Slide>
-
-            <template #addons>
-              <Navigation />
-            </template>
-          </Carousel>
         </div>
       </div>
     </div>
@@ -274,6 +276,7 @@ export default defineComponent({
     const response5 = await axios.get(url5, { headers5 });
     console.log(response5.data.response.body.items.item);
     this.list4 = response5.data.response.body.items.item;
+    this.loading = false;
   },
   methods: {
     contentgo(slide) {
@@ -287,6 +290,7 @@ export default defineComponent({
 
   data() {
     return {
+      loading: true,
       value1: 5,
       settings: {
         itemsToShow: 4,

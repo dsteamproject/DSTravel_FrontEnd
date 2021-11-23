@@ -3,7 +3,8 @@
     <div class="wrap">
       <h2 class="tti">커뮤니티</h2>
       <div class="hr"></div>
-      <label>작성자</label> <span>박병근</span><br />
+      <label>작성자</label> <span>{{ this.list.nicname }}</span
+      ><br />
       <label>카테고리</label>
       <select class="keyword" v-model="keyword">
         <option value="free">잡담</option>
@@ -43,12 +44,18 @@ export default {
   components: {
     ckeditor: CKEditor.component,
   },
-  created() {
+  async created() {
+    const url = `/REST/mypage/home`;
+    const headers = { "Content-type": "application/json", token: this.token };
+    const response = await axios.get(url, { headers });
+    console.log(response);
+    this.list = response.data.member;
     console.log(this.$route.query.category);
     this.keyword = this.$route.query.category;
   },
   data() {
     return {
+      list: [],
       imagefile: "",
       category: "",
       title: "",

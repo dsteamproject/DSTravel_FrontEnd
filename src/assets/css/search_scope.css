@@ -36,6 +36,7 @@
   border-radius: 50%;
   bottom: 6.5px;
   right: 50px;
+  cursor: pointer;
 }
 .plus_btn {
   position: absolute;
@@ -503,7 +504,7 @@ body {
 .dialogtext {
   float: left;
   width: 65%;
-  padding: 20px 10px 20px 10px;
+  padding: 20px 10px 20px 30px;
   box-sizing: border-box;
 }
 .diatextarea {
@@ -908,4 +909,47 @@ body {
   transform: translateY(10px);
   transition: all 1s;
   color:#000
+}
+.dltitle{
+  font-size:20px;
+  font-weight: bold;
+
+}
+.dialogtext label{
+  display: inline-block;
+  width:100px;
+  margin-bottom: 5px;
+}
+.tlright{
+  text-align: right;
+}
+.dltitle_wrap{
+  margin-bottom: 30px;
+}
+.tlright button{
+  padding:9px 15px;
+  margin:7px 10px 0px 10px;
+  border:none;
+  cursor: pointer;  
+  
+}
+.tlright button:nth-child(1){
+  background-color: black;
+  color:white
+}
+.tlright button:nth-child(2){
+  background-color: #2752BE;
+  color:white;
+}
+.heart{
+  font-size:25px;
+  float:right;
+  margin-right:5%;
+  color:red;
+}
+.heart2{
+  font-size:25px;
+  float:right;
+  margin-right:5%;
+  color:red;
 }

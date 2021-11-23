@@ -23,7 +23,8 @@
           ※ 상세한 내용은 사이트 내 개인정보 취급방침을 참고 해 주세요.<br />
           <br />
         </div>
-        <input type="checkbox" /> 회원 탈퇴 안내에 동의합니다
+        <input type="checkbox" v-model="check1" class="chkbox" />
+        <span class="info">회원 탈퇴 안내에 동의합니다</span>
         <br />
         <span class="bold2">개인정보처리방침</span>
         <div class="delbox">
@@ -59,7 +60,8 @@
           게시·등록한 콘텐츠 등 <br />
           <br />
         </div>
-        <input type="checkbox" /> 개인정보처리방침에 동의합니다
+        <input type="checkbox" v-model="check2" class="chkbox" />
+        <span class="info">개인정보처리방침에 동의합니다</span>
         <div class="btn_box">
           <button class="chbtn" @click="handleout">탈퇴하기</button>
         </div>
@@ -94,6 +96,8 @@ import axios from "axios";
 export default {
   data() {
     return {
+      check1: false,
+      check2: false,
       email: "선택항목",
       token: sessionStorage.getItem("TOKEN"),
       dialogVisible: false,
@@ -105,6 +109,14 @@ export default {
       (this.yes = true), (this.dialogVisible = false);
     },
     async handleout() {
+      if (this.check1 !== true) {
+        alert("회원 탈퇴 안내를 체크해주세요");
+        return;
+      }
+      if (this.check2 !== true) {
+        alert("개인정보처리방침을 체크해주세요");
+        return;
+      }
       this.dialogVisible = true;
       if (this.yes === true) {
         const url = `/REST/mypage/memberdelete`;
@@ -130,6 +142,14 @@ export default {
 </script>
 
 <style scoped>
+.chkbox {
+  margin-top: 5px;
+  vertical-align: -3px;
+  margin-right: 3px;
+}
+.info {
+  font-size: 13px;
+}
 .dialog {
   padding: 30px;
 }

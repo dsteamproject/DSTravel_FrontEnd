@@ -228,7 +228,8 @@ export default {
   cursor: pointer;
 }
 .right_in1 {
-  position: fixed;
+  position: sticky;
+  top: 150px;
   border: 1px solid #ddd;
   width: 330px;
   height: auto;
@@ -340,6 +341,7 @@ label {
   height: auto;
 }
 .right1_99 {
+  position: relative;
   margin-top: 50px;
   width: 330px;
   height: 1000px;

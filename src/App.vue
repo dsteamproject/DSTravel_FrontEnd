@@ -127,7 +127,7 @@
                 >회원가입</router-link
               >
               <router-link
-                to="/mypage/mypw"
+                to="/mypage/myinfo"
                 class="router"
                 v-if="logined === true"
                 @click="scrollToTop()"
@@ -135,6 +135,20 @@
               >
             </li>
             <li>
+              <el-dropdown trigger="click" v-if="logined === true">
+                <span class="el-dropdown-link">
+                  <el-icon class="iconbell"><bell-filled /></el-icon>
+                  <el-badge class="mark" :value="1" />
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item class="clearfix">
+                      공지사항
+                    </el-dropdown-item>
+                    <el-dropdown-item class="clearfix"> 안내 </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
               <router-link
                 to="/login"
                 class="router"
@@ -175,7 +189,10 @@
               >
             </li>
             <li>
-              <router-link to="/vs" class="router2" @click="scrollToTop()"
+              <router-link
+                to="/vs/vsplay"
+                class="router2"
+                @click="scrollToTop()"
                 >여행지월드컵</router-link
               >
             </li>
@@ -194,16 +211,70 @@
     <div class="blo"></div>
     <router-view @changeLogged="changeLogged"> </router-view>
     <div></div>
-    <div class="footer">footer</div>
+    <div class="footer">
+      <div class="contact_wrap">
+        <div class="contact1">
+          <h1 style="color: #ffd75e; font-size: 50px; margin-bottom: 20px">
+            Contact me
+          </h1>
+          <p style="color: white; font-size: 13px">
+            저의 웹사이트에 방문해주셔서 감사합니다 <br />
+            구인관련 및 궁금한 점이 있으시다면,<br />
+            아래 연라처를 통해 연락 바랍니다
+          </p>
+          <div style="font-size: 45px; color: white">
+            <Message style="width: 1em; height: 1em; margin-right: 8px" />
+          </div>
+          <span style="font-weight: bold; color: white">Mail me</span><br />
+          <span style="color: white; margin-bottom: 20px"
+            >qudrms1648@kakao.com</span
+          >
+          <div style="font-size: 45px; color: white; padding-top: 20px">
+            <Phone style="width: 1em; height: 1em; margin-right: 8px" />
+          </div>
+          <span style="font-weight: bold; color: white">Call me</span><br />
+          <span style="color: white">010-5195-1648</span>
+        </div>
+        <div class="contact2">
+          <input
+            type="text"
+            class="input_text1"
+            placeholder="이름을 입력해주세요"
+            v-model="contactname"
+          />
+          <br />
+          <input
+            placeholder="이메일을 입력해주세요  'exmail@naver.com'"
+            type="text"
+            class="input_text2"
+            v-model="contactmail"
+          />
+          <br />
+          <textarea
+            class="text_area"
+            placeholder="메세지를 입력해주세요"
+            v-model="contactmessage"
+          ></textarea
+          ><br />
+          <button class="sendbtn" @click="send">Send</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { Message } from "@element-plus/icons";
+import { Phone } from "@element-plus/icons";
+import { BellFilled } from "@element-plus/icons";
 import { Search } from "@element-plus/icons";
 import axios from "axios";
 export default {
   components: {
     Search,
+    BellFilled,
+    Message,
+    Phone,
   },
   async created() {
     const url = "https://api.ipify.org?format=json";
@@ -474,6 +545,15 @@ export default {
 </style>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
+.ft_center h2 {
+  color: white;
+  font-size: 40px;
+  margin-top: 40px;
+  padding-top: 30px;
+}
+.ft_center {
+  text-align: center;
+}
 #main_step {
   cursor: pointer;
 }
@@ -495,15 +575,7 @@ export default {
   font-size: 18px;
   color: rgb(70, 64, 64);
 }
-.footer {
-  text-align: center;
-  height: 200px;
-  background: #e2b3b3;
 
-  clear: both;
-  z-index: 99;
-  width: 100%;
-}
 .logo {
   text-decoration: none;
 }
@@ -693,6 +765,13 @@ export default {
   width: 6vw;
   border: 1px solid #ccc;
 }
+.iconbell {
+  font-size: 23px;
+  vertical-align: -5px;
+  margin-right: 20px;
+  cursor: pointer;
+  color: rgb(167, 185, 178);
+}
 
 .area_eng {
   font-size: 24px;
@@ -749,11 +828,6 @@ export default {
 .input {
   text-align: center;
 }
-h1 {
-  padding-top: 250px;
-  padding-bottom: 50px;
-  color: white;
-}
 
 .content {
   text-align: center;
@@ -780,5 +854,87 @@ h3 {
 #box1 {
   text-align: center;
   padding-top: 20px;
+}
+.el-dropdown-link {
+  position: relative;
+}
+.mark {
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  font-size: 10px;
+}
+/* */
+.sendbtn {
+  width: 423px;
+  padding: 16px;
+  margin-top: 20px;
+  background: #ffd75e;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: all 0.5s;
+}
+.sendbtn:hover {
+  background: #b18d20;
+}
+.text_area {
+  width: 400px;
+  height: 110px;
+  margin-top: 30px;
+  resize: none;
+  background: none;
+  border: 1px solid white;
+  padding: 10px;
+  color: white;
+}
+.input_text1 {
+  width: 400px;
+  height: 40px;
+  background: none;
+  border: 1px solid white;
+  padding: 0px 10px;
+  margin-top: 22px;
+  color: white;
+}
+.input_text2 {
+  width: 400px;
+  height: 40px;
+  background: none;
+  margin-top: 20px;
+  border: 1px solid white;
+  padding: 0px 10px;
+  color: white;
+}
+.contact_wrap {
+  display: block;
+  width: 950px;
+  margin: 50px auto;
+}
+.contact1 {
+  width: 400px;
+  height: 300px;
+  display: inline-block;
+
+  float: left;
+  text-align: right;
+}
+.contact2 {
+  width: 400px;
+  height: 300px;
+
+  display: inline-block;
+  folat: left;
+}
+.footer {
+  padding-top: 10px;
+  /*background-color: #B3C0D1;*/
+  background: #3f3f3f;
+  color: black;
+  text-align: center;
+  height: 500px !important;
+  clear: both;
+  width: 100%;
+  margin-top: 70px;
 }
 </style>

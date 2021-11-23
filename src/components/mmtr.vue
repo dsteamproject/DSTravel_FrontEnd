@@ -2,11 +2,13 @@
   <div>
     <div class="wrap1">
       <ul class="likelist">
-        <li v-for="item in 9" :key="item">
-          <img src="../assets/seoul1.jpg" class="img" />
+        <li v-for="item in list" :key="item">
+          <img :src="item.firstimage" class="img" />
           <div class="liketext">
-            <p>[제주도] 트립에이드 X 제주 오설록티 뮤지엄 티스톤</p>
-            <p>30,000원</p>
+            <p>{{ item.title }}</p>
+            <p>{{ item.addr }}</p>
+            <p>{{ item.tel }}</p>
+            <p>{{ item.price }}만원</p>
           </div>
         </li>
       </ul>
@@ -21,6 +23,7 @@ export default {
     return {
       imgsrc: "`../assets/seoul${item}.jpg`",
       token: sessionStorage.getItem("TOKEN"),
+      list: [],
     };
   },
   async created() {
@@ -52,12 +55,14 @@ export default {
 }
 .likelist li {
   width: 30%;
-  height: 300px;
+  height: 250px;
+  overflow: hidden;
   border-top: 1px solid #f0f0f0;
   border-right: 1px solid #f0f0f0;
   border-bottom: 3px solid #40be70;
   border-left: 1px solid #f0f0f0;
-  display: inline-block;
+  float: left;
+  list-style: none;
   margin: 0px 10px;
   margin-bottom: 30px;
   box-shadow: 1px 5px 9px 2px rgba(0, 0, 0, 0.2);

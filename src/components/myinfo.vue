@@ -5,13 +5,25 @@
       <div class="hr"></div>
       <div class="wrap_in">
         <label>아이디</label>
-        <span> {{ this.list.id }} </span>
+        <span v-if="this.list.login !== 'SNS'"> {{ this.list.id }} </span>
+        <span v-if="this.list.login === 'SNS'"> {{ this.list.email }} </span>
 
         <span v-bind:class="idchk">{{ idcheck }}</span
         ><br />
         <label>비밀번호</label
-        ><router-link to="/mypage/mypw" @click="handlepw" class="gopw"
+        ><router-link
+          v-if="this.list.login !== 'SNS'"
+          to="/mypage/mypw"
+          @click="handlepw"
+          class="gopw"
           >비밀번호 재설정</router-link
+        >
+        <router-link
+          v-if="this.list.login === 'SNS'"
+          to=""
+          @click="handlepw"
+          class="gopw1"
+          >SNS계정 변경불가</router-link
         >
 
         <br />
@@ -32,6 +44,7 @@
         /><br />
         <label class="maillabel">이메일</label
         ><input
+          v-if="this.list.login !== 'SNS'"
           type="text"
           class="usermail"
           v-model="usermail"
@@ -39,18 +52,48 @@
         />
         <input
           type="text"
+          class="usermail1"
+          v-model="usermail"
+          ref="usermail"
+          disabled
+          v-if="this.list.login === 'SNS'"
+        />
+        <input
+          type="text"
           class="userpw"
           v-model="email"
           ref="email"
-          readonly
+          v-if="this.list.login !== 'SNS'"
         />
-        <select class="sele" v-model="email">
+        <input
+          type="text"
+          class="userpw1"
+          v-model="email"
+          ref="email"
+          disabled
+          v-if="this.list.login === 'SNS'"
+        />
+        <select class="sele" v-model="email" v-if="this.list.login !== 'SNS'">
           <option disabled selected>선택항목</option>
           <option>naver.com</option>
           <option>google.com</option>
           <option>gmail.com</option>
-          <option>daum.net</option></select
-        ><br />
+          <option>daum.net</option>
+        </select>
+        <select
+          disabled
+          class="sele1"
+          v-model="email"
+          v-if="this.list.login === 'SNS'"
+        >
+          <option disabled selected>선택항목</option>
+          <option>naver.com</option>
+          <option>google.com</option>
+          <option>gmail.com</option>
+          <option>daum.net</option>
+        </select>
+
+        <br />
         <label>성별</label
         ><input
           type="radio"
@@ -124,6 +167,7 @@ export default {
       console.log(response);
       if (response.data.status === 200) {
         alert("회원정보 수정이 완료되었습니다");
+        this.$emit("infochange", true);
       }
     },
   },
@@ -132,7 +176,7 @@ export default {
 
 <style scoped>
 .maillabel {
-  height: 50px;
+  height: 20px;
 }
 .wrap_in {
   padding: 0px 50px;
@@ -168,6 +212,14 @@ export default {
   font-size: 13px;
   text-decoration: none;
 }
+.gopw1 {
+  padding: 8px 12px;
+  background: #c5c6c9;
+  cursor: default;
+  color: white;
+  font-size: 13px;
+  text-decoration: none;
+}
 .radio {
   width: 24px;
   height: 24px;
@@ -198,11 +250,53 @@ export default {
   margin-top: 5px;
   outline: none;
 }
+.usermail1 {
+  margin-right: 5px;
+  width: 28%;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background: rgb(209, 207, 207);
+  height: 38px;
+  padding: 0px 10px 0px 20px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  line-height: 36px\9;
+  font-family: inherit;
+  font-size: 16px;
+  margin-top: 5px;
+  outline: none;
+}
 .sele {
   width: 28%;
   height: 38px;
   margin-left: 3px;
   background: #eee;
+  border: none;
+  vertical-align: 1px;
+  font-size: 16px;
+
+  text-indent: 0.01px;
+  position: relative;
+
+  color: #222;
+  margin-right: -40px;
+  padding-right: 40px;
+  padding-left: 20px;
+  min-width: 150px;
+}
+.sele1 {
+  width: 28%;
+  height: 38px;
+  margin-left: 3px;
+  background: rgb(209, 207, 207);
   border: none;
   vertical-align: 1px;
   font-size: 16px;
@@ -239,6 +333,34 @@ label {
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   background: #fff;
+  height: 38px;
+  padding: 0px 10px 0px 20px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  line-height: 36px\9;
+  font-family: inherit;
+  font-size: 16px;
+  margin-top: 5px;
+  outline: none;
+}
+.userpw1 {
+  width: 187px;
+  height: 38px;
+  padding: 0px 10px 0px 20px;
+
+  margin-right: 5px;
+  width: 28%;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background: rgb(209, 207, 207);
   height: 38px;
   padding: 0px 10px 0px 20px;
   box-sizing: border-box;

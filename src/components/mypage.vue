@@ -3,11 +3,15 @@
     <div class="wrap">
       <div class="content">
         <div class="topcontent">
-          <router-link to="/mypage/mypw" @click="changeMenu(0)" :class="btn1"
-            >암호변경</router-link
-          >
-          <router-link to="/mypage/myinfo" @click="changeMenu(1)" :class="btn2"
+          <router-link to="/mypage/myinfo" @click="changeMenu(0)" :class="btn1"
             >정보변경</router-link
+          >
+          <router-link
+            v-if="this.list.login !== 'SNS'"
+            to="/mypage/mypw"
+            @click="changeMenu(1)"
+            :class="btn2"
+            >암호변경</router-link
           >
           <router-link
             to="/mypage/myboard/mbwrite"
@@ -66,15 +70,23 @@
                 </div>
               </div>
               <p class="namet">
-                <span class="name">{{ this.list.nicname }}</span> 님<br />
+                <span class="name">{{ this.list.nicname }}</span>
+                님<br />
                 <span class="rank">개인회원</span>
               </p>
-              <span class="whatlogin">페이스북으로 로그인중</span><br />
+              <span class="whatlogin" v-if="this.list.login !== 'SNS'"
+                >일반계정으로 로그인중</span
+              >
+              <span class="whatlogin" v-if="this.list.login === 'SNS'"
+                >SNS계정으로 로그인중</span
+              >
+              <br />
               <button class="logout">로그아웃</button>
             </div>
           </div>
           <div class="right">
             <router-view
+              @infochange="infochange"
               @chmenu="chmenu"
               @changeLogged="changeLogged"
             ></router-view>
@@ -106,7 +118,7 @@ export default {
     if (currentPath === "/mypage") {
       this.$router.push({ path: "/mypage/mypw" });
     }
-    if (currentPath === "/mypage/mypw" || currentPath === "/mypage") {
+    if (currentPath === "/mypage/myinfo") {
       this.btn1 = "btn2";
       this.btn2 = "btn1";
       this.btn3 = "btn1";
@@ -114,7 +126,7 @@ export default {
       this.btn5 = "btn1";
       this.btn6 = "btn1";
     }
-    if (currentPath === "/mypage/myinfo") {
+    if (currentPath === "/mypage/mypw" || currentPath === "/mypage") {
       this.btn1 = "btn1";
       this.btn2 = "btn2";
       this.btn3 = "btn1";
@@ -181,6 +193,13 @@ export default {
   },
 
   methods: {
+    async infochange() {
+      const url = `/REST/mypage/home`;
+      const headers = { "Content-type": "application/json", token: this.token };
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.list = response.data.member;
+    },
     changeLogged() {
       this.$emit("changeLogged", false);
     },

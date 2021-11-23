@@ -5,8 +5,10 @@
         <li v-for="item in list" :key="item">
           <img :src="item.firstimage" class="img" />
           <div class="liketext">
-            <p>[제주도] 트립에이드 X 제주 오설록티 뮤지엄 티스톤</p>
-            <p>30,000원</p>
+            <p>{{ item.title }}</p>
+            <p>{{ item.addr }}</p>
+            <p>{{ item.tel }}</p>
+            <p>{{ item.price }}만원</p>
           </div>
         </li>
       </ul>

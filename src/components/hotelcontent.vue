@@ -251,13 +251,14 @@ export default {
   cursor: pointer;
 }
 .right_in1 {
-  position: fixed;
+  position: sticky;
   border: 1px solid #ddd;
   width: 330px;
   height: auto;
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
+  top: 150px;
 }
 .label3 {
   vertical-align: top;
@@ -367,5 +368,6 @@ label {
   width: 330px;
   height: 1000px;
   float: left;
+  position: relative;
 }
 </style>

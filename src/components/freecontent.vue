@@ -1,6 +1,14 @@
 <template>
   <div class="app">
-    <div class="bg1">
+    <div
+      class="bg1"
+      :style="{
+        backgroundImage:
+          'url(' +
+          `//127.0.0.1:8080/REST/board/select_image?no=${this.no}` +
+          ')',
+      }"
+    >
       <div class="bg1_in">
         <h2 class="title">{{ list.title }}</h2>
       </div>
@@ -625,8 +633,9 @@ export default {
   z-index: 98;
 }
 .bg1 {
-  background: url(../assets/bg.jpg);
-
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: 20%;
   height: 200px;
 }
 .bg2 {

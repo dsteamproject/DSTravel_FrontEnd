@@ -14,6 +14,13 @@
       ><br />
       <label>제목</label
       ><input type="text" class="title" v-model="title" /><br />
+      <label>대표이미지</label
+      ><input
+        ref="file"
+        type="file"
+        name="file"
+        @change="imagechange()"
+      /><br />
       <label>내용</label>
       <div class="ckeditor">
         <ckeditor :editor="editor" v-model="editorData" :config="editorConfig">
@@ -40,6 +47,7 @@ export default {
   },
   data() {
     return {
+      imagefile: "",
       keyword: "",
       list: [],
       title: "",
@@ -53,15 +61,25 @@ export default {
     };
   },
   methods: {
+    async imagechange() {
+      this.imagefile = this.$refs.file.files[0];
+      console.log(this.imagefile);
+    },
     async handleconfirm() {
       const url = `/REST/board/update`;
-      const headers = { "Content-type": "application/json", token: this.token };
-      const body = {
-        no: this.no,
-        title: this.title,
-        content: this.editorData,
-        category: this.keyword,
+      const headers = {
+        "Content-type": "multipart/form-data",
+        token: this.token,
       };
+      const body = new FormData();
+
+      body.append("no", this.no);
+      body.append("title", this.title);
+      body.append("category", this.keyword);
+      body.append("content", this.editorData);
+      body.append("file", this.imagefile);
+      console.log(body);
+
       const response = await axios.put(url, body, { headers }); // put으로 교체예정
       console.log(response);
       if (response.data.status === 200) {
