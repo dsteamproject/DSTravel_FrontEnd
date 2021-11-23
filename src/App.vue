@@ -209,7 +209,7 @@
       </div>
     </div>
     <div class="blo"></div>
-    <router-view @changeLogged="changeLogged"> </router-view>
+    <router-view @changeLogged="changeLogged" @dialog="dialog"> </router-view>
     <div></div>
     <div class="footer">
       <div class="contact_wrap">
@@ -349,6 +349,9 @@ export default {
     };
   },
   methods: {
+    dialog() {
+      this.dialogVisible = true;
+    },
     step1go() {
       this.step = 1;
       this.stepbg = "sbg";

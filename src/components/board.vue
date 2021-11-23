@@ -220,6 +220,7 @@ export default {
 
   float: revert;
   margin-left: 10%;
+  overflow: hidden;
 }
 .fix {
   margin-top: 30px;

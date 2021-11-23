@@ -122,6 +122,7 @@
           </div>
         </div>
       </div>
+      <div class="both"></div>
     </div>
   </div>
 </template>

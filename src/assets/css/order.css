@@ -12,6 +12,7 @@
     width:25%;
     box-sizing: border-box;
     padding-left:50px;
+    height: 68vh;
 }
 .text{
     text-align: center;
@@ -201,14 +202,16 @@ input[type=number]::-webkit-outer-spin-button {
     height: 100%;
    
 }
-
+.both{
+    clear:both;
+}
 .center{
     text-align: center;
 }
 .fixbox{
-    position: fixed;
+    position: sticky;
     top:50%;
-    width:14%;
+    width:100%;
     border:1px solid black;
     
     box-sizing: border-box;
