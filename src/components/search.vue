@@ -1419,7 +1419,12 @@
       </p>
 
       <div class="dlsqwrap">
-        <input type="text" />
+        <input
+          v-model="dltitle"
+          type="text"
+          class="dltitle1"
+          placeholder="제목을 입력해주세요"
+        />
         <ul class="dlsuqare">
           <li @click="TDsave"><p>일정저장</p></li>
           <li><p>일정공유</p></li>
@@ -1454,6 +1459,7 @@ export default {
   },
   data() {
     return {
+      dltitle: "",
       imagefile: "",
       heart: false,
       mapnum: 12,
@@ -1574,6 +1580,7 @@ export default {
       markers10: [],
       numberp: [],
       coordinate: [],
+      allchoice: [],
       addr: "",
       loadtexton: false,
       options: {
@@ -1608,14 +1615,99 @@ export default {
 
   methods: {
     async TDsave() {
-      const url1 = `/REST/travel/TDsave`;
+      if (this.$route.query.betday === "1") {
+        this.allchoice.push(this.choice1);
+      }
+      if (this.$route.query.betday === "2") {
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+      }
+      if (this.$route.query.betday === "3") {
+        this.allchoice = {
+          save1: this.choice1,
+          save2: this.choice2,
+          save3: this.choice3,
+        };
+      }
+      if (this.$route.query.betday === "4") {
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+        this.allchoice.push(this.choice3);
+        this.allchoice.push(this.choice4);
+      }
+      if (this.$route.query.betday === "5") {
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+        this.allchoice.push(this.choice3);
+        this.allchoice.push(this.choice4);
+        this.allchoice.push(this.choice5);
+      }
+      if (this.$route.query.betday === "6") {
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+        this.allchoice.push(this.choice3);
+        this.allchoice.push(this.choice4);
+        this.allchoice.push(this.choice5);
+        this.allchoice.push(this.choice6);
+      }
+      if (this.$route.query.betday === "7") {
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+        this.allchoice.push(this.choice3);
+        this.allchoice.push(this.choice4);
+        this.allchoice.push(this.choice5);
+        this.allchoice.push(this.choice6);
+        this.allchoice.push(this.choice7);
+      }
+      if (this.$route.query.betday === "8") {
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+        this.allchoice.push(this.choice3);
+        this.allchoice.push(this.choice4);
+        this.allchoice.push(this.choice5);
+        this.allchoice.push(this.choice6);
+        this.allchoice.push(this.choice7);
+        this.allchoice.push(this.choice8);
+      }
+      if (this.$route.query.betday === "9") {
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+        this.allchoice.push(this.choice3);
+        this.allchoice.push(this.choice4);
+        this.allchoice.push(this.choice5);
+        this.allchoice.push(this.choice6);
+        this.allchoice.push(this.choice7);
+        this.allchoice.push(this.choice8);
+        this.allchoice.push(this.choice9);
+      }
+      if (this.$route.query.betday === "10") {
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+        this.allchoice.push(this.choice3);
+        this.allchoice.push(this.choice4);
+        this.allchoice.push(this.choice5);
+        this.allchoice.push(this.choice6);
+        this.allchoice.push(this.choice7);
+        this.allchoice.push(this.choice8);
+        this.allchoice.push(this.choice9);
+        this.allchoice.push(this.choice10);
+      }
+
+      console.log(this.allchoice);
+
+      const url1 = `/REST/travel/TDsave?title=${this.dltitle}`;
       const headers = {
         "Content-type": "application/json",
         token: this.token,
       };
-      const body = {};
+      const body = { total: this.allchoice };
       const response1 = await axios.post(url1, body, { headers });
       console.log(response1);
+      if (response1.data.status === 200) {
+        alert("일정 저장이 완료되었습니다");
+        this.dltitle = "";
+        this.dialogVisible2 = false;
+      }
     },
     // 일정저장
     async mapput2() {

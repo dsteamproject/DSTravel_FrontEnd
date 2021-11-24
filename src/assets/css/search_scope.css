@@ -967,16 +967,26 @@ body {
   padding-bottom: 30px;
 }
 .dlsuqare li{
-  width:120px;
-  height: 120px;
+  width:115px;
+  height: 115px;
   background-color: #98dde3;
   display: inline-block;
   margin:10px;
-
+  transition: all 1s;
   color:white;
   cursor: pointer;
 }
+.dlsuqare li:hover{
+
+  background-color: #61a1a7;
+
+}
 .dlsuqare li p{
-  line-height: 124px;
+  line-height: 115px;
   font-weight: bold;
+}
+.dltitle1{
+  width:44.5%;
+  height: 30px;
+  margin-bottom: 10px;
 }

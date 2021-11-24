@@ -54,7 +54,7 @@ export default {
       this.page++;
     },
     async refresh() {
-      const url = `/REST/mypage/mygoodtd?type=12&page=${this.page}&size=3`;
+      const url = `/REST/mypage/mygoodtd?type=12&page=${this.page}&size=6`;
       const headers = { "Content-type": "application/json", token: this.token };
 
       const response = await axios.get(url, { headers: headers });
