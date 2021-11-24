@@ -57,9 +57,10 @@
     box-sizing: border-box;
 }
 .btn1{
+    color:black;
     text-decoration: none;
     padding:10px;
-    background-color: rgb(235, 232, 232);
+    background-color: rgb(241, 241, 241);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     float:right;
@@ -69,6 +70,7 @@
 
     }
     .btn2{
+        color:black;
         text-decoration: none;
         padding:10px;
         background-color: rgb(255, 255, 255);

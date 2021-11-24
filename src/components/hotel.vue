@@ -84,9 +84,7 @@
       </div>
       <div class="right1_1">
         <div class="right-top">
-          <span class="right_top_text"
-            >검색된 숙소 :{{ this.pages * 5 }}개</span
-          >
+          <span class="right_top_text">검색된 숙소 :{{ this.total }}개</span>
         </div>
         <ul>
           <li
@@ -164,6 +162,7 @@ export default defineComponent({
       locationcss9: "location1",
       rank: "",
       city: "",
+      total: "",
     };
   },
   methods: {
@@ -186,6 +185,7 @@ export default defineComponent({
       console.log(response1);
       this.pages = response1.data.cnt;
       this.list = response1.data.list;
+      this.total = response1.data.total;
       for (var i = 0; i < this.list.length; i++) {
         if (String(this.list[i].price).length === 3) {
           var coma =

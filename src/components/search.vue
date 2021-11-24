@@ -1356,6 +1356,7 @@
     </div>
     <template #footer>
       <span class="dialog-footer">
+        <input type="file" @change="imagechange()" ref="file" name="file" />
         <el-button @click="dialogVisible = false">취소</el-button>
         <el-button type="primary" @click="mapfinish">완료</el-button>
       </span>
@@ -1400,6 +1401,33 @@
       <div style="clear: both"></div>
     </div>
   </el-dialog>
+
+  <el-dialog
+    v-model="dialogVisible2"
+    :title="this.dialoglist.title"
+    top="30vh"
+    width="30%"
+    :before-close="handleClose"
+    append-to-body
+    class="sasa"
+  >
+    <div class="dialog2">
+      <p class="dl2title">일정저장</p>
+      <p>
+        일정을 저장하여 일정등록 / 일정공유 등의 기능을<br />
+        이용하실수 있습니다.
+      </p>
+
+      <div class="dlsqwrap">
+        <input type="text" />
+        <ul class="dlsuqare">
+          <li @click="TDsave"><p>일정저장</p></li>
+          <li><p>일정공유</p></li>
+        </ul>
+      </div>
+      <div style="clear: both"></div>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
@@ -1426,6 +1454,7 @@ export default {
   },
   data() {
     return {
+      imagefile: "",
       heart: false,
       mapnum: 12,
       searchopen: false,
@@ -1515,6 +1544,7 @@ export default {
       zoom: 14,
       dialogVisible: false,
       dialogVisible1: false,
+      dialogVisible2: false,
       sublat: "",
       sublng: "",
       chclass: "chcss",
@@ -1577,6 +1607,24 @@ export default {
   },
 
   methods: {
+    async TDsave() {
+      const url1 = `/REST/travel/TDsave`;
+      const headers = {
+        "Content-type": "application/json",
+        token: this.token,
+      };
+      const body = {};
+      const response1 = await axios.post(url1, body, { headers });
+      console.log(response1);
+    },
+    // 일정저장
+    async mapput2() {
+      this.dialogVisible2 = true;
+    },
+    async imagechange() {
+      this.imagefile = this.$refs.file.files[0];
+      console.log(this.imagefile);
+    },
     async likepush(item) {
       console.log(item);
       const url1 = `/REST/travel/good?contentid=${item}`;
@@ -1631,13 +1679,17 @@ export default {
       }
       console.log(this.token);
       const url1 = `/REST/travel/TDtem/insert?type=${this.mapnum}&city=${this.areacode}`;
-      const headers = { "Content-type": "application/json", token: this.token };
-      const body1 = {
-        title: this.pluslocation,
-        addr: this.addr,
-        xlocation: response.data.coordinateInfo.coordinate[0].lon,
-        ylocation: response.data.coordinateInfo.coordinate[0].lat,
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        token: this.token,
       };
+      const body1 = new FormData();
+      body1.append("title", this.pluslocation);
+      body1.append("addr", this.addr);
+      body1.append("xlocation", response.data.coordinateInfo.coordinate[0].lon);
+      body1.append("ylocation", response.data.coordinateInfo.coordinate[0].lat);
+      body1.append("file", this.imagefile);
+
       const response1 = await axios.post(url1, body1, { headers });
       console.log(response1);
       this.dialogVisible = false;

@@ -78,7 +78,11 @@
           </el-table-column>
         </el-table>
         <div class="block">
-          <el-pagination layout="prev, pager, next" :total="50"></el-pagination>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            layout="prev, pager, next"
+            :total="this.cnt * 10"
+          ></el-pagination>
         </div>
       </div>
     </div>
@@ -93,38 +97,48 @@ export default {
       multipleSelection: [],
       token: sessionStorage.getItem("TOKEN"),
       list: [],
+      pages: "",
+      page: 1,
     };
   },
   async created() {
-    const url = `/REST/mypage/myboard`;
-    const headers = { "Content-type": "application/json", token: this.token };
-
-    const response = await axios.get(url, { headers });
-    console.log(response);
-    this.list = response.data.list;
-    console.log(this.list);
-    for (var i = 0; i < this.list.length; i++) {
-      const regdate1 = this.list[i].regdate;
-
-      const dada = new Date(regdate1);
-
-      const simpledate =
-        dada.getFullYear() +
-        "-" +
-        ("0" + (dada.getMonth() + 1)).slice(-2) +
-        "-" +
-        ("0" + dada.getDate()).slice(-2);
-
-      const simpledate2 =
-        ("0" + dada.getHours()).slice(-2) +
-        ":" +
-        ("0" + dada.getMinutes()).slice(-2);
-
-      this.list[i].regdate2 = simpledate;
-      this.list[i].regdate3 = simpledate2;
-    }
+    await this.refresh();
   },
   methods: {
+    async refresh() {
+      const url = `/REST/mypage/myboard?page=${this.page}&size=5`;
+      const headers = { "Content-type": "application/json", token: this.token };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.cnt = response.data.cnt;
+      this.list = response.data.list;
+      console.log(this.list);
+      for (var i = 0; i < this.list.length; i++) {
+        const regdate1 = this.list[i].regdate;
+
+        const dada = new Date(regdate1);
+
+        const simpledate =
+          dada.getFullYear() +
+          "-" +
+          ("0" + (dada.getMonth() + 1)).slice(-2) +
+          "-" +
+          ("0" + dada.getDate()).slice(-2);
+
+        const simpledate2 =
+          ("0" + dada.getHours()).slice(-2) +
+          ":" +
+          ("0" + dada.getMinutes()).slice(-2);
+
+        this.list[i].regdate2 = simpledate;
+        this.list[i].regdate3 = simpledate2;
+      }
+    },
+    async handleCurrentChange(val) {
+      this.page = val;
+      await this.refresh();
+    },
     toggleAllSelection(rows) {
       if (rows) {
         rows.forEach((row) => {

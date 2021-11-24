@@ -55,7 +55,10 @@
     color: white;
     margin-top: 20px;
     border-radius: 2px 2px 2px 2px;
-   
+   transition: all 1s;
+  }
+  .wrbtn:hover{
+    background: #0f296d;
   }
   .sbtn {
     padding: 10px 35px;
@@ -66,6 +69,10 @@
     margin-right: 80px;
     margin-left: 5px;
     margin-bottom: 20px;
+    transition: all 1s;
+  }
+  .sbtn:hover{
+    background: #0f296d;
   }
   .sch {
     height: 36px;

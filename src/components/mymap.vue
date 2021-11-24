@@ -65,7 +65,11 @@
           </el-table-column>
         </el-table>
         <div class="block">
-          <el-pagination layout="prev, pager, next" :total="50"></el-pagination>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            layout="prev, pager, next"
+            :total="this.cnt * 10"
+          ></el-pagination>
         </div>
       </div>
     </div>
@@ -74,23 +78,30 @@
 
 <script>
 import axios from "axios";
+
 export default {
   data() {
     return {
       multipleSelection: [],
       token: sessionStorage.getItem("TOKEN"),
       list: [],
+      page: 1,
+      
     };
   },
   async created() {
-    const url = `/REST/mypage/mytdtem`;
-    const headers = { "Content-type": "application/json", token: this.token };
-
-    const response = await axios.get(url, { headers });
-    console.log(response);
-    this.list = response.data.mytdtem;
+    await this.refresh();
   },
   methods: {
+    async refresh() {
+      const url = `/REST/mypage/mytdtem?page=${this.page}&size=5`;
+      const headers = { "Content-type": "application/json", token: this.token };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.cnt = response.data.cnt;
+      this.list = response.data.mytdtem;
+    },
     toggleAllSelection(rows) {
       if (rows) {
         rows.forEach((row) => {

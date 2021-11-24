@@ -148,7 +148,7 @@
     box-shadow:0px 3px 3px rgba(0, 0, 0, 0.2);
     background: #01c73c;
     margin-top: 25px;
-    transition: all 0.5s;
+    transition: all 1s;
   }
   .easylogin1 {
     background: #ffdf00;
@@ -164,7 +164,8 @@
     box-shadow:0px 3px 3px rgba(0, 0, 0, 0.2);
     background: #4982ee;
     margin: 10px 0px;
-    transition: all 0.5s;
+
+    transition: all 1s;
   }
   .easylogin2 {
     background: #ffdf00;
@@ -178,30 +179,19 @@
     font-weight: bold;
     font-size: 14px;
     box-shadow:0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 1s;
     
   }
-  .easylogin:nth-child(2) {
-    background: #01c73c;
-    margin-top: 25px;
-    transition: all 0.5s;
-  }
-  .easylogin:nth-child(2):hover {
+
+  .easylogin:hover {
     background: #049930;
   }
-  .easylogin:nth-child(4) {
-    background: #4982ee;
-    margin: 10px 0px;
-    transition: all 0.5s;
-  }
-  .easylogin:nth-child(4):hover {
+
+  .easylogin1:hover {
     background: #3772e0;
   }
-  .easylogin:nth-child(6) {
-    background: #ffdf00;
-    color: black;
-    transition: all 0.5s;
-  }
-  .easylogin:nth-child(6):hover {
+
+  .easylogin2:hover {
     background: #ddc005;
   }
   .bottom {

@@ -953,3 +953,30 @@ body {
   margin-right:5%;
   color:red;
 }
+.dialog2{
+  text-align: center;
+  padding-top:40px;
+}
+.dl2title{
+  font-size:20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.dlsqwrap{
+  margin-top:40px;
+  padding-bottom: 30px;
+}
+.dlsuqare li{
+  width:120px;
+  height: 120px;
+  background-color: #98dde3;
+  display: inline-block;
+  margin:10px;
+
+  color:white;
+  cursor: pointer;
+}
+.dlsuqare li p{
+  line-height: 124px;
+  font-weight: bold;
+}

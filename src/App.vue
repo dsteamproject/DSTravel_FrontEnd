@@ -121,14 +121,14 @@
             <li>
               <router-link
                 to="/join"
-                class="router"
+                class="router clrouter"
                 v-if="logined === false"
                 @click="scrollToTop()"
                 >회원가입</router-link
               >
               <router-link
                 to="/mypage/myinfo"
-                class="router"
+                class="router clrouter"
                 v-if="logined === true"
                 @click="scrollToTop()"
                 >마이페이지</router-link
@@ -169,7 +169,10 @@
         <div class="nav2">
           <ul>
             <li>
-              <router-link to="/hotel" class="router2" @click="scrollToTop()"
+              <router-link
+                to="/hotel"
+                :class="routerclass1"
+                @click="scrollToTop(1)"
                 ><img
                   src="../src/assets/hotel.png"
                   style="width: 20px; height: 14px"
@@ -178,29 +181,32 @@
               >
             </li>
             <li>
-              <router-link to="/car" class="router2" @click="scrollToTop()"
+              <router-link
+                to="/car"
+                :class="routerclass2"
+                @click="scrollToTop(2)"
                 ><img src="../src/assets/car.png" style="width: 20px" />
                 행사·티켓</router-link
               >
             </li>
             <li>
-              <router-link to="" class="router2" @click="dialogVisible = true"
+              <router-link to="" :class="routerclass3" @click="scrollToTop(3)"
                 >여행추천</router-link
               >
             </li>
             <li>
               <router-link
                 to="/vs/vsplay"
-                class="router2"
-                @click="scrollToTop()"
+                :class="routerclass4"
+                @click="scrollToTop(4)"
                 >여행지월드컵</router-link
               >
             </li>
             <li>
               <router-link
                 to="/board/free"
-                class="router2"
-                @click="scrollToTop()"
+                :class="routerclass5"
+                @click="scrollToTop(5)"
                 >커뮤니티</router-link
               >
             </li>
@@ -277,6 +283,49 @@ export default {
     Phone,
   },
   async created() {
+    const currentPath = window.location.pathname;
+    console.log(currentPath);
+
+    if (currentPath === "/hotel") {
+      this.routerclass1 = "router3";
+    } else if (currentPath === "/hotelcontent") {
+      this.routerclass1 = "router3";
+    } else if (currentPath === "/order") {
+      this.routerclass1 = "router3";
+    } else if (currentPath === "/car") {
+      this.routerclass2 = "router3";
+    } else if (currentPath === "/carcontent") {
+      this.routerclass2 = "router3";
+    } else if (currentPath === "/search") {
+      this.routerclass3 = "router3";
+    } else if (currentPath === "/vs/vsplay") {
+      this.routerclass4 = "router3";
+    } else if (currentPath === "/vs/vsrank") {
+      this.routerclass4 = "router3";
+    } else if (currentPath === "/board/free") {
+      this.routerclass5 = "router3";
+    } else if (currentPath === "/board/review") {
+      this.routerclass5 = "router3";
+    } else if (currentPath === "/board/info") {
+      this.routerclass5 = "router3";
+    } else if (currentPath === "/board/que") {
+      this.routerclass5 = "router3";
+    } else if (currentPath === "/board/travel") {
+      this.routerclass5 = "router3";
+    } else if (currentPath === "/freewrite") {
+      this.routerclass5 = "router3";
+    } else if (currentPath === "/freecontent") {
+      this.routerclass5 = "router3";
+    } else if (currentPath === "/freechange") {
+      this.routerclass5 = "router3";
+    } else {
+      this.routerclass1 = "router2";
+      this.routerclass2 = "router2";
+      this.routerclass3 = "router2";
+      this.routerclass4 = "router2";
+      this.routerclass5 = "router2";
+    }
+
     const url = "https://api.ipify.org?format=json";
     const headers = { "Content-type": "application/json" };
 
@@ -338,7 +387,11 @@ export default {
       endmonth: "",
       endyear: "",
       enddate: "",
-
+      routerclass1: "router2",
+      routerclass2: "router2",
+      routerclass3: "router2",
+      routerclass4: "router2",
+      routerclass5: "router2",
       kora: [],
       traveldate: "",
       scrollPostion: 0,
@@ -505,8 +558,47 @@ export default {
       this.stepbg2 = "nonesbg";
       window.scrollTo(0, 0);
     },
-    scrollToTop() {
+    scrollToTop(num) {
       window.scrollTo(0, 0);
+      console.log(num);
+      if (num === 1) {
+        this.routerclass1 = "router3";
+        this.routerclass2 = "router2";
+        this.routerclass3 = "router2";
+        this.routerclass4 = "router2";
+        this.routerclass5 = "router2";
+      } else if (num === 2) {
+        this.routerclass1 = "router2";
+        this.routerclass2 = "router3";
+        this.routerclass3 = "router2";
+        this.routerclass4 = "router2";
+        this.routerclass5 = "router2";
+      } else if (num === 3) {
+        this.dialogVisible = true;
+        this.routerclass1 = "router2";
+        this.routerclass2 = "router2";
+        this.routerclass3 = "router2";
+        this.routerclass4 = "router2";
+        this.routerclass5 = "router2";
+      } else if (num === 4) {
+        this.routerclass1 = "router2";
+        this.routerclass2 = "router2";
+        this.routerclass3 = "router2";
+        this.routerclass4 = "router3";
+        this.routerclass5 = "router2";
+      } else if (num === 5) {
+        this.routerclass1 = "router2";
+        this.routerclass2 = "router2";
+        this.routerclass3 = "router2";
+        this.routerclass4 = "router2";
+        this.routerclass5 = "router3";
+      } else {
+        this.routerclass1 = "router2";
+        this.routerclass2 = "router2";
+        this.routerclass3 = "router2";
+        this.routerclass4 = "router2";
+        this.routerclass5 = "router2";
+      }
     },
     onscroll(e) {
       console.log(e);
@@ -581,6 +673,7 @@ export default {
 
 .logo {
   text-decoration: none;
+  color: #2752be;
 }
 .wrap9 {
   border-bottom: 1px solid #ccc;
@@ -610,8 +703,12 @@ export default {
   padding: 5px 20px;
 }
 .nav_in_2 li:nth-child(1) {
-  border: 1px solid #ccc;
+  border: 1px solid rgb(19, 77, 184);
   padding: 5px 25px;
+  transition: all 0.6s;
+}
+.nav_in_2 li:hover {
+  opacity: 0.5;
 }
 .nav_in_2 li:nth-child(2) {
   font-weight: bold;
@@ -619,7 +716,13 @@ export default {
 .router {
   text-decoration: none;
   color: black;
+  font-size: 14px;
+  font-family: "Noto Sans KR", sans-serif;
 }
+.clrouter {
+  color: rgb(19, 77, 184);
+}
+
 .search {
   padding: 13px 50px;
   background: #eee;
@@ -640,7 +743,23 @@ export default {
 }
 .router2 {
   text-decoration: none;
-  color: black;
+  color: rgb(99, 99, 99);
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+.router3 {
+  text-decoration: none;
+  color: rgb(99, 99, 99);
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  padding-bottom: 5px;
+
+  border-bottom: 2px solid #98dde3;
+  color: #98dde3;
+}
+.router2:hover {
+  border-bottom: 2px solid #98dde3;
 }
 /* asd */
 
