@@ -147,6 +147,10 @@ export default {
       this.dialogVisible1 = true;
     },
     ordergo() {
+      if (this.token === null) {
+        alert("로그인후 이용가능한 서비스 입니다");
+        return;
+      }
       this.$router.push({
         path: "/order",
         query: { code: this.$route.query.code },
@@ -174,6 +178,10 @@ export default {
       await this.goodinfo();
     },
     async goodup() {
+      if (this.token === null) {
+        alert("로그인후 이용가능한 서비스 입니다");
+        return;
+      }
       const url1 = `/REST/travel/good?contentid=${this.$route.query.code}`;
       const headers = {
         "Content-type": "application/json",

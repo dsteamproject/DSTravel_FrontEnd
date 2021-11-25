@@ -66,10 +66,8 @@
       </div>
       <div class="right1_99">
         <div class="right_in1">
-          <span
-            ><input type="text" v-model="this.list2.usetimefestival" /> /
-            1인</span
-          ><span class="heart">♡</span><span class="heart">♥</span>
+          <span>무료/ 1인</span><span class="heart">♡</span
+          ><span class="heart">♥</span>
 
           <br />
           <button class="ribtn">예약하기</button>

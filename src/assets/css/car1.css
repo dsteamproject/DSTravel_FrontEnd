@@ -2,38 +2,63 @@
     width:65%;
     margin:0 auto;
     height: auto;
+    
 }
-.carousel__item1{
+.el-carousel__container{
     width:90%;
-    height: 293px;
     background: rgb(255, 255, 255);
     border-radius: 10px;
     border:1px solid #ddd;
    cursor: pointer;
 }
-.carousel_img{
+
+.abcc{
     width:100%;
+    height: auto;
+    
+}
+.carousel__item1{
+    width:22.6%;
+    height: 293px;
+    overflow: hidden;
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    float:left;
+    margin: 1%;
+    margin-bottom: 20px;
+}
+.carousel_img{
+    width: 100%;
     height: 60%;
     border-bottom: 1px solid #ddd;
 }
 .cimg{
     width:100%;
-    height: 100%;;
+    height: 100%;
 }
-.carousel_content{
-    padding:0px 30px;
+.carousel__content{
+    padding: 0px 30px;
     text-align: left;
-  
-}
-.carousel_content:hover{
-    box-shadow: inset 0 0 0 1px #666d7533;
-}
-.cacotitle{
-    font-size:14px;
-    font-weight: bold;
 }
 .addr{
     font-size: 10px;
+}
+.cacotitle{
+    font-size: 14px;
+    font-weight: bold;
+}
+.carousel_content{
+    padding: 0px 30px;
+    text-align: left;
+}
+.rightsel{
+    float:right;
+    margin-right: 20px;
+}
+.carousel_content:hover{
+    box-shadow: inset 0 0 0 1px #666d7533;
 }
 .loti{
     margin-bottom: 10px;
@@ -45,12 +70,7 @@
     padding-left:10px;
     
 }
-.plus{
-    float:right;
-    cursor: pointer;
-    font-size:14px;
-    margin-right: 10px;
-}
+
 .addrtitle{
     width:100%;
     height: 60%;
@@ -70,11 +90,18 @@
     margin-top:20px;
     border-radius: 10px;
 }
-.abcc{
-    display: inline-flex;
-    margin-right:18px;
-    margin-bottom: 20px;
+.locationbox{
+    width:100%;
 }
+
+
+
+
+
+
+
+
+
 .el-carousel__item:nth-child(3) {
     background-image: url("http://morningcalm.co.kr/_ADM/data/designImages/BANNER_1636014061.jpg");
     background-repeat: no-repeat;

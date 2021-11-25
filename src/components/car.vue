@@ -9,7 +9,7 @@
       <div class="seolu_box">
         <div class="loti">
           <span class="locationtitle">문화관광,일반축제</span>
-          <span class="plus" @click="$router.push('/car1')">더보기></span>
+          <span class="plus" @click="car1push(1)">더보기></span>
         </div>
         <div>
           <Carousel :settings="settings" :breakpoints="breakpoints">
@@ -55,7 +55,7 @@
         <div class="seolu_box">
           <div class="loti">
             <span class="locationtitle">전통공연</span>
-            <span class="plus">더보기></span>
+            <span class="plus" @click="car1push(2)">더보기></span>
           </div>
           <Carousel :settings="settings" :breakpoints="breakpoints">
             <Slide v-for="slide in list1" :key="slide">
@@ -98,7 +98,7 @@
           <div class="seolu_box">
             <div class="loti">
               <span class="locationtitle">박람회</span>
-              <span class="plus">더보기></span>
+              <span class="plus" @click="car1push(3)">더보기></span>
             </div>
             <Carousel :settings="settings" :breakpoints="breakpoints">
               <Slide v-for="slide in list2" :key="slide">
@@ -142,7 +142,7 @@
           <div class="seolu_box">
             <div class="loti">
               <span class="locationtitle">전시회</span>
-              <span class="plus">더보기></span>
+              <span class="plus" @click="car1push(4)">더보기></span>
             </div>
 
             <Carousel :settings="settings" :breakpoints="breakpoints">
@@ -187,7 +187,7 @@
           <div class="seolu_box">
             <div class="loti">
               <span class="locationtitle">연극</span>
-              <span class="plus">더보기></span>
+              <span class="plus" @click="car1push(5)">더보기></span>
             </div>
             <Carousel :settings="settings" :breakpoints="breakpoints">
               <Slide v-for="slide in list4" :key="slide">
@@ -246,7 +246,7 @@ export default defineComponent({
     Navigation,
   },
   async created() {
-    const url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&&cat2=A0207&listYN=Y`;
+    const url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&&cat2=A0207&listYN=Y`;
     const headers1 = { "Content-type": "application/json" };
 
     const response1 = await axios.get(url1, { headers1 });
@@ -279,6 +279,12 @@ export default defineComponent({
     this.loading = false;
   },
   methods: {
+    car1push(num) {
+      this.$router.push({
+        path: "/car1",
+        query: { type: num },
+      });
+    },
     contentgo(slide) {
       console.log(slide);
       this.$router.push({

@@ -7,8 +7,25 @@
         </el-carousel>
       </div>
       <div class="seolu_box">
+        <div class="locationbox">
+          <button>전체보기</button>
+          <button>서울</button>
+          <button>대전</button>
+          <button>대구</button>
+          <button>부산</button>
+          <button>부산</button>
+          <button>인천</button>
+          <button>광주</button>
+          <button>제주도</button>
+          <button>울산</button>
+        </div>
         <div class="loti">
-          <span class="locationtitle">문화관광,일반축제</span>
+          <span class="locationtitle">{{ this.title }}</span>
+          <select class="rightsel">
+            <option>최신순</option>
+            <option>가나다순</option>
+            <option>인기순</option>
+          </select>
         </div>
 
         <div class="abcc" v-for="slide in list" :key="slide">
@@ -55,7 +72,23 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   async created() {
-    const url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&&cat2=A0207&listYN=Y`;
+    var url1;
+    if (this.$route.query.type === "1") {
+      this.title = "문화관광,일반축제";
+      url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&&cat2=A0207&listYN=Y`;
+    } else if (this.$route.query.type === "2") {
+      this.title = "전통공연";
+      url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&cat2=A0208&cat3=A02080100&listYN=Y`;
+    } else if (this.$route.query.type === "3") {
+      this.title = "박람회";
+      url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&cat2=A0208&cat3=A02080600&listYN=Y`;
+    } else if (this.$route.query.type === "4") {
+      this.title = "전시회";
+      url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&cat2=A0208&cat3=A02080500&listYN=Y`;
+    } else if (this.$route.query.type === "5") {
+      this.title = "연극";
+      url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&cat2=A0208&cat3=A02080200&listYN=Y`;
+    }
     const headers1 = { "Content-type": "application/json" };
 
     const response1 = await axios.get(url1, { headers1 });
@@ -74,6 +107,7 @@ export default defineComponent({
 
   data() {
     return {
+      title: "",
       value1: 5,
       settings: {
         itemsToShow: 4,
@@ -108,5 +142,5 @@ export default defineComponent({
   padding: 3px;
 }
 </style>
-<style scoped src="../assets/css/car.css">
+<style scoped src="../assets/css/car1.css">
 </style>

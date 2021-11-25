@@ -3160,7 +3160,9 @@ export default {
     async handledatego(i) {
       if (i === 0) {
         console.log(this.choice1);
-        for (var date1 = 0; date1 < this.choice1.length - 1; date1++) {
+        const wait = (timeToDelay) =>
+          new Promise((resolve) => setTimeout(resolve, timeToDelay));
+        for (let date1 = 0; date1 < this.choice1.length - 1; date1++) {
           const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
             this.choice1[date1 + 1].xlocation
           }&endY=${
@@ -3179,6 +3181,7 @@ export default {
           this.choice1[date1].totalTime =
             parseInt(response.data.features[0].properties.totalTime / 60) +
             "분";
+          await wait(300);
         }
         console.log(this.choice1);
 
