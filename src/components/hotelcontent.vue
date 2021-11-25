@@ -4,7 +4,9 @@
     <div class="wrap">
       <div class="left1">
         <div class="stayheader">
-          <button class="mapbtn">위치보기</button>
+          <button class="mapbtn" @click="handlemapdialog(this.list)">
+            위치보기
+          </button>
           <h2>{{ this.list.title }}</h2>
           <p>{{ this.list.rank }}성급</p>
 
@@ -75,6 +77,19 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      v-model="dialogVisible1"
+      top="10vh"
+      width="50%"
+      :before-close="handleClose"
+      append-to-body
+      class="sasa"
+    >
+      <div class="mapdia">
+        <mapdialog v-bind:childVaule="this.chvalue" :key="abc" />
+        <div style="clear: both"></div>
+      </div>
+    </el-dialog>
     <vue-easy-lightbox
       scrollDisabled
       escDisabled
@@ -88,11 +103,13 @@
 </template>
 
 <script>
+import mapdialog from "./mapdialog.vue";
 import axios from "axios";
 import VueEasyLightbox from "vue-easy-lightbox";
 export default {
   components: {
     VueEasyLightbox,
+    mapdialog,
   },
   mounted() {
     const { IMP } = window;
@@ -100,6 +117,8 @@ export default {
   },
   data() {
     return {
+      abc: 1,
+      dialogVisible1: false,
       heart: false,
       token: sessionStorage.getItem("TOKEN"),
       impCode: "imp00284079",
@@ -121,6 +140,12 @@ export default {
     await this.goodinfo();
   },
   methods: {
+    handlemapdialog(item) {
+      this.abc += 1;
+      console.log(item);
+      this.chvalue = item;
+      this.dialogVisible1 = true;
+    },
     ordergo() {
       this.$router.push({
         path: "/order",
@@ -259,6 +284,9 @@ export default {
   padding: 20px;
   box-sizing: border-box;
   top: 150px;
+}
+.mapdia {
+  height: 500px !important;
 }
 .label3 {
   vertical-align: top;

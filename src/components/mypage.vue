@@ -103,6 +103,16 @@ import { Camera } from "@element-plus/icons";
 import axios from "axios";
 
 export default {
+  components: { Camera },
+  watch: {
+    async $route(to, form) {
+      console.log(to.path);
+      console.log(form.path);
+      this.$router.push(to.path);
+      this.currentPath = to.path;
+      await this.currentPath1();
+    },
+  },
   async created() {
     const url = `/REST/mypage/home`;
     const headers = { "Content-type": "application/json", token: this.token };
@@ -110,74 +120,15 @@ export default {
     console.log(response);
     this.list = response.data.member;
 
+    await this.currentPath1();
     // ========================================================
 
     // ========================================================
-    const currentPath = window.location.pathname;
-    console.log(currentPath);
-    if (currentPath === "/mypage") {
-      this.$router.push({ path: "/mypage/mypw" });
-    }
-    if (currentPath === "/mypage/myinfo") {
-      this.btn1 = "btn2";
-      this.btn2 = "btn1";
-      this.btn3 = "btn1";
-      this.btn4 = "btn1";
-      this.btn5 = "btn1";
-      this.btn6 = "btn1";
-    }
-    if (currentPath === "/mypage/mypw" || currentPath === "/mypage") {
-      this.btn1 = "btn1";
-      this.btn2 = "btn2";
-      this.btn3 = "btn1";
-      this.btn4 = "btn1";
-      this.btn5 = "btn1";
-      this.btn6 = "btn1";
-    }
-    if (
-      currentPath === "/mypage/myboard/mbwrite" ||
-      currentPath === "/mypage/myboard/mblike"
-    ) {
-      this.btn1 = "btn1";
-      this.btn2 = "btn1";
-      this.btn3 = "btn2";
-      this.btn4 = "btn1";
-      this.btn5 = "btn1";
-      this.btn6 = "btn1";
-    }
-    if (
-      currentPath === "/mypage/mylike/mmtr" ||
-      currentPath === "/mypage/mylike/mmho"
-    ) {
-      this.btn1 = "btn1";
-      this.btn2 = "btn1";
-      this.btn3 = "btn1";
-      this.btn4 = "btn2";
-      this.btn5 = "btn1";
-      this.btn6 = "btn1";
-    }
-    if (currentPath === "/mypage/mymap") {
-      this.btn1 = "btn1";
-      this.btn2 = "btn1";
-      this.btn3 = "btn1";
-      this.btn4 = "btn1";
-      this.btn5 = "btn2";
-      this.btn6 = "btn1";
-    }
-    if (currentPath === "/mypage/mydel") {
-      this.btn1 = "btn1";
-      this.btn2 = "btn1";
-      this.btn3 = "btn1";
-      this.btn4 = "btn1";
-      this.btn5 = "btn1";
-      this.btn6 = "btn2";
-    }
   },
-  components: {
-    Camera,
-  },
+
   data() {
     return {
+      currentPath: window.location.pathname,
       uploadImageFile: [],
       chk: [],
       btn1: "btn1",
@@ -193,6 +144,70 @@ export default {
   },
 
   methods: {
+    currentPath1() {
+      console.log(this.currentPath);
+      if (this.currentPath === "/mypage") {
+        this.$router.push({ path: "/mypage/myinfo" });
+      }
+      if (
+        this.currentPath === "/mypage/myinfo" ||
+        this.currentPath === "/mypage"
+      ) {
+        this.btn1 = "btn2";
+        this.btn2 = "btn1";
+        this.btn3 = "btn1";
+        this.btn4 = "btn1";
+        this.btn5 = "btn1";
+        this.btn6 = "btn1";
+      }
+      if (this.currentPath === "/mypage/mypw") {
+        this.btn1 = "btn1";
+        this.btn2 = "btn2";
+        this.btn3 = "btn1";
+        this.btn4 = "btn1";
+        this.btn5 = "btn1";
+        this.btn6 = "btn1";
+      }
+      if (
+        this.currentPath === "/mypage/myboard/mbwrite" ||
+        this.currentPath === "/mypage/myboard/mblike"
+      ) {
+        this.btn1 = "btn1";
+        this.btn2 = "btn1";
+        this.btn3 = "btn2";
+        this.btn4 = "btn1";
+        this.btn5 = "btn1";
+        this.btn6 = "btn1";
+      }
+      if (
+        this.currentPath === "/mypage/mylike/mmtr" ||
+        this.currentPath === "/mypage/mylike/mmho" ||
+        this.currentPath === "/mypage/mylike/mmfo"
+      ) {
+        this.btn1 = "btn1";
+        this.btn2 = "btn1";
+        this.btn3 = "btn1";
+        this.btn4 = "btn2";
+        this.btn5 = "btn1";
+        this.btn6 = "btn1";
+      }
+      if (this.currentPath === "/mypage/mymap") {
+        this.btn1 = "btn1";
+        this.btn2 = "btn1";
+        this.btn3 = "btn1";
+        this.btn4 = "btn1";
+        this.btn5 = "btn2";
+        this.btn6 = "btn1";
+      }
+      if (this.currentPath === "/mypage/mydel") {
+        this.btn1 = "btn1";
+        this.btn2 = "btn1";
+        this.btn3 = "btn1";
+        this.btn4 = "btn1";
+        this.btn5 = "btn1";
+        this.btn6 = "btn2";
+      }
+    },
     async infochange() {
       const url = `/REST/mypage/home`;
       const headers = { "Content-type": "application/json", token: this.token };

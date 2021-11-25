@@ -134,6 +134,23 @@
                 >마이페이지</router-link
               >
             </li>
+
+            <li>
+              <router-link
+                to="/login"
+                class="router"
+                v-if="logined === false"
+                @click="scrollToTop()"
+                >로그인</router-link
+              >
+              <router-link
+                to=""
+                @click="handlelogout"
+                class="router"
+                v-if="logined === true"
+                >로그아웃</router-link
+              >
+            </li>
             <li>
               <el-dropdown trigger="click" v-if="logined === true">
                 <span class="el-dropdown-link">
@@ -149,20 +166,6 @@
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-              <router-link
-                to="/login"
-                class="router"
-                v-if="logined === false"
-                @click="scrollToTop()"
-                >로그인</router-link
-              >
-              <router-link
-                to=""
-                @click="handlelogout"
-                class="router"
-                v-if="logined === true"
-                >로그아웃</router-link
-              >
             </li>
           </ul>
         </div>
@@ -699,12 +702,17 @@ export default {
 .nav_in_2 li {
   float: right;
   list-style: none;
-  margin-left: 30px;
+  margin: 5px;
   padding: 5px 20px;
 }
 .nav_in_2 li:nth-child(1) {
   border: 1px solid rgb(19, 77, 184);
   padding: 5px 25px;
+  margin-left: 5px;
+  transition: all 0.6s;
+}
+.nav_in_2 li:nth-child(3) {
+  padding: 5px 0px;
   transition: all 0.6s;
 }
 .nav_in_2 li:hover {

@@ -19,6 +19,7 @@ import boardreview from '@/components/review'
 import boardque from '@/components/que'
 import boardtravel from '@/components/travel'
 import order from '@/components/order'
+import mapdialog from '@/components/mapdialog'
 
 import vs from '@/components/vs'
 import vsseoul from '@/components/vsseoul'
@@ -57,6 +58,7 @@ const routes = [
     { path: '/airline', name: "airline", component: airline },
     { path: '/order', name: "order", component: order },
 
+    { path: '/mapdialog', name: "mapdialog", component: mapdialog },
     { path: '/car', name: "car", component: car },
     { path: '/car1', name: "car1", component: car1 },
     { path: '/carcontent', name: "carcontent", component: carcontent },

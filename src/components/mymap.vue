@@ -86,13 +86,16 @@ export default {
       token: sessionStorage.getItem("TOKEN"),
       list: [],
       page: 1,
-      
     };
   },
   async created() {
     await this.refresh();
   },
   methods: {
+    async handleCurrentChange(val) {
+      this.page = val;
+      await this.refresh();
+    },
     async refresh() {
       const url = `/REST/mypage/mytdtem?page=${this.page}&size=5`;
       const headers = { "Content-type": "application/json", token: this.token };

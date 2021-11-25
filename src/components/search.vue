@@ -94,10 +94,17 @@
               >
                 <div class="mytimg">
                   <img
+                    v-if="list.firstimage !== undefined"
                     :src="list.firstimage"
                     style="height: 100%; width: 100%"
                   />
+                  <img
+                    v-if="list.firstimage === undefined"
+                    :src="`//127.0.0.1:8080/REST/travel/select_image?no=${list.no}`"
+                    style="height: 100%; width: 100%"
+                  />
                 </div>
+
                 <div class="myt2">
                   <span class="mylist_text">{{ list.title }}</span>
                   <br />
@@ -925,7 +932,18 @@
                 </div>
               </div>
               <div class="choice_title1">
-                <div class="choice_text2">{{ item.title }}</div>
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
               </div>
             </div>
           </li>
@@ -940,10 +958,23 @@
           >
             <div class="choice_title">
               <div class="choice_no">
-                <div class="choice_no_in">NO.{{ index + 1 }}</div>
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
               </div>
               <div class="choice_title1">
-                <div class="choice_title1_in">{{ item.title }}</div>
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
               </div>
             </div>
           </li>
@@ -957,8 +988,25 @@
             :key="item"
           >
             <div class="choice_title">
-              <div class="choice_no">NO.{{ index + 1 }}</div>
-              <div class="choice_title1">{{ item.title }}</div>
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
+              </div>
             </div>
           </li>
         </ul>
@@ -971,8 +1019,25 @@
             :key="item"
           >
             <div class="choice_title">
-              <div class="choice_no">NO.{{ index + 1 }}</div>
-              <div class="choice_title1">{{ item.title }}</div>
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
+              </div>
             </div>
           </li>
         </ul>
@@ -985,8 +1050,25 @@
             :key="item"
           >
             <div class="choice_title">
-              <div class="choice_no">NO.{{ index + 1 }}</div>
-              <div class="choice_title1">{{ item.title }}</div>
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
+              </div>
             </div>
           </li>
         </ul>
@@ -999,8 +1081,25 @@
             :key="item"
           >
             <div class="choice_title">
-              <div class="choice_no">NO.{{ index + 1 }}</div>
-              <div class="choice_title1">{{ item.title }}</div>
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
+              </div>
             </div>
           </li>
         </ul>
@@ -1013,8 +1112,25 @@
             :key="item"
           >
             <div class="choice_title">
-              <div class="choice_no">NO.{{ index + 1 }}</div>
-              <div class="choice_title1">{{ item.title }}</div>
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
+              </div>
             </div>
           </li>
         </ul>
@@ -1027,8 +1143,25 @@
             :key="item"
           >
             <div class="choice_title">
-              <div class="choice_no">NO.{{ index + 1 }}</div>
-              <div class="choice_title1">{{ item.title }}</div>
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
+              </div>
             </div>
           </li>
         </ul>
@@ -1041,8 +1174,25 @@
             :key="item"
           >
             <div class="choice_title">
-              <div class="choice_no">NO.{{ index + 1 }}</div>
-              <div class="choice_title1">{{ item.title }}</div>
+              <div class="choice_no">
+                <div class="choice_no_in">
+                  <div class="choice_text1">NO.{{ index + 1 }}</div>
+                </div>
+              </div>
+              <div class="choice_title1">
+                <div class="choice_title1_in">
+                  <div class="choice_text2">{{ item.title }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="totalDT">
+              <div class="totaldt1" v-if="item.totalDistance !== undefined">
+                ↓
+              </div>
+              <div class="totaldt2" v-if="item.totalDistance !== undefined">
+                거리 : {{ item.totalDistance }}<br />
+                시간 : {{ item.totalTime }}
+              </div>
             </div>
           </li>
         </ul>
@@ -1356,7 +1506,12 @@
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <input type="file" @change="imagechange()" ref="file" name="file" />
+        <input
+          type="file"
+          @change="imagechange(event)"
+          ref="file"
+          name="file"
+        />
         <el-button @click="dialogVisible = false">취소</el-button>
         <el-button type="primary" @click="mapfinish">완료</el-button>
       </span>
@@ -1581,6 +1736,7 @@ export default {
       numberp: [],
       coordinate: [],
       allchoice: [],
+
       addr: "",
       loadtexton: false,
       options: {
@@ -1747,28 +1903,234 @@ export default {
       const response = await axios.get(url, body, { headers1 });
       console.log(response.data.coordinateInfo.coordinate[0].lat);
       console.log(response.data.coordinateInfo.coordinate[0].lon);
+      console.log(this.pluslocation);
       this.plusmarker.push({
         title: this.pluslocation,
+
         xlocation: Number(response.data.coordinateInfo.coordinate[0].lon),
         ylocation: Number(response.data.coordinateInfo.coordinate[0].lat),
       });
-      this.choice1.push(this.plusmarker[0]);
-      this.markers1.push({
-        id: this.pluslocation,
-        position: {
-          lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
-          lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
-        },
-        icon: `http://127.0.0.1:8080/REST/travel/image${
-          this.choice1.length + 1
-        }`,
-      });
-      for (var nam = 0; nam < this.markers1.length; nam++) {
-        this.markers1[nam].icon = `http://127.0.0.1:8080/REST/travel/image${
-          nam + 1
-        }`;
-        this.markers.push(this.markers1[nam]);
+
+      if (this.num3 === 1) {
+        this.choice1.push(this.plusmarker[0]);
+        console.log(this.choice1);
+        this.markers1.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice1.length + 1
+          }`,
+        });
+
+        for (var nam = 0; nam < this.markers1.length; nam++) {
+          this.markers1[nam].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam + 1
+          }`;
+          this.markers.push(this.markers1[nam]);
+        }
       }
+
+      if (this.num3 === 2) {
+        this.choice2.push(this.plusmarker[0]);
+        console.log(this.choice2);
+        this.markers2.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice2.length + 1
+          }`,
+        });
+
+        for (var nam2 = 0; nam2 < this.markers2.length; nam2++) {
+          this.markers2[nam2].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam2 + 1
+          }`;
+          this.markers.push(this.markers2[nam2]);
+        }
+      }
+
+      if (this.num3 === 3) {
+        this.choice3.push(this.plusmarker[0]);
+        console.log(this.choice3);
+        this.markers3.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice3.length + 1
+          }`,
+        });
+
+        for (var nam3 = 0; nam3 < this.markers3.length; nam3++) {
+          this.markers3[nam3].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam3 + 1
+          }`;
+          this.markers.push(this.markers3[nam3]);
+        }
+      }
+
+      if (this.num3 === 4) {
+        this.choice4.push(this.plusmarker[0]);
+        console.log(this.choice4);
+        this.markers4.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice4.length + 1
+          }`,
+        });
+
+        for (var nam4 = 0; nam4 < this.markers4.length; nam4++) {
+          this.markers4[nam4].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam4 + 1
+          }`;
+          this.markers.push(this.markers4[nam4]);
+        }
+      }
+
+      if (this.num3 === 5) {
+        this.choice5.push(this.plusmarker[0]);
+        console.log(this.choice5);
+        this.markers5.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice5.length + 1
+          }`,
+        });
+
+        for (var nam5 = 0; nam5 < this.markers5.length; nam5++) {
+          this.markers5[nam5].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam5 + 1
+          }`;
+          this.markers.push(this.markers5[nam5]);
+        }
+      }
+
+      if (this.num3 === 6) {
+        this.choice6.push(this.plusmarker[0]);
+        console.log(this.choice6);
+        this.markers6.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice6.length + 1
+          }`,
+        });
+
+        for (var nam6 = 0; nam6 < this.markers6.length; nam6++) {
+          this.markers6[nam6].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam6 + 1
+          }`;
+          this.markers.push(this.markers6[nam6]);
+        }
+      }
+
+      if (this.num3 === 7) {
+        this.choice7.push(this.plusmarker[0]);
+        console.log(this.choice7);
+        this.markers7.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice7.length + 1
+          }`,
+        });
+
+        for (var nam7 = 0; nam7 < this.markers7.length; nam7++) {
+          this.markers7[nam7].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam7 + 1
+          }`;
+          this.markers.push(this.markers7[nam7]);
+        }
+      }
+
+      if (this.num3 === 8) {
+        this.choice8.push(this.plusmarker[0]);
+        console.log(this.choice8);
+        this.markers8.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice8.length + 1
+          }`,
+        });
+
+        for (var nam8 = 0; nam8 < this.markers8.length; nam8++) {
+          this.markers8[nam8].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam8 + 1
+          }`;
+          this.markers.push(this.markers8[nam8]);
+        }
+      }
+
+      if (this.num3 === 9) {
+        this.choice9.push(this.plusmarker[0]);
+        console.log(this.choice9);
+        this.markers9.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice9.length + 1
+          }`,
+        });
+
+        for (var nam9 = 0; nam9 < this.markers9.length; nam9++) {
+          this.markers9[nam9].icon = `http://127.0.0.1:8080/REST/travel/image${
+            nam9 + 1
+          }`;
+          this.markers.push(this.markers9[nam9]);
+        }
+      }
+
+      if (this.num3 === 10) {
+        this.choice10.push(this.plusmarker[0]);
+        console.log(this.choice10);
+        this.markers10.push({
+          id: this.pluslocation,
+          position: {
+            lat: Number(response.data.coordinateInfo.coordinate[0].lat), //위도   36
+            lng: Number(response.data.coordinateInfo.coordinate[0].lon), // 경도   129
+          },
+          icon: `http://127.0.0.1:8080/REST/travel/image${
+            this.choice10.length + 1
+          }`,
+        });
+
+        for (var nam10 = 0; nam10 < this.markers10.length; nam10++) {
+          this.markers10[
+            nam10
+          ].icon = `http://127.0.0.1:8080/REST/travel/image${nam10 + 1}`;
+          this.markers.push(this.markers10[nam10]);
+        }
+      }
+
       console.log(this.token);
       const url1 = `/REST/travel/TDtem/insert?type=${this.mapnum}&city=${this.areacode}`;
       const headers = {
@@ -1784,8 +2146,10 @@ export default {
 
       const response1 = await axios.post(url1, body1, { headers });
       console.log(response1);
-      this.dialogVisible = false;
-      await this.rightrefresh();
+      if (response1.data.status === 200) {
+        this.dialogVisible = false;
+        await this.rightrefresh();
+      }
     },
     dorofull(event) {
       var doro = event.currentTarget.textContent;
@@ -2834,9 +3198,31 @@ export default {
           this.markers.push(this.markers1[nm1]);
         }
       } else if (i === 1) {
+        console.log(this.choice1);
+        for (var date2 = 0; date2 < this.choice2.length - 1; date2++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice2[date2 + 1].xlocation
+          }&endY=${
+            this.choice2[date2 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice2[date2].xlocation
+          }&startY=${this.choice2[date2].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice2[date2].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice2[date2].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         console.log(this.choice2);
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth2";
+
         this.markers = [];
         for (var aaa = 0; aaa < this.markers2.length; aaa++) {
           this.markers2[aaa].icon = `http://127.0.0.1:8080/REST/travel/image${
@@ -2847,6 +3233,26 @@ export default {
           this.markers.push(this.markers2[nw1]);
         }
       } else if (i === 2) {
+        for (var date3 = 0; date3 < this.choice3.length - 1; date3++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice3[date3 + 1].xlocation
+          }&endY=${
+            this.choice3[date3 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice3[date3].xlocation
+          }&startY=${this.choice3[date3].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice3[date3].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice3[date3].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth3";
         this.markers = [];
@@ -2859,6 +3265,26 @@ export default {
           this.markers.push(this.markers3[bbb1]);
         }
       } else if (i === 3) {
+        for (var date4 = 0; date4 < this.choice4.length - 1; date4++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice4[date4 + 1].xlocation
+          }&endY=${
+            this.choice4[date4 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice4[date4].xlocation
+          }&startY=${this.choice4[date4].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice4[date4].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice4[date4].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth4";
         this.markers = [];
@@ -2871,6 +3297,26 @@ export default {
           this.markers.push(this.markers4[ccc1]);
         }
       } else if (i === 4) {
+        for (var date5 = 0; date5 < this.choice5.length - 1; date5++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice5[date5 + 1].xlocation
+          }&endY=${
+            this.choice5[date5 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice5[date5].xlocation
+          }&startY=${this.choice5[date5].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice5[date5].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice5[date5].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth5";
         for (var ddd = 0; ddd < this.markers5.length; ddd++) {
@@ -2882,6 +3328,26 @@ export default {
           this.markers.push(this.markers5[ddd1]);
         }
       } else if (i === 5) {
+        for (var date6 = 0; date6 < this.choice6.length - 1; date6++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice6[date6 + 1].xlocation
+          }&endY=${
+            this.choice6[date6 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice6[date6].xlocation
+          }&startY=${this.choice6[date6].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice6[date6].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice6[date6].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth6";
         for (var fff = 0; fff < this.markers6.length; fff++) {
@@ -2893,6 +3359,26 @@ export default {
           this.markers.push(this.markers6[fff1]);
         }
       } else if (i === 6) {
+        for (var date7 = 0; date7 < this.choice7.length - 1; date7++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice7[date7 + 1].xlocation
+          }&endY=${
+            this.choice7[date7 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice7[date7].xlocation
+          }&startY=${this.choice7[date7].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice7[date7].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice7[date7].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth7";
         for (var ggg = 0; ggg < this.markers7.length; ggg++) {
@@ -2904,6 +3390,26 @@ export default {
           this.markers.push(this.markers7[ggg1]);
         }
       } else if (i === 7) {
+        for (var date8 = 0; date8 < this.choice8.length - 1; date8++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice8[date8 + 1].xlocation
+          }&endY=${
+            this.choice8[date8 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice8[date8].xlocation
+          }&startY=${this.choice8[date8].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice8[date8].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice8[date8].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth8";
         for (var hhh = 0; hhh < this.markers8.length; hhh++) {
@@ -2915,6 +3421,26 @@ export default {
           this.markers.push(this.markers8[hhh1]);
         }
       } else if (i === 8) {
+        for (var date9 = 0; date9 < this.choice9.length - 1; date9++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice9[date9 + 1].xlocation
+          }&endY=${
+            this.choice9[date9 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice9[date9].xlocation
+          }&startY=${this.choice9[date9].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice9[date9].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice9[date9].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth9";
         for (var jjj = 0; jjj < this.markers9.length; jjj++) {
@@ -2926,6 +3452,26 @@ export default {
           this.markers.push(this.markers9[jjj1]);
         }
       } else if (i === 9) {
+        for (var date10 = 0; date10 < this.choice10.length - 1; date10++) {
+          const url = `https://apis.openapi.sk.com/tmap/routes?version=1&speed=10&callback=function&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&roadType=32&directionOption=0&endX=${
+            this.choice10[date10 + 1].xlocation
+          }&endY=${
+            this.choice10[date10 + 1].ylocation
+          }&reqCoordType=WGS84GEO&endRpFlag=G&startX=${
+            this.choice10[date10].xlocation
+          }&startY=${this.choice10[date10].ylocation}`;
+          const headers = { "Content-type": "application/json" };
+
+          const response = await axios.get(url, { headers });
+          console.log(response.data.features[0].properties.totalDistance);
+          console.log(response.data.features[0].properties.totalTime);
+
+          this.choice10[date10].totalDistance =
+            response.data.features[0].properties.totalDistance + "m";
+          this.choice10[date10].totalTime =
+            parseInt(response.data.features[0].properties.totalTime / 60) +
+            "분";
+        }
         this.nltext2css = "nltext2";
         this.lastleft_bthcss = "lastleft_bth10";
         for (var kkk = 0; kkk < this.markers10.length; kkk++) {
@@ -3164,6 +3710,7 @@ export default {
     },
     async delalllist() {},
     async listpush(i) {
+      console.log(i);
       if (this.choice1.length > 11) {
         alert("일일 여행지 선택은 12개를 초과할수 없습니다");
         return;
@@ -3195,6 +3742,7 @@ export default {
         alert("일일 여행지 선택은 12개를 초과할수 없습니다");
         return;
       }
+      console.log(this.choice1);
       // ==========================================================
       if (this.dtm === false) {
         await this.showmarker();

@@ -55,48 +55,21 @@
 
 <script>
 export default {
-  created() {
-    const currentPath = window.location.pathname;
-    console.log(currentPath);
-    if (currentPath === "/board/free") {
-      this.oncolor1 = "btnon";
-      this.oncolor2 = "btnoff";
-      this.oncolor3 = "btnoff";
-      this.oncolor4 = "btnoff";
-      this.oncolor5 = "btnoff";
-    }
-    if (currentPath === "/board/review") {
-      this.oncolor1 = "btnoff";
-      this.oncolor2 = "btnon";
-      this.oncolor3 = "btnoff";
-      this.oncolor4 = "btnoff";
-      this.oncolor5 = "btnoff";
-    }
-    if (currentPath === "/board/info") {
-      this.oncolor1 = "btnoff";
-      this.oncolor2 = "btnoff";
-      this.oncolor3 = "btnon";
-      this.oncolor4 = "btnoff";
-      this.oncolor5 = "btnoff";
-    }
-    if (currentPath === "/board/que") {
-      this.oncolor1 = "btnoff";
-      this.oncolor2 = "btnoff";
-      this.oncolor3 = "btnoff";
-      this.oncolor4 = "btnon";
-      this.oncolor5 = "btnoff";
-    }
-
-    if (currentPath === "/board/travel") {
-      this.oncolor1 = "btnoff";
-      this.oncolor2 = "btnoff";
-      this.oncolor3 = "btnoff";
-      this.oncolor4 = "btnoff";
-      this.oncolor5 = "btnon";
-    }
+  watch: {
+    async $route(to, form) {
+      console.log(to.path);
+      console.log(form.path);
+      this.$router.push(to.path);
+      this.currentPath = to.path;
+      await this.currentPath1();
+    },
+  },
+  async created() {
+    await this.currentPath1();
   },
   data() {
     return {
+      currentPath: window.location.pathname,
       currentView: "free", // 처음 시작시 메뉴
       menus: [
         "/board/free",
@@ -117,6 +90,44 @@ export default {
     };
   },
   methods: {
+    currentPath1() {
+      if (this.currentPath === "/board/free") {
+        this.oncolor1 = "btnon";
+        this.oncolor2 = "btnoff";
+        this.oncolor3 = "btnoff";
+        this.oncolor4 = "btnoff";
+        this.oncolor5 = "btnoff";
+      }
+      if (this.currentPath === "/board/review") {
+        this.oncolor1 = "btnoff";
+        this.oncolor2 = "btnon";
+        this.oncolor3 = "btnoff";
+        this.oncolor4 = "btnoff";
+        this.oncolor5 = "btnoff";
+      }
+      if (this.currentPath === "/board/info") {
+        this.oncolor1 = "btnoff";
+        this.oncolor2 = "btnoff";
+        this.oncolor3 = "btnon";
+        this.oncolor4 = "btnoff";
+        this.oncolor5 = "btnoff";
+      }
+      if (this.currentPath === "/board/que") {
+        this.oncolor1 = "btnoff";
+        this.oncolor2 = "btnoff";
+        this.oncolor3 = "btnoff";
+        this.oncolor4 = "btnon";
+        this.oncolor5 = "btnoff";
+      }
+
+      if (this.currentPath === "/board/travel") {
+        this.oncolor1 = "btnoff";
+        this.oncolor2 = "btnoff";
+        this.oncolor3 = "btnoff";
+        this.oncolor4 = "btnoff";
+        this.oncolor5 = "btnon";
+      }
+    },
     changeMenu(val) {
       this.free = this.menus[val];
       if (val === 0) {
