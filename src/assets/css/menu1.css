@@ -36,9 +36,13 @@
   }
   .carousel__item {
     width: 80%;
-    height:300px;
-    background: #ccc;
-  }
+    height:290px;
+    background: rgb(255, 255, 255);
+    cursor: pointer;
+    }
+    .carousel__item:hover .myimg{
+      opacity: 0.5;
+    }
   .box2 {
     width: 69.4%;
     margin: 0 auto;
@@ -343,4 +347,48 @@ height: 30%;
         top:-60px;
         left:50%;
         transform: translateX(-50%);
+      }
+      .myimg{
+        width:100%;
+        height: 100%;
+      }
+      .img_box2{
+        width:100%;
+       height: 55%;
+      }
+      .redfont{
+        color:red;
+        font-size:13px;
+      }
+      .contentbox{
+        height:50%;
+       padding-top:3px;
+        font-size:11px;
+        text-align: left;
+      }
+      .text_box2{
+        height: 40%;
+        padding-top:5px;
+        text-overflow:ellipsis;
+        border-right:1px solid rgb(235, 234, 234);
+        border-left:1px solid rgb(235, 234, 234);
+        border-bottom: 1px solid rgb(235, 234, 234);
+        padding:5px 10px 0px 10px;
+    
+      }
+      .bigfont{
+        font-weight:bold;
+        padding-top:5px;
+        font-size:14px;
+
+       
+      
+      }
+      .nicname{
+        text-align: right; 
+        font-size:12px;
+      }
+     
+      .review{
+
       }

@@ -94,8 +94,34 @@
           :wrapAround="true"
           :breakpoints="breakpoints"
         >
-          <Slide v-for="slide in 6" :key="slide">
-            <div class="carousel__item">{{ slide }}</div>
+          <Slide v-for="slide in reviewlist" :key="slide">
+            <div class="carousel__item">
+              <div class="img_box2">
+                <img
+                  :src="`http://127.0.0.1:8080/REST/board/select_image?no=${slide.no}`"
+                  class="myimg"
+                />
+              </div>
+              <div class="text_box2">
+                <p class="bfp">
+                  <span class="bigfont"> {{ slide.title }}</span
+                  ><span class="redfont" v-if="slide.reply !== 0"
+                    >[{{ slide.reply }}]</span
+                  >
+                </p>
+                <div class="contentbox" v-html="slide.review"></div>
+
+                <div class="nicname">
+                  <el-icon style="font-size: 13px; vertical-align: -2px">
+                    <Avatar />
+                  </el-icon>
+                  {{ slide.member.nicname }}님
+                  <el-icon style="font-size: 13px; vertical-align: -2px">
+                    <AlarmClock /> </el-icon
+                  >{{ slide.simple }}
+                </div>
+              </div>
+            </div>
           </Slide>
 
           <template #addons>
@@ -109,7 +135,9 @@
 </template>
 
 <script>
-// import axios from "axios";
+import { AlarmClock } from "@element-plus/icons";
+import { Avatar } from "@element-plus/icons";
+import axios from "axios";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 export default {
@@ -118,9 +146,13 @@ export default {
     Slide,
     Pagination,
     Navigation,
+    AlarmClock,
+    Avatar,
   },
   data() {
     return {
+      reviewlist1: "",
+      reviewlist: [],
       visible: false,
       breakpoints: {
         // 700px and up
@@ -137,7 +169,36 @@ export default {
       },
     };
   },
+  async created() {
+    await this.boardlist();
+  },
   methods: {
+    async boardlist() {
+      const url = `/REST/board/select_all?type=title&orderby=latest&keyword=&size=5&page=1&category=review`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      this.reviewlist = response.data.list;
+      console.log(this.reviewlist);
+      for (var i = 0; i < this.reviewlist.length; i++) {
+        const review = this.reviewlist[i].content.replace(/(<([^>]+)>)/gi, "");
+        const review1 = review.substr(0, 43) + "...";
+        this.reviewlist[i].review = review1;
+
+        const rgd = new Date(this.reviewlist[i].regdate);
+
+        const simple =
+          rgd.getFullYear() +
+          "-" +
+          ("0" + (rgd.getMonth() + 1)).slice(-2) +
+          "-" +
+          ("0" + rgd.getDate()).slice(-2);
+        this.reviewlist[i].simple = simple;
+      }
+
+      console.log(this.reviewlist);
+    },
     handlebtn() {
       this.$emit("dialog", true);
     },

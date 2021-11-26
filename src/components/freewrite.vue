@@ -14,13 +14,21 @@
       ><br />
       <label>제목</label
       ><input type="text" class="title" v-model="title" /><br />
-      <label>대표이미지</label
-      ><input
+      <label class="imlabel">대표이미지</label>
+
+      <input
         ref="file"
+        class="nullfile"
+        id="ex_file"
         type="file"
         name="file"
         @change="imagechange()"
-      /><br />
+      />
+      <div class="filebox">
+        <label class="filelabel" for="ex_file">UPLOAD</label>
+        <span class="imagename">{{ this.imagename }}</span>
+      </div>
+      <br />
       <label>내용</label>
 
       <div class="ckeditor">
@@ -55,6 +63,7 @@ export default {
   },
   data() {
     return {
+      imagename: "",
       list: [],
       imagefile: "",
       category: "",
@@ -73,6 +82,7 @@ export default {
     async imagechange() {
       this.imagefile = this.$refs.file.files[0];
       console.log(this.imagefile);
+      this.imagename = this.imagefile.name;
     },
     // 글작성 POST
     async handleconfirm() {
@@ -197,5 +207,45 @@ label {
 .hr {
   margin: 20px 0px;
   border-bottom: 1px solid #ccc;
+}
+.nullfile {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+.filelabel {
+  background: #2752be;
+  display: inline-block;
+  width: unset;
+  display: inline-block;
+
+  text-align: center;
+  box-sizing: border-box;
+  padding: 9px 10px;
+  font-size: 13px;
+  color: white;
+  margin-bottom: unset;
+  border-radius: 3px 0px 0px 3px;
+}
+.filelabel:hover {
+  background: #0e2e7e;
+}
+
+.filebox {
+  display: inline-block;
+  width: 40%;
+
+  height: 36.4px;
+  border: 1px solid #dddddd;
+  box-sizing: border-box;
+  border-radius: 3px 3px 3px 3px;
+}
+.imagename {
+  margin-left: 20px;
 }
 </style>

@@ -117,3 +117,40 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
+  .lobtn{
+      width:11.1%;
+      height: 40px;
+      border:1px solid #ddd;
+      box-shadow: 0px 0px 2px 2px rgb(0 0 0 / 5%);
+      cursor: pointer;
+     background-color: white;
+     border-radius: 10px;
+     margin-top:30px;
+    }
+    .lobtn:hover{
+        background: rgb(224, 224, 224);
+    }
+    .lobth:active{
+        background-color: aqua;
+    }
+    .nodata{
+        width:100%;
+        height: 200px;
+        text-align: center;
+        padding-top:100px;
+    }
+    .pluslistdiv{
+        text-align: center;
+        width:100%;
+    }
+    .abcc_wrap{
+        height: 100%;
+        overflow: hidden;
+    }
+    .plbtn{
+        padding:10px 20px;
+        background-color: rgb(104, 104, 231);
+        color:white;
+        border:none;
+        cursor: pointer;
+    }

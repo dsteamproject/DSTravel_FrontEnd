@@ -193,7 +193,11 @@
               >
             </li>
             <li>
-              <router-link to="" :class="routerclass3" @click="scrollToTop(3)"
+              <router-link
+                to=""
+                :class="routerclass3"
+                @click="scrollToTop(3)"
+                class="chu"
                 >여행추천</router-link
               >
             </li>
@@ -1066,5 +1070,19 @@ h3 {
   clear: both;
   width: 100%;
   margin-top: 70px;
+}
+.chu {
+  animation: downicon 2s infinite;
+}
+@keyframes downicon {
+  0% {
+    color: black;
+  }
+  50% {
+    color: rgb(180, 180, 46);
+  }
+  100% {
+    color: black;
+  }
 }
 </style>

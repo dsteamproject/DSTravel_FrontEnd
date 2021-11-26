@@ -4,7 +4,6 @@
     <div class="wrap">
       <div class="left1">
         <div class="stayheader">
-          <button class="mapbtn">위치보기</button>
           <h2>{{ this.list.title }}</h2>
           <p>tel : {{ this.list.tel }}</p>
 
@@ -34,19 +33,25 @@
           <div class="cho1">
             <label>소개</label>
             <ul class="info">
-              <li>{{ this.list2.agelimit }}</li>
+              <li><span v-html="this.list.overview"></span></li>
+              <li v-if="this.list2.agelimit !== undefined">
+                <span v-html="this.list2.agelimit"></span>
+              </li>
               <li>
-                {{ this.list2.usetimefestival }}
+                <span v-html="this.list2.usetimefestival"> </span>
               </li>
               <li v-if="this.list2.eventhomepage === ''">
-                {{ this.list2.eventhomepage }}
+                <span v-html="this.list2.eventhomepage"></span>
               </li>
             </ul>
             <div class="hr"></div>
-            <label>시간</label
-            ><span v-if="this.list2.playtime !== ''">
-              {{ this.list2.playtime }}</span
+            <label class="label3">시간</label
+            ><span
+              class="cancel"
+              v-if="this.list2.playtime !== ''"
+              v-html="this.list2.playtime"
             >
+            </span>
             <span v-if="this.list2.playtime === ''"> -</span>
             <div class="hr"></div>
             <label class="label3">환불규정</label>
@@ -66,18 +71,31 @@
       </div>
       <div class="right1_99">
         <div class="right_in1">
-          <span>무료/ 1인</span><span class="heart">♡</span
-          ><span class="heart">♥</span>
+          <span class="usertitle" v-html="this.list2.usetimefestival"></span>
 
           <br />
-          <button class="ribtn">예약하기</button>
-          <button class="ribtn2" @click="goodup">위시리스트에 담기</button>
-          <span class="ritext"
-            >{{ this.list.good }}명이 이 상품을 위시리스트에 담았습니다.</span
+          <a :href="this.link" target="_blank"
+            ><button class="ribtn">해당 사이트로 이동</button></a
           >
+          <button class="ribtn2" @click="goodup">위치보기</button>
         </div>
       </div>
+      <div class="both"></div>
     </div>
+
+    <el-dialog
+      v-model="dialogVisible1"
+      top="10vh"
+      width="50%"
+      :before-close="handleClose"
+      append-to-body
+      class="sasa"
+    >
+      <div class="mapdia">
+        <mapdialog v-bind:childVaule="this.chvalue" :key="abc" />
+        <div style="clear: both"></div>
+      </div>
+    </el-dialog>
     <vue-easy-lightbox
       scrollDisabled
       escDisabled
@@ -91,14 +109,19 @@
 </template>
 
 <script>
+import mapdialog from "./mapdialog.vue";
 import axios from "axios";
 import VueEasyLightbox from "vue-easy-lightbox";
 export default {
   components: {
     VueEasyLightbox,
+    mapdialog,
   },
   data() {
     return {
+      dialogVisible1: false,
+      abc: 0,
+      link: "",
       token: sessionStorage.getItem("TOKEN"),
       list: [],
       list2: [],
@@ -126,17 +149,25 @@ export default {
       const response2 = await axios.get(url2, { headers2 });
       console.log(response2.data.response.body.items.item);
       this.list = response2.data.response.body.items.item;
+      console.log(this.list.overview);
+
+      console.log(this.list.homepage);
+      this.link2 = this.list.homepage
+        .replace(/(<([^>]+)>)/gi, "")
+        .replace("https://", "")
+        .replace("http://", "");
+
+      this.link = "https://" + this.link2;
     },
     async goodup() {
-      const url1 = `/REST/travel/good?contentid=${this.$route.query.code}`;
-      const headers = {
-        "Content-type": "application/json",
-        token: this.token,
+      this.abc += 1;
+
+      this.chvalue = {
+        title: this.list.title,
+        ylocation: this.list.mapy,
+        xlocation: this.list.mapx,
       };
-      const body = {};
-      const response1 = await axios.post(url1, body, { headers });
-      console.log(response1);
-      await this.refresh();
+      this.dialogVisible1 = true;
     },
     showMultiple() {
       this.imgs = [
@@ -194,6 +225,16 @@ export default {
 </script>
 
 <style scoped>
+.usertitle {
+  font-size: 13px;
+  font-weight: bold;
+}
+.both {
+  clear: both;
+}
+.heart_box {
+  overflow: hidden;
+}
 .heart {
   float: right;
   color: red;
@@ -208,12 +249,13 @@ export default {
 .ribtn2 {
   width: 100%;
   height: 45px;
-  border: 1px solid rgb(53, 52, 52);
-  background: #ffffff;
+  border: 1px solid #ddd;
+  background: #f1f1f1;
   color: black;
   margin-top: 30px;
   border-radius: 5px;
   cursor: pointer;
+  color: rgb(0, 0, 0);
 }
 .ribtn {
   width: 100%;
@@ -252,6 +294,7 @@ export default {
 .info {
   display: inline-block;
   vertical-align: top;
+  width: 70%;
 }
 label {
   width: 150px;
@@ -327,14 +370,18 @@ label {
   border: none;
   cursor: pointer;
 }
+.mapdia {
+  height: 500px !important;
+}
 .wrap {
   width: 1060px;
   margin: 0 auto;
+  display: flex;
 }
 .left1 {
   margin-top: 50px;
   width: 700px;
-  float: left;
+
   margin-right: 30px;
   height: auto;
 }
@@ -342,7 +389,5 @@ label {
   position: relative;
   margin-top: 50px;
   width: 330px;
-  height: 1000px;
-  float: left;
 }
 </style>

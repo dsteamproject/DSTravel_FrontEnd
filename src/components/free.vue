@@ -155,38 +155,6 @@ export default {
       this.todays = 2;
     },
     async searchclick() {
-      //   const url = `/REST/board/select_all?type=${this.type}&orderby=${this.orderby}&keyword=${this.keyword}&size=${this.size}&page=${this.page}&category=${this.category}`;
-      //   const headers = { "Content-type": "application/json" };
-      //   const response = await axios.get(url, { headers });
-      //   console.log(response);
-      //  if (response.data.status === 200) {
-      //     this.list = response.data.list;
-      //     this.pages = Number(response.data.cnt) * 10;
-      //     for (var i = 0; i < this.list.length; i++) {
-      //       const regdate1 = this.list[i].regdate
-
-      //       const dada = new Date(regdate1)
-      //       console.log(dada);
-      //          const simpledate = dada.getFullYear() + "-" + ("0" + (dada.getMonth() + 1)).slice(-2) + "-" + ("0" + dada.getDate()).slice(-2)
-
-      // const simpledate2 =("0"+ dada.getHours()).slice(-2) +":"+ ("0" + dada.getMinutes()).slice(-2);
-      // const simpledate3 = ("0"+ dada.getHours()).slice(-2)
-      //        console.log(simpledate);
-      //           console.log(simpledate2);
-      //                  const todaydate = new Date();
-      //        const todaydate2 =("0"+ todaydate.getHours()).slice(-2)
-      //        console.log("오늘현재시간",todaydate2)  // 15
-      //        this.todayhours = todaydate2;
-      //        console.log("작성 시간",simpledate3)  // 12
-      //        const Timeremaining = Number(todaydate2) - Number(simpledate3)
-      //        console.log(Timeremaining)
-      //       this.list[i].regdate2 = simpledate;
-      //       this.list[i].regdate3 = simpledate2;
-      //       this.list[i].hours = Timeremaining;
-
-      //    }
-
-      //  }
       await this.start();
     },
     async start() {

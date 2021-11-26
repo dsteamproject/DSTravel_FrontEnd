@@ -59,7 +59,7 @@ export default {
     async $route(to, form) {
       console.log(to.path);
       console.log(form.path);
-      this.$router.push(to.path);
+
       this.currentPath = to.path;
       await this.currentPath1();
     },
