@@ -50,6 +50,11 @@
 
       <div class="reply_box">
         <div class="likebox">
+          <img
+            @click="likeup"
+            class="likeicon2"
+            src="../assets/report.png"
+          /><button class="report" @click="report">신고하기</button>
           <img @click="likeup" class="likeicon" src="../assets/like.png" /><span
             style="vertical-align: 5px"
           >
@@ -163,27 +168,64 @@
       width="30%"
       :before-close="handleClose"
     >
-      <span>현재 게시글을 삭제하시겠습니까?</span>
+      <div class="delbox">
+        <h2>게시물 삭제</h2>
+        <div class="hr4"></div>
+        <p>선택한 게시물을 정말 삭제 하시겠습니까?</p>
+        <p>한번 삭제한 자료는 복구할 수 없습니다.</p>
+      </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">취소</el-button>
-          <el-button type="primary" @click="handledelete">삭제</el-button>
+          <button class="no_btn" @click="dialogVisible = false">취소</button>
+          <button class="del_btn" @click="handledelete">삭제</button>
         </span>
       </template>
     </el-dialog>
 
-    <!-- 댓글 삭제 다이얼로그  -->
+    <!-- 신고하기 다이얼로그 -->
+
     <el-dialog
-      v-model="dialogVisible1"
-      title="댓글 삭제"
-      width="30%"
+      v-model="dialogVisible2"
+      title="글 삭제"
+      width="23%"
       :before-close="handleClose"
     >
-      <span>선택하신 댓글을 삭제하시겠습니까?</span>
+      <div class="delbox2">
+        <div class="dlbti">
+          <p>신고하기</p>
+        </div>
+        <div class="dlbti2">
+          <p>신고사유를 선택해주세요</p>
+          <div class="rp1">
+            <el-radio v-model="report1" label="1"
+              >게시판 목적과 무관한 글</el-radio
+            >
+          </div>
+          <div class="rp1">
+            <el-radio v-model="report1" label="2"
+              >악의적 용설이 포함된 글</el-radio
+            >
+          </div>
+          <div class="rp1">
+            <el-radio v-model="report1" label="3"
+              >성적인 글 및 성희롱 발언</el-radio
+            >
+          </div>
+          <div class="rp1">
+            <el-radio v-model="report1" label="4"
+              >홍보 및 상업적인 내용이 들어간 글</el-radio
+            >
+          </div>
+          <div class="rp1">
+            <el-radio v-model="report1" label="5">기타</el-radio>
+          </div>
+          <textarea class="area"></textarea>
+        </div>
+      </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible1 = false">취소</el-button>
-          <el-button type="primary" @click="replydelete(i)">삭제</el-button>
+          <button class="no_btn" @click="dialogVisible2 = false">취소</button>
+          <button class="del_btn" type="primary" @click="abc">신고</button>
         </span>
       </template>
     </el-dialog>
@@ -195,11 +237,13 @@ import axios from "axios";
 export default {
   data() {
     return {
+      report1: "",
       repch: "off",
       no: this.$route.query.no,
       list: [],
       dialogVisible: false,
       dialogVisible1: false,
+      dialogVisible2: false,
       token: sessionStorage.getItem("TOKEN"),
       prev1: "",
       next1: "",
@@ -220,6 +264,9 @@ export default {
     console.log(this.loginid);
   },
   methods: {
+    report() {
+      this.dialogVisible2 = true;
+    },
     cancelreply() {
       this.repch = "off";
     },
@@ -534,12 +581,14 @@ export default {
   margin-left: 15px;
   text-decoration: none;
   vertical-align: -13px;
+  color: black;
 }
 .change {
   vertical-align: middle;
   margin-left: 10px;
   text-decoration: none;
   vertical-align: -13px;
+  color: black;
 }
 .reply_content2 {
   min-height: 120px;
@@ -670,5 +719,86 @@ export default {
 .app {
   height: auto;
   margin-bottom: 50px;
+}
+.likeicon2 {
+  width: 20px;
+  cursor: pointer;
+  float: left;
+  margin-right: 2px;
+}
+.report {
+  float: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.report:hover {
+  opacity: 0.6;
+}
+.delbox {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+}
+.delbox p {
+  margin-bottom: 10px;
+}
+.hr4 {
+  margin: 20px 0px 10px 0px;
+  width: 95%;
+  border-bottom: 1px solid #ddd;
+}
+.no_btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: white;
+  border: 1px solid #ddd;
+  margin-right: 5px;
+  transition: all 1s;
+}
+.no_btn:hover {
+  background: rgb(238, 238, 238);
+}
+.del_btn {
+  padding: 10px 20px;
+  background: #d82424;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 1s;
+}
+
+.del_btn:hover {
+  background: #af1313;
+}
+.delbox2 {
+  width: 100%;
+  height: 450px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.dlbti {
+  text-align: center;
+  margin: 20px 0px;
+}
+.dlbti2 {
+  width: 100%;
+}
+.rp1 {
+  margin: 20px;
+}
+.dlbti p {
+  font-size: 20px;
+  font-weight: bold;
+}
+.area {
+  width: 90%;
+  margin: 0px 20px;
+  height: 100px;
+  resize: none;
+  outline: none;
 }
 </style>

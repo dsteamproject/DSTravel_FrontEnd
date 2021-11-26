@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap1_1" style="position: fixed">
+  <div class="wrap1_1" style="position: fixed" v-loading="loading">
     <div class="newleft" v-if="newleft === 'on'">
       <p class="nltext1">일정</p>
       <button :class="nltext2css" @click="allview">전체일정</button>
@@ -103,6 +103,7 @@
                     :src="`//127.0.0.1:8080/REST/travel/select_image?no=${list.no}`"
                     style="height: 100%; width: 100%"
                   />
+                  
                 </div>
 
                 <div class="myt2">
@@ -1477,31 +1478,6 @@
             @blur="focusover2"
           /><button class="addrbtn" @click="handlemapput">검색</button>
         </div>
-        <div style="text-align: center" v-if="searchopen === true">
-          <table border="1" style="width: 100%">
-            <tr>
-              <th>주소</th>
-              <th>우편번호</th>
-            </tr>
-            <tr v-for="(item, index) in coordinate" :key="index">
-              <td>
-                <a href="#" @click="dorofull($event)">
-                  <div>
-                    <span class="doro">도로명</span>{{ item.city_do }}
-                    {{ item.gu_gun }}{{ item.newBuildingIndex
-                    }}{{ item.legalDong }}
-                  </div>
-                  <div>
-                    <span class="zip">지번</span
-                    ><span style="display: none">.</span>{{ item.city_do }}
-                    {{ item.gu_gun }} {{ item.legalDong }}{{ item.bunji }}
-                  </div>
-                </a>
-              </td>
-              <td>{{ item.zipcode }}</td>
-            </tr>
-          </table>
-        </div>
       </div>
     </div>
     <template #footer>
@@ -1614,6 +1590,10 @@ export default {
   },
   data() {
     return {
+      loading: true,
+      postcode: "",
+      address: "",
+      extraAddress: "",
       dltitle: "",
       imagefile: "",
       heart: false,
@@ -1901,12 +1881,13 @@ export default {
       const headers1 = { "Content-type": "application/json" };
       const body = {};
       const response = await axios.get(url, body, { headers1 });
+      console.log(response);
       console.log(response.data.coordinateInfo.coordinate[0].lat);
       console.log(response.data.coordinateInfo.coordinate[0].lon);
       console.log(this.pluslocation);
       this.plusmarker.push({
         title: this.pluslocation,
-
+        firstimage: this.imagefile,
         xlocation: Number(response.data.coordinateInfo.coordinate[0].lon),
         ylocation: Number(response.data.coordinateInfo.coordinate[0].lat),
       });
@@ -2174,14 +2155,57 @@ export default {
       this.focus = "focus";
     },
     async handlemapput() {
-      this.searchopen = true;
-      const url = `https://apis.openapi.sk.com/tmap/geo/postcode?version=1&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&addr=${this.addr}&coordType=WGS84GEO&addressFlag=F00&format=json&page=1&count=5`;
-      const headers = { "Content-type": "application/json" };
+      new window.daum.Postcode({
+        oncomplete: (data) => {
+          console.log(data);
+          if (this.extraAddress !== "") {
+            this.extraAddress = "";
+          }
+          if (data.userSelectedType === "R") {
+            // 사용자가 도로명 주소를 선택했을 경우
+            this.address = data.roadAddress;
+          } else {
+            // 사용자가 지번 주소를 선택했을 경우(J)
+            this.address = data.jibunAddress;
+          }
 
-      const response = await axios.get(url, { headers });
+          // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+          if (data.userSelectedType === "R") {
+            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+            if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
+              this.extraAddress += data.bname;
+            }
+            // 건물명이 있고, 공동주택일 경우 추가한다.
+            if (data.buildingName !== "" && data.apartment === "Y") {
+              this.extraAddress +=
+                this.extraAddress !== ""
+                  ? `, ${data.buildingName}`
+                  : data.buildingName;
+            }
+            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+            if (this.extraAddress !== "") {
+              this.extraAddress = `(${this.extraAddress})`;
+            }
+          } else {
+            this.extraAddress = "";
+          }
+          // 우편번호를 입력한다.
+          this.postcode = data.zonecode;
+          console.log(data);
+          console.log(data.roadAddress);
+          this.addr = data.jibunAddress;
+        },
+      }).open();
 
-      console.log(response.data.coordinateInfo.coordinate);
-      this.coordinate = response.data.coordinateInfo.coordinate;
+      // this.searchopen = true;
+      // const url = `https://apis.openapi.sk.com/tmap/geo/postcode?version=1&appKey=l7xx39d08d83d78244e9b28ddca092eaaa55&addr=${this.addr}&coordType=WGS84GEO&addressFlag=F00&format=json&page=1&count=5`;
+      // const headers = { "Content-type": "application/json" };
+
+      // const response = await axios.get(url, { headers });
+
+      // console.log(response.data.coordinateInfo.coordinate);
+      // this.coordinate = response.data.coordinateInfo.coordinate;
     },
     mapdialog(num) {
       console.log(num);
@@ -2275,8 +2299,12 @@ export default {
           icon: "https://ifh.cc/g/ugSmCT.png",
         });
       }
+      this.loading = false;
     },
     mapput() {
+      if (this.token === null) {
+        alert("로그인후 이용가능한 서비스입니다");
+      }
       this.dialogVisible = true;
     },
     loadinfo2() {
@@ -4601,5 +4629,5 @@ export default {
   padding: unset;
 }
 </style>
-<style scope src="../assets/css/search_scope.css">
+<style scoped src="../assets/css/search_scope.css">
 </style>

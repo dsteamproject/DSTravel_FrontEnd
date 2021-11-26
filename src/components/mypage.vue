@@ -231,14 +231,17 @@ export default {
     },
     async onFileSelected(event) {
       var input = event.target;
-      console.log(this.uploadImageFile);
+
       if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = (e) => {
           this.uploadImageFile = e.target.result;
         };
-        reader.readAsDataURL(input.files[0]);
+        console.log(this.uploadImageFile);
+       reader.readAsDataURL(input.files[0]);
         this.chk = input.files[0];
+        console.log(this.chk);
+     
 
         console.log(this.chk);
         const url = `/REST/mypage/insertMemberImg`;
