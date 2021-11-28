@@ -246,6 +246,7 @@ export default defineComponent({
     Navigation,
   },
   async created() {
+    this.$emit("searchon", true);
     const url1 = `http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=mK%2Fn1wrd%2BkpKfgOKIsZlMX6gtKHuhcb%2BXQWk5%2FIlqDIC6zz6nuP%2FS4xInk0L98YpxvscEIFY3pm%2BCFuYLPcMJQ%3D%3D&pageNo=1&numOfRows=100&MobileApp=AppTest&MobileOS=ETC&arrange=P&cat1=A02&contentTypeId=15&&cat2=A0207&listYN=Y`;
     const headers1 = { "Content-type": "application/json" };
 

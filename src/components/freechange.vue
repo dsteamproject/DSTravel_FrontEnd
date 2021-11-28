@@ -51,6 +51,7 @@ export default {
     ckeditor: CKEditor.component,
   },
   async created() {
+      this.$emit("searchon", true);
     await this.refresh();
   },
   data() {

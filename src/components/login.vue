@@ -127,6 +127,7 @@ export default {
     },
   },
   async created() {
+      this.$emit("searchon", true);
     const cookieget = this.$cookies.get("cookieid");
     if (this.$cookies.isKey("cookieid") === true) {
       this.saved = true;

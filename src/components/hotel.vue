@@ -134,6 +134,7 @@ import axios from "axios";
 import { ref, defineComponent } from "vue";
 export default defineComponent({
   async created() {
+    this.$emit("searchon", true);
     await this.listrefresh();
   },
   setup() {

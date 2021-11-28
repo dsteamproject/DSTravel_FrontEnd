@@ -65,6 +65,9 @@
 
 <script>
 export default {
+  created() {
+    this.$emit("searchon", true);
+  },
   data() {
     return {
       image: "https://ifh.cc/g/hOQCCf.jpg",

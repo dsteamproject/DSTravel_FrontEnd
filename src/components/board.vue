@@ -65,6 +65,7 @@ export default {
     },
   },
   async created() {
+      this.$emit("searchon", true);
     await this.currentPath1();
   },
   data() {

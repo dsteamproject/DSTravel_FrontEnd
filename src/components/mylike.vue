@@ -31,6 +31,7 @@
 <script>
 export default {
   created() {
+      this.$emit("searchon", true);
     var location = document.location.href.split("mylike/");
     console.log(location[1]);
     if (location[1] === "mmtr") {

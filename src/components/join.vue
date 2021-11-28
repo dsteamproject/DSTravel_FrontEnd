@@ -40,19 +40,14 @@
       <div class="input_box" v-if="step === 1">
         <ul class="iul">
           <li>
-            <input
-              type="checkbox"
-              class="chk"
-              v-model="checkall"
-              @click="allcheck"
-            />
+            <input type="checkbox" class="chk" v-model="checkAll" />
             <span class="chk1"
               >사이트 이용약관, 개인정보 수집 및 이용동의, 이벤트 및 프로모션
               안내메일 수신(선택)에 모두 동의 합니다.</span
             >
           </li>
           <li>
-            <input type="checkbox" class="chk" v-model="chk1" />
+            <input type="checkbox" class="chk" v-model="check.check1" />
             <span class="chk1"
               >사이트 이용약관
               <span class="blue">(필수)</span>
@@ -60,7 +55,7 @@
             <button class="exbtn">자세히 보기</button>
           </li>
           <li>
-            <input type="checkbox" class="chk" v-model="chk2" />
+            <input type="checkbox" class="chk" v-model="check.check2" />
             <span class="chk1"
               >개인정보 수집 및 이용동의
               <span class="blue">(필수)</span>
@@ -68,7 +63,7 @@
             <button class="exbtn">자세히 보기</button>
           </li>
           <li>
-            <input type="checkbox" class="chk" v-model="chk3" />
+            <input type="checkbox" class="chk" v-model="check.check3" />
             <span class="chk1"
               >이벤트 및 프로모션 알림 메일 수신
               <span class="blue">(선택)</span>
@@ -189,6 +184,12 @@ export default {
   },
   data() {
     return {
+      check: {
+        analysis: "ads",
+        check1: false,
+        check2: false,
+        check3: false,
+      },
       idchk: "",
       idcheck: "",
       userid: "",
@@ -243,7 +244,7 @@ export default {
       this.$router.go(-1);
     },
     handleyes() {
-      if (this.chk1 === false || this.chk2 === false) {
+      if (this.check.check1 === false || this.check.check2 === false) {
         alert("필수 체크항목을 체크해주세요");
       } else {
         this.step = 2;
@@ -301,7 +302,9 @@ export default {
           this.userpw
         )
       ) {
-        alert("암호는 5~15자 영문 대 소문자, 숫자, 특수문자를 포함해서 사용하세요");
+        alert(
+          "암호는 5~15자 영문 대 소문자, 숫자, 특수문자를 포함해서 사용하세요"
+        );
         return;
       }
       if (!/^[가-힣A-Za-z]+$/i.test(this.username)) {
@@ -338,19 +341,19 @@ export default {
     },
   },
   computed: {
-    checkall: {
+    checkAll: {
       get: function () {
-        return this.chk1 + "," + this.chk2 + "," + this.chk3;
+        return this.check1 + "," + this.check2 + "," + this.check3;
       },
       set: function (e) {
         if (e === true) {
-          this.chk1 = true;
-          this.chk2 = true;
-          this.chk3 = true;
+          this.check.check1 = true;
+          this.check.check2 = true;
+          this.check.check3 = true;
         } else {
-          this.chk1 = false;
-          this.chk2 = false;
-          this.chk3 = false;
+          this.check.check1 = false;
+          this.check.check2 = false;
+          this.check.check3 = false;
         }
       },
     },

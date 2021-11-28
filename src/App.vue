@@ -188,7 +188,10 @@
                 to="/car"
                 :class="routerclass2"
                 @click="scrollToTop(2)"
-                ><img src="../src/assets/car.png" style="width: 20px" />
+                ><img
+                  src="../src/assets/ticket.png"
+                  style="width: 20px; height: 14px"
+                />
                 행사·티켓</router-link
               >
             </li>
@@ -222,9 +225,14 @@
       </div>
     </div>
     <div class="blo"></div>
-    <router-view @changeLogged="changeLogged" @dialog="dialog"> </router-view>
+    <router-view
+      @changeLogged="changeLogged"
+      @dialog="dialog"
+      @searchon="searchon"
+    >
+    </router-view>
     <div></div>
-    <div class="footer">
+    <div class="footer" v-if="this.footeron === true">
       <div class="contact_wrap">
         <div class="contact1">
           <h1 style="color: #ffd75e; font-size: 50px; margin-bottom: 20px">
@@ -404,11 +412,14 @@ export default {
       scrollPostion: 0,
       logined: false,
       token: sessionStorage.getItem("TOKEN"),
-
+      footeron: true,
       dialogVisible: false,
     };
   },
   methods: {
+    searchon(abc) {
+      this.footeron = abc;
+    },
     dialog() {
       this.dialogVisible = true;
     },
@@ -1069,7 +1080,6 @@ h3 {
   height: 500px !important;
   clear: both;
   width: 100%;
-  margin-top: 70px;
 }
 .chu {
   animation: downicon 2s infinite;

@@ -158,6 +158,7 @@
 import axios from "axios";
 export default {
   async created() {
+      this.$emit("searchon", true);
     // 서울
     const url1 = `/REST/worldcup/home?city=1&type=12`;
     const headers1 = { "Content-type": "application/json" };

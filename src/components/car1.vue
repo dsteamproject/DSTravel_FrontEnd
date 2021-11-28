@@ -89,6 +89,7 @@ export default defineComponent({
   // CAT 3  // 1=>   ""   2 = > A02080100  3=>  A02080600 4=>   A02080500  5=> A02080200
 
   async created() {
+    this.$emit("searchon", true);
     if (this.$route.query.type === "1") {
       this.title = "문화관광,일반축제";
       this.arrange = "P";

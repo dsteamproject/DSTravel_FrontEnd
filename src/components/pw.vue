@@ -1,54 +1,74 @@
 <template>
-    <div>
-        <div class="app">
-    <dl>
-    <dt> 등록된 회원정보로 찾기</dt>
-        <dd><span class="O1">.</span>회원정보에 등록된 아이디, 이름, 이메일이 일치하면 가입하셨던 메일로 임시 비밀번호를 발송해드립니다</dd>
-         <label>아이디</label
-        ><input type="text" class="userpw" v-model="userid" ref="username" /><br />
-         <label>이름</label
-        ><input type="text" class="userpw" v-model="username" ref="username" /><br />
-         <label>이메일</label
-        ><input type="text" class="usermail" v-model="usermail" ref="usermail" />@ <input type="text" class="userpw" v-model="email" ref="email" />
-       
-</dl>
-</div>
-  <div class="center">
-         
-          <button class="yesbtn" @click="handlepw">임시 비밀번호 발송</button>
-        </div>
+  <div>
+    <div class="app">
+      <dl>
+        <dt>등록된 회원정보로 찾기</dt>
+        <dd>
+          <span class="O1">.</span>회원정보에 등록된 아이디, 이름, 이메일이
+          일치하면 가입하셨던 메일로 임시 비밀번호를 발송해드립니다
+        </dd>
+        <label>아이디</label
+        ><input
+          type="text"
+          class="userpw"
+          v-model="userid"
+          ref="username"
+        /><br />
+        <label>이름</label
+        ><input
+          type="text"
+          class="userpw"
+          v-model="username"
+          ref="username"
+        /><br />
+        <label>이메일</label
+        ><input
+          type="text"
+          class="usermail"
+          v-model="usermail"
+          ref="usermail"
+        />@ <input type="text" class="userpw" v-model="email" ref="email" />
+      </dl>
     </div>
+    <div class="center">
+      <button class="yesbtn" @click="handlepw">임시 비밀번호 발송</button>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
-    export default {
-        data(){
-          return{
-            userid:"",
-            userpw:"",
-            usermail:"",
-            email:"",
-
-          }
-        },
-        methods:{
-          async handlepw(){
-                  const url = `/REST/member/check/findPw/sendEmail`;
-                  const headers = { "Content-type": "application/json" };
+export default {
+  created() {
+    this.$emit("searchon", true);
+  },
+  data() {
+    return {
+      userid: "",
+      userpw: "",
+      usermail: "",
+      email: "",
+    };
+  },
+  methods: {
+    async handlepw() {
+      const url = `/REST/member/check/findPw/sendEmail`;
+      const headers = { "Content-type": "application/json" };
       const body = {
-          id: this.userid,
-          name: this.username,
-          email: this.usermail + "@" + this.email,
+        id: this.userid,
+        name: this.username,
+        email: this.usermail + "@" + this.email,
       };
       const response = await axios.post(url, body, { headers });
       console.log(response);
-      if(response.data.status === 200){
-        alert("임시 비밀번호 발송이 완료되었습니다\n 발송된 비밀번호로 로그인후 비밀번호를 변경해주세요")
+      if (response.data.status === 200) {
+        alert(
+          "임시 비밀번호 발송이 완료되었습니다\n 발송된 비밀번호로 로그인후 비밀번호를 변경해주세요"
+        );
       }
-          }
-        }
-    }
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -102,23 +122,23 @@ label {
   margin-top: 5px;
   outline: none;
 }
-.app{
-    margin:75px 50px;
+.app {
+  margin: 75px 50px;
 }
-    dd{
-        text-indent: 40px;
-        list-style:disc;
-        font-size:14px;
-        margin-bottom: 30px;
-    }
-    dt{
-        font-size: 22px;
-        margin-left:20px;
-        font-weight: 500;
-    }
-.O1{
-    font-size: 30px;
-    vertical-align: 4px;
-    margin-right: 5px;
+dd {
+  text-indent: 40px;
+  list-style: disc;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+dt {
+  font-size: 22px;
+  margin-left: 20px;
+  font-weight: 500;
+}
+.O1 {
+  font-size: 30px;
+  vertical-align: 4px;
+  margin-right: 5px;
 }
 </style>

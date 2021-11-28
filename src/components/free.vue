@@ -229,6 +229,7 @@ export default {
     },
   },
   async created() {
+      this.$emit("searchon", true);
     await this.start();
   },
 };

@@ -103,7 +103,6 @@
                     :src="`//127.0.0.1:8080/REST/travel/select_image?no=${list.no}`"
                     style="height: 100%; width: 100%"
                   />
-                  
                 </div>
 
                 <div class="myt2">
@@ -1573,6 +1572,7 @@ export default {
   name: "searchbusan",
 
   async created() {
+    this.$emit("searchon", false);
     await this.replacerefresh();
 
     this.contenttypeid = "12";

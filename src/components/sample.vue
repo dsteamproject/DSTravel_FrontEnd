@@ -94,6 +94,7 @@ import axios from "axios";
 
 export default {
   async created() {
+      this.$emit("searchon", true);
     const url = `/REST/mypage/home`;
     const headers = { "Content-type": "application/json", token: this.token };
     const response = await axios.get(url, { headers });

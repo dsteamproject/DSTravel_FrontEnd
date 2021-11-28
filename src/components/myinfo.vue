@@ -122,6 +122,7 @@
 import axios from "axios";
 export default {
   async created() {
+      this.$emit("searchon", true);
     await this.refresh();
   },
 

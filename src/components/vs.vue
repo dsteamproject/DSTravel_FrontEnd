@@ -14,6 +14,7 @@
 import axios from "axios";
 export default {
   async created() {
+    this.$emit("searchon", true);
     const url = `/REST/worldcup/home?city=1&type=12`;
     const headers = { "Content-type": "application/json" };
 

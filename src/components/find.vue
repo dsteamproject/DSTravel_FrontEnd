@@ -20,6 +20,7 @@
 
 export default {
     created(){
+          this.$emit("searchon", true);
        var location = document.location.href.split("find/");
        console.log(location[1])
        if(location[1] === "id"){
