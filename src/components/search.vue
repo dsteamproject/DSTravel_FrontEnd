@@ -3519,6 +3519,130 @@ export default {
       this.newleft0 = "off";
     },
     async lastaction() {
+      if (this.token === null) {
+        alert("로그인후 이용가능한 서비스입니다");
+        return;
+      }
+      if (this.num3 === 1) {
+        if (this.choice1.length === 0) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 2) {
+        if (this.choice1.length === 0 || this.choice2.length === 0) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 3) {
+        if (
+          this.choice1.length === 0 ||
+          this.choice2.length === 0 ||
+          this.choice3.length === 0
+        ) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 4) {
+        if (
+          this.choice1.length === 0 ||
+          this.choice2.length === 0 ||
+          this.choice3.length === 0 ||
+          this.choice4.length === 0
+        ) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 5) {
+        if (
+          this.choice1.length === 0 ||
+          this.choice2.length === 0 ||
+          this.choice3.length === 0 ||
+          this.choice4.length === 0 ||
+          this.choice5.length === 0
+        ) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 6) {
+        if (
+          this.choice1.length === 0 ||
+          this.choice2.length === 0 ||
+          this.choice3.length === 0 ||
+          this.choice4.length === 0 ||
+          this.choice5.length === 0 ||
+          this.choice6.length === 0
+        ) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 7) {
+        if (
+          this.choice1.length === 0 ||
+          this.choice2.length === 0 ||
+          this.choice3.length === 0 ||
+          this.choice4.length === 0 ||
+          this.choice5.length === 0 ||
+          this.choice6.length === 0 ||
+          this.choice7.length === 0
+        ) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 8) {
+        if (
+          this.choice1.length === 0 ||
+          this.choice2.length === 0 ||
+          this.choice3.length === 0 ||
+          this.choice4.length === 0 ||
+          this.choice5.length === 0 ||
+          this.choice6.length === 0 ||
+          this.choice7.length === 0 ||
+          this.choice8.length === 0
+        ) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 9) {
+        if (
+          this.choice1.length === 0 ||
+          this.choice2.length === 0 ||
+          this.choice3.length === 0 ||
+          this.choice4.length === 0 ||
+          this.choice5.length === 0 ||
+          this.choice6.length === 0 ||
+          this.choice7.length === 0 ||
+          this.choice8.length === 0 ||
+          this.choice9.length === 0
+        ) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
+      if (this.num3 === 10) {
+        if (
+          this.choice1.length === 0 ||
+          this.choice2.length === 0 ||
+          this.choice3.length === 0 ||
+          this.choice4.length === 0 ||
+          this.choice5.length === 0 ||
+          this.choice6.length === 0 ||
+          this.choice7.length === 0 ||
+          this.choice8.length === 0 ||
+          this.choice9.length === 0 ||
+          this.choice10.length === 0
+        ) {
+          alert("여행일정에 최소 1개 이상의 여행지를 추가해주세요");
+          return;
+        }
+      }
       this.nltext2css = "nltext3";
       this.markers = [];
       await this.savemarker3();

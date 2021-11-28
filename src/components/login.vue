@@ -103,6 +103,14 @@ export default {
       console.log(params);
     },
     async handlelogin() {
+      if (this.userid === "") {
+        alert("아이디를 입력해주세요");
+        return;
+      }
+      if (this.userpw === "") {
+        alert("암호를 입력해주세요");
+        return;
+      }
       const url = `/REST/member/login`;
       const headers = { "Content-type": "application/json" };
       const body = {
@@ -127,7 +135,7 @@ export default {
     },
   },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     const cookieget = this.$cookies.get("cookieid");
     if (this.$cookies.isKey("cookieid") === true) {
       this.saved = true;

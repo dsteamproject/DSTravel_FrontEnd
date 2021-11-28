@@ -10,7 +10,9 @@
       >
         <div class="popovercontent">채팅 구현</div>
         <template #reference>
-          <div @click="visible = !visible" class="fixedbtn"></div>
+          <div @click="visible = !visible" class="fixedbtn">
+            <img src="../assets/queicon.png" class="fixedimg" />
+          </div>
         </template>
       </el-popover>
       <el-carousel height="480px">
@@ -170,7 +172,6 @@ export default {
     };
   },
   async created() {
-    
     this.$emit("searchon", true);
     await this.boardlist();
   },

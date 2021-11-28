@@ -766,7 +766,7 @@ export default {
 }
 .router2 {
   text-decoration: none;
-  color: rgb(99, 99, 99);
+  color: rgb(0, 0, 0);
   font-family: "Noto Sans KR", sans-serif;
   font-weight: 500;
   padding-bottom: 5px;

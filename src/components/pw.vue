@@ -97,6 +97,23 @@ label {
   width: 187px;
   height: 38px;
   padding: 0px 10px 0px 20px;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  line-height: 36px\9;
+  font-family: inherit;
+  font-size: 16px;
+  margin-top: 5px;
+  outline: none;
 }
 .usermail {
   margin-right: 5px;

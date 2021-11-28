@@ -118,6 +118,7 @@
       </div>
       <div class="pagen">
         <el-pagination
+          :current-page="this.cpage * 1"
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
@@ -148,6 +149,7 @@ export default defineComponent({
   },
   data() {
     return {
+      cpage: sessionStorage.getItem("PAGE"),
       pages: "",
       list: [],
       value1: "",
@@ -201,6 +203,7 @@ export default defineComponent({
     },
     async handleCurrentChange(val) {
       this.page = val;
+
       await this.listrefresh();
     },
     async handlelocation(me) {
