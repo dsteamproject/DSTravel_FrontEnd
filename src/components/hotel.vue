@@ -13,32 +13,32 @@
                   :class="locationcss1"
                   value="id"
                   :name="1"
-                  @click="handlelocation(1)"
+                  @click="handlelocation('')"
                 >
                   전체보기</button
                 ><br />
-                <button :class="locationcss2" @click="handlelocation(2)">
+                <button :class="locationcss2" @click="handlelocation(1)">
                   서울</button
                 ><br />
-                <button :class="locationcss3" @click="handlelocation(3)">
+                <button :class="locationcss3" @click="handlelocation(6)">
                   부산</button
                 ><br />
-                <button :class="locationcss4" @click="handlelocation(4)">
+                <button :class="locationcss4" @click="handlelocation(3)">
                   대전</button
                 ><br />
-                <button :class="locationcss5" @click="handlelocation(5)">
+                <button :class="locationcss5" @click="handlelocation(4)">
                   대구</button
                 ><br />
-                <button :class="locationcss6" @click="handlelocation(6)">
+                <button :class="locationcss6" @click="handlelocation(2)">
                   인천</button
                 ><br />
-                <button :class="locationcss7" @click="handlelocation(7)">
+                <button :class="locationcss7" @click="handlelocation(5)">
                   광주</button
                 ><br />
-                <button :class="locationcss8" @click="handlelocation(8)">
+                <button :class="locationcss8" @click="handlelocation(7)">
                   울산</button
                 ><br />
-                <button :class="locationcss9" @click="handlelocation(9)">
+                <button :class="locationcss9" @click="handlelocation(39)">
                   제주
                 </button>
               </div>
@@ -118,7 +118,7 @@
       </div>
       <div class="pagen">
         <el-pagination
-          :current-page="this.cpage * 1"
+          :current-page="this.page * 1"
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
@@ -135,9 +135,42 @@ import axios from "axios";
 import { ref, defineComponent } from "vue";
 export default defineComponent({
   async created() {
-    this.$emit("searchon", true);
+    console.log(this.value);
     await this.listrefresh();
+    if (sessionStorage.getItem("PAGE") !== null) {
+      this.page = sessionStorage.getItem("PAGE");
+    }
+    if (sessionStorage.getItem("LOC") !== null) {
+      this.city = Number(sessionStorage.getItem("LOC"));
+    }
+    if (sessionStorage.getItem("PRICE1") !== null) {
+      this.value = ref([
+        Number(sessionStorage.getItem("PRICE1")),
+        Number(sessionStorage.getItem("PRICE2")),
+      ]);
+
+      console.log(this.value);
+      this.value[0] = Number(sessionStorage.getItem("PRICE1"));
+      this.value[1] = Number(sessionStorage.getItem("PRICE2"));
+    }
+    if (sessionStorage.getItem("RAT") !== null) {
+      this.value1 = Number(sessionStorage.getItem("RAT"));
+    }
+
+    this.$emit("searchon", true);
+    await this.cssch();
+    await this.listrefresh();
+
+    console.log(this.city);
   },
+  beforeUnmount() {
+    sessionStorage.removeItem("PAGE");
+    sessionStorage.removeItem("LOC");
+    sessionStorage.removeItem("PRICE1");
+    sessionStorage.removeItem("PRICE2");
+    sessionStorage.removeItem("RAT");
+  },
+
   setup() {
     const value = ref([0, 100]);
     console.log(value);
@@ -149,11 +182,11 @@ export default defineComponent({
   },
   data() {
     return {
-      cpage: sessionStorage.getItem("PAGE"),
       pages: "",
       list: [],
       value1: "",
       page: 1,
+
       locationcss1: "location2",
       locationcss2: "location1",
       locationcss3: "location1",
@@ -168,12 +201,20 @@ export default defineComponent({
       total: "",
     };
   },
+
   methods: {
     detailcontentgo(item) {
       console.log(item.code);
       this.$router.push({
         path: "/hotelcontent",
-        query: { code: item.code },
+        query: {
+          code: item.code,
+          page: this.page,
+          location: this.city,
+          value1: this.value[0],
+          value2: this.value[1],
+          rat: this.value1,
+        },
       });
     },
     async valuechange() {
@@ -181,9 +222,13 @@ export default defineComponent({
       await this.listrefresh();
     },
     async listrefresh() {
-      const url1 = `/REST/hotel/select?size=5&page=${this.page}&firstprice=${this.value[0]}&endprice=${this.value[1]}&city=${this.city}&rank=${this.rank}`;
+      let url1;
+      if (this.city === 0) {
+        url1 = `/REST/hotel/select?size=5&page=${this.page}&firstprice=${this.value[0]}&endprice=${this.value[1]}&city=&rank=${this.rank}`;
+      } else {
+        url1 = `/REST/hotel/select?size=5&page=${this.page}&firstprice=${this.value[0]}&endprice=${this.value[1]}&city=${this.city}&rank=${this.rank}`;
+      }
       const headers1 = { "Content-type": "application/json" };
-
       const response1 = await axios.get(url1, { headers1 });
       console.log(response1);
       this.pages = response1.data.cnt;
@@ -198,16 +243,21 @@ export default defineComponent({
 
           this.list[i].price = coma;
         }
-        console.log(this.list.length);
       }
     },
     async handleCurrentChange(val) {
+      console.log(val);
       this.page = val;
 
       await this.listrefresh();
     },
     async handlelocation(me) {
-      if (me === 1) {
+      this.page = 1;
+      this.city = me;
+      await this.cssch();
+    },
+    async cssch() {
+      if (this.city === "") {
         this.locationcss1 = "location2";
         this.locationcss2 = "location1";
         this.locationcss3 = "location1";
@@ -217,10 +267,10 @@ export default defineComponent({
         this.locationcss7 = "location1";
         this.locationcss8 = "location1";
         this.locationcss9 = "location1";
-        this.city = "";
+
         await this.listrefresh();
       }
-      if (me === 2) {
+      if (this.city === 1) {
         this.locationcss1 = "location1";
         this.locationcss2 = "location2";
         this.locationcss3 = "location1";
@@ -230,10 +280,10 @@ export default defineComponent({
         this.locationcss7 = "location1";
         this.locationcss8 = "location1";
         this.locationcss9 = "location1";
-        this.city = 1;
+
         await this.listrefresh();
       }
-      if (me === 3) {
+      if (this.city === 6) {
         this.locationcss1 = "location1";
         this.locationcss2 = "location1";
         this.locationcss3 = "location2";
@@ -243,10 +293,10 @@ export default defineComponent({
         this.locationcss7 = "location1";
         this.locationcss8 = "location1";
         this.locationcss9 = "location1";
-        this.city = 6;
+
         await this.listrefresh();
       }
-      if (me === 4) {
+      if (this.city === 3) {
         this.locationcss1 = "location1";
         this.locationcss2 = "location1";
         this.locationcss3 = "location1";
@@ -256,10 +306,10 @@ export default defineComponent({
         this.locationcss7 = "location1";
         this.locationcss8 = "location1";
         this.locationcss9 = "location1";
-        this.city = 3;
+
         await this.listrefresh();
       }
-      if (me === 5) {
+      if (this.city === 4) {
         this.locationcss1 = "location1";
         this.locationcss2 = "location1";
         this.locationcss3 = "location1";
@@ -269,10 +319,10 @@ export default defineComponent({
         this.locationcss7 = "location1";
         this.locationcss8 = "location1";
         this.locationcss9 = "location1";
-        this.city = 4;
+
         await this.listrefresh();
       }
-      if (me === 6) {
+      if (this.city === 2) {
         this.locationcss1 = "location1";
         this.locationcss2 = "location1";
         this.locationcss3 = "location1";
@@ -282,10 +332,10 @@ export default defineComponent({
         this.locationcss7 = "location1";
         this.locationcss8 = "location1";
         this.locationcss9 = "location1";
-        this.city = 2;
+
         await this.listrefresh();
       }
-      if (me === 7) {
+      if (this.city === 5) {
         this.locationcss1 = "location1";
         this.locationcss2 = "location1";
         this.locationcss3 = "location1";
@@ -295,10 +345,10 @@ export default defineComponent({
         this.locationcss7 = "location2";
         this.locationcss8 = "location1";
         this.locationcss9 = "location1";
-        this.city = 5;
+
         await this.listrefresh();
       }
-      if (me === 8) {
+      if (this.city === 7) {
         this.locationcss1 = "location1";
         this.locationcss2 = "location1";
         this.locationcss3 = "location1";
@@ -308,10 +358,10 @@ export default defineComponent({
         this.locationcss7 = "location1";
         this.locationcss8 = "location2";
         this.locationcss9 = "location1";
-        this.city = 7;
+
         await this.listrefresh();
       }
-      if (me === 9) {
+      if (this.city === 39) {
         this.locationcss1 = "location1";
         this.locationcss2 = "location1";
         this.locationcss3 = "location1";
@@ -321,7 +371,7 @@ export default defineComponent({
         this.locationcss7 = "location1";
         this.locationcss8 = "location1";
         this.locationcss9 = "location2";
-        this.city = 39;
+
         await this.listrefresh();
       }
     },

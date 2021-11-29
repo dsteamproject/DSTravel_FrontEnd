@@ -1572,8 +1572,7 @@ export default {
   name: "searchbusan",
 
   async created() {
-    this.$emit("searchon", false);
-    await this.replacerefresh();
+    this.$emit("searchon", false), await this.replacerefresh();
 
     this.contenttypeid = "12";
 

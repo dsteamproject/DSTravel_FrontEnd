@@ -136,7 +136,12 @@ export default {
   },
 
   async created() {
-      this.$emit("searchon", true);
+    sessionStorage.setItem("PAGE", this.$route.query.page);
+    sessionStorage.setItem("LOC", this.$route.query.location);
+    sessionStorage.setItem("PRICE1", this.$route.query.value1);
+    sessionStorage.setItem("PRICE2", this.$route.query.value2);
+    sessionStorage.setItem("RAT", this.$route.query.rat);
+    this.$emit("searchon", true);
     await this.refresh();
     await this.goodinfo();
   },

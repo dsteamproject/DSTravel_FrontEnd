@@ -60,7 +60,7 @@ export default {
     };
   },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     await this.refresh();
   },
   methods: {
@@ -87,7 +87,7 @@ export default {
       this.page++;
     },
     async refresh() {
-      const url = `/REST/mypage/mygoodtd?type=32&page=${this.page}&size=6`;
+      const url = `/REST/mypage/mygoodtd?type=32&page=${this.page}&size=1`;
       const headers = { "Content-type": "application/json", token: this.token };
 
       const response = await axios.get(url, { headers: headers });
