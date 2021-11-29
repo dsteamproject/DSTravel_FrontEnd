@@ -1753,6 +1753,7 @@ export default {
     handlereview() {
       this.$router.push({ path: "/board/review" });
     },
+
     async TDsave() {
       if (this.$route.query.betday === "1") {
         this.allchoice.push(this.choice1);
@@ -1837,7 +1838,7 @@ export default {
         "Content-type": "application/json",
         token: this.token,
       };
-      const body = { total: this.allchoice };
+      const body = { total: this.allchoice, date: this.betdatelist };
       const response1 = await axios.post(url1, body, { headers });
       console.log(response1);
       if (response1.data.status === 200) {

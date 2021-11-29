@@ -35,32 +35,45 @@
     </ul>
     <div>
       <ul class="travel_list1_3">
-        <li v-for="(item, index) in mylist" :key="index" class="list1_3_2">
+        <!-- 상자갯수  -->
+        <li v-for="(item, index) in list" :key="index" class="list1_3_2">
           <div
             class="tl_img"
             v-bind:style="{
-              backgroundImage: 'url(' + item + ')',
+              backgroundImage: 'url(' + item.total[0][0].firstimage + ')',
             }"
           >
-            <span></span><br />
-            <span>지역:</span>
-            <p>님</p>
+            <div class="tl2">
+              <span class="tl2_title">{{ item.title }}</span
+              ><br />
+              <span class="tl2_city">{{ item.total[0][0].city.name }}</span>
+              <p class="tl2_nicename">{{ item.member.nicname }}님의 여행일정</p>
+            </div>
           </div>
 
           <div class="tl_text">
             <div class="block">
               <el-timeline>
                 <el-timeline-item
-                  v-for="(activity, index) in list"
-                  :key="index"
-                  :timestamp="1"
+                  v-for="(activity, index1) in list[index].date"
+                  :key="index1"
+                  :timestamp="activity"
                 >
+                  {{ this.list[index].total[index1][0].title }}
                 </el-timeline-item>
               </el-timeline>
             </div>
           </div>
         </li>
       </ul>
+    </div>
+    <div class="pagen">
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        layout="prev, pager, next"
+        :total="10"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -72,20 +85,27 @@ export default {
     this.$emit("searchon", true);
 
     //==============================
-    const url = `/REST/mypage/tdsave?title=&page=1&size=6`;
-    const headers = { "Content-type": "application/json", token: this.token };
+    await this.refresh();
+  },
+  methods: {
+    async refresh() {
+      const url = `/REST/mypage/tdsave?title=&page=${this.page}&size=6`;
+      const headers = { "Content-type": "application/json", token: this.token };
 
-    const response = await axios.get(url, { headers });
-    console.log(response.data.tdsave);
-    this.list = response.data.tdsave; // 0: 1일 , 1 : 2일
-    for (var i = 0; i < this.list.length; i++) {
-      console.log(this.list[i].total);
-      this.mylist.push(this.list[i].total);
-    }
-    console.log(this.mylist);
+      const response = await axios.get(url, { headers });
+      console.log(response);
+      console.log(response.data.tdsave);
+      this.list = response.data.tdsave; // 0: 1일 , 1 : 2일
+    },
+    async handleCurrentChange(val) {
+      this.page = val;
+      await this.refresh();
+    },
   },
   data() {
     return {
+      pages: "",
+      page: 1,
       mylist: [],
       datelist: [],
       tdlist: [],
@@ -103,6 +123,10 @@ export default {
 </script>
 
 <style scoped>
+.pagen {
+  text-align: center;
+  clear: both;
+}
 .block {
   padding: 10px;
   height: 100%;
@@ -110,11 +134,32 @@ export default {
 }
 .tl_img {
   width: 100%;
-
+  text-align: center;
   height: 40%;
   background-size: cover;
 
+  font-weight: bold;
+
   box-sizing: border-box;
+}
+.tl2 {
+  color: white;
+  text-shadow: 1px 1px 1px rgba;
+  background: rgba(0, 0, 0, 0.4);
+  width: 50%;
+  margin: 0 auto;
+  padding-top: 10px;
+}
+.tl2_title {
+  font-size: 20px;
+}
+.tl2_city {
+  font-size: 13px;
+}
+.tl2_nicename {
+  font-size: 12px;
+  margin-top: 10px;
+  padding-bottom: 5px;
 }
 .tl_text {
   height: 60%;
@@ -130,6 +175,10 @@ export default {
   height: 300px;
   border: 1px solid #ddd;
   float: left;
+  cursor: pointer;
+}
+.list1_3_2:hover {
+  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.1);
 }
 .boardlength {
   width: 78px;

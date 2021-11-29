@@ -28,6 +28,12 @@
           <router-link to="/mypage/mymap" @click="changeMenu(4)" :class="btn5"
             >지도요청</router-link
           >
+          <router-link
+            to="/mypage/mytravel"
+            @click="changeMenu(6)"
+            :class="btn7"
+            >내 여행</router-link
+          >
           <router-link to="/mypage/mydel" @click="changeMenu(5)" :class="btn6"
             >회원탈퇴</router-link
           >
@@ -114,7 +120,7 @@ export default {
     },
   },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     const url = `/REST/mypage/home`;
     const headers = { "Content-type": "application/json", token: this.token };
     const response = await axios.get(url, { headers });
@@ -138,6 +144,7 @@ export default {
       btn4: "btn1",
       btn5: "btn1",
       btn6: "btn1",
+      btn7: "btn1",
       menu: "",
       token: sessionStorage.getItem("TOKEN"),
       list: [],
@@ -160,6 +167,7 @@ export default {
         this.btn4 = "btn1";
         this.btn5 = "btn1";
         this.btn6 = "btn1";
+        this.btn7 = "btn1";
       }
       if (this.currentPath === "/mypage/mypw") {
         this.btn1 = "btn1";
@@ -168,6 +176,7 @@ export default {
         this.btn4 = "btn1";
         this.btn5 = "btn1";
         this.btn6 = "btn1";
+        this.btn7 = "btn1";
       }
       if (
         this.currentPath === "/mypage/myboard/mbwrite" ||
@@ -179,6 +188,7 @@ export default {
         this.btn4 = "btn1";
         this.btn5 = "btn1";
         this.btn6 = "btn1";
+        this.btn7 = "btn1";
       }
       if (
         this.currentPath === "/mypage/mylike/mmtr" ||
@@ -191,6 +201,7 @@ export default {
         this.btn4 = "btn2";
         this.btn5 = "btn1";
         this.btn6 = "btn1";
+        this.btn7 = "btn1";
       }
       if (this.currentPath === "/mypage/mymap") {
         this.btn1 = "btn1";
@@ -199,6 +210,7 @@ export default {
         this.btn4 = "btn1";
         this.btn5 = "btn2";
         this.btn6 = "btn1";
+        this.btn7 = "btn1";
       }
       if (this.currentPath === "/mypage/mydel") {
         this.btn1 = "btn1";
@@ -207,6 +219,16 @@ export default {
         this.btn4 = "btn1";
         this.btn5 = "btn1";
         this.btn6 = "btn2";
+        this.btn7 = "btn1";
+      }
+      if (this.currentPath === "/mypage/mytravel") {
+        this.btn1 = "btn1";
+        this.btn2 = "btn1";
+        this.btn3 = "btn1";
+        this.btn4 = "btn1";
+        this.btn5 = "btn1";
+        this.btn6 = "btn1";
+        this.btn7 = "btn2";
       }
     },
     async infochange() {
@@ -228,6 +250,7 @@ export default {
         this.btn4 = "btn1";
         this.btn5 = "btn1";
         this.btn6 = "btn1";
+        this.btn7 = "btn1";
       }
     },
     async onFileSelected(event) {
@@ -239,10 +262,9 @@ export default {
           this.uploadImageFile = e.target.result;
         };
         console.log(this.uploadImageFile);
-       reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(input.files[0]);
         this.chk = input.files[0];
         console.log(this.chk);
-     
 
         console.log(this.chk);
         const url = `/REST/mypage/insertMemberImg`;
@@ -308,6 +330,15 @@ export default {
         this.btn4 = "btn1";
         this.btn5 = "btn1";
         this.btn6 = "btn2";
+      }
+      if (val === 6) {
+        this.btn1 = "btn1";
+        this.btn2 = "btn1";
+        this.btn3 = "btn1";
+        this.btn4 = "btn1";
+        this.btn5 = "btn1";
+        this.btn6 = "btn1";
+        this.btn7 = "btn2";
       }
     },
   },

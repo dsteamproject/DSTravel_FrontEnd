@@ -38,6 +38,7 @@ import mypagemyboard from '@/components/myboard'
 import mypagemylike from '@/components/mylike'
 import mypagemymap from '@/components/mymap'
 import mypagemydel from '@/components/mydel'
+import mypagetrvel from '@/components/mytravel'
 
 import myfo from '@/components/mmfo'
 import myho from '@/components/mmho'
@@ -116,6 +117,7 @@ const routes = [
             },
             { path: '/mypage/mymap', component: mypagemymap },
             { path: '/mypage/mydel', component: mypagemydel },
+            { path: '/mypage/mytravel', component: mypagetrvel },
         ]
     },
 ];
