@@ -35,24 +35,26 @@
     </ul>
     <div>
       <ul class="travel_list1_3">
-        <li v-for="item in 6" :key="item" class="list1_3_2">
+        <li v-for="(item, index) in mylist" :key="index" class="list1_3_2">
           <div
             class="tl_img"
-            v-bind:style="{ backgroundImage: 'url(' + image + ')' }"
+            v-bind:style="{
+              backgroundImage: 'url(' + item + ')',
+            }"
           >
-            <span>가나다라마바</span><br />
-            <span>지역:부산</span> <span>박병근</span>
+            <span></span><br />
+            <span>지역:</span>
+            <p>님</p>
           </div>
 
           <div class="tl_text">
             <div class="block">
               <el-timeline>
                 <el-timeline-item
-                  v-for="(activity, index) in activities"
+                  v-for="(activity, index) in list"
                   :key="index"
-                  :timestamp="activity.timestamp"
+                  :timestamp="1"
                 >
-                  {{ activity.content }}
                 </el-timeline-item>
               </el-timeline>
             </div>
@@ -64,31 +66,33 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  created() {
+  async created() {
     this.$emit("searchon", true);
+
+    //==============================
+    const url = `/REST/mypage/tdsave?title=&page=1&size=6`;
+    const headers = { "Content-type": "application/json", token: this.token };
+
+    const response = await axios.get(url, { headers });
+    console.log(response.data.tdsave);
+    this.list = response.data.tdsave; // 0: 1일 , 1 : 2일
+    for (var i = 0; i < this.list.length; i++) {
+      console.log(this.list[i].total);
+      this.mylist.push(this.list[i].total);
+    }
+    console.log(this.mylist);
   },
   data() {
     return {
+      mylist: [],
+      datelist: [],
+      tdlist: [],
+      list: [],
+      token: sessionStorage.getItem("TOKEN"),
       image: "https://ifh.cc/g/hOQCCf.jpg",
-      activities: [
-        {
-          content: "1번여행지",
-          timestamp: "2021-11-20",
-        },
-        {
-          content: "2번여행지",
-          timestamp: "2021-11-21",
-        },
-        {
-          content: "3번여행지",
-          timestamp: "2021-11-22",
-        },
-        {
-          content: "3번여행지",
-          timestamp: "2021-11-22",
-        },
-      ],
+
       type: "title",
       size: 10,
       orderby: "latest",

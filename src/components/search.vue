@@ -1522,7 +1522,7 @@
 
         <div><label>팁 </label><span></span>-</div>
         <div class="tlright">
-          <button>리뷰보기</button
+          <button @click="handlereview">리뷰보기</button
           ><button @click="likepush(this.dialoglist.code)">
             위시리스트 추가
           </button>
@@ -1572,7 +1572,8 @@ export default {
   name: "searchbusan",
 
   async created() {
-    this.$emit("searchon", false), await this.replacerefresh();
+    this.$emit("searchon", false);
+    await this.replacerefresh();
 
     this.contenttypeid = "12";
 
@@ -1749,6 +1750,9 @@ export default {
   },
 
   methods: {
+    handlereview() {
+      this.$router.push({ path: "/board/review" });
+    },
     async TDsave() {
       if (this.$route.query.betday === "1") {
         this.allchoice.push(this.choice1);
@@ -1758,11 +1762,9 @@ export default {
         this.allchoice.push(this.choice2);
       }
       if (this.$route.query.betday === "3") {
-        this.allchoice = {
-          save1: this.choice1,
-          save2: this.choice2,
-          save3: this.choice3,
-        };
+        this.allchoice.push(this.choice1);
+        this.allchoice.push(this.choice2);
+        this.allchoice.push(this.choice3);
       }
       if (this.$route.query.betday === "4") {
         this.allchoice.push(this.choice1);
@@ -1853,6 +1855,9 @@ export default {
       console.log(this.imagefile);
     },
     async likepush(item) {
+      if (this.token === null) {
+        alert("로그인후 이용가능한 서비스 입니다");
+      }
       console.log(item);
       const url1 = `/REST/travel/good?contentid=${item}`;
       const headers = {
@@ -4314,18 +4319,18 @@ export default {
 
       const response = await axios.get(url, { headers });
       this.dialoglist = response.data.TD;
+      if (this.token !== null) {
+        const url1 = `/REST/travel/good/state?contentid=${i.code}`;
+        const headers1 = {
+          "Content-type": "application/json",
+          token: this.token,
+        };
+        const data = {};
 
-      const url1 = `/REST/travel/good/state?contentid=${i.code}`;
-      const headers1 = {
-        "Content-type": "application/json",
-        token: this.token,
-      };
-      const data = {};
-
-      const response1 = await axios.post(url1, data, { headers: headers1 });
-      console.log(response1);
-      this.heart = response1.data.goodresult;
-
+        const response1 = await axios.post(url1, data, { headers: headers1 });
+        console.log(response1);
+        this.heart = response1.data.goodresult;
+      }
       this.dialogVisible1 = true;
     },
     async outMarker1() {

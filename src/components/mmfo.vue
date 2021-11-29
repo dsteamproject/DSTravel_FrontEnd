@@ -18,7 +18,7 @@
           <div class="btn_box">
             <button @click="handlemapdialog(item)" class="map">위치보기</button>
           </div>
-          <span class="heart1">♥</span>
+          <span class="heart1" @click="handleheart(item)">♥</span>
         </li>
       </ul>
     </div>
@@ -60,10 +60,32 @@ export default {
     };
   },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     await this.refresh();
   },
   methods: {
+    async handleheart(item) {
+      console.log(item);
+      if (this.token === null) {
+        alert("로그인후 이용가능한 서비스 입니다");
+        return;
+      }
+      var delConfirm = confirm("위시리스트에서 삭제하시겠습니까?");
+      if (delConfirm) {
+        const url1 = `/REST/travel/good?contentid=${item.code}`;
+        const headers = {
+          "Content-type": "application/json",
+          token: this.token,
+        };
+        const body = {};
+        const response1 = await axios.post(url1, body, { headers });
+        console.log(response1);
+        if (response1.data.status === 200) {
+          alert("삭제되었습니다.");
+          await this.refresh();
+        }
+      }
+    },
     handlemapdialog(item) {
       this.abc += 1;
       console.log(item);
@@ -150,6 +172,7 @@ button {
   clear: both;
 }
 .heart1 {
+  cursor: pointer;
   position: absolute;
   top: 3%;
   right: 1%;
@@ -190,6 +213,7 @@ button {
 }
 
 .map {
+  margin-right: 10px;
   margin-top: 5px;
   border: none;
   cursor: pointer;
