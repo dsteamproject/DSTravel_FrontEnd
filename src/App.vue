@@ -151,22 +151,6 @@
                 >로그아웃</router-link
               >
             </li>
-            <li>
-              <el-dropdown trigger="click" v-if="logined === true">
-                <span class="el-dropdown-link">
-                  <el-icon class="iconbell"><bell-filled /></el-icon>
-                  <el-badge class="mark" :value="1" />
-                </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item class="clearfix">
-                      공지사항
-                    </el-dropdown-item>
-                    <el-dropdown-item class="clearfix"> 안내 </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </li>
           </ul>
         </div>
         <div class="nav2">
@@ -287,13 +271,13 @@
 <script>
 import { Message } from "@element-plus/icons";
 import { Phone } from "@element-plus/icons";
-import { BellFilled } from "@element-plus/icons";
+
 import { Search } from "@element-plus/icons";
 import axios from "axios";
 export default {
   components: {
     Search,
-    BellFilled,
+
     Message,
     Phone,
   },

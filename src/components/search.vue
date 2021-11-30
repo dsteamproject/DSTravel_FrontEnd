@@ -1557,7 +1557,7 @@
         />
         <ul class="dlsuqare">
           <li @click="TDsave"><p>일정저장</p></li>
-          <li><p>일정공유</p></li>
+          <li @click="TDshare"><p>일정공유</p></li>
         </ul>
       </div>
       <div style="clear: both"></div>
@@ -1750,11 +1750,26 @@ export default {
   },
 
   methods: {
+    async TDshare() {
+      await this.allchoic();
+      const url1 = `/REST/travel/TDsave_board?title=${this.dltitle}`;
+      const headers = {
+        "Content-type": "application/json",
+        token: this.token,
+      };
+      const body = { total: this.allchoice, date: this.betdatelist };
+      const response1 = await axios.post(url1, body, { headers });
+      console.log(response1);
+      if (response1.data.status === 200) {
+        alert("일정 공유 완료 커뮤니티 여행일정 탭에서 확인하실수 있습니다");
+        this.dltitle = "";
+        this.dialogVisible2 = false;
+      }
+    },
     handlereview() {
       this.$router.push({ path: "/board/review" });
     },
-
-    async TDsave() {
+    async allchoic() {
       if (this.$route.query.betday === "1") {
         this.allchoice.push(this.choice1);
       }
@@ -1830,7 +1845,9 @@ export default {
         this.allchoice.push(this.choice9);
         this.allchoice.push(this.choice10);
       }
-
+    },
+    async TDsave() {
+      await this.allchoic();
       console.log(this.allchoice);
 
       const url1 = `/REST/travel/TDsave?title=${this.dltitle}`;

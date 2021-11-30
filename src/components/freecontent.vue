@@ -225,7 +225,7 @@
       <template #footer>
         <span class="dialog-footer">
           <button class="no_btn" @click="dialogVisible2 = false">취소</button>
-          <button class="del_btn" type="primary" @click="abc">신고</button>
+          <button class="del_btn" type="primary" @click="singo">신고</button>
         </span>
       </template>
     </el-dialog>
@@ -259,12 +259,24 @@ export default {
     };
   },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     await this.refresh();
     console.log(this.list);
     console.log(this.loginid);
   },
   methods: {
+    async singo() {
+      const url = `/REST/board/warning`;
+      const headers = { "Content-type": "application/json", token: this.token };
+      const body = {
+        no: this.list.no,
+      };
+      const response = await axios.post(url, body, { headers });
+      console.log(response);
+      if (response.data.status === 200) {
+        alert("신고 완료되었습니다");
+      }
+    },
     report() {
       this.dialogVisible2 = true;
     },

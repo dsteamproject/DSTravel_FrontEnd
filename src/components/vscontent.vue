@@ -330,12 +330,12 @@ export default {
     };
   },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     await this.refresh();
   },
   methods: {
     // 오른쪽 일곱번째 64강 결승
-    list7apush(item1) {
+    async list7apush(item1) {
       if (this.list7a.length !== 1) {
         if (this.list7a.length < this.list7a.length / 2) {
           this.list8a.push(item1);
@@ -360,10 +360,20 @@ export default {
         this.lastlist.push(item1);
         this.last = true;
         this.count7 = "";
+        const url1 = `/REST/worldcup/save`;
+        const headers1 = {
+          "Content-type": "application/json",
+        };
+        const body = {
+          no: item1.no,
+        };
+
+        const response1 = await axios.post(url1, body, { headers: headers1 });
+        console.log(response1);
       }
     },
     //왼쪽 여섯번째 64강결승
-    list7bpush(item) {
+    async list7bpush(item) {
       if (this.list7a.length !== 1) {
         if (this.list7a.length < this.list7a.length / 2) {
           this.list8a.push(item);
@@ -388,10 +398,20 @@ export default {
         this.lastlist.push(item);
         this.last = true;
         this.count7 = "";
+        const url1 = `/REST/worldcup/save`;
+        const headers1 = {
+          "Content-type": "application/json",
+        };
+        const body = {
+          no: item.no,
+        };
+
+        const response1 = await axios.post(url1, body, { headers: headers1 });
+        console.log(response1);
       }
     },
     // 오른쪽 여섯번째 32강 결승
-    list6apush(item1) {
+    async list6apush(item1) {
       if (this.list6a.length !== 1) {
         if (this.list7a.length < this.list6a.length / 2) {
           this.list7a.push(item1);
@@ -415,10 +435,20 @@ export default {
         this.lastlist.push(item1);
         this.last = true;
         this.count6 = "";
+        const url1 = `/REST/worldcup/save`;
+        const headers1 = {
+          "Content-type": "application/json",
+        };
+        const body = {
+          no: item1.no,
+        };
+
+        const response1 = await axios.post(url1, body, { headers: headers1 });
+        console.log(response1);
       }
     },
     //왼쪽 여섯번째 32강결승
-    list6bpush(item) {
+    async list6bpush(item) {
       if (this.list6a.length !== 1) {
         if (this.list7a.length < this.list6a.length / 2) {
           this.list7a.push(item);
@@ -442,10 +472,20 @@ export default {
         this.lastlist.push(item);
         this.last = true;
         this.count6 = "";
+        const url1 = `/REST/worldcup/save`;
+        const headers1 = {
+          "Content-type": "application/json",
+        };
+        const body = {
+          no: item.no,
+        };
+
+        const response1 = await axios.post(url1, body, { headers: headers1 });
+        console.log(response1);
       }
     },
     // 오른쪽 다섯번째 16강 결승
-    list5apush(item1) {
+    async list5apush(item1) {
       if (this.list5a.length !== 1) {
         if (this.list6a.length < this.list5a.length / 2) {
           this.list6a.push(item1);
@@ -466,12 +506,23 @@ export default {
         }
       } else {
         this.lastlist.push(item1);
+        console.log(this.lastlist);
         this.last = true;
         this.count5 = "";
+        const url1 = `/REST/worldcup/save`;
+        const headers1 = {
+          "Content-type": "application/json",
+        };
+        const body = {
+          no: item1.no,
+        };
+
+        const response1 = await axios.post(url1, body, { headers: headers1 });
+        console.log(response1);
       }
     },
     //왼쪽 다섯번째 16강결승
-    list5bpush(item) {
+    async list5bpush(item) {
       if (this.list5a.length !== 1) {
         if (this.list6a.length < this.list5a.length / 2) {
           this.list6a.push(item);
@@ -492,8 +543,19 @@ export default {
         }
       } else {
         this.lastlist.push(item);
+        console.log(this.lastlist);
         this.last = true;
         this.count5 = "";
+        const url1 = `/REST/worldcup/save`;
+        const headers1 = {
+          "Content-type": "application/json",
+        };
+        const body = {
+          no: item.no,
+        };
+
+        const response1 = await axios.post(url1, body, { headers: headers1 });
+        console.log(response1);
       }
     },
     // 오른쪽 네번째

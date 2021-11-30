@@ -2,6 +2,8 @@
   <div>
     <div class="wrap1">
       <!-- ㅇㅁㄴㅇ    -->
+      <p class="text1">내 여행</p>
+      <div class="hr"></div>
       <div style="margin-top: 20px">
         <!-- <el-button @click="toggleSelection([tableData[i]])"
       >Toggle selection status of second and third rows</el-button
@@ -21,7 +23,7 @@
               <option>제목</option>
               <option>카테고리</option>
             </select>
-            <input type="text" class="textinput" />
+            <input type="text" class="textinput" v-model="textinput" />
           </div>
         </div>
 
@@ -35,44 +37,29 @@
         >
           <el-table-column type="selection" width="55" />
           <el-table-column
-            prop="regdate2"
-            label="작성일"
+            prop="total[0][0].city.name"
+            label="지역"
             width="120"
             sortable
           />
           <el-table-column
-            prop="category"
-            label="카테고리"
+            prop="date[0]"
+            label="여행시작일"
             width="120"
             sortable
           >
-            <template #default="scope">
-              <span v-if="scope.row.category === 'A'">여행후기</span>
-              <span v-if="scope.row.category === 'info'">여행정보</span>
-              <span v-if="scope.row.category === 'free'">잡담</span>
-              <span v-if="scope.row.category === 'que'">질문</span>
-            </template>
           </el-table-column>
           <el-table-column
             property="title"
-            label="글제목"
+            label="여행일정제목"
             width="240"
             sortable
           />
 
           <el-table-column align="right">
             <template #default="scope">
-              <button
-                class="chbtn"
-                @click="handleDelete(scope.$index, scope.row)"
-              >
-                수정
-              </button>
-              <button
-                class="delbtn"
-                @click="handleDelete(scope.$index, scope.row)"
-              >
-                삭제
+              <button class="chbtn" @click="handleasd(scope.list)">
+                자세히보기
               </button>
             </template>
           </el-table-column>
@@ -81,7 +68,7 @@
           <el-pagination
             @current-change="handleCurrentChange"
             layout="prev, pager, next"
-            :total="this.cnt * 10"
+            :total="this.pages"
           ></el-pagination>
         </div>
       </div>
@@ -106,16 +93,20 @@ export default {
     await this.refresh();
   },
   methods: {
+    async handleasd(asd) {
+      console.log(asd);
+    },
     async refresh() {
       const url = `/REST/mypage/tdsave?title=&page=${this.page}&size=6`;
       const headers = { "Content-type": "application/json", token: this.token };
 
       const response = await axios.get(url, { headers });
-      console.log(response);
+      console.log(response.data.total);
       this.cnt = response.data.cnt;
       this.list = response.data.list;
       console.log(response.data.tdsave);
       this.list = response.data.tdsave; // 0: 1일 , 1 : 2일
+      this.pages = response.data.total;
     },
     async handleCurrentChange(val) {
       this.page = val;
@@ -237,5 +228,11 @@ export default {
 }
 .wrap1 {
   padding: 10px;
+}
+.text1 {
+  font-weight: bold;
+  font-size: 18px;
+  margin-left: 50px;
+  text-align: left;
 }
 </style>

@@ -21,7 +21,7 @@
             <td>{{ this.select }}</td>
             <td>{{ this.value[0] }}<br />~ {{ this.value[1] }}</td>
             <td>{{ this.number }}</td>
-            <td>{{ this.list.price }}만원</td>
+            <td>{{ this.price }}만원</td>
           </tr>
         </table>
         <h3>방문하실 객실과 예약정보를 입력해주세요</h3>
@@ -45,9 +45,9 @@
           <div>
             <p class="font_mini">객실 선택</p>
             <select name="items1" class="select" v-model="select">
-              <option value="싱글룸">싱글룸</option>
-              <option value="스탠다드">스탠다드</option>
-              <option value="스위트룸">스위트룸</option>
+              <option value="싱글룸">싱글룸(+1만원)</option>
+              <option value="스탠다드">스탠다드(+2만원)</option>
+              <option value="스위트룸">스위트룸(+3만원)</option>
             </select>
           </div>
           <p class="font_mini">투숙인원</p>
@@ -76,7 +76,7 @@
           <input
             class="datepiceer"
             type="text"
-            :value="this.value[0] + '~' + this.value[1]"
+            :value="this.value[0] + ' ~ ' + this.value[1]"
           />
 
           <p class="font_mini addoption">추가옵션</p>
@@ -109,13 +109,13 @@
           </div>
           <div class="hr2_pa">
             <span class="p2">총 상품금액</span
-            ><span class="p2_right">{{ this.list.price }}0,000</span><br />
+            ><span class="p2_right">{{ this.price }}0,000</span><br />
             <span class="p2">수수료</span><span class="p2_right">500</span
             ><br />
           </div>
           <div class="gray">
             <p>총결제 금액</p>
-            <div class="g_right">{{ this.list.price }}0,000</div>
+            <div class="g_right">{{ this.price }}0,000</div>
           </div>
           <div class="btnbox">
             <button class="ribtn" @click="requestPay">예약하기</button>
@@ -131,8 +131,16 @@
 import axios from "axios";
 import { defineComponent, ref } from "vue";
 export default defineComponent({
+  watch: {
+    select: async function () {
+      if (this.select === "싱글룸") {
+        this.price + 1;
+        console.log(this.price);
+      }
+    },
+  },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     await this.refresh();
   },
   setup() {
@@ -149,6 +157,8 @@ export default defineComponent({
   },
   data() {
     return {
+      price: "",
+      list1: "",
       number: "",
       select: "",
       list: [],
@@ -169,6 +179,8 @@ export default defineComponent({
       const response1 = await axios.get(url1, { headers1 });
       console.log(response1);
       this.list = response1.data.TD;
+      this.price = Number(response1.data.TD.price);
+      console.log(this.price);
     },
     requestPay: async function () {
       //1. 객체 초기화 (가맹점 식별코드 삽입)
@@ -200,7 +212,7 @@ export default defineComponent({
             msg1 += "에러내용 : " + rsp.error_msg;
           }
           console.log(msg);
-          console.loh(msg1);
+          console.log(msg1);
         }
       );
     },

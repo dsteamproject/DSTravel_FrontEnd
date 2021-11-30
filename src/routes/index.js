@@ -30,6 +30,7 @@ import findid from '@/components/id'
 import findpw from '@/components/pw'
 import freewrite from '@/components/freewrite'
 import freecontent from '@/components/freecontent'
+import travelcontent from '@/components/travelcontent'
 import freechange from '@/components/freechange'
 import mypage from '@/components/mypage'
 import mypagemypw from '@/components/mypw'
@@ -65,6 +66,7 @@ const routes = [
     { path: '/carcontent', name: "carcontent", component: carcontent },
     { path: '/freewrite', name: "freewrite", component: freewrite, meta: { auth2: true }, },
     { path: '/freecontent', name: "freecontent", component: freecontent },
+    { path: '/travelcontent', name: "travelcontent", component: travelcontent },
     { path: '/freechange', name: "freechange", component: freechange, meta: { auth2: true } },
 
     {

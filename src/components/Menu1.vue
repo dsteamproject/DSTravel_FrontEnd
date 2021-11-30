@@ -1,20 +1,6 @@
 <template>
   <div class="wrap">
     <div class="wrap_in">
-      <el-popover
-        v-model:visible="visible"
-        placement="left-end"
-        title="Title"
-        :width="300"
-        trigger="manual"
-      >
-        <div class="popovercontent">채팅 구현</div>
-        <template #reference>
-          <div @click="visible = !visible" class="fixedbtn">
-            <img src="../assets/queicon.png" class="fixedimg" />
-          </div>
-        </template>
-      </el-popover>
       <el-carousel height="480px">
         <el-carousel-item v-for="item in 3" :key="item"> </el-carousel-item>
       </el-carousel>
@@ -60,29 +46,33 @@
         </p>
         <div class="box1_in">
           <ul class="traveldate">
-            <li>
-              <div class="img_box">asd</div>
-              <div class="text_box1"><div class="sqare"></div></div>
-            </li>
-            <li>
-              <div class="img_box">asd</div>
-              <div class="text_box1"><div class="sqare"></div></div>
-            </li>
-            <li>
-              <div class="img_box">asd</div>
-              <div class="text_box1"><div class="sqare"></div></div>
-            </li>
-            <li>
-              <div class="img_box">asd</div>
-              <div class="text_box1"><div class="sqare"></div></div>
-            </li>
-            <li>
-              <div class="img_box">asd</div>
-              <div class="text_box1"><div class="sqare"></div></div>
-            </li>
-            <li>
-              <div class="img_box">asd</div>
-              <div class="text_box1"><div class="sqare"></div></div>
+            <li v-for="item in list" :key="item">
+              <div
+                class="img_box"
+                v-bind:style="{
+                  backgroundImage: 'url(' + item.total[0][0].firstimage + ')',
+                }"
+              ></div>
+              <div class="text_box1">
+                <div class="sqare">
+                  <img
+                    :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${item.member.id}`"
+                    class="myimg"
+                  />
+                </div>
+                <div class="text_b">
+                  <p class="text_b3">{{ item.total[0][0].city.name }} 여행</p>
+                  <span class="text_b0">{{ item.title }}</span>
+                  <p class="text_b1">
+                    {{ item.date[0] }} ~
+                    {{ item.date[item.date.length - 1] }}
+                  </p>
+
+                  <p class="text_b2">{{ item.member.nicname }}님의 여행일정</p>
+
+                  <button class="text_b_btn">상세보기</button>
+                </div>
+              </div>
             </li>
           </ul>
         </div>
@@ -153,6 +143,7 @@ export default {
   },
   data() {
     return {
+      list: [],
       reviewlist1: "",
       reviewlist: [],
       visible: false,
@@ -174,8 +165,23 @@ export default {
   async created() {
     this.$emit("searchon", true);
     await this.boardlist();
+    await this.travellist();
   },
   methods: {
+    async travellist() {
+      const url = `/REST/board/select_all?type=title&orderby=latest&keyword=&size=6&page=1&&category=TDsave`;
+      const headers = { "Content-type": "application/json" };
+
+      const response = await axios.get(url, { headers });
+      console.log(response.data.cnt);
+      console.log(response);
+      this.list = response.data.list;
+      console.log(this.list[0].date);
+      this.pages = response.data.cnt;
+
+      console.log(this.list);
+    },
+
     async boardlist() {
       const url = `/REST/board/select_all?type=title&orderby=latest&keyword=&size=5&page=1&category=review`;
       const headers = { "Content-type": "application/json" };
