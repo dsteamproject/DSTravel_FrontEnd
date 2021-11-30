@@ -613,7 +613,7 @@ label {
 .wrap {
   background: white;
   width: 1200px;
-  height: 1300px;
+  height: auto;
   margin: auto;
   padding: 70px 120px;
   box-sizing: border-box;
@@ -640,7 +640,7 @@ ul .circle1 {
   clear: both;
   box-sizing: border-box;
   width: 100%;
-  height: 800px;
+  height: auto;
 }
 .input_box1 {
   clear: both;

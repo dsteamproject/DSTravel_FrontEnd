@@ -22,25 +22,249 @@
 
     <div class="wrap">
       <div class="userdetail">
-        <img :src="123" class="myimg" />
+        <img
+          :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${this.list.member.id}`"
+          class="myimg"
+        />
+        <p>{{ this.list.member.nicname }}</p>
       </div>
-      <div class="ck-content"></div>
+      <div class="travel_wrap">
+        <div class="tw1">
+          <img src="../assets/icon_cos_schedule1.gif" />
+          <p>일정</p>
+          <span
+            >{{ this.tdsave1.date[0] }} ~
+            {{ this.tdsave1.date[this.tdsave1.date.length - 1] }}</span
+          >
+        </div>
+        <div class="tw2">
+          <img src="../assets/icon_cos_theme1.gif" />
+          <p>여행지</p>
+          <span>{{ this.tdsave1.total[0][0].city.name }}</span>
+        </div>
+      </div>
+      <div class="content">
+        <div v-if="this.choice1 !== undefined">
+          <p class="cp1">1일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice1" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+        <div v-if="this.choice2 !== undefined">
+          <p class="cp1">2일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice2" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+        <div v-if="this.choice3 !== undefined">
+          <p class="cp1">3일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice3" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+
+        <div v-if="this.choice4 !== undefined">
+          <p class="cp1">4일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice4" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+
+        <div v-if="this.choice5 !== undefined">
+          <p class="cp1">5일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice5" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+        <div v-if="this.choice6 !== undefined">
+          <p class="cp1">6일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice6" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+        <div v-if="this.choice7 !== undefined">
+          <p class="cp1">7일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice7" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+
+        <div v-if="this.choice8 !== undefined">
+          <p class="cp1">8일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice8" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+
+        <div v-if="this.choice9 !== undefined">
+          <p class="cp1">9일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice9" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
+        </div>
+
+        <div v-if="this.choice10 !== undefined">
+          <p class="cp1">10일차</p>
+          <Carousel :settings="settings" :breakpoints="breakpoints">
+            <Slide v-for="(slide, index) in choice10" :key="index">
+              <div class="sli1">
+                <p class="cp2">{{ index + 1 }}</p>
+                <div class="img_Box">
+                  <p class="img_text">{{ slide.title }}</p>
+                  <img :src="slide.firstimage" class="img" />
+                </div>
+              </div>
+            </Slide>
+
+            <template #addons> </template>
+          </Carousel>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Carousel, Navigation, Slide } from "vue3-carousel";
 import axios from "axios";
 export default {
+  components: {
+    Carousel,
+    Slide,
+    Navigation,
+  },
   async created() {
     await this.refresh();
   },
   data() {
     return {
+      settings: {
+        itemsToShow: 5,
+        snapAlign: "left",
+      },
       no: this.$route.query.no,
       token: sessionStorage.getItem("TOKEN"),
       tdsave1: [],
+      tdsave2: [],
       list: [],
+      choice1: [],
+      choice2: [],
+      choice3: [],
+      choice4: [],
+      choice5: [],
+      choice6: [],
+      choice7: [],
+      choice8: [],
+      choice9: [],
+      choice10: [],
     };
   },
   methods: {
@@ -60,13 +284,82 @@ export default {
       const response = await axios.get(url, { headers });
       console.log(JSON.parse(response.data.tdsave.td));
       this.list = response.data.tdsave;
+      console.log(this.list);
       this.tdsave1 = JSON.parse(response.data.tdsave.td);
+      this.tdsave2 = this.tdsave1.total;
+      this.choice1 = this.tdsave1.total[0];
+      this.choice2 = this.tdsave1.total[1];
+      this.choice3 = this.tdsave1.total[2];
+      this.choice4 = this.tdsave1.total[3];
+      this.choice5 = this.tdsave1.total[4];
+      this.choice6 = this.tdsave1.total[5];
+      this.choice7 = this.tdsave1.total[6];
+      this.choice8 = this.tdsave1.total[7];
+      this.choice9 = this.tdsave1.total[8];
+      this.choice10 = this.tdsave1.total[9];
+      console.log(this.choice1);
+      console.log(this.choice2);
+      console.log(this.choice3);
+      console.log(this.choice4);
+      console.log(this.choice5);
+      console.log(this.choice6);
+      console.log(this.choice7);
+      console.log(this.choice8);
+      console.log(this.choice9);
+      console.log(this.choice10);
     },
   },
 };
 </script>
 
 <style scoped>
+.cp1 {
+  margin-top: 10px;
+  padding-top: 10px;
+  font-weight: bold;
+  color: #2752be;
+}
+.cp2 {
+  background: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  display: inline-block;
+  border-radius: 50%;
+  font-weight: bold;
+}
+.img {
+  width: 100%;
+  height: 100%;
+}
+.img_Box {
+  width: 180px;
+  height: 180px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+.img_text {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px black;
+}
+.wrapsl {
+  height: 150px;
+  width: 300px;
+  background: #af1313;
+}
+.content {
+  background: rgb(240, 240, 240);
+  height: auto;
+  margin-top: 40px;
+  text-align: center;
+}
 .userdetail {
   text-align: center;
   margin-top: 25px;
@@ -312,7 +605,7 @@ export default {
   min-height: 400px;
 }
 .wrap {
-  width: 1320px;
+  width: 1080px;
   margin: 0 auto;
 }
 .ck-content .text-tiny {
@@ -414,5 +707,21 @@ export default {
   height: 100px;
   resize: none;
   outline: none;
+}
+.travel_wrap {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  height: 130px;
+  padding: 40px 150px;
+}
+.tw1 {
+  width: 50%;
+  float: left;
+  text-align: center;
+}
+.tw2 {
+  width: 50%;
+  float: left;
+  text-align: center;
 }
 </style>

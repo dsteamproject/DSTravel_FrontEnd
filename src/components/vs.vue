@@ -2,8 +2,9 @@
   <div>
     <div class="wrap">
       <div class="top">
-        <router-link :to="`/vs/vsplay`" class="rlink">월드컵하기</router-link>
-        <router-link :to="`/vs/vsrank`" class="rlink">랭킹보기</router-link>
+        <router-link :to="`/vs/vsplay`" class="rlink"
+          >여행지 월드컵</router-link
+        >
       </div>
       <router-view></router-view>
     </div>

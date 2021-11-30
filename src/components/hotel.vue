@@ -535,6 +535,7 @@ export default defineComponent({
 .wrap3_1 {
   width: 1080px;
   margin: 0 auto;
+  margin-bottom: 50px;
 }
 .left1 {
   width: 24%;
