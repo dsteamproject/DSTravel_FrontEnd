@@ -58,8 +58,17 @@
 
           <el-table-column align="right">
             <template #default="scope">
-              <button class="chbtn" @click="handleasd(scope.list)">
-                자세히보기
+              <button
+                class="chbtn"
+                @click="handleDelete(scope.$index, scope.row)"
+              >
+                수정
+              </button>
+              <button
+                class="delbtn"
+                @click="handleDelete(scope.$index, scope.row)"
+              >
+                삭제
               </button>
             </template>
           </el-table-column>

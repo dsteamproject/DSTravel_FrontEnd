@@ -119,6 +119,7 @@ export default {
       console.log(response.data.cnt);
       console.log(response.data.list[0].No);
       this.list = response.data.list;
+      console.log(this.list);
       this.pages = response.data.cnt;
     },
     async handleCurrentChange(val) {

@@ -759,8 +759,18 @@
             </li>
             <li class="alldatecontent" v-for="item in choice1" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
+
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
               </div>
@@ -772,7 +782,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice2" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -786,7 +805,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice3" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -800,7 +828,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice4" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -813,7 +850,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice5" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -826,7 +872,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice6" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -839,7 +894,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice7" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -852,7 +916,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice8" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -865,7 +938,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice9" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -878,7 +960,16 @@
             </li>
             <li class="alldatecontent" v-for="item in choice10" :key="item">
               <div class="ads" style="width: 20%; float: left">
-                <img :src="item.firstimage" style="width: 100%; height: 50px" />
+                <img
+                  v-if="item.firstimage !== undefined"
+                  :src="item.firstimage"
+                  style="width: 100%; height: 50px"
+                />
+                <img
+                  v-if="item.firstimage === undefined"
+                  :src="`//127.0.0.1:8080/REST/travel/select_image?no=${item.no}`"
+                  style="height: 50px; width: 100%"
+                />
               </div>
               <div class="ads2" style="width: 80%; float: left">
                 <span class="choice_title2"> {{ item.title }}</span>
@@ -2332,6 +2423,7 @@ export default {
     mapput() {
       if (this.token === null) {
         alert("로그인후 이용가능한 서비스입니다");
+        return;
       }
       this.dialogVisible = true;
     },
