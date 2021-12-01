@@ -1875,6 +1875,7 @@ export default {
     async likepush(item) {
       if (this.token === null) {
         alert("로그인후 이용가능한 서비스 입니다");
+        return;
       }
       console.log(item);
       const url1 = `/REST/travel/good?contentid=${item}`;
@@ -1907,9 +1908,31 @@ export default {
       console.log(response.data.coordinateInfo.coordinate[0].lat);
       console.log(response.data.coordinateInfo.coordinate[0].lon);
       console.log(this.pluslocation);
+      console.log(this.imagefile);
+
+      const url1 = `/REST/travel/TDtem/insert?type=${this.mapnum}&city=${this.areacode}`;
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        token: this.token,
+      };
+      const body1 = new FormData();
+      body1.append("title", this.pluslocation);
+      body1.append("addr", this.addr);
+      body1.append("xlocation", response.data.coordinateInfo.coordinate[0].lon);
+      body1.append("ylocation", response.data.coordinateInfo.coordinate[0].lat);
+      body1.append("file", this.imagefile);
+
+      const response1 = await axios.post(url1, body1, { headers });
+      console.log(response1);
+
+      if (response1.data.status === 200) {
+        await this.rightrefresh();
+        this.dialogVisible = false;
+      }
       this.plusmarker.push({
         title: this.pluslocation,
-        firstimage: this.imagefile,
+        no: response1.data.no,
+        //firstimage: this.imagefile,
         xlocation: Number(response.data.coordinateInfo.coordinate[0].lon),
         ylocation: Number(response.data.coordinateInfo.coordinate[0].lat),
       });
@@ -2134,25 +2157,8 @@ export default {
         }
       }
 
-      console.log(this.token);
-      const url1 = `/REST/travel/TDtem/insert?type=${this.mapnum}&city=${this.areacode}`;
-      const headers = {
-        "Content-Type": "multipart/form-data",
-        token: this.token,
-      };
-      const body1 = new FormData();
-      body1.append("title", this.pluslocation);
-      body1.append("addr", this.addr);
-      body1.append("xlocation", response.data.coordinateInfo.coordinate[0].lon);
-      body1.append("ylocation", response.data.coordinateInfo.coordinate[0].lat);
-      body1.append("file", this.imagefile);
-
-      const response1 = await axios.post(url1, body1, { headers });
-      console.log(response1);
-      if (response1.data.status === 200) {
-        this.dialogVisible = false;
-        await this.rightrefresh();
-      }
+      await this.rightrefresh();
+      await this.alllist();
     },
     dorofull(event) {
       var doro = event.currentTarget.textContent;
@@ -2662,14 +2668,18 @@ export default {
         var marknum2 = this.markers.findIndex((e) => e.id == this.loadtext[vv]);
         this.markers.splice(marknum2, 1);
       }
+
       if (this.num3 === 1) {
         var checknum1 = this.markers1.findIndex((e) => e.id == i.title);
+
         this.markers1.splice(checknum1, 1);
       } else if (this.num3 === 2) {
         var checknum2 = this.markers2.findIndex((e) => e.id == i.title);
+
         this.markers2.splice(checknum2, 1);
       } else if (this.num3 === 3) {
         var checknum3 = this.markers3.findIndex((e) => e.id == i.title);
+
         this.markers3.splice(checknum3, 1);
       } else if (this.num3 === 4) {
         var checknum4 = this.markers2.findIndex((e) => e.id == i.title);
@@ -2693,15 +2703,46 @@ export default {
         var checknum10 = this.markers10.findIndex((e) => e.id == i.title);
         this.markers10.splice(checknum10, 1);
       }
-      await this.pathnone();
+
       this.middleload = [];
       this.loadfirst = [];
       this.loadtext = [];
       this.loadtexton = false;
+      if (this.num3 === 1) {
+        var chonum1 = this.choice1.findIndex((e) => e.title == i.title);
+        this.choice1.splice(chonum1, 1);
+      } else if (this.num3 === 2) {
+        var chonum2 = this.choice2.findIndex((e) => e.title == i.title);
+        this.choice2.splice(chonum2, 1);
+      } else if (this.num3 === 3) {
+        var chonum3 = this.choice3.findIndex((e) => e.title == i.title);
+        this.choice3.splice(chonum3, 1);
+      } else if (this.num3 === 4) {
+        var chonum4 = this.choice4.findIndex((e) => e.title == i.title);
+        this.choice4.splice(chonum4, 1);
+      } else if (this.num3 === 5) {
+        var chonum5 = this.choice5.findIndex((e) => e.title == i.title);
+        this.choice5.splice(chonum5, 1);
+      } else if (this.num3 === 6) {
+        var chonum6 = this.choice6.findIndex((e) => e.title == i.title);
+        this.choice6.splice(chonum6, 1);
+      } else if (this.num3 === 7) {
+        var chonum7 = this.choice7.findIndex((e) => e.title == i.title);
+        this.choice7.splice(chonum7, 1);
+      } else if (this.num3 === 8) {
+        var chonum8 = this.choice8.findIndex((e) => e.title == i.title);
+        this.choice8.splice(chonum8, 1);
+      } else if (this.num3 === 9) {
+        var chonum9 = this.choice9.findIndex((e) => e.title == i.title);
+        this.choice9.splice(chonum9, 1);
+      } else if (this.num3 === 10) {
+        var chonum10 = this.choice10.findIndex((e) => e.title == i.title);
+        this.choice10.splice(chonum10, 1);
+      }
 
-      var chonum = this.choice1.findIndex((e) => e.title == i.title);
-
-      this.choice1.splice(chonum, 1);
+      await this.pathnone();
+      await this.onetwomarker();
+      await this.numchagnelist();
       var marknum = this.markers.findIndex((e) => e.id == i.title);
       // right 1,2,3 별로 변경 해야함
       if (this.right === 1) {
@@ -2710,16 +2751,6 @@ export default {
         this.markers[marknum].icon = "https://ifh.cc/g/Xg70rK.png";
       } else if (this.right === 3) {
         this.markers[marknum].icon = "https://ifh.cc/g/PSvrrN.png";
-      }
-
-      for (var cc = 0; cc < this.choice1.length; cc++) {
-        var marknum1 = this.markers.findIndex(
-          (e) => e.id == this.choice1[cc].title
-        );
-
-        this.markers[marknum1].icon = `http://127.0.0.1:8080/REST/travel/image${
-          cc + 1
-        }`;
       }
 
       //"https://ifh.cc/g/3qp9x6.png"
@@ -3772,6 +3803,7 @@ export default {
           this.markers[vv1].icon = "https://ifh.cc/g/PSvrrN.png";
         }
       }
+
       await this.onetwomarker();
       await this.numchagnelist();
     },

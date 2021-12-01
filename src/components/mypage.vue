@@ -266,7 +266,6 @@ export default {
         this.chk = input.files[0];
         console.log(this.chk);
 
-        console.log(this.chk);
         const url = `/REST/mypage/insertMemberImg`;
         const headers = {
           "Content-Type": "multipart/form-data",

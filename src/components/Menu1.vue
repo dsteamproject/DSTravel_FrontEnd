@@ -70,7 +70,9 @@
 
                   <p class="text_b2">{{ item.member.nicname }}님의 여행일정</p>
 
-                  <button class="text_b_btn">상세보기</button>
+                  <button class="text_b_btn" @click="handlerouter(item)">
+                    상세보기
+                  </button>
                 </div>
               </div>
             </li>
@@ -87,7 +89,7 @@
           :breakpoints="breakpoints"
         >
           <Slide v-for="slide in reviewlist" :key="slide">
-            <div class="carousel__item">
+            <div class="carousel__item" @click="carouselgo(slide)">
               <div class="img_box2">
                 <img
                   :src="`http://127.0.0.1:8080/REST/board/select_image?no=${slide.no}`"
@@ -168,6 +170,15 @@ export default {
     await this.travellist();
   },
   methods: {
+    carouselgo(slide) {
+      console.log(slide.no);
+      this.$router.push(`/freecontent?no=${slide.no}`);
+    },
+    handlerouter(item) {
+      console.log(item.No);
+
+      this.$router.push(`/travelcontent?no=${item.No}`);
+    },
     async travellist() {
       const url = `/REST/board/select_all?type=title&orderby=latest&keyword=&size=6&page=1&&category=TDsave`;
       const headers = { "Content-type": "application/json" };
