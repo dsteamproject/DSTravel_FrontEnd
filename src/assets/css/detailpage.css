@@ -1,0 +1,41 @@
+.container{
+	max-width : 960px;
+	width : 100%;
+	padding-right : 0, 0.75rem;
+	padding-left : 0, 0.75rem;
+	margin-right : auto;
+	margin-left : auto;
+}
+
+.label{
+	margin-bottom : 0.5rem;
+	display : inline-block;
+}
+
+.input{
+	display : block;
+	width : 96%;
+	padding : 0.375rem 0.75rem;
+	font-size : 1rem;
+	font-weight : 400;
+	line-height : 1.5;
+	color : #212529;
+
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #ced4da;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+
+	appearance : none;
+	border-radius : 0.25rem;
+	transition : border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.item-div{
+	margin-top : 1rem !important;
+}
+
+.el-select{
+	width: 100%;
+}

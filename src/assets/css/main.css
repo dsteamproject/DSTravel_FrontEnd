@@ -1,0 +1,105 @@
+@font-face {
+	font-family: "hannaair";
+	src: url("../fonts/BMHANNAAir_ttf.ttf");
+}
+
+body{
+	margin: 0; 
+	font-size: 1rem; 
+	font-weight: 400; 
+	line-height: 1.5;
+	font-family: "hannaair";
+
+} 
+
+thead, tbody, tfoot, tr, td, th{
+	border-color : inherit;
+	border-style : solid;
+	border-width : 0;
+	}
+
+	.main-title{
+		margin: 0;
+		padding: 20px;
+		color: #ffffff;
+		font-size: 28px;
+		background-color: #727A83;
+	}
+
+	/* .container{
+		max-width : 720px;
+		width : 100%;
+		padding-right : 0, 0.75rem;
+		padding-left : 0, 0.75rem;
+		margin-right : auto;
+		margin-left : auto;
+	}
+
+	.row2{
+		display: flex;
+		flex-wrap: wrap;
+	}
+	
+	table{
+		caption-side : bottom;
+		border-collapse : collapse;
+		width : 100%;
+		margin-bottom : 1rem;
+		color : #212529;
+		vertical-align : top;
+		border-color : #dee2e6;
+		}
+	
+	table > thead{
+		vertical-align : bottom;
+	}
+	
+	table > :not(:first-child){
+		border-top : 2px solid currentColor;
+	}
+	
+	table > tbody{
+		vertical-align : inherit;
+	}
+	
+	tr{
+		display : table-row;
+		vertical-align : inherit;
+	}
+	
+	td{
+		border-left: 1px solid #dee2e6;
+		border-right: 1px solid #dee2e6;
+	}
+	
+	th{
+		text-align : -webkit-match-parent;
+		display: table-cell;
+		vertical-align: inherit;
+		font-weight: bold;
+	
+	}
+	
+	table > :not(caption) > * > * {
+		padding:0.5rem 0.5rem;
+		background-color: transparent;
+		border-bottom-width: 1px;
+		box-shadow: inset 0 0 0 9999px transparent;
+	}
+	
+	@media(min-width :576px)
+	{
+		.title{
+			flex: 0 0 auto;
+			width : 60%;
+			font-weight:500;
+			margin: 0;
+		}
+	}
+	
+	.title{
+		flex: 0 0 auto;
+		width : 60%;
+		font-weight:500;
+		margin: 0;
+	} */
