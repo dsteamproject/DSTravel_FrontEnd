@@ -30,7 +30,9 @@
       <div class="jin_left">
         <div class="left5">
           <p class="ib_left">날짜와 객실선택</p>
-          <span class="font_mini">체크인/아웃 선택</span>
+          <span class="font_mini"
+            >체크인/아웃 선택 <span class="red"> * </span></span
+          >
           <div class="block321">
             <el-date-picker
               v-model="value"
@@ -43,25 +45,37 @@
             <p class="inf">체크인 날짜와 체크아웃시간을 선택해주세요</p>
           </div>
           <div>
-            <p class="font_mini">객실 선택</p>
+            <p class="font_mini">객실 선택 <span class="red"> * </span></p>
             <select name="items1" class="select" v-model="select">
-              <option value="싱글룸">싱글룸(+1만원)</option>
-              <option value="스탠다드">스탠다드(+2만원)</option>
-              <option value="스위트룸">스위트룸(+3만원)</option>
+              <option value="싱글룸">싱글룸</option>
+              <option value="스탠다드">스탠다드</option>
+              <option value="스위트룸">스위트룸</option>
             </select>
           </div>
-          <p class="font_mini">투숙인원</p>
+          <p class="font_mini">투숙인원 <span class="red"> * </span></p>
           <input type="number" class="numberbox" v-model="number" />
           <p class="inf">추가인원에 따라 객실요금이 달라질수있습니다.</p>
           <div>
             <p class="customer ib_left">고객정보</p>
-            <p class="name">이름</p>
-            <input type="text" class="name1" placeholder="성" />
-            <input type="text" class="name2" placeholder="이름" />
+            <p class="name font_mini">이름 <span class="red"> * </span></p>
+
+            <input
+              type="text"
+              v-model="firstname"
+              class="name1"
+              placeholder="성"
+            />
+            <input
+              type="text"
+              v-model="lastname"
+              class="name2"
+              placeholder="이름"
+            />
             <p class="phone font_mini">
               휴대폰 연락처 <span class="red"> * </span>
             </p>
             <input
+              v-model="phone"
               type="text"
               class="name3"
               placeholder=" '-'없이 숫자만 입력해주세요"
@@ -74,6 +88,7 @@
           </div>
           <p class="datenum font_mini">숙박일수</p>
           <input
+            disabled
             class="datepiceer"
             type="text"
             :value="this.value[0] + ' ~ ' + this.value[1]"
@@ -81,10 +96,9 @@
 
           <p class="font_mini addoption">추가옵션</p>
           <div class="plus_box">
-            <input type="checkbox" name="xxx" value="yyy" checked /><label
-              >조식</label
+            <input type="checkbox" name="xxx" value="yyy" /><label>조식</label
             ><br />
-            <input type="checkbox" name="xxx" value="yyy" checked /><label
+            <input type="checkbox" name="xxx" value="yyy" /><label
               >라운지</label
             >
           </div>
@@ -97,7 +111,7 @@
 
         <div class="last_box">
           <p class="ib_left ib_plus">추가요청사항</p>
-          <textarea class="area">sad</textarea>
+          <textarea class="area"></textarea>
         </div>
       </div>
       <div class="jin_right">
@@ -110,8 +124,7 @@
           <div class="hr2_pa">
             <span class="p2">총 상품금액</span
             ><span class="p2_right">{{ this.price }}0,000</span><br />
-            <span class="p2">수수료</span><span class="p2_right">500</span
-            ><br />
+            <span class="p2">수수료</span><span class="p2_right">0</span><br />
           </div>
           <div class="gray">
             <p>총결제 금액</p>
@@ -140,6 +153,7 @@ export default defineComponent({
     },
   },
   async created() {
+    console.log(this.select);
     this.$emit("searchon", true);
     await this.refresh();
   },
@@ -157,6 +171,9 @@ export default defineComponent({
   },
   data() {
     return {
+      phone: "",
+      firstname: "",
+      lastname: "",
       price: "",
       list1: "",
       number: "",
@@ -183,6 +200,31 @@ export default defineComponent({
       console.log(this.price);
     },
     requestPay: async function () {
+      if (this.value === "00") {
+        alert("일정을 선택해주세요");
+        return;
+      }
+      if (this.select === "") {
+        alert("객실을 선택해주세요");
+        return;
+      }
+      if (this.number === "") {
+        alert("투숙인원을 선택해주세요");
+        return;
+      }
+      if (this.firstname === "") {
+        alert("이름을 입력해주세요");
+        return;
+      }
+      if (this.lastname === "") {
+        alert("이름을 입력해주세요");
+        return;
+      }
+      if (this.phone === "") {
+        alert("연락처를 입력해주세요");
+        return;
+      }
+
       //1. 객체 초기화 (가맹점 식별코드 삽입)
       var IMP = window.IMP;
       IMP.init(this.impCode);
