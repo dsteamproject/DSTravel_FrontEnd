@@ -16,5 +16,5 @@ module.exports = {
         //127.0.0.1:9090
         port: 9090
     },
-    //publicPath: '/REST',
+    publicPath: '/REST',
 };
