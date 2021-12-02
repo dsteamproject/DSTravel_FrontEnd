@@ -56,6 +56,7 @@
                 수정
               </button>
               <button
+                v-if="scope.row.state !== 1"
                 class="delbtn"
                 @click="handleDelete(scope.$index, scope.row)"
               >
@@ -89,7 +90,7 @@ export default {
     };
   },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     await this.refresh();
   },
   methods: {

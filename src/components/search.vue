@@ -3928,7 +3928,7 @@ export default {
     async rightrefresh() {
       console.log(sessionStorage.getItem("TOKEN"));
       // 오른쪽 상세창
-      const url1 = `/REST/travel/select?size=200&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
+      const url1 = `/REST/travel/select?size=250&page=1&title=&contentTypeId=${this.contenttypeid}&areaCode=${this.areacode}`;
       let headers;
       if (sessionStorage.getItem("TOKEN") === null) {
         headers = { "Content-type": "application/json" };

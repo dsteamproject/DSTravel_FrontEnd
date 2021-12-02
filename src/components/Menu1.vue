@@ -56,7 +56,7 @@
               <div class="text_box1">
                 <div class="sqare">
                   <img
-                    :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${item.member.id}`"
+                    :src="`/REST/mypage/select_image?id=${item.member.id}`"
                     class="myimg"
                   />
                 </div>
@@ -92,7 +92,7 @@
             <div class="carousel__item" @click="carouselgo(slide)">
               <div class="img_box2">
                 <img
-                  :src="`http://127.0.0.1:8080/REST/board/select_image?no=${slide.no}`"
+                  :src="`/REST/board/select_image?no=${slide.no}`"
                   class="myimg"
                 />
               </div>
