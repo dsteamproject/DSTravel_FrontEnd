@@ -2248,8 +2248,13 @@ export default {
         }
       }
 
+      this.pluslocation = "";
+      this.addr = "";
+      this.imagefile = "";
+
       await this.rightrefresh();
       await this.alllist();
+      await this.rightrefresh();
     },
     dorofull(event) {
       var doro = event.currentTarget.textContent;

@@ -51,7 +51,7 @@ export default {
     ckeditor: CKEditor.component,
   },
   async created() {
-      this.$emit("searchon", true);
+    this.$emit("searchon", true);
     await this.refresh();
   },
   data() {
@@ -99,12 +99,12 @@ export default {
       }
     },
     async refresh() {
-      const url = `/REST/board/selectone?no=${this.no}`;
+      const url = `/REST/board/selectone?no=${this.no}&category=free`;
 
-      const headers = { "Content-type": "application/json" };
+      const headers = { "Content-type": "application/json", token: this.token };
       const response = await axios.get(url, headers);
       console.log(response);
-      if (response.data.status === 200) {
+      if (response.status === 200) {
         this.list = response.data.board;
         this.editorData = this.list.content;
         this.title = this.list.title;

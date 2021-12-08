@@ -263,6 +263,7 @@ export default {
     await this.refresh();
     console.log(this.list);
     console.log(this.loginid);
+    console.log(this.no);
   },
   methods: {
     async singo() {
@@ -415,7 +416,7 @@ export default {
       const response = await axios.get(url, { headers });
       console.log(response);
 
-      if (response.data.status === 200) {
+      if (response.status === 200) {
         this.list = response.data.board;
         this.loginid = response.data.LoginId;
         console.log(this.loginid);
