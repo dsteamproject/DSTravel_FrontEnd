@@ -17,13 +17,13 @@
             class="userpw"
             placeholder="비밀번호"
             v-model="userpw"
-            v-on:keyup.enter="handlelogin"
+            v-on:keyup.enter="handlelogin1"
           /><br />
           <input
             type="button"
             value="로그인"
-            class="btn"
-            @click="handlelogin"
+            class="btn23"
+            @click="handlelogin1"
           />
           <div class="chk">
             <div class="chk_in_left">
@@ -45,20 +45,20 @@
         <div class="right">
           <h3 class="login2 h31">간편 로그인</h3>
           <a
-            href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=WCxe47guG90KEPP6lIWu&redirect_uri=http://localhost:9090/login"
+            href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=WCxe47guG90KEPP6lIWu&redirect_uri=http://ibyeong.shop/login"
           >
             <button class="easylogin">네이버로 로그인</button>
           </a>
 
           <br />
           <a
-            href="https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=74537161972-j2r3otdejq6fs24eeo09tlpsm5lho3u0.apps.googleusercontent.com&redirect_uri=http://localhost:9090/login&scope=email%20profile%20openid"
+            href="https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=74537161972-j2r3otdejq6fs24eeo09tlpsm5lho3u0.apps.googleusercontent.com&redirect_uri=http://ibyeong.shop/login&scope=email%20profile%20openid"
           >
             <button class="easylogin1">구글로 로그인</button>
           </a>
           <br />
           <a
-            href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=ce61cbedf2c1d5758c73ec734dc1af08&redirect_uri=http://localhost:9090/login&id=kakao"
+            href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=ce61cbedf2c1d5758c73ec734dc1af08&redirect_uri=http://ibyeong.shop/login&id=kakao"
             ><button class="easylogin2">카카오톡 로그인</button></a
           >
         </div>
@@ -97,12 +97,12 @@ export default {
   methods: {
     async loginWithKakao() {
       const params = {
-        redirectUri: "http://127.0.0.1:9090/login",
+        redirectUri: "http://ibyeong.shop/login",
       };
       window.Kakao.Auth.authorize(params);
       console.log(params);
     },
-    async handlelogin() {
+    async handlelogin1() {
       if (this.userid === "") {
         alert("아이디를 입력해주세요");
         return;
