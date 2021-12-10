@@ -6,7 +6,7 @@ module.exports = {
             // 127.0.0.1:8080/REST/
             '/REST': {
                 // 프록시 요청을 보낼 서버의 주소
-                target: 'http://127.0.0.1:8080',
+                target: 'http://127.0.0.1:8081',
                 changeOrigin: true,
                 logLevel: 'debug',
             }

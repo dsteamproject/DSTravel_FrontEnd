@@ -23,7 +23,7 @@
     <div class="wrap">
       <div class="userdetail">
         <img
-          :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${this.list.member.id}`"
+          :src="`/REST/mypage/select_image?id=${this.list.member.id}`"
           class="myimg"
         />
         <p>{{ this.list.member.nicname }}</p>
@@ -282,6 +282,7 @@ export default {
         };
       }
       const response = await axios.get(url, { headers });
+      console.log(response);
       console.log(JSON.parse(response.data.tdsave.td));
       this.list = response.data.tdsave;
       console.log(this.list);

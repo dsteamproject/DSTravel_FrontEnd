@@ -4,20 +4,18 @@
       class="bg1"
       :style="{
         backgroundImage:
-          'url(' +
-          `//127.0.0.1:8080/REST/board/select_image?no=${this.no}` +
-          ')',
+          'url(' + `/REST/board/select_image?no=${this.no}` + ')',
       }"
     >
       <div class="bg1_in">
-        <h2 class="title">{{ list.title }}</h2>
+        <h2 class="title">{{ this.list1.title }}</h2>
       </div>
     </div>
     <div class="bg2">
       <div class="bg2_in">
         <div class="dech1">
           <span class="sub">{{ this.regdate }}</span>
-          <span class="sub1">조회수: {{ this.list.hit }}</span>
+          <span class="sub1">조회수: {{ this.list1.hit }}</span>
         </div>
 
         <div class="dech2">
@@ -25,14 +23,13 @@
             class="change"
             :to="`/freechange?no=${this.no}`"
             @click="handleupdate"
-            v-if="this.loginid === this.list.member.id"
-            >수정</router-link
-          ><router-link
-            class="delete"
-            to=""
-            @click="dialogVisible = true"
-            v-if="this.loginid === this.list.member.id"
-            >삭제</router-link
+            ><span v-if="this.list1.member.id === this.loginid"
+              >수정</span
+            ></router-link
+          ><router-link class="delete" to="" @click="dialogVisible = true"
+            ><span v-if="this.list1.member.id === this.loginid"
+              >삭제</span
+            ></router-link
           >
         </div>
       </div>
@@ -41,12 +38,12 @@
     <div class="wrap">
       <div class="userdetail">
         <img
-          :src="`//127.0.0.1:8080/REST/mypage/select_image?id=${this.list.member.id}`"
           class="myimg"
+          :src="`/REST/mypage/select_image?id=${this.list1.member.id}`"
         />
-        <p>{{ this.list.member.nicname }}</p>
+        <p>{{ this.list1.member.nicname }}</p>
       </div>
-      <div v-html="this.list.content" class="ck-content"></div>
+      <div v-html="this.list1.content" class="ck-content"></div>
 
       <div class="reply_box">
         <div class="likebox">
@@ -58,7 +55,7 @@
           <img @click="likeup" class="likeicon" src="../assets/like.png" /><span
             style="vertical-align: 5px"
           >
-            {{ this.list.good }}
+            {{ this.list1.good }}
           </span>
         </div>
         <div class="hr"></div>
@@ -182,6 +179,26 @@
       </template>
     </el-dialog>
 
+    <el-dialog
+      v-model="dialogVisible"
+      title="글 삭제"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <div class="delbox">
+        <h2>게시물 삭제</h2>
+        <div class="hr4"></div>
+        <p>선택한 게시물을 정말 삭제 하시겠습니까?</p>
+        <p>한번 삭제한 자료는 복구할 수 없습니다.</p>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <button class="no_btn" @click="dialogVisible = false">취소</button>
+          <button class="del_btn" @click="handledelete">삭제</button>
+        </span>
+      </template>
+    </el-dialog>
+
     <!-- 신고하기 다이얼로그 -->
 
     <el-dialog
@@ -240,7 +257,7 @@ export default {
       report1: "",
       repch: "off",
       no: this.$route.query.no,
-      list: [],
+      list1: [],
       dialogVisible: false,
       dialogVisible1: false,
       dialogVisible2: false,
@@ -258,10 +275,13 @@ export default {
       good: 0,
     };
   },
+  async mounted() {
+    await this.refresh();
+  },
   async created() {
     this.$emit("searchon", true);
     await this.refresh();
-    console.log(this.list);
+    console.log(this.list1.member.id);
     console.log(this.loginid);
     console.log(this.no);
   },
@@ -270,7 +290,7 @@ export default {
       const url = `/REST/board/warning`;
       const headers = { "Content-type": "application/json", token: this.token };
       const body = {
-        no: this.list.no,
+        no: this.list1.no,
       };
       const response = await axios.post(url, body, { headers });
       console.log(response);
@@ -294,7 +314,7 @@ export default {
       const url = `/REST/board/reply_delete?no=${this.reply[this.push].no}`;
       const headers = { "Content-type": "application/json", token: this.token };
       const body = {
-        no: this.list.no,
+        no: this.list1.no,
       };
       const response = await axios.put(url, body, { headers });
       console.log(response);
@@ -329,7 +349,7 @@ export default {
     },
     // 해당 카테고리 리스트로 이동
     golist() {
-      this.$router.push(`/board/${this.list.category}`);
+      this.$router.push(`/board/${this.list1.category}`);
       window.scrollTo(0, 0);
     },
     // 좋아요 UP
@@ -343,7 +363,7 @@ export default {
           token: this.token,
         };
         const body = {
-          no: this.list.no,
+          no: this.list1.no,
         };
         const response = await axios.post(url, body, { headers });
         console.log(response);
@@ -385,7 +405,7 @@ export default {
       const response = await axios.put(url, { data }, { headers });
       console.log(response);
       if (response.data.status === 200) {
-        this.$router.push({ path: `/board/${this.list.category}` });
+        this.$router.push({ path: `/board/${this.list1.category}` });
       }
     },
     // 다음글
@@ -416,14 +436,12 @@ export default {
       const response = await axios.get(url, { headers });
       console.log(response);
 
-      if (response.status === 200) {
-        this.list = response.data.board;
-        this.loginid = response.data.LoginId;
-        console.log(this.loginid);
+      if (response.data.status === 200) {
+        this.list1 = response.data.board;
         this.loginid = response.data.LoginId;
 
         this.reply = response.data.reply;
-        console.log(this.reply);
+
         for (var i = 0; i < this.reply.length; i++) {
           const sample = this.reply[i].regdate;
 
